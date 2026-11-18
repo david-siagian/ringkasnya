@@ -80,7 +80,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   return (
     <div className="min-h-screen bg-slate-50/70 pb-20">
       {/* Banner Header Buku */}
-      <div className={`bg-gradient-to-br ${book.coverGradient} text-white`}>
+      <div className="bg-emerald-800 bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-700 text-white">
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
           <Link
             href="/#katalog"

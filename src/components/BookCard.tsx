@@ -14,7 +14,7 @@ export default function BookCard({ book }: BookCardProps) {
     >
       {/* Visual Sampul Buku */}
       <div
-        className={`relative flex h-48 w-full flex-col justify-between bg-gradient-to-br ${book.coverGradient} p-5 text-white`}
+        className="relative flex h-48 w-full flex-col justify-between bg-emerald-800 bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-700 p-5 text-white"
       >
         <div className="flex items-center justify-between gap-2">
           <span className="rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-medium backdrop-blur-sm">
