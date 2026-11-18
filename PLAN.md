@@ -16,33 +16,33 @@ Dokumen ini berisi rancangan pengembangan website **ringkasnya.id** menggunakan 
            +------------------------+------------------------+
                                     |
                            [ ringkasnya.id ]
-                  - Clean, Mobile-First Web App
+                  - Clean, Mobile-First Web App (Tema Hijau Emerald)
                   - Kurasi Buku Populer (Bahasa Indonesia)
-                  - "3-Min Quick Glance" + "10-Min In-Depth"
+                  - "Mode Kilat (6–10 Menit)" + "Mode Mendalam (20–30 Menit)"
                   - Actionable Checklist (Penerapan praktis)
                   - Shareable Quote Cards untuk Medsos
 ```
 
 ### Amati (Observasi Referensi)
-- **Headway & Blinkist**: Navigasi bab per bab yang ringkas (*flashcard-like reader*), penekanan pada durasi baca (misal: "8 min read"), serta pengalaman membaca mobile yang sangat minim distraksi.
+- **Headway & Blinkist**: Navigasi bab per bab yang ringkas (*flashcard-like reader*), penekanan pada durasi baca terukur, serta pengalaman membaca mobile yang minim distraksi.
 - **ringkaspaham.id**: Mengadaptasi buku-buku *best-seller* dunia ke dalam bahasa Indonesia yang luwes, kontekstual, dan mudah dicerna untuk audiens lokal.
 - **Booksnap**: Penekanan pada visual grafis, quote ringkas, dan ringkasan yang mudah dibagikan (*shareable*).
 
 ### Tiru (Fitur Fondasi yang Diadaptasi)
 1. **Struktur Konten Terstandar**:
-   - Metadata Buku: Judul, Penulis, Kategori, Estimasi Waktu Baca, Cover, Skor Rekomendasi.
+   - Metadata Buku: Judul, Penulis, Kategori, Estimasi Waktu Baca, Cover (basis hijau emerald), Skor Rekomendasi.
    - *Who Is This For*: Target pembaca ideal untuk buku tersebut.
-   - *Key Insights / Bab Ringkas*: 3–7 poin utama yang diuraikan secara lugas.
+   - *Key Insights / Bab Ringkas*: 7–8 poin utama yang diuraikan secara lugas.
    - *Final Takeaway / Kesimpulan*: Inti pati dari keseluruhan buku.
-2. **Katalog & Navigasi**: Halaman beranda dengan rekomendasi buku terpopuler, filter kategori (Produktivitas, Bisnis, Keuangan, Psikologi, Self-Development), dan kolom pencarian instan.
-3. **Reader Mode Nyaman**: Tipografi ramah mata, pemisah bab jelas, serta pengaturan ukuran huruf.
+2. **Katalog & Navigasi**: Halaman beranda dengan kurasi buku terpopuler, filter kategori, kolom pencarian instan, serta smooth scroll & transisi halaman.
+3. **Reader Mode Nyaman**: Tipografi ramah mata, pemisah bab jelas, pengaturan ukuran huruf, dan animasi transisi mode baca.
 
 ### Modifikasi (Nilai Tambah / UVP ringkasnya.id)
-1. **Mode Ringkasan Dwi-Kecepatan**:
-   - *Kilat (3 Menit)*: Hanya membaca poin inti & kesimpulan utama.
-   - *Mendalam (10–12 Menit)*: Penjelasan komprehensif per poin/bab.
+1. **Mode Ringkasan Dwi-Kecepatan (Terukur ~200 kata/menit)**:
+   - *Mode Kilat (6–10 Menit)*: ~1.350–1.750 kata berisi sinopsis, poin inti 1–3 kalimat, tips praktis, checklist, kutipan, dan kesimpulan.
+   - *Mode Mendalam (20–30 Menit)*: ~4.150–5.500 kata dengan penjelasan komprehensif 4–5 paragraf per poin/bab, contoh kasus, dan penerapan praktis.
 2. **Action Checklist (Praktek Nyata)**: Daftar aksi praktis di akhir ringkasan dengan kotak centang (*checklist*) interaktif (tersimpan di `localStorage`) agar pembaca bisa langsung mempraktikkan isi buku.
-3. **Social Quote Card**: Kartu kutipan (*quote card*) berdesain estetik yang mudah disalin atau dibagikan.
+3. **Social Quote Card**: Kartu kutipan (*quote card*) yang mudah disalin dalam 1 klik.
 
 ---
 
@@ -50,108 +50,60 @@ Dokumen ini berisi rancangan pengembangan website **ringkasnya.id** menggunakan 
 
 ```mermaid
 flowchart LR
-    A["Fase 1: MVP Sederhana<br/>(Static / Content-First)"] --> B["Fase 2: Interaktivitas<br/>(Search, Filter, Bookmark Lokal)"]
-    B --> C["Fase 3: Personalisasi<br/>(User Account, Progress, Audio TTS)"]
+    A["Fase 1: MVP Sederhana<br/>(Static / Content-First)"] --> B["Fase 2: Interaktivitas<br/>(Bookmark, Progress, Quote Card)"]
+    B --> C["Fase 3: Personalisasi<br/>(Supabase Auth, Database, Audio TTS)"]
 ```
 
-### Fase 1: MVP Sederhana (Fokus Saat Ini)
-- **Tujuan**: Memiliki web hidup dan siap diakses pembaca dalam waktu singkat tanpa beban pengelolaan database rumit.
-- **Tech Stack**: Next.js (App Router, TypeScript) + Tailwind CSS + Markdown/Data Lokal.
+### Fase 1: MVP Sederhana (Terealisasi)
+- **Tujuan**: Memiliki web hidup dan siap diakses pembaca dengan konten berbobot tanpa beban pengelolaan database rumit.
+- **Tech Stack**: Next.js 15 (App Router, SSG, TypeScript) + Tailwind CSS + `lucide-react` + Data Lokal Modular (`src/data/books/*.ts`).
 - **Fitur Fase 1**:
-  - Landing page bersih dengan Hero section, kurasi buku populer, dan filter kategori.
-  - Halaman Detail & Reader View (`/buku/[slug]`) dengan fitur *Mode Kilat (3 Menit)* vs *Mode Mendalam (10 Menit)*.
-  - *Action Checklist* interaktif di akhir setiap ringkasan buku.
-  - 4 ringkasan buku *best-seller* awal lengkap dalam Bahasa Indonesia (*Atomic Habits*, *The Psychology of Money*, *Deep Work*, *Show Your Work!*).
+  - Landing page bersih dengan Hero section, kurasi 6 buku populer, filter kategori, dan pencarian instan.
+  - Halaman Detail & Reader View (`/buku/[slug]`) dengan toggle **Mode Kilat (6–10 Menit)** vs **Mode Mendalam (20–30 Menit)**, pengatur ukuran huruf, dan *Action Checklist* interaktif (`localStorage`).
+  - Identitas visual tema hijau emerald (`emerald-800` / `emerald-700` / `teal-700`) agar teks putih selalu kontras, ditambah favicon SVG (`src/app/icon.svg`) dan konfigurasi Vercel (`vercel.json`).
+  - Navigasi halus menggunakan `SmoothNavigation.tsx` (`SmoothHashLink` berbasis `requestAnimationFrame` + `PageTransitionWrapper`).
+  - 6 ringkasan buku *best-seller* lengkap dalam Bahasa Indonesia: *Atomic Habits*, *The Psychology of Money*, *Deep Work*, *Show Your Work!*, *Filosofi Teras*, dan *Essentialism*.
 
 ### Fase 2: Peningkatan Interaktivitas (Selanjutnya)
-- Fitur pencarian cepat (*instant search*) dan filter multi-kategori.
 - Fitur simpan/bookmark buku favorit (`localStorage`).
-- Indikator progress membaca (*reading progress bar*) & kontrol ukuran font di Reader View.
+- Indikator progress membaca (*reading progress bar*) di Reader View.
 - Generator kartu kutipan estetik (*Shareable Quote Card* ke gambar PNG).
+- Pengujian UI otomatis dengan Playwright.
 
 ### Fase 3: Fitur Komunitas & Lanjutan
-- Sistem Akun & Login + Database (Supabase / PostgreSQL).
+- Sistem Akun & Login + Database (Supabase / PostgreSQL — integrasi Vercel↔Supabase env vars sudah tersedia).
 - Ringkasan Audio (Text-to-Speech / Narasi Audio singkat).
 - Halaman Admin CMS untuk tambah/edit ringkasan buku langsung dari browser.
 
 ---
 
-## 3. Proposed Changes (Fase 1: Setup & MVP di `E:\MyApp\ringkasnya`)
+## 3. Arsitektur & Struktur File (Fase 1 di `E:\MyApp\ringkasnya`)
 
-### Inisialisasi Proyek & Konfigurasi
-#### [NEW] `E:\MyApp\ringkasnya\package.json`, `tsconfig.json`, `next.config.ts`, `postcss.config.mjs`
-- Setup Next.js App Router dengan TypeScript, Tailwind CSS, dan `lucide-react` untuk ikon.
+### Konfigurasi & Aset
+- `package.json`, `tsconfig.json`, `next.config.ts`, `postcss.config.mjs`, `tailwind.config.ts`, `vercel.json`
+- `src/app/icon.svg`: Favicon SVG bertema hijau emerald.
 
----
-
-### Struktur Data & Konten Buku
-#### [NEW] `E:\MyApp\ringkasnya\src\types\book.ts`
-```typescript
-export interface BookTakeaway {
-  number: number;
-  title: string;
-  quickSummary: string; // Untuk Mode Kilat (3 menit)
-  deepContent: string[]; // Paragraf penjelasan untuk Mode Mendalam (10 menit)
-}
-
-export interface BookSummary {
-  slug: string;
-  title: string;
-  author: string;
-  category: 'Kebiasaan & Produktivitas' | 'Keuangan & Bisnis' | 'Psikologi' | 'Kreativitas & Karier';
-  readingTimeMinutes: number;
-  QuickTimeMinutes: number;
-  coverColor: string;
-  coverAccent: string;
-  tagline: string;
-  synopsis: string;
-  whoIsItFor: string[];
-  keyTakeaways: BookTakeaway[];
-  actionChecklist: string[];
-  quotes: string[];
-  conclusion: string;
-}
-```
-
-#### [NEW] `E:\MyApp\ringkasnya\src\data\books.ts` (dan loader Markdown `content/books/*.md`)
-- Berisi data ringkasan buku awal dalam Bahasa Indonesia yang natural dan aplikatif:
-  1. **Atomic Habits** – James Clear
-  2. **The Psychology of Money** – Morgan Housel
-  3. **Deep Work** – Cal Newport
-  4. **Show Your Work!** – Austin Kleon
-
----
+### Struktur Data & Konten Buku Modular
+- `src/types/book.ts`: Interface `BookCategory`, `BookTakeaway`, dan `BookSummary`.
+- `src/data/books.ts`: Menggabungkan dan mengekspor `CATEGORIES`, `BOOKS`, serta `getBookBySlug(slug)`.
+- `src/data/books/*.ts`: 6 modul buku terpisah (`atomic-habits.ts`, `psychology-of-money.ts`, `deep-work.ts`, `show-your-work.ts`, `filosofi-teras.ts`, `essentialism.ts`) dengan panjang teks sesuai target 6–10 menit (Kilat) dan 20–30 menit (Mendalam).
 
 ### Halaman & Komponen UI
-#### [NEW] `E:\MyApp\ringkasnya\src\components\Navbar.tsx` & `Footer.tsx`
-- Navigasi responsif dengan branding **ringkasnya.id** ("Baca Intinya, Praktikkan Ilmunya").
-
-#### [NEW] `E:\MyApp\ringkasnya\src\components\BookCard.tsx`
-- Kartu katalog buku dengan visual sampul buku bergaya modern, badge kategori, waktu baca, judul, penulis, dan tagline singkat.
-
-#### [NEW] `E:\MyApp\ringkasnya\src\app\page.tsx`
-- Halaman Utama (Home):
-  - Hero Section dengan proposisi nilai *ringkasnya.id*.
-  - Filter kategori buku & pencarian kata kunci.
-  - Grid daftar ringkasan buku pilihan.
-  - Bagian penjelasan metode membaca di *ringkasnya.id* (Kilat 3 Menit, Mendalam 10 Menit, Action Checklist).
-
-#### [NEW] `E:\MyApp\ringkasnya\src\app\buku\[slug]\page.tsx` & `ReaderClient.tsx`
-- Halaman Baca Ringkasan Buku (*Reader View*):
-  - Header detail buku, target pembaca (*Cocok untuk siapa?*), dan sinopsis singkat.
-  - Toggle **Mode Kilat (3 Menit)** vs **Mode Mendalam (10 Menit)**.
-  - Daftar *Key Takeaways* (Poin Inti Bab per Bab).
-  - Komponen **Action Checklist** interaktif (tersimpan otomatis di browser pembaca).
-  - Kartu Kutipan Pilihan (*Quotes*) dengan tombol *Salin Kutipan*.
+- `src/app/layout.tsx` & `src/app/globals.css`: Layout root dengan `SmoothScrollHandler`, `PageTransitionWrapper`, dan animasi `pageEnter` / `fadeSlideUp`.
+- `src/components/SmoothNavigation.tsx`: Komponen `SmoothHashLink`, `SmoothScrollHandler`, dan `PageTransitionWrapper` untuk smooth scroll & transisi antar halaman.
+- `src/components/Navbar.tsx` & `Footer.tsx`: Navigasi responsif dengan branding **ringkasnya.id** ("Baca Intinya, Praktikkan Ilmunya").
+- `src/components/BookCard.tsx` & `CatalogSection.tsx`: Kartu buku bertema hijau emerald, filter kategori, dan pencarian instan.
+- `src/app/page.tsx`: Halaman Utama (Hero, Katalog Buku, Seksi Metode Membaca).
+- `src/app/buku/[slug]/page.tsx` & `src/components/BookReader.tsx`: Reader View interaktif dengan toggle Mode Kilat/Mendalam, kontrol font, Action Checklist, dan salin kutipan.
 
 ---
 
 ## 4. Verification Plan
 
 ### Automated Verification
-- Menjalankan `npm run build` di `E:\MyApp\ringkasnya` untuk memastikan kompilasi TypeScript dan Next.js berjalan tanpa error.
+- Menjalankan `npm run build` di `E:\MyApp\ringkasnya` (dengan `BypassSandbox: true` pada Windows) untuk memastikan kompilasi TypeScript, linting, dan generasi 11 halaman statis Next.js berjalan tanpa error.
 
-### Manual Verification
-1. Menjalankan `npm run dev` dan membuka `http://localhost:3000`.
-2. Memastikan halaman beranda menampilkan daftar buku, filter kategori berfungsi, dan pencarian bekerja.
-3. Membuka halaman detail buku (`/buku/atomic-habits`), menguji toggle **Mode Kilat** vs **Mode Mendalam**, serta mencentang **Action Checklist** dan menyalin kutipan.
+### Manual & Deployment Verification
+1. Menguji navigasi **Katalog Buku**, **Cara Kerja**, dan klik kartu buku untuk memastikan smooth scroll & transisi halaman bekerja mulus.
+2. Membuka halaman detail buku (`/buku/atomic-habits`), menguji toggle **Mode Kilat (6–10 Menit)** vs **Mode Mendalam (20–30 Menit)**, serta mencentang **Action Checklist** dan menyalin kutipan.
+3. Memverifikasi deploy produksi di `https://ringkasnya.vercel.app` (`npx vercel --yes --prod`).

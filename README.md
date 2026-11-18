@@ -1,7 +1,9 @@
 # ringkasnya.id — Baca Intinya, Praktikkan Ilmunya
 
 Website ringkasan buku populer dunia dalam Bahasa Indonesia dengan pendekatan **ATM (Amati, Tiru, Modifikasi)**:
-- **Mode Baca Dwi-Kecepatan**: *Mode Kilat (3 Menit)* & *Mode Mendalam (10–12 Menit)*.
+- **Mode Baca Dwi-Kecepatan**: *Mode Kilat (6–10 Menit)* & *Mode Mendalam (20–30 Menit)* dengan panjang teks terukur (~200 kata/menit).
+- **6 Buku Kurasi Modular**: *Atomic Habits*, *The Psychology of Money*, *Deep Work*, *Show Your Work!*, *Filosofi Teras*, dan *Essentialism*.
+- **Navigasi & Transisi Smooth**: Smooth scroll `requestAnimationFrame` untuk tautan bagian (`#katalog`, `#metode`) dan transisi fade-slide antar halaman.
 - **Action Checklist Interaktif**: Daftar langkah nyata di akhir setiap ringkasan buku yang dapat dicentang pembaca dan tersimpan otomatis di browser (`localStorage`).
 - **Shareable Quotes**: Kutipan berkesan dari buku yang dapat disalin dalam 1 klik.
 

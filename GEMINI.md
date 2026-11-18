@@ -2,3 +2,16 @@
 
 ## Planning & Documentation
 - Setiap kali membuat atau memperbarui dokumen rencana (Implementation Plan / `/plan`), selain menyimpannya di Artifact Directory sistem, **wajib** juga menyimpan salinan file rencana tersebut (`PLAN.md`) langsung di dalam folder proyek aktif (`E:\MyApp\ringkasnya\PLAN.md`).
+
+## Desain & UX (ringkasnya.id)
+- **Kontras Cover & Header**: Kartu buku (`BookCard`) dan banner header pembaca (`BookReader`) wajib memakai basis warna hijau (`emerald-800` / `emerald-700` / `teal-700`) agar teks putih selalu kontras dan tidak bertabrakan.
+- **Ilustrasi Sampul Buku (.svg)**: Setiap kali membuat atau meng-generate gambar sampul buku, buat dalam format vektor `.svg` saja (simpan di `public/images/covers/<slug>.svg` dan daftarkan di `coverImage` pada `src/data/books/<slug>.ts`) dengan gaya editorial datar (ala Headway/Blinkist/Booksnap) tanpa teks, alih-alih file raster `.jpg`/`.png`.
+- **Navigasi & Transisi Smooth**: Jangan mengandalkan CSS `scroll-behavior: smooth` atau `<Link href="/#...">` bawaan Next.js untuk hash scroll; gunakan `SmoothHashLink` dan `PageTransitionWrapper` (`src/components/SmoothNavigation.tsx`) agar scroll dan perpindahan halaman selalu mulus.
+
+## Standar Konten & Durasi Baca
+- Hitung estimasi baca pada kecepatan ~200 kata/menit dan simpan tiap buku sebagai modul terpisah di `src/data/books/<slug>.ts`:
+  - **Mode Kilat (6–10 Menit)**: 1.350–1.750 kata (`quickTimeMinutes` di kisaran 6–10).
+  - **Mode Mendalam (20–30 Menit)**: 4.150–5.500 kata (`readingTimeMinutes` di kisaran 20–30).
+
+## Operasional CLI (Windows)
+- Jalankan `npm run build`, `git push`, `npx vercel`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.
