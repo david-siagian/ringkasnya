@@ -10,7 +10,7 @@ export const atomicHabits: BookSummary = {
   readingTimeMinutes: 21,
   quickTimeMinutes: 7,
   rating: 4.9,
-  coverGradient: "from-amber-500 via-orange-500 to-red-600",
+  coverGradient: "from-orange-950 via-orange-900 to-amber-800",
   coverAccent: "bg-amber-100 text-amber-900",
   coverImage: "/images/covers/atomic-habits.svg",
   badgeText: "Terpopuler #1",

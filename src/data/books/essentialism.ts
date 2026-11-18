@@ -10,7 +10,7 @@ export const essentialism: BookSummary = {
   readingTimeMinutes: 21,
   quickTimeMinutes: 7,
   rating: 4.8,
-  coverGradient: "from-slate-700 via-zinc-800 to-neutral-950",
+  coverGradient: "from-stone-950 via-stone-900 to-neutral-800",
   coverAccent: "bg-slate-200 text-slate-900",
   coverImage: "/images/covers/essentialism.svg",
   badgeText: "Seni Memilih Prioritas",
