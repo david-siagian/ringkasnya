@@ -16,9 +16,8 @@ export const atomicHabits: BookSummary = {
   badgeText: "Terpopuler #1",
   tagline:
     "Perubahan kecil yang dilakukan setiap hari akan menciptakan hasil luar biasa seiring waktu.",
-  synopsis: `Banyak dari kita mengira bahwa untuk mengubah hidup, kita harus membuat gebrakan besar: langsung diet ketat, olahraga dua jam sehari, atau bangun jam empat pagi tanpa kompromi. Nyatanya, resolusi besar seperti itu hampir selalu kandas di minggu kedua. Lewat Atomic Habits, James Clear menawarkan pendekatan yang jauh lebih manusiawi dan terbukti secara ilmiah: fokuslah pada perbaikan kecil sebesar 1% setiap hari yang mudah diulang bahkan saat Anda sedang lelah.
-
-Seperti atom yang menjadi penyusun terkecil sebuah molekul, kebiasaan kecil adalah unit dasar dari hasil-hasil besar dalam hidup. Buku ini membongkar bagaimana kebiasaan bekerja di otak kita melalui empat tahap—petunjuk (cue), keinginan (craving), respons (response), dan imbalan (reward)—lalu menerjemahkannya menjadi Empat Hukum Perubahan Perilaku yang sangat praktis. Anda tidak diajak untuk mengandalkan motivasi atau tekad baja yang cepat habis, melainkan diajak merancang sistem dan lingkungan agar kebiasaan baik terasa mudah, menarik, dan otomatis. Baik Anda ingin lebih rajin membaca, berhenti menunda pekerjaan, mengatur keuangan, atau mengurangi kebiasaan menggulir media sosial sebelum tidur, buku ini memberi peta jalan yang jelas dan bisa langsung dipraktikkan hari ini juga.`,
+  synopsis:
+    "Banyak dari kita mengira perubahan hidup butuh gebrakan besar, padahal resolusi ekstrem sering kandas di minggu kedua. Lewat Atomic Habits, James Clear menunjukkan bahwa hasil luar biasa justru lahir dari perbaikan kecil sebesar 1% yang dilakukan konsisten setiap hari. Dengan membedah empat tahap cara kerja otak—petunjuk, keinginan, respons, dan imbalan—buku ini memberi panduan praktis merancang sistem dan lingkungan agar kebiasaan baik terasa mudah, otomatis, dan bertahan lama.",
   whoIsItFor: [
     "Anda yang sering semangat membuat resolusi awal tahun atau target baru, tetapi selalu berhenti di tengah jalan karena kehabisan motivasi.",
     "Pekerja kantoran, mahasiswa, dan kreator yang merasa sibuk seharian tetapi produktivitasnya jalan di tempat akibat kebiasaan menunda.",

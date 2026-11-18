@@ -16,9 +16,8 @@ export const psychologyOfMoney: BookSummary = {
   badgeText: "Wajib Baca Finansial",
   tagline:
     "Sukses mengelola uang bukan soal seberapa pintar Anda berhitung, melainkan bagaimana Anda mengendalikan perilaku.",
-  synopsis: `Selama ini kita sering mengira bahwa urusan keuangan adalah pelajaran matematika yang dingin: cukup kuasai rumus bunga majemuk, baca laporan laba rugi, lalu pilih instrumen investasi dengan imbal hasil tertinggi. Namun lewat The Psychology of Money, Morgan Housel membuktikan bahwa kesuksesan finansial jauh lebih banyak ditentukan oleh psikologi, ego, rasa takut, dan kebiasaan kita sehari-hari ketimbang kecerdasan akademis semata. Keputusan uang hampir selalu dibuat di meja makan atau ruang keluarga yang penuh emosi, bukan di ruang rapat analis saham.
-
-Di dunia nyata, orang biasa tanpa gelar ekonomi bisa pensiun dengan kekayaan miliaran rupiah hanya karena sabar dan hidup sederhana, sementara eksekutif keuangan lulusan universitas ternama bisa bangkrut karena keserakahan dan gaya hidup berlebihan. Melalui 19 esai pendek yang penuh kisah nyata memikat, Housel mengajak kita memahami mengapa sejarah pribadi membentuk cara pandang kita terhadap uang, mengapa 'cukup' adalah kata paling sakti dalam keuangan, dan bagaimana kekayaan sejati justru terletak pada uang yang tidak Anda belanjakan. Buku ini bukan panduan cepat kaya atau daftar saham yang harus dibeli, melainkan kompas ketenangan batin agar uang bekerja melayani kebebasan hidup Anda, bukan sebaliknya.`,
+  synopsis:
+    "Mengelola uang bukanlah ilmu pasti seperti matematika yang dingin, melainkan soal psikologi, ego, rasa takut, dan kesabaran dalam mengambil keputusan sehari-hari. Lewat kisah nyata yang memikat, Morgan Housel menjelaskan mengapa orang biasa yang sabar dan hidup sederhana bisa membangun kekayaan besar, sementara profesional berpendidikan tinggi bisa bangkrut karena keserakahan. Buku ini mengajak Anda memahami arti 'cukup', keajaiban waktu, dan cara menjadikan uang sebagai alat untuk membeli kebebasan hidup.",
   whoIsItFor: [
     "Siapa saja yang merasa penghasilannya terus naik tetapi tabungan dan ketenangan finansialnya seolah jalan di tempat setiap akhir bulan.",
     "Investor pemula maupun berpengalaman yang sering panik saat pasar turun atau tergoda ikut-ikutan tren (FOMO) saat pasar naik.",
