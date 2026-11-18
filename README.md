@@ -28,9 +28,8 @@ Setiap kali perbaikan atau fitur selesai dibuat, jalankan alur verifikasi hingga
 ### 1. Automated Verification
 - Menjalankan `npm run build` di `E:\MyApp\ringkasnya` (dengan `BypassSandbox: true` pada Windows) untuk memastikan kompilasi TypeScript, linting, dan generasi halaman statis Next.js berjalan tanpa error.
 
-### 2. Manual & UI Verification
-1. Menguji navigasi **Katalog Buku**, **Cara Kerja**, dan klik kartu buku untuk memastikan smooth scroll & transisi halaman bekerja mulus.
-2. Membuka halaman detail buku (`/buku/atomic-habits`), menguji toggle **Mode Kilat (6–10 Menit)** vs **Mode Mendalam (20–30 Menit)**, serta mencentang **Action Checklist** dan menyalin kutipan.
+### 2. UI Verification (Playwright)
+- Setiap kali ada perubahan UI, uji tampilan, alur interaksi, dan layout secara langsung melalui **Playwright** (desktop & mobile) untuk memastikan tidak ada regresi visual maupun fungsional.
 
 ### 3. Commit, Push & Deploy ke Produksi
 1. Commit dan push perubahan ke GitHub (`git push`, dengan `BypassSandbox: true`).
