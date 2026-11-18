@@ -31,7 +31,7 @@ export default function CatalogSection({ books }: CatalogSectionProps) {
   }, [books, selectedCategory, searchQuery]);
 
   return (
-    <section id="katalog" className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <section id="katalog" className="scroll-mt-20 mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">
@@ -102,7 +102,10 @@ export default function CatalogSection({ books }: CatalogSectionProps) {
 
       {/* Daftar Buku */}
       {filteredBooks.length > 0 ? (
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          key={`${selectedCategory}-${searchQuery}`}
+          className="animate-fade-slide mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {filteredBooks.map((book) => (
             <BookCard key={book.slug} book={book} />
           ))}

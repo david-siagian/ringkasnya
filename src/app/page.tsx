@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BOOKS } from "@/data/books";
 import CatalogSection from "@/components/CatalogSection";
+import { SmoothHashLink } from "@/components/SmoothNavigation";
 import {
   ArrowRight,
   BookOpen,
@@ -39,7 +40,7 @@ export default function HomePage() {
               merangkum gagasan utama buku-buku terbaik dunia ke dalam Bahasa
               Indonesia yang mengalir, lengkap dengan{" "}
               <span className="underline decoration-emerald-400 decoration-2 underline-offset-4">
-                Mode Kilat 5–10 Menit
+                Mode Kilat 6–10 Menit
               </span>{" "}
               dan{" "}
               <span className="underline decoration-emerald-400 decoration-2 underline-offset-4">
@@ -49,16 +50,16 @@ export default function HomePage() {
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
-              <Link
-                href="#katalog"
-                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700"
+              <SmoothHashLink
+                targetId="katalog"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition-all duration-200 hover:bg-emerald-700 active:scale-[0.98]"
               >
                 <span>Jelajahi Katalog Buku</span>
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </SmoothHashLink>
               <Link
                 href="/buku/atomic-habits"
-                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98]"
               >
                 <Zap className="h-4 w-4 text-amber-500" />
                 <span>Coba Baca: Atomic Habits</span>
@@ -69,7 +70,7 @@ export default function HomePage() {
             <div className="mt-12 grid grid-cols-3 gap-4 border-t border-slate-200/80 pt-8 text-center">
               <div>
                 <p className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
-                  5–30 <span className="text-sm font-semibold text-emerald-600">Mnt</span>
+                  6–30 <span className="text-sm font-semibold text-emerald-600">Mnt</span>
                 </p>
                 <p className="mt-0.5 text-xs text-slate-500">
                   Waktu Baca Fleksibel
@@ -102,7 +103,7 @@ export default function HomePage() {
       {/* Seksi Metode Membaca (ATM Value Proposition) */}
       <section
         id="metode"
-        className="border-t border-slate-200/80 bg-white py-16 sm:py-20"
+        className="scroll-mt-20 border-t border-slate-200/80 bg-white py-16 sm:py-20"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
@@ -127,7 +128,7 @@ export default function HomePage() {
                 1. Mode Baca Dwi-Kecepatan
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                Sedang buru-buru? Aktifkan <strong>Mode Kilat (5–10 Menit)</strong>{" "}
+                Sedang buru-buru? Aktifkan <strong>Mode Kilat (6–10 Menit)</strong>{" "}
                 untuk membaca intisari 1 kalimat per bab. Ingin menyelami contoh
                 dan konteks lengkap? Gunakan{" "}
                 <strong>Mode Mendalam (20–30 Menit)</strong>.

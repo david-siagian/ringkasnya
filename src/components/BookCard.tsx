@@ -14,7 +14,7 @@ export default function BookCard({ book }: BookCardProps) {
     >
       {/* Visual Sampul Buku */}
       <div
-        className="relative flex h-48 w-full flex-col justify-between bg-emerald-800 bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-700 p-5 text-white"
+        className={`relative flex w-full flex-col justify-between bg-gradient-to-br ${book.coverGradient} p-5 text-white`}
       >
         <div className="flex items-center justify-between gap-2">
           <span className="rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-medium backdrop-blur-sm">
@@ -26,24 +26,36 @@ export default function BookCard({ book }: BookCardProps) {
           </span>
         </div>
 
-        <div className="my-auto pt-2">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-white/80">
-            {book.author}
-          </p>
-          <h3 className="mt-0.5 text-xl font-extrabold leading-snug tracking-tight text-white drop-shadow-sm">
-            {book.title}
-          </h3>
-        </div>
+        <div className="mt-4 flex items-center gap-4">
+          {book.coverImage && (
+            <div className="relative aspect-[3/4] w-24 shrink-0 overflow-hidden rounded-xl bg-black/20 shadow-[0_12px_24px_-6px_rgba(0,0,0,0.45)] ring-1 ring-white/25">
+              <img
+                src={book.coverImage}
+                alt={`Ilustrasi sampul buku ${book.title}`}
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+          )}
 
-        <div className="flex items-center justify-between text-xs text-white/90">
-          <span className="inline-flex items-center gap-1 font-medium">
-            <Zap className="h-3.5 w-3.5 text-amber-300" />
-            Kilat {book.quickTimeMinutes} mnt
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5" />
-            Lengkap {book.readingTimeMinutes} mnt
-          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-white/80">
+              {book.author}
+            </p>
+            <h3 className="mt-1 text-xl font-extrabold leading-snug tracking-tight text-white drop-shadow-sm">
+              {book.title}
+            </h3>
+
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/90">
+              <span className="inline-flex items-center gap-1 font-medium">
+                <Zap className="h-3.5 w-3.5 text-amber-300" />
+                Kilat {book.quickTimeMinutes} mnt
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <Clock className="h-3.5 w-3.5" />
+                {book.readingTimeMinutes} mnt
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 

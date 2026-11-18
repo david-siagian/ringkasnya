@@ -90,37 +90,51 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             Kembali ke Katalog
           </Link>
 
-          <div className="mt-6 flex flex-wrap items-center gap-2.5">
-            <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
-              {book.category}
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
-              <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
-              {book.rating} / 5.0
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
-              <Clock className="h-3.5 w-3.5" />
-              {readMode === "quick"
-                ? `${book.quickTimeMinutes} menit baca (Mode Kilat)`
-                : `${book.readingTimeMinutes} menit baca (Mode Mendalam)`}
-            </span>
+          <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
+            {book.coverImage && (
+              <div className="relative aspect-[3/4] w-36 shrink-0 overflow-hidden rounded-2xl bg-black/20 shadow-[0_18px_36px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/25 sm:w-44">
+                <img
+                  src={book.coverImage}
+                  alt={`Ilustrasi sampul buku ${book.title}`}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
+
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
+                  {book.category}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
+                  <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
+                  {book.rating} / 5.0
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
+                  <Clock className="h-3.5 w-3.5" />
+                  {readMode === "quick"
+                    ? `${book.quickTimeMinutes} menit baca (Mode Kilat)`
+                    : `${book.readingTimeMinutes} menit baca (Mode Mendalam)`}
+                </span>
+              </div>
+
+              <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
+                {book.title}
+              </h1>
+              {book.originalTitle && (
+                <p className="mt-1 text-sm text-white/80 italic">
+                  {book.originalTitle}
+                </p>
+              )}
+              <p className="mt-2 text-base font-semibold text-white/95">
+                Karya {book.author} ({book.year})
+              </p>
+
+              <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-white/90">
+                {book.tagline}
+              </p>
+            </div>
           </div>
-
-          <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
-            {book.title}
-          </h1>
-          {book.originalTitle && (
-            <p className="mt-1 text-sm text-white/80 italic">
-              {book.originalTitle}
-            </p>
-          )}
-          <p className="mt-2 text-base font-semibold text-white/95">
-            Karya {book.author} ({book.year})
-          </p>
-
-          <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-white/90">
-            {book.tagline}
-          </p>
         </div>
       </div>
 
@@ -291,7 +305,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
               {/* Penjelasan Mendalam (Hanya muncul di Mode Mendalam) */}
               {readMode === "deep" && (
-                <div className={`mt-5 space-y-4 text-slate-700 ${fontSizeClass}`}>
+                <div className={`animate-fade-slide mt-5 space-y-4 text-slate-700 ${fontSizeClass}`}>
                   {takeaway.deepContent.map((paragraph, pIdx) => (
                     <p key={pIdx}>{paragraph}</p>
                   ))}

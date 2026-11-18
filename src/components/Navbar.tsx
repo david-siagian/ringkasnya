@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BookOpen, Sparkles, Zap } from "lucide-react";
+import { BookOpen, Zap } from "lucide-react";
+import { SmoothHashLink } from "@/components/SmoothNavigation";
 
 export default function Navbar() {
   return (
@@ -25,21 +26,21 @@ export default function Navbar() {
         </Link>
 
         <nav className="flex items-center gap-3 sm:gap-6">
-          <Link
-            href="/#katalog"
-            className="text-sm font-medium text-slate-600 transition-colors hover:text-emerald-600"
+          <SmoothHashLink
+            targetId="katalog"
+            className="text-sm font-medium text-slate-600 transition-colors duration-200 hover:text-emerald-600"
           >
             Katalog Buku
-          </Link>
-          <Link
-            href="/#metode"
-            className="hidden text-sm font-medium text-slate-600 transition-colors hover:text-emerald-600 sm:inline-block"
+          </SmoothHashLink>
+          <SmoothHashLink
+            targetId="metode"
+            className="hidden text-sm font-medium text-slate-600 transition-colors duration-200 hover:text-emerald-600 sm:inline-block"
           >
             Cara Kerja
-          </Link>
+          </SmoothHashLink>
           <Link
             href="/buku/atomic-habits"
-            className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-600"
+            className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-emerald-600 active:scale-95"
           >
             <Zap className="h-3.5 w-3.5 text-amber-400" />
             <span>Mulai Baca</span>

@@ -24,6 +24,7 @@ export interface BookSummary {
   rating: number;
   coverGradient: string;
   coverAccent: string;
+  coverImage?: string;
   badgeText: string;
   tagline: string;
   synopsis: string;

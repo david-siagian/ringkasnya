@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1C1917" />
+      <stop offset="55%" stop-color="#292524" />
+      <stop offset="100%" stop-color="#44403C" />
+    </linearGradient>
+    <linearGradient id="funnelGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E7E5E4" />
+      <stop offset="100%" stop-color="#A8A29E" />
+    </linearGradient>
+    <linearGradient id="vitalGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    <radialGradient id="vitalGlow" cx="50%" cy="68%" r="35%">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#292524" stop-opacity="0" />
+    </radialGradient>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <rect width="600" height="800" fill="url(#vitalGlow)" />
+
+  <!-- Subtle Architectural Grid / Framing -->
+  <circle cx="300" cy="560" r="190" fill="none" stroke="#57534E" stroke-width="1.5" opacity="0.4" />
+  <circle cx="300" cy="560" r="130" fill="none" stroke="#78716C" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.4" />
+
+  <!-- Top: Scattered Noise (Trivial Many) -->
+  <g fill="#78716C" opacity="0.7">
+    <circle cx="140" cy="115" r="10" />
+    <circle cx="215" cy="95" r="7" />
+    <circle cx="275" cy="130" r="12" />
+    <circle cx="345" cy="100" r="8" />
+    <circle cx="415" cy="125" r="11" />
+    <circle cx="465" cy="155" r="7" />
+    <circle cx="170" cy="175" r="9" />
+    <circle cx="245" cy="185" r="6" />
+    <circle cx="375" cy="178" r="10" />
+    <circle cx="310" cy="165" r="8" />
+    <rect x="195" y="135" width="22" height="6" rx="3" transform="rotate(24 195 135)" />
+    <rect x="395" y="88" width="24" height="6" rx="3" transform="rotate(-18 395 88)" />
+    <rect x="285" y="75" width="20" height="6" rx="3" transform="rotate(12 285 75)" />
+  </g>
+  <!-- One Emerald Dot Among the Noise -->
+  <circle cx="300" cy="122" r="13" fill="#34D399" />
+
+  <!-- Geometric Filter / Funnel -->
+  <polygon points="115,245 485,245 342,405 258,405" fill="url(#funnelGrad)" opacity="0.92" />
+  <polygon points="115,245 300,245 300,405 258,405" fill="#F5F5F4" opacity="0.35" />
+  <rect x="258" y="405" width="84" height="22" rx="4" fill="#D6D3D1" />
+
+  <!-- Single Pure Essential Beam & Sphere ("Less, But Better") -->
+  <line x1="300" y1="427" x2="300" y2="545" stroke="#34D399" stroke-width="6" stroke-linecap="round" />
+  <circle cx="300" cy="585" r="56" fill="url(#vitalGrad)" />
+  <circle cx="300" cy="585" r="24" fill="#ECFDF5" />
+
+  <!-- Clean Minimal Pedestal -->
+  <rect x="200" y="685" width="200" height="8" rx="4" fill="#A8A29E" opacity="0.6" />
+  <rect x="245" y="710" width="110" height="6" rx="3" fill="#78716C" opacity="0.45" />
+
+  <!-- Subtle Paper Grain -->
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
+</svg>

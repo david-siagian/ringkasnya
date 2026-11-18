@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9A3412" />
+      <stop offset="50%" stop-color="#C2410C" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FEF3C7" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <linearGradient id="stepGrad" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7C2D12" />
+      <stop offset="100%" stop-color="#F97316" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="28%" r="45%">
+      <stop offset="0%" stop-color="#FDE68A" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#EA580C" stop-opacity="0" />
+    </radialGradient>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" result="noise" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+      <feComposite in2="SourceGraphic" operator="in" />
+    </filter>
+  </defs>
+
+  <!-- Base Background -->
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+
+  <!-- Editorial Geometric Color Blocks -->
+  <path d="M0 0 H600 V340 Q420 260 0 380 Z" fill="#7C2D12" opacity="0.45" />
+  <circle cx="480" cy="140" r="240" fill="#FB923C" opacity="0.16" />
+  <circle cx="300" cy="220" r="270" fill="url(#glow)" />
+
+  <!-- Sun / Compounding Peak -->
+  <circle cx="395" cy="205" r="76" fill="url(#sunGrad)" />
+  <circle cx="395" cy="205" r="102" fill="none" stroke="#FEF3C7" stroke-width="2.5" stroke-dasharray="8 10" opacity="0.7" />
+  <circle cx="395" cy="205" r="128" fill="none" stroke="#FDE68A" stroke-width="1.5" opacity="0.35" />
+
+  <!-- Orbital Atomic Rings around Central Sphere -->
+  <g transform="translate(220, 405)">
+    <ellipse cx="0" cy="0" rx="115" ry="42" transform="rotate(-28)" fill="none" stroke="#FED7AA" stroke-width="3" opacity="0.65" />
+    <ellipse cx="0" cy="0" rx="115" ry="42" transform="rotate(28)" fill="none" stroke="#FEF3C7" stroke-width="2.5" opacity="0.5" />
+    <ellipse cx="0" cy="0" rx="115" ry="42" transform="rotate(88)" fill="none" stroke="#FDBA74" stroke-width="2" opacity="0.4" />
+    <circle cx="0" cy="0" r="34" fill="#FEF3C7" />
+    <circle cx="0" cy="0" r="20" fill="#F59E0B" />
+    <!-- Orbiting electrons -->
+    <circle cx="96" cy="-50" r="9" fill="#FFFBEB" />
+    <circle cx="-92" cy="48" r="7" fill="#FDE68A" />
+    <circle cx="12" cy="-112" r="6" fill="#FED7AA" />
+  </g>
+
+  <!-- Compounding 1% Ascending Steps -->
+  <g>
+    <rect x="65" y="690" width="75" height="110" rx="6" fill="#431407" opacity="0.85" />
+    <rect x="145" y="645" width="75" height="155" rx="6" fill="#7C2D12" opacity="0.9" />
+    <rect x="225" y="590" width="75" height="210" rx="6" fill="#9A3412" />
+    <rect x="305" y="520" width="75" height="280" rx="6" fill="#C2410C" />
+    <rect x="385" y="435" width="75" height="365" rx="6" fill="#F59E0B" />
+    <rect x="465" y="330" width="75" height="470" rx="6" fill="#FEF3C7" />
+  </g>
+
+  <!-- Exponential Curve Arrow -->
+  <path d="M 85 655 Q 290 615 492 290" fill="none" stroke="#FFFBEB" stroke-width="5" stroke-linecap="round" />
+  <polygon points="502,272 476,292 504,306" fill="#FFFBEB" />
+
+  <!-- Small Floating Habit Spheres Along the Curve -->
+  <circle cx="102" cy="650" r="10" fill="#FDE68A" />
+  <circle cx="182" cy="618" r="12" fill="#FDE68A" />
+  <circle cx="262" cy="566" r="14" fill="#FEF3C7" />
+  <circle cx="342" cy="492" r="16" fill="#FEF3C7" />
+  <circle cx="422" cy="396" r="19" fill="#FFFBEB" />
+
+  <!-- Subtle Paper Grain Overlay -->
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.45" style="mix-blend-mode: overlay;" />
+</svg>
