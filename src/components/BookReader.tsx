@@ -226,7 +226,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         {/* Seksi Sinopsis & Untuk Siapa Buku Ini */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
           <h2 className="text-lg font-bold text-slate-900">
-            Gambaran Singkat Buku
+            Sinopsis
           </h2>
           <p className={`mt-2.5 text-slate-700 ${fontSizeClass}`}>
             {book.synopsis}
