@@ -16,7 +16,7 @@ body {
 @keyframes pageEnter {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -36,19 +36,9 @@ body {
 }
 
 .animate-page-enter {
-  animation: pageEnter 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: pageEnter 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-fade-slide {
-  animation: fadeSlideUp 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .animate-page-enter,
-  .animate-fade-slide {
-    animation: none;
-  }
+  animation: fadeSlideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

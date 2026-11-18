@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BookOpen, CheckCircle2, Clock, Sparkles } from "lucide-react";
+import { CheckCircle2, Clock, Sparkles } from "lucide-react";
+import BrandLogo from "@/components/BrandLogo";
 
 export default function Footer() {
   return (
@@ -7,10 +8,8 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white">
-                <BookOpen className="h-4 w-4" />
-              </div>
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <BrandLogo className="h-8 w-8 rounded-lg shadow-sm transition-transform group-hover:scale-105" />
               <span className="text-lg font-extrabold tracking-tight text-slate-900">
                 ringkasnya<span className="text-emerald-600">.id</span>
               </span>

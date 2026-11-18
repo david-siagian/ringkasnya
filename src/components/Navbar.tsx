@@ -1,15 +1,14 @@
 import Link from "next/link";
-import { BookOpen, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
 import { SmoothHashLink } from "@/components/SmoothNavigation";
+import BrandLogo from "@/components/BrandLogo";
 
 export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm shadow-emerald-600/20 transition-transform group-hover:scale-105">
-            <BookOpen className="h-5 w-5" />
-          </div>
+          <BrandLogo className="h-9 w-9 shadow-sm shadow-emerald-600/20 rounded-xl transition-transform group-hover:scale-105" />
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="text-lg font-extrabold tracking-tight text-slate-900">

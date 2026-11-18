@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { SmoothScrollHandler } from "@/components/SmoothNavigation";
+import { SmoothScrollHandler, PageTransitionWrapper } from "@/components/SmoothNavigation";
 
 export const metadata: Metadata = {
   title: "ringkasnya.id — Baca Intinya, Praktikkan Ilmunya",
@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col antialiased">
         <SmoothScrollHandler />
         <Navbar />
-        <div className="flex-1">{children}</div>
+        <PageTransitionWrapper>{children}</PageTransitionWrapper>
         <Footer />
       </body>
     </html>

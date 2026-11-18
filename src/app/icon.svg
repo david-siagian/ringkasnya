@@ -1,10 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="16" fill="#16a34a"/>
+  <defs>
+    <linearGradient id="ringkasnyaLogoBg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#0F766E" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#ringkasnyaLogoBg)" />
   <path
-    d="M32 21v26M18 43a2 2 0 0 1-2-2V19a2 2 0 0 1 2-2h7a7 7 0 0 1 7 7 7 7 0 0 1 7-7h7a2 2 0 0 1 2 2v22a2 2 0 0 1-2 2h-9a5 5 0 0 0-5 5 5 5 0 0 0-5-5h-9Z"
-    stroke="#ffffff"
-    stroke-width="3.5"
+    d="M17 20C17 17.7909 18.7909 16 21 16H36C38.2091 16 40 17.7909 40 20V46L28.5 39.5L17 46V20Z"
+    fill="#FFFFFF"
+    fill-opacity="0.95"
+  />
+  <path
+    d="M23 23H34M23 29H31"
+    stroke="#059669"
+    stroke-width="3.2"
     stroke-linecap="round"
-    stroke-linejoin="round"
+  />
+  <path
+    d="M47 13L49.2 18.8L55 21L49.2 23.2L47 29L44.8 23.2L39 21L44.8 18.8L47 13Z"
+    fill="#FCD34D"
   />
 </svg>
