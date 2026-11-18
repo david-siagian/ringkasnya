@@ -12,6 +12,7 @@
 - Hitung estimasi baca pada kecepatan ~200 kata/menit dan simpan tiap buku sebagai modul terpisah di `src/data/books/<slug>.ts`:
   - **Mode Kilat (6–10 Menit)**: 1.350–1.750 kata (`quickTimeMinutes` di kisaran 6–10).
   - **Mode Mendalam (20–30 Menit)**: 4.150–5.500 kata (`readingTimeMinutes` di kisaran 20–30).
+- **Format Sinopsis**: Bagian `synopsis` pada setiap buku cukup ditulis **1 paragraf ringkas (4–7 baris)** saja. Jika pemangkasan sinopsis mengurangi total kata, kompensasikan penambahan teks pada `deepContent`, `quickSummary`, atau `conclusion` agar estimasi durasi baca tetap konsisten.
 
 ## Operasional CLI (Windows)
 - Jalankan `npm run build`, `git push`, `npx vercel`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.
