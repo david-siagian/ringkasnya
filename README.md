@@ -20,3 +20,18 @@ npm run dev
 ```
 
 Buka `http://localhost:3000` di browser Anda.
+
+## Verification Plan & Release Pipeline
+
+Setiap kali perbaikan atau fitur selesai dibuat, jalankan alur verifikasi hingga deploy produksi (`release-pipeline`):
+
+### 1. Automated Verification
+- Menjalankan `npm run build` di `E:\MyApp\ringkasnya` (dengan `BypassSandbox: true` pada Windows) untuk memastikan kompilasi TypeScript, linting, dan generasi halaman statis Next.js berjalan tanpa error.
+
+### 2. Manual & UI Verification
+1. Menguji navigasi **Katalog Buku**, **Cara Kerja**, dan klik kartu buku untuk memastikan smooth scroll & transisi halaman bekerja mulus.
+2. Membuka halaman detail buku (`/buku/atomic-habits`), menguji toggle **Mode Kilat (6–10 Menit)** vs **Mode Mendalam (20–30 Menit)**, serta mencentang **Action Checklist** dan menyalin kutipan.
+
+### 3. Commit, Push & Deploy ke Produksi
+1. Commit dan push perubahan ke GitHub (`git push`, dengan `BypassSandbox: true`).
+2. Deploy ke produksi Vercel (`npx vercel --yes --prod`, dengan `BypassSandbox: true`) dan verifikasi situs live di `https://ringkasnya.vercel.app`.

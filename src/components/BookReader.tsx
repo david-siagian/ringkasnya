@@ -127,7 +127,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 </p>
               )}
               <p className="mt-2 text-base font-semibold text-white/95">
-                Karya {book.author} ({book.year})
+                {book.author} ({book.year})
               </p>
 
               <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-white/90">
@@ -329,17 +329,19 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         </div>
 
         {/* Kesimpulan Akhir */}
-        <div className="mt-8 rounded-2xl bg-slate-900 p-6 sm:p-8 text-white shadow-md">
-          <div className="flex items-center gap-2 text-emerald-400">
-            <Sparkles className="h-5 w-5" />
+        <section className="mt-8 rounded-2xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/50 p-6 sm:p-8 shadow-sm">
+          <div className="flex items-center gap-2.5 text-emerald-700">
+            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+              <Sparkles className="h-4 w-4" />
+            </span>
             <span className="text-xs font-bold uppercase tracking-wider">
               Kesimpulan Akhir (Final Takeaway)
             </span>
           </div>
-          <p className="mt-3 text-base sm:text-lg font-medium leading-relaxed text-slate-100">
+          <p className={`mt-4 text-slate-800 ${fontSizeClass}`}>
             {book.conclusion}
           </p>
-        </div>
+        </section>
 
         {/* Fitur Khas ringkasnya.id: Action Checklist Interaktif */}
         <section className="mt-8 rounded-2xl border-2 border-emerald-500/30 bg-white p-6 sm:p-8 shadow-sm">
