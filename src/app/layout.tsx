@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "ringkasnya.id — Baca Intinya, Praktikkan Ilmunya",
   description:
-    "Platform ringkasan buku best-seller dunia dalam Bahasa Indonesia. Dilengkapi Mode Kilat 3 Menit, Mode Mendalam 10 Menit, dan Action Checklist interaktif.",
+    "Platform ringkasan buku best-seller dunia dalam Bahasa Indonesia. Dilengkapi Mode Kilat 5–10 Menit, Mode Mendalam 20–30 Menit, dan Action Checklist interaktif.",
 };
 
 export default function RootLayout({

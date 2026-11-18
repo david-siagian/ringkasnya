@@ -21,7 +21,7 @@ export default function HomePage() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 text-xs font-semibold text-emerald-800 shadow-sm">
               <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
-              <span>Serap Ilmu Buku Best-Seller Dunia dalam 10 Menit</span>
+              <span>Serap Ilmu Buku Best-Seller Dunia Mulai dari 5 Menit</span>
             </div>
 
             <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
@@ -39,7 +39,7 @@ export default function HomePage() {
               merangkum gagasan utama buku-buku terbaik dunia ke dalam Bahasa
               Indonesia yang mengalir, lengkap dengan{" "}
               <span className="underline decoration-emerald-400 decoration-2 underline-offset-4">
-                Mode Kilat 3 Menit
+                Mode Kilat 5–10 Menit
               </span>{" "}
               dan{" "}
               <span className="underline decoration-emerald-400 decoration-2 underline-offset-4">
@@ -69,7 +69,7 @@ export default function HomePage() {
             <div className="mt-12 grid grid-cols-3 gap-4 border-t border-slate-200/80 pt-8 text-center">
               <div>
                 <p className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
-                  3–12 <span className="text-sm font-semibold text-emerald-600">Mnt</span>
+                  5–30 <span className="text-sm font-semibold text-emerald-600">Mnt</span>
                 </p>
                 <p className="mt-0.5 text-xs text-slate-500">
                   Waktu Baca Fleksibel
@@ -127,10 +127,10 @@ export default function HomePage() {
                 1. Mode Baca Dwi-Kecepatan
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                Sedang buru-buru? Aktifkan <strong>Mode Kilat (3 Menit)</strong>{" "}
+                Sedang buru-buru? Aktifkan <strong>Mode Kilat (5–10 Menit)</strong>{" "}
                 untuk membaca intisari 1 kalimat per bab. Ingin menyelami contoh
                 dan konteks lengkap? Gunakan{" "}
-                <strong>Mode Mendalam (10 Menit)</strong>.
+                <strong>Mode Mendalam (20–30 Menit)</strong>.
               </p>
             </div>
 

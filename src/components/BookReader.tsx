@@ -204,7 +204,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             <p className="text-xs sm:text-sm font-medium">
               <strong>Mode Kilat Aktif:</strong> Menampilkan intisari 1 kalimat
               dan tips praktis dari setiap bab agar Anda bisa menangkap ide utama
-              buku ini dalam 3 menit.
+              buku ini dalam {book.quickTimeMinutes} menit.
             </p>
           </div>
         )}
