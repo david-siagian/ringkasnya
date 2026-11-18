@@ -12,6 +12,7 @@ export const deepWork: BookSummary = {
   rating: 4.8,
   coverGradient: "from-indigo-600 via-blue-700 to-slate-900",
   coverAccent: "bg-indigo-100 text-indigo-900",
+  coverImage: "/images/covers/deep-work.svg",
   badgeText: "Fokus Maksimal",
   tagline:
     "Kuasai kemampuan fokus tanpa gangguan untuk menghasilkan karya terbaik di era penuh distraksi.",

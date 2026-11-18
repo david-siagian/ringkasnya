@@ -12,6 +12,7 @@ export const filosofiTeras: BookSummary = {
   rating: 4.9,
   coverGradient: "from-sky-600 via-cyan-700 to-teal-800",
   coverAccent: "bg-sky-100 text-sky-900",
+  coverImage: "/images/covers/filosofi-teras.svg",
   badgeText: "Best-Seller Indonesia",
   tagline:
     "Filsafat Stoisisme dua ribu tahun lalu yang membumi untuk meredam overthinking, cemas, dan drama hidup modern.",
