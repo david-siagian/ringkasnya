@@ -1,0 +1,472 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { BookSummary } from "@/types/book";
+import {
+  ArrowLeft,
+  BookOpen,
+  Check,
+  CheckCircle2,
+  Clock,
+  Copy,
+  Lightbulb,
+  ListChecks,
+  Quote,
+  Sparkles,
+  Star,
+  Target,
+  Type,
+  Zap,
+} from "lucide-react";
+
+interface BookReaderProps {
+  book: BookSummary;
+  relatedBooks: BookSummary[];
+}
+
+export default function BookReader({ book, relatedBooks }: BookReaderProps) {
+  const [readMode, setReadMode] = useState<"deep" | "quick">("deep");
+  const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
+  const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
+  const [copiedQuoteIdx, setCopiedQuoteIdx] = useState<number | null>(null);
+
+  const storageKey = `ringkasnya_checklist_${book.slug}`;
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        setCheckedItems(JSON.parse(saved));
+      } else {
+        setCheckedItems({});
+      }
+    } catch {
+      setCheckedItems({});
+    }
+  }, [storageKey]);
+
+  const toggleChecklist = (index: number) => {
+    setCheckedItems((prev) => {
+      const updated = { ...prev, [index]: !prev[index] };
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(updated));
+      } catch {
+        // ignore storage error
+      }
+      return updated;
+    });
+  };
+
+  const completedCount = Object.values(checkedItems).filter(Boolean).length;
+  const totalChecklist = book.actionChecklist.length;
+  const progressPercent =
+    totalChecklist > 0 ? Math.round((completedCount / totalChecklist) * 100) : 0;
+
+  const handleCopyQuote = (quote: string, index: number) => {
+    const textToCopy = `"${quote}" — ${book.title} (${book.author}) via ringkasnya.id`;
+    navigator.clipboard.writeText(textToCopy);
+    setCopiedQuoteIdx(index);
+    setTimeout(() => setCopiedQuoteIdx(null), 2000);
+  };
+
+  const fontSizeClass =
+    fontSize === "sm"
+      ? "text-sm leading-relaxed"
+      : fontSize === "lg"
+      ? "text-lg leading-relaxed"
+      : "text-base leading-relaxed";
+
+  return (
+    <div className="min-h-screen bg-slate-50/70 pb-20">
+      {/* Banner Header Buku */}
+      <div className={`bg-gradient-to-br ${book.coverGradient} text-white`}>
+        <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
+          <Link
+            href="/#katalog"
+            className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm transition hover:bg-black/30"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Kembali ke Katalog
+          </Link>
+
+          <div className="mt-6 flex flex-wrap items-center gap-2.5">
+            <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
+              {book.category}
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
+              <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
+              {book.rating} / 5.0
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
+              <Clock className="h-3.5 w-3.5" />
+              {readMode === "quick"
+                ? `${book.quickTimeMinutes} menit baca (Mode Kilat)`
+                : `${book.readingTimeMinutes} menit baca (Mode Mendalam)`}
+            </span>
+          </div>
+
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
+            {book.title}
+          </h1>
+          {book.originalTitle && (
+            <p className="mt-1 text-sm text-white/80 italic">
+              {book.originalTitle}
+            </p>
+          )}
+          <p className="mt-2 text-base font-semibold text-white/95">
+            Karya {book.author} ({book.year})
+          </p>
+
+          <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-white/90">
+            {book.tagline}
+          </p>
+        </div>
+      </div>
+
+      {/* Sticky Reader Toolbar (Mode Baca & Ukuran Huruf) */}
+      <div className="sticky top-[61px] z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur-md">
+        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          {/* Toggle Mode Kilat vs Mendalam */}
+          <div className="flex items-center rounded-xl bg-slate-100 p-1">
+            <button
+              type="button"
+              onClick={() => setReadMode("deep")}
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
+                readMode === "deep"
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <BookOpen className="h-4 w-4 text-emerald-600" />
+              <span>Mendalam ({book.readingTimeMinutes} mnt)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setReadMode("quick")}
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
+                readMode === "quick"
+                  ? "bg-amber-500 text-white shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <Zap className="h-4 w-4" />
+              <span>Kilat ({book.quickTimeMinutes} mnt)</span>
+            </button>
+          </div>
+
+          {/* Kontrol Ukuran Teks */}
+          <div className="flex items-center gap-1.5">
+            <Type className="h-4 w-4 text-slate-400 mr-1 hidden sm:inline" />
+            <button
+              type="button"
+              onClick={() => setFontSize("sm")}
+              className={`rounded-lg px-2.5 py-1 text-xs font-semibold border ${
+                fontSize === "sm"
+                  ? "border-emerald-600 bg-emerald-50 text-emerald-700"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              A-
+            </button>
+            <button
+              type="button"
+              onClick={() => setFontSize("base")}
+              className={`rounded-lg px-2.5 py-1 text-xs font-semibold border ${
+                fontSize === "base"
+                  ? "border-emerald-600 bg-emerald-50 text-emerald-700"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              A
+            </button>
+            <button
+              type="button"
+              onClick={() => setFontSize("lg")}
+              className={`rounded-lg px-2.5 py-1 text-xs font-semibold border ${
+                fontSize === "lg"
+                  ? "border-emerald-600 bg-emerald-50 text-emerald-700"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              A+
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Konten Utama Ringkasan */}
+      <main className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
+        {/* Banner Info Mode Kilat */}
+        {readMode === "quick" && (
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
+            <Zap className="h-5 w-5 shrink-0 text-amber-600" />
+            <p className="text-xs sm:text-sm font-medium">
+              <strong>Mode Kilat Aktif:</strong> Menampilkan intisari 1 kalimat
+              dan tips praktis dari setiap bab agar Anda bisa menangkap ide utama
+              buku ini dalam 3 menit.
+            </p>
+          </div>
+        )}
+
+        {/* Seksi Sinopsis & Untuk Siapa Buku Ini */}
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+          <h2 className="text-lg font-bold text-slate-900">
+            Gambaran Singkat Buku
+          </h2>
+          <p className={`mt-2.5 text-slate-700 ${fontSizeClass}`}>
+            {book.synopsis}
+          </p>
+
+          <div className="mt-6 rounded-xl bg-slate-50 p-5 border border-slate-100">
+            <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+              <Target className="h-4 w-4 text-emerald-600" />
+              Buku Ini Sangat Cocok Untuk:
+            </h3>
+            <ul className="mt-3 space-y-2">
+              {book.whoIsItFor.map((target, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-start gap-2.5 text-sm text-slate-700"
+                >
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                  <span>{target}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Daftar Isi Cepat */}
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            Daftar Poin Inti ({book.keyTakeaways.length} Bab Ringkas)
+          </h2>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            {book.keyTakeaways.map((item) => (
+              <a
+                key={item.number}
+                href={`#poin-${item.number}`}
+                className="flex items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50/60 hover:text-emerald-800"
+              >
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
+                  {item.number}
+                </span>
+                <span className="line-clamp-1">{item.title}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Poin Inti Bab per Bab */}
+        <div className="mt-8 space-y-6">
+          {book.keyTakeaways.map((takeaway) => (
+            <article
+              key={takeaway.number}
+              id={`poin-${takeaway.number}`}
+              className="scroll-mt-32 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-sm font-extrabold text-white">
+                  {takeaway.number}
+                </span>
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                  Poin Inti #{takeaway.number}
+                </span>
+              </div>
+
+              <h3 className="mt-3 text-xl font-extrabold text-slate-900 sm:text-2xl">
+                {takeaway.title}
+              </h3>
+
+              {/* Box Intisari Kilat */}
+              <div className="mt-4 rounded-xl border-l-4 border-emerald-500 bg-emerald-50/70 p-4">
+                <p className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                  ⚡ Intisari 1 Kalimat
+                </p>
+                <p className="mt-1 text-sm sm:text-base font-semibold text-slate-900">
+                  {takeaway.quickSummary}
+                </p>
+              </div>
+
+              {/* Penjelasan Mendalam (Hanya muncul di Mode Mendalam) */}
+              {readMode === "deep" && (
+                <div className={`mt-5 space-y-4 text-slate-700 ${fontSizeClass}`}>
+                  {takeaway.deepContent.map((paragraph, pIdx) => (
+                    <p key={pIdx}>{paragraph}</p>
+                  ))}
+                </div>
+              )}
+
+              {/* Tips Praktis */}
+              <div className="mt-5 flex items-start gap-3 rounded-xl bg-amber-50/90 border border-amber-200/80 p-4">
+                <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-900">
+                    Tips Praktis Langsung Coba:
+                  </span>
+                  <p className="mt-0.5 text-sm text-slate-800">
+                    {takeaway.practicalTip}
+                  </p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* Kesimpulan Akhir */}
+        <div className="mt-8 rounded-2xl bg-slate-900 p-6 sm:p-8 text-white shadow-md">
+          <div className="flex items-center gap-2 text-emerald-400">
+            <Sparkles className="h-5 w-5" />
+            <span className="text-xs font-bold uppercase tracking-wider">
+              Kesimpulan Akhir (Final Takeaway)
+            </span>
+          </div>
+          <p className="mt-3 text-base sm:text-lg font-medium leading-relaxed text-slate-100">
+            {book.conclusion}
+          </p>
+        </div>
+
+        {/* Fitur Khas ringkasnya.id: Action Checklist Interaktif */}
+        <section className="mt-8 rounded-2xl border-2 border-emerald-500/30 bg-white p-6 sm:p-8 shadow-sm">
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 text-emerald-700">
+                <ListChecks className="h-5 w-5" />
+                <span className="text-xs font-bold uppercase tracking-wider">
+                  Action Checklist Interaktif
+                </span>
+              </div>
+              <h2 className="mt-1 text-xl font-extrabold text-slate-900">
+                Jangan Hanya Dibaca—Mari Praktikkan!
+              </h2>
+              <p className="mt-1 text-xs sm:text-sm text-slate-600">
+                Centang langkah-langkah di bawah ini setelah Anda mempraktikkannya.
+                Progres Anda tersimpan otomatis di perangkat ini.
+              </p>
+            </div>
+
+            <div className="flex flex-col items-end">
+              <span className="text-xs font-bold text-slate-700">
+                {completedCount} dari {totalChecklist} Selesai ({progressPercent}%)
+              </span>
+              <div className="mt-1.5 h-2.5 w-36 overflow-hidden rounded-full bg-slate-100">
+                <div
+                  className="h-full rounded-full bg-emerald-600 transition-all duration-300"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-3">
+            {book.actionChecklist.map((action, idx) => {
+              const isChecked = !!checkedItems[idx];
+              return (
+                <label
+                  key={idx}
+                  onClick={() => toggleChecklist(idx)}
+                  className={`flex cursor-pointer items-start gap-3.5 rounded-xl border p-4 transition-all ${
+                    isChecked
+                      ? "border-emerald-300 bg-emerald-50/60 text-slate-500 line-through"
+                      : "border-slate-200 bg-white text-slate-800 hover:border-emerald-300 hover:bg-slate-50"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={() => {}}
+                    className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <span className="text-sm sm:text-base font-medium">
+                    {action}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Kutipan Berkesan (Shareable Quotes) */}
+        <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+          <div className="flex items-center gap-2 text-slate-900">
+            <Quote className="h-5 w-5 text-emerald-600" />
+            <h2 className="text-xl font-extrabold">
+              Kutipan Berkesan ({book.quotes.length})
+            </h2>
+          </div>
+          <p className="mt-1 text-xs sm:text-sm text-slate-500">
+            Klik tombol salin untuk membagikan kutipan favoritmu ke WhatsApp atau
+            media sosial.
+          </p>
+
+          <div className="mt-5 grid gap-4">
+            {book.quotes.map((quote, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col justify-between gap-4 rounded-xl border border-slate-100 bg-slate-50 p-5 sm:flex-row sm:items-center"
+              >
+                <blockquote className="text-sm sm:text-base font-semibold italic text-slate-800">
+                  &ldquo;{quote}&rdquo;
+                </blockquote>
+                <button
+                  type="button"
+                  onClick={() => handleCopyQuote(quote, idx)}
+                  className="inline-flex shrink-0 items-center gap-1.5 self-end rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-emerald-400 hover:text-emerald-700 sm:self-center"
+                >
+                  {copiedQuoteIdx === idx ? (
+                    <>
+                      <Check className="h-3.5 w-3.5 text-emerald-600" />
+                      <span className="text-emerald-700">Tersalin!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3.5 w-3.5" />
+                      <span>Salin Kutipan</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Rekomendasi Buku Lainnya */}
+        {relatedBooks.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-xl font-extrabold text-slate-900">
+              Lanjutkan Membaca Buku Lainnya
+            </h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              {relatedBooks.map((other) => (
+                <Link
+                  key={other.slug}
+                  href={`/buku/${other.slug}`}
+                  className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-emerald-400 hover:shadow-md"
+                >
+                  <div>
+                    <span className="text-xs font-bold text-emerald-600">
+                      {other.category}
+                    </span>
+                    <h3 className="mt-1 text-lg font-extrabold text-slate-900 group-hover:text-emerald-600">
+                      {other.title}
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      {other.author} • {other.readingTimeMinutes} menit baca
+                    </p>
+                    <p className="mt-2 line-clamp-2 text-xs text-slate-600">
+                      {other.tagline}
+                    </p>
+                  </div>
+                  <span className="mt-4 text-xs font-semibold text-emerald-700">
+                    Baca Ringkasan →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
+    </div>
+  );
+}
