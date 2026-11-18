@@ -12,6 +12,7 @@ export const essentialism: BookSummary = {
   rating: 4.8,
   coverGradient: "from-slate-700 via-zinc-800 to-neutral-950",
   coverAccent: "bg-slate-200 text-slate-900",
+  coverImage: "/images/covers/essentialism.svg",
   badgeText: "Seni Memilih Prioritas",
   tagline:
     "Berhenti sibuk mengerjakan segalanya; pilih sedikit hal yang paling bermakna dan kerjakan dengan hasil luar biasa.",

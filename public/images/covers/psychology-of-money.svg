@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#064E3B" />
+      <stop offset="55%" stop-color="#0F766E" />
+      <stop offset="100%" stop-color="#115E59" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FEF3C7" />
+      <stop offset="50%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <linearGradient id="headGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+    <radialGradient id="aura" cx="44%" cy="30%" r="48%">
+      <stop offset="0%" stop-color="#FDE68A" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#0F766E" stop-opacity="0" />
+    </radialGradient>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <!-- Base Background -->
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <path d="M0 430 H600 V800 H0 Z" fill="#042F2E" opacity="0.55" />
+  <circle cx="480" cy="140" r="220" fill="#14B8A6" opacity="0.14" />
+  <circle cx="265" cy="240" r="260" fill="url(#aura)" />
+
+  <!-- Stylized Profile Silhouette -->
+  <path d="M125 710 L145 595 Q115 540 120 465 Q125 355 235 340 Q335 328 352 425 L376 472 Q382 486 362 496 L352 504 L350 545 Q346 582 302 588 L272 590 L282 710 Z" fill="url(#headGrad)" />
+  <path d="M168 515 Q195 455 268 455 Q318 455 335 495" fill="none" stroke="#34D399" stroke-width="3" opacity="0.45" />
+
+  <!-- Growing Golden Botanical Tree from Mind -->
+  <g stroke="url(#goldGrad)" stroke-linecap="round" fill="none">
+    <path d="M242 415 V135" stroke-width="7" />
+    <path d="M242 330 Q185 290 155 235" stroke-width="4.5" />
+    <path d="M242 300 Q300 260 330 205" stroke-width="4.5" />
+    <path d="M242 250 Q192 210 175 155" stroke-width="4" />
+    <path d="M242 225 Q292 185 312 135" stroke-width="4" />
+  </g>
+  <!-- Golden Leaves -->
+  <g fill="url(#goldGrad)">
+    <ellipse cx="242" cy="112" rx="16" ry="28" />
+    <ellipse cx="144" cy="218" rx="14" ry="24" transform="rotate(-35 144 218)" />
+    <ellipse cx="342" cy="188" rx="14" ry="24" transform="rotate(35 342 188)" />
+    <ellipse cx="166" cy="142" rx="12" ry="21" transform="rotate(-24 166 142)" />
+    <ellipse cx="320" cy="122" rx="12" ry="21" transform="rotate(24 320 122)" />
+    <ellipse cx="195" cy="268" rx="11" ry="18" transform="rotate(-48 195 268)" />
+    <ellipse cx="290" cy="242" rx="11" ry="18" transform="rotate(48 290 242)" />
+  </g>
+
+  <!-- Balanced Hourglass (Time & Patience) -->
+  <g transform="translate(455, 425)">
+    <rect x="-52" y="-78" width="104" height="12" rx="6" fill="#FEF3C7" />
+    <rect x="-52" y="66" width="104" height="12" rx="6" fill="#FEF3C7" />
+    <path d="M-40 -66 H40 L10 -6 Q4 0 10 6 L40 66 H-40 L-10 6 Q-4 0 -10 -6 Z" fill="#CCFBF1" opacity="0.28" stroke="#FEF3C7" stroke-width="3" />
+    <!-- Sand -->
+    <polygon points="-24,-42 24,-42 6,-12 -6,-12" fill="#FBBF24" />
+    <polygon points="-30,66 30,66 10,32 -10,32" fill="#F59E0B" />
+    <line x1="0" y1="-10" x2="0" y2="34" stroke="#FDE68A" stroke-width="3" stroke-dasharray="4 4" />
+  </g>
+
+  <!-- Minimal Geometric Coins -->
+  <g>
+    <circle cx="385" cy="645" r="28" fill="#F59E0B" />
+    <circle cx="385" cy="645" r="20" fill="none" stroke="#FEF3C7" stroke-width="2.5" />
+    <circle cx="455" cy="615" r="34" fill="#FBBF24" />
+    <circle cx="455" cy="615" r="24" fill="none" stroke="#FFFBEB" stroke-width="2.5" />
+    <circle cx="515" cy="662" r="24" fill="#FDE68A" />
+    <circle cx="515" cy="662" r="16" fill="none" stroke="#D97706" stroke-width="2" />
+  </g>
+
+  <!-- Subtle Paper Grain -->
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
+</svg>

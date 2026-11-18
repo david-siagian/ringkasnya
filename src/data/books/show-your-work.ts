@@ -12,6 +12,7 @@ export const showYourWork: BookSummary = {
   rating: 4.8,
   coverGradient: "from-rose-500 via-pink-600 to-purple-700",
   coverAccent: "bg-rose-100 text-rose-900",
+  coverImage: "/images/covers/show-your-work.svg",
   badgeText: "Karier & Personal Branding",
   tagline:
     "Berhenti bersembunyi di balik kesempurnaan: bagikan proses berkaryamu setiap hari agar dunia menemukanmu.",

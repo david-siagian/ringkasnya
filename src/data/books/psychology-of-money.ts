@@ -12,6 +12,7 @@ export const psychologyOfMoney: BookSummary = {
   rating: 4.9,
   coverGradient: "from-emerald-600 via-teal-600 to-cyan-700",
   coverAccent: "bg-emerald-100 text-emerald-900",
+  coverImage: "/images/covers/psychology-of-money.svg",
   badgeText: "Wajib Baca Finansial",
   tagline:
     "Sukses mengelola uang bukan soal seberapa pintar Anda berhitung, melainkan bagaimana Anda mengendalikan perilaku.",

@@ -12,6 +12,7 @@ export const atomicHabits: BookSummary = {
   rating: 4.9,
   coverGradient: "from-amber-500 via-orange-500 to-red-600",
   coverAccent: "bg-amber-100 text-amber-900",
+  coverImage: "/images/covers/atomic-habits.svg",
   badgeText: "Terpopuler #1",
   tagline:
     "Perubahan kecil yang dilakukan setiap hari akan menciptakan hasil luar biasa seiring waktu.",
