@@ -77,6 +77,13 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       ? "text-lg leading-relaxed"
       : "text-base leading-relaxed";
 
+  const conclusionFontSizeClass =
+    fontSize === "sm"
+      ? "text-base leading-relaxed"
+      : fontSize === "lg"
+      ? "text-xl leading-relaxed"
+      : "text-lg leading-relaxed";
+
   return (
     <div className="min-h-screen bg-slate-50/70 pb-20">
       {/* Banner Header Buku */}
@@ -329,18 +336,31 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         </div>
 
         {/* Kesimpulan Akhir */}
-        <section className="mt-8 rounded-2xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/50 p-6 sm:p-8 shadow-sm">
-          <div className="flex items-center gap-2.5 text-emerald-700">
-            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
-              <Sparkles className="h-4 w-4" />
-            </span>
-            <span className="text-xs font-bold uppercase tracking-wider">
-              Kesimpulan Akhir (Final Takeaway)
-            </span>
+        <section className="mt-8 rounded-2xl border-2 border-emerald-300/90 border-l-[6px] border-l-emerald-600 bg-gradient-to-br from-emerald-100/75 via-emerald-50/70 to-teal-50/80 p-6 sm:p-8 shadow-md shadow-emerald-950/5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-3">
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+                <Sparkles className="h-4 w-4" />
+              </span>
+              <div>
+                <span className="block text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+                  Final Takeaway
+                </span>
+                <h2 className="text-lg font-extrabold text-slate-900 sm:text-xl">
+                  Kesimpulan Akhir
+                </h2>
+              </div>
+            </div>
           </div>
-          <p className={`mt-4 text-slate-800 ${fontSizeClass}`}>
-            {book.conclusion}
-          </p>
+          <div className={`mt-4 space-y-4 font-semibold text-slate-900 ${conclusionFontSizeClass}`}>
+            {book.conclusion
+              .split(/\n\s*\n/)
+              .map((paragraph) => paragraph.trim())
+              .filter(Boolean)
+              .map((paragraph, idx) => (
+                <p key={idx}>{paragraph}</p>
+              ))}
+          </div>
         </section>
 
         {/* Fitur Khas ringkasnya.id: Action Checklist Interaktif */}
