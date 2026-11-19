@@ -17,3 +17,6 @@
 ## Operasional CLI (Windows)
 - Jalankan `npm run build`, `git push`, `npx wrangler`, `cf`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.
 - When interacting with Cloudflare, use the `cf` CLI unless the project has a Wrangler configuration file.
+
+## Deployment & Rilis
+- **Wajib Deploy Setelah Push**: Setiap kali selesai melakukan `git commit` dan `git push`, **wajib** langsung melanjutkan dengan deploy ke Cloudflare Workers menggunakan `npx wrangler deploy` (pastikan `npm run build` sudah dijalankan pada perubahan terbaru) serta melakukan verifikasi smoke check ke URL produksi (`https://app.ringkasnya.workers.dev`).
