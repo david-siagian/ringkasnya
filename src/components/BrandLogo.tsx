@@ -4,7 +4,7 @@ interface BrandLogoProps {
   className?: string;
 }
 
-export default function BrandLogo({ className = "h-9 w-9" }: BrandLogoProps) {
+export default function BrandLogo({ className = "h-11 w-11" }: BrandLogoProps) {
   const gradientId = useId();
 
   return (
