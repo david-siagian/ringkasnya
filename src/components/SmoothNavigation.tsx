@@ -1,7 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const SCROLL_TARGET_KEY = "ringkasnya_scroll_target";
 const NAVBAR_OFFSET = 80;
@@ -10,7 +7,7 @@ function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-function smoothScrollToY(targetY: number, duration = 680) {
+export function smoothScrollToY(targetY: number, duration = 680) {
   const startY = window.scrollY;
   const distance = targetY - startY;
 
@@ -37,7 +34,7 @@ function smoothScrollToY(targetY: number, duration = 680) {
   window.requestAnimationFrame(step);
 }
 
-function smoothScrollToElement(id: string, duration = 680) {
+export function smoothScrollToElement(id: string, duration = 680) {
   const el = document.getElementById(id);
   if (!el) return false;
 
@@ -48,10 +45,8 @@ function smoothScrollToElement(id: string, duration = 680) {
 }
 
 export function SmoothScrollHandler() {
-  const pathname = usePathname();
-
   useEffect(() => {
-    if (pathname !== "/") return;
+    if (window.location.pathname !== "/") return;
 
     let targetId: string | null = null;
     try {
@@ -74,7 +69,7 @@ export function SmoothScrollHandler() {
     }, 140);
 
     return () => window.clearTimeout(timer);
-  }, [pathname]);
+  }, []);
 
   return null;
 }
@@ -82,16 +77,28 @@ export function SmoothScrollHandler() {
 export function PageTransitionWrapper({
   children,
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const router = useRouter();
   const [isLeaving, setIsLeaving] = useState(false);
 
-  // Reset leaving state whenever route finishes changing
   useEffect(() => {
     setIsLeaving(false);
-  }, [pathname]);
+    const handlePageShow = () => setIsLeaving(false);
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, []);
+
+  useEffect(() => {
+    const root = document.getElementById("page-transition-root");
+    if (!root) return;
+    if (isLeaving) {
+      root.classList.remove("animate-page-enter", "opacity-100", "translate-y-0");
+      root.classList.add("opacity-0", "translate-y-1.5");
+    } else {
+      root.classList.remove("opacity-0", "translate-y-1.5");
+      root.classList.add("animate-page-enter", "opacity-100", "translate-y-0");
+    }
+  }, [isLeaving]);
 
   // Intercept internal link clicks in capture phase for smooth exit -> navigate -> enter
   useEffect(() => {
@@ -112,10 +119,19 @@ export function PageTransitionWrapper({
       if (!anchor) return;
 
       if (anchor.hasAttribute("download") || anchor.target === "_blank") return;
-      if (anchor.dataset.smoothHash === "true") return;
+
+      const currentPathname = window.location.pathname;
+      if (anchor.dataset.smoothHash === "true" && currentPathname === "/") {
+        return;
+      }
 
       const rawHref = anchor.getAttribute("href");
-      if (!rawHref || rawHref.startsWith("#") || rawHref.startsWith("mailto:") || rawHref.startsWith("tel:")) {
+      if (
+        !rawHref ||
+        rawHref.startsWith("#") ||
+        rawHref.startsWith("mailto:") ||
+        rawHref.startsWith("tel:")
+      ) {
         return;
       }
 
@@ -129,7 +145,7 @@ export function PageTransitionWrapper({
       if (url.origin !== window.location.origin) return;
 
       // Same-page hash link
-      if (url.pathname === pathname && url.hash) {
+      if (url.pathname === currentPathname && url.hash) {
         e.preventDefault();
         e.stopPropagation();
         const id = url.hash.replace(/^#/, "");
@@ -139,7 +155,7 @@ export function PageTransitionWrapper({
       }
 
       // Same exact URL
-      if (url.pathname === pathname && !url.hash) {
+      if (url.pathname === currentPathname && !url.hash) {
         e.preventDefault();
         e.stopPropagation();
         smoothScrollToY(0, 600);
@@ -152,26 +168,34 @@ export function PageTransitionWrapper({
 
       if (url.hash && url.pathname === "/") {
         try {
-          sessionStorage.setItem(SCROLL_TARGET_KEY, url.hash.replace(/^#/, ""));
+          sessionStorage.setItem(
+            SCROLL_TARGET_KEY,
+            url.hash.replace(/^#/, "")
+          );
         } catch {
           // ignore
         }
       }
 
       setIsLeaving(true);
-      const destination = url.pathname + url.search + (url.pathname === "/" ? "" : url.hash);
+      const destination =
+        url.pathname + url.search + (url.pathname === "/" ? "" : url.hash);
       window.setTimeout(() => {
-        router.push(destination);
+        window.location.assign(destination);
       }, 190);
     };
 
     document.addEventListener("click", handleDocumentClick, true);
-    return () => document.removeEventListener("click", handleDocumentClick, true);
-  }, [pathname, router]);
+    return () =>
+      document.removeEventListener("click", handleDocumentClick, true);
+  }, []);
+
+  if (!children) {
+    return null;
+  }
 
   return (
     <div
-      key={pathname}
       className={`flex-1 transition-all duration-300 ease-out ${
         isLeaving
           ? "opacity-0 translate-y-1.5"
@@ -194,10 +218,10 @@ export function SmoothHashLink({
   children,
   className,
 }: SmoothHashLinkProps) {
-  const pathname = usePathname();
-
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (pathname !== "/") return;
+    if (typeof window !== "undefined" && window.location.pathname !== "/") {
+      return;
+    }
     e.preventDefault();
     smoothScrollToElement(targetId, 680);
     window.history.replaceState(null, "", `/#${targetId}`);
@@ -206,7 +230,7 @@ export function SmoothHashLink({
   return (
     <a
       href={`/#${targetId}`}
-      data-smooth-hash={pathname === "/" ? "true" : undefined}
+      data-smooth-hash="true"
       onClick={handleClick}
       className={className}
     >

@@ -2,21 +2,19 @@
 /node_modules
 /.pnp
 .pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
 
 # testing
 /coverage
 
-# next.js
+# astro & cloudflare build output
+/dist/
+/.astro/
+/.wrangler/
+
+# legacy next.js / vercel
 /.next/
 /out/
-
-# production
-/build
+.vercel
 
 # misc
 .DS_Store
@@ -30,15 +28,10 @@ yarn-error.log*
 
 # env files
 .env*
-
-# vercel
-.vercel
+.dev.vars*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
-# jetbrains
+# ide
 .idea/
-
-.vercel

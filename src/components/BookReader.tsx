@@ -1,8 +1,5 @@
-"use client";
-
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { BookSummary } from "@/types/book";
+import type { BookSummary } from "@/types/book";
 import {
   ArrowLeft,
   BookOpen,
@@ -89,13 +86,13 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       {/* Banner Header Buku */}
       <div className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}>
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
-          <Link
+          <a
             href="/#katalog"
             className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm transition hover:bg-black/30"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Kembali ke Katalog
-          </Link>
+          </a>
 
           <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
             {book.coverImage && (
@@ -475,7 +472,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               {relatedBooks.map((other) => (
-                <Link
+                <a
                   key={other.slug}
                   href={`/buku/${other.slug}`}
                   className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-emerald-400 hover:shadow-md"
@@ -497,7 +494,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   <span className="mt-4 text-xs font-semibold text-emerald-700">
                     Baca Ringkasan →
                   </span>
-                </Link>
+                </a>
               ))}
             </div>
           </section>

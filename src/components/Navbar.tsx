@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Zap } from "lucide-react";
 import { SmoothHashLink } from "@/components/SmoothNavigation";
 import BrandLogo from "@/components/BrandLogo";
@@ -7,7 +6,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <a href="/" className="flex items-center gap-2.5 group">
           <BrandLogo className="h-9 w-9 shadow-sm shadow-emerald-600/20 rounded-xl transition-transform group-hover:scale-105" />
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
@@ -22,7 +21,7 @@ export default function Navbar() {
               Baca Intinya, Praktikkan Ilmunya
             </span>
           </div>
-        </Link>
+        </a>
 
         <nav className="flex items-center gap-3 sm:gap-6">
           <SmoothHashLink
@@ -37,13 +36,13 @@ export default function Navbar() {
           >
             Cara Kerja
           </SmoothHashLink>
-          <Link
+          <a
             href="/buku/atomic-habits"
             className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-emerald-600 active:scale-95"
           >
             <Zap className="h-3.5 w-3.5 text-amber-400" />
             <span>Mulai Baca</span>
-          </Link>
+          </a>
         </nav>
       </div>
     </header>

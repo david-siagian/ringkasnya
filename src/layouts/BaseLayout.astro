@@ -1,0 +1,42 @@
+---
+import "@/styles/globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import {
+  SmoothScrollHandler,
+  PageTransitionWrapper,
+} from "@/components/SmoothNavigation";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "ringkasnya.id — Baca Intinya, Praktikkan Ilmunya",
+  description = "Platform ringkasan buku best-seller dunia dalam Bahasa Indonesia. Dilengkapi Mode Kilat 6–10 Menit, Mode Mendalam 20–30 Menit, dan Action Checklist interaktif.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body class="flex min-h-screen flex-col antialiased">
+    <SmoothScrollHandler client:load />
+    <PageTransitionWrapper client:load />
+    <Navbar client:load />
+    <div
+      id="page-transition-root"
+      class="flex-1 transition-all duration-300 ease-out animate-page-enter opacity-100 translate-y-0"
+    >
+      <slot />
+    </div>
+    <Footer />
+  </body>
+</html>

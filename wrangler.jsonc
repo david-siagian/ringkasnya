@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ringkasnya",
+  "compatibility_date": "2025-03-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "pages_build_output_dir": "./dist"
+  // Siap diaktifkan untuk Fase 3 (Login Auth & Payment Gateway):
+  // "d1_databases": [
+  //   {
+  //     "binding": "DB",
+  //     "database_name": "ringkasnya-db",
+  //     "database_id": "<D1_DATABASE_ID>"
+  //   }
+  // ],
+  // "kv_namespaces": [
+  //   {
+  //     "binding": "SESSION_KV",
+  //     "id": "<KV_NAMESPACE_ID>"
+  //   }
+  // ]
+}

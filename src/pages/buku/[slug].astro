@@ -1,0 +1,26 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { BOOKS, getBookBySlug } from "@/data/books";
+import BookReader from "@/components/BookReader";
+
+export function getStaticPaths() {
+  return BOOKS.map((book) => ({
+    params: { slug: book.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const book = slug ? getBookBySlug(slug) : undefined;
+
+if (!book) {
+  return Astro.redirect("/404");
+}
+
+const relatedBooks = BOOKS.filter((b) => b.slug !== book.slug).slice(0, 2);
+const pageTitle = `Ringkasan Buku ${book.title} (${book.author}) — ringkasnya.id`;
+const pageDescription = `${book.tagline} Baca ringkasan ${book.title} dalam ${book.quickTimeMinutes}-${book.readingTimeMinutes} menit lengkap dengan Action Checklist.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <BookReader client:load book={book} relatedBooks={relatedBooks} />
+</BaseLayout>

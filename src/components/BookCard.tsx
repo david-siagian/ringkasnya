@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { BookSummary } from "@/types/book";
+import type { BookSummary } from "@/types/book";
 import { ArrowRight, Clock, Layers, Star, Zap } from "lucide-react";
 
 interface BookCardProps {
@@ -8,7 +7,7 @@ interface BookCardProps {
 
 export default function BookCard({ book }: BookCardProps) {
   return (
-    <Link
+    <a
       href={`/buku/${book.slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg"
     >
@@ -84,6 +83,6 @@ export default function BookCard({ book }: BookCardProps) {
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </div>
       </div>
-    </Link>
+    </a>
   );
 }

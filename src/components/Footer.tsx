@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { CheckCircle2, Clock, Sparkles } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 
@@ -8,12 +7,12 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <Link href="/" className="flex items-center gap-2.5 group">
+            <a href="/" className="flex items-center gap-2.5 group">
               <BrandLogo className="h-8 w-8 rounded-lg shadow-sm transition-transform group-hover:scale-105" />
               <span className="text-lg font-extrabold tracking-tight text-slate-900">
                 ringkasnya<span className="text-emerald-600">.id</span>
               </span>
-            </Link>
+            </a>
             <p className="mt-3 text-sm leading-relaxed text-slate-600">
               Platform ringkasan buku populer dunia dalam Bahasa Indonesia yang
               luwes, praktis, dan dilengkapi daftar aksi nyata agar ilmu dari
@@ -47,36 +46,36 @@ export default function Footer() {
             </h3>
             <ul className="mt-3 space-y-2 text-sm text-slate-600">
               <li>
-                <Link
+                <a
                   href="/buku/atomic-habits"
                   className="hover:text-emerald-600 transition-colors"
                 >
                   Atomic Habits — James Clear
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
+                <a
                   href="/buku/psychology-of-money"
                   className="hover:text-emerald-600 transition-colors"
                 >
                   The Psychology of Money — Morgan Housel
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
+                <a
                   href="/buku/filosofi-teras"
                   className="hover:text-emerald-600 transition-colors"
                 >
                   Filosofi Teras — Henry Manampiring
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
+                <a
                   href="/buku/deep-work"
                   className="hover:text-emerald-600 transition-colors"
                 >
                   Deep Work — Cal Newport
-                </Link>
+                </a>
               </li>
             </ul>
           </div>

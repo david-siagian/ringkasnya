@@ -1,4 +1,4 @@
-import { BookSummary, BookCategory } from "@/types/book";
+import type { BookSummary, BookCategory } from "@/types/book";
 import { atomicHabits } from "./books/atomic-habits";
 import { psychologyOfMoney } from "./books/psychology-of-money";
 import { deepWork } from "./books/deep-work";

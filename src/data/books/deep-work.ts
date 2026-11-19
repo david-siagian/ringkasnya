@@ -1,4 +1,4 @@
-import { BookSummary } from "@/types/book";
+import type { BookSummary } from "@/types/book";
 
 export const deepWork: BookSummary = {
   slug: "deep-work",

@@ -1,7 +1,5 @@
-"use client";
-
 import { useState, useMemo } from "react";
-import { BookSummary, BookCategory } from "@/types/book";
+import type { BookSummary, BookCategory } from "@/types/book";
 import { CATEGORIES } from "@/data/books";
 import BookCard from "./BookCard";
 import { Search, X } from "lucide-react";
