@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid gap-8 md:grid-cols-3">
           <div>
             <a href="/" className="flex items-center gap-2.5 group">
-              <BrandLogo className="h-8 w-8 rounded-lg shadow-sm transition-transform group-hover:scale-105" />
+              <BrandLogo className="h-8 w-8 transition-transform group-hover:scale-105" />
               <span className="text-lg font-extrabold tracking-tight text-slate-900">
                 ringkasnya<span className="text-emerald-600">.id</span>
               </span>

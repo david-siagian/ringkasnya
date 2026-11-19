@@ -7,7 +7,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
         <a href="/" className="flex items-center gap-2.5 group">
-          <BrandLogo className="h-9 w-9 shadow-sm shadow-emerald-600/20 rounded-xl transition-transform group-hover:scale-105" />
+          <BrandLogo className="h-9 w-9 transition-transform group-hover:scale-105" />
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="text-lg font-extrabold tracking-tight text-slate-900">
