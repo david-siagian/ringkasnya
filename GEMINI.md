@@ -15,4 +15,5 @@
 - **Format Sinopsis**: Bagian `synopsis` pada setiap buku cukup ditulis **1 paragraf ringkas (4–7 baris)** saja. Jika pemangkasan sinopsis mengurangi total kata, kompensasikan penambahan teks pada `deepContent`, `quickSummary`, atau `conclusion` agar estimasi durasi baca tetap konsisten.
 
 ## Operasional CLI (Windows)
-- Jalankan `npm run build`, `git push`, `npx wrangler`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.
+- Jalankan `npm run build`, `git push`, `npx wrangler`, `cf`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.
+- When interacting with Cloudflare, use the `cf` CLI unless the project has a Wrangler configuration file.

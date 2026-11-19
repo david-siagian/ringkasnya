@@ -1,9 +1,16 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ringkasnya",
+  "main": "./dist/_worker.js/index.js",
   "compatibility_date": "2025-03-01",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": "./dist"
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
+  "observability": {
+    "enabled": true
+  }
   // Siap diaktifkan untuk Fase 3 (Login Auth & Payment Gateway):
   // "d1_databases": [
   //   {

@@ -41,4 +41,4 @@ Setiap kali perbaikan atau fitur selesai dibuat, jalankan alur verifikasi hingga
 
 ### 3. Commit, Push & Deploy ke Cloudflare
 1. Commit dan push perubahan ke GitHub (`git push`, dengan `BypassSandbox: true`).
-2. Deploy ke produksi Cloudflare Pages (`npm run cf:deploy` atau `npx wrangler pages deploy ./dist --project-name=ringkasnya`, dengan `BypassSandbox: true`).
+2. Deploy ke produksi Cloudflare Workers (`npm run cf:deploy` atau `npx wrangler deploy`, dengan `BypassSandbox: true`).

@@ -33,9 +33,9 @@ Jalankan langkah-langkah berikut secara berurutan di `E:\MyApp\ringkasnya`. Pada
   - `git add <files>` & `git commit -m "<pesan ringkas>"`
   - `git push origin main` (`BypassSandbox: true`)
 
-## 5. Deploy ke Cloudflare Pages
-- Jalankan `npx wrangler pages deploy ./dist --project-name=ringkasnya` (`BypassSandbox: true`).
+## 5. Deploy ke Cloudflare Workers (with Static Assets)
+- Jalankan `npx wrangler deploy` (`BypassSandbox: true`).
 
 ## 6. Post-Deploy Smoke Check & Dokumentasi
-- Verifikasi respons live dari URL Cloudflare Pages (`https://ringkasnya.pages.dev` atau domain kustom) termasuk endpoint `/api/health`.
+- Verifikasi respons live dari URL produksi Cloudflare (`https://ringkasnya.<subdomain>.workers.dev` atau domain kustom) termasuk endpoint `/api/health`.
 - Jika ada perubahan fitur besar/arsitektur, sinkronkan `PLAN.md` dan `README.md`.

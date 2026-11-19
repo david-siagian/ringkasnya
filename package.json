@@ -7,8 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "cf:preview": "wrangler pages dev ./dist",
-    "cf:deploy": "wrangler pages deploy ./dist --project-name=ringkasnya",
+    "cf:preview": "wrangler dev",
+    "cf:deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
