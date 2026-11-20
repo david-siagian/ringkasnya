@@ -20,3 +20,4 @@
 
 ## Deployment & Rilis
 - **Auto-Deploy Cloudflare Aktif**: Build dan deploy otomatis sudah diaktifkan di Cloudflare saat `git push` ke branch `main`. Tidak perlu menjalankan `npx wrangler deploy` secara manual setelah `git push` (cukup pastikan `npx tsc --noEmit` dan `npm run build` lulus secara lokal sebelum commit/push).
+- **Auto-Push Setelah Selesai Fitur/Bug**: Setiap kali selesai mengerjakan fitur atau perbaikan bug dan verifikasi (`npx tsc --noEmit` / `npm run build`) lulus, langsung lakukan `git commit` dan `git push`, kecuali user meminta untuk tidak di-push terlebih dahulu.
