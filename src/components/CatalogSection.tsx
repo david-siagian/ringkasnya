@@ -3,16 +3,25 @@ import type { BookSummary, BookCategory } from "@/types/book";
 import { CATEGORIES } from "@/data/books";
 import BookCard from "./BookCard";
 import { smoothScrollToElement } from "./SmoothNavigation";
-import { ArrowRight, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Layers,
+  Search,
+  Star,
+  X,
+  Zap,
+} from "lucide-react";
 
 interface CatalogSectionProps {
   books: BookSummary[];
   mode?: "preview" | "full";
-  maxPreviewItems?: number;
   itemsPerPage?: number;
 }
 
-const DEFAULT_PREVIEW_LIMIT = 5;
+const DEFAULT_PREVIEW_SCROLL_LIMIT = 10;
 const DEFAULT_ITEMS_PER_PAGE = 20;
 
 function getPageNumbers(currentPage: number, totalPages: number): (number | "ellipsis")[] {
@@ -37,7 +46,6 @@ function getPageNumbers(currentPage: number, totalPages: number): (number | "ell
 export default function CatalogSection({
   books,
   mode = "preview",
-  maxPreviewItems = DEFAULT_PREVIEW_LIMIT,
   itemsPerPage = DEFAULT_ITEMS_PER_PAGE,
 }: CatalogSectionProps) {
   const isFull = mode === "full";
@@ -77,11 +85,11 @@ export default function CatalogSection({
 
   const displayedBooks = useMemo(() => {
     if (!isFull) {
-      return filteredBooks.slice(0, maxPreviewItems);
+      return filteredBooks.slice(0, 1 + DEFAULT_PREVIEW_SCROLL_LIMIT);
     }
     const startIndex = (safePage - 1) * itemsPerPage;
     return filteredBooks.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredBooks, isFull, maxPreviewItems, safePage, itemsPerPage]);
+  }, [filteredBooks, isFull, safePage, itemsPerPage]);
 
   const syncPageUrl = (page: number) => {
     if (!isFull || typeof window === "undefined") return;
@@ -211,18 +219,150 @@ export default function CatalogSection({
 
       {/* Daftar Buku */}
       {displayedBooks.length > 0 ? (
-        <div
-          key={`${selectedCategory}-${searchQuery}-${safePage}`}
-          className={`animate-fade-slide mt-8 grid ${
-            isFull
-              ? "grid-cols-2 gap-3 sm:gap-6"
-              : "grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          }`}
-        >
-          {displayedBooks.map((book) => (
-            <BookCard key={book.slug} book={book} />
-          ))}
-        </div>
+        isFull ? (
+          <div
+            key={`${selectedCategory}-${searchQuery}-${safePage}`}
+            className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-6"
+          >
+            {displayedBooks.map((book) => (
+              <BookCard key={book.slug} book={book} />
+            ))}
+          </div>
+        ) : (
+          <div
+            key={`${selectedCategory}-${searchQuery}-preview`}
+            className="animate-fade-slide mt-8 space-y-6"
+          >
+            {/* 1 Buku Highlight Contoh */}
+            {(() => {
+              const featuredBook = displayedBooks[0];
+              return (
+                <a
+                  href={`/buku/${featuredBook.slug}`}
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg md:flex-row"
+                >
+                  <div
+                    className={`relative flex flex-col justify-between bg-slate-900 bg-gradient-to-br ${featuredBook.coverGradient} p-6 text-white md:w-2/5`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="rounded-full bg-black/25 px-3 py-1 text-xs font-medium backdrop-blur-sm">
+                        {featuredBook.category}
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-semibold backdrop-blur-sm">
+                        <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
+                        {featuredBook.rating}
+                      </span>
+                    </div>
+
+                    <div className="mt-5 flex items-center gap-4">
+                      {featuredBook.coverImage && (
+                        <div className="relative aspect-[3/4] w-24 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-black/20 shadow-[0_14px_28px_-6px_rgba(0,0,0,0.45)] ring-1 ring-white/25">
+                          <img
+                            src={featuredBook.coverImage}
+                            alt={`Ilustrasi sampul buku ${featuredBook.title}`}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <span className="inline-block rounded-full bg-white/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white/95">
+                          Buku Pilihan
+                        </span>
+                        <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-white/80">
+                          {featuredBook.author}
+                        </p>
+                        <h3 className="mt-1 text-xl sm:text-2xl font-extrabold leading-snug tracking-tight text-white drop-shadow-sm">
+                          {featuredBook.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-white/90">
+                      <span className="inline-flex items-center gap-1 font-medium">
+                        <Zap className="h-3.5 w-3.5 text-amber-300" />
+                        Mode Kilat {featuredBook.quickTimeMinutes} mnt
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Clock className="h-3.5 w-3.5" />
+                        Mendalam {featuredBook.readingTimeMinutes} mnt
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-1 flex-col justify-between p-6">
+                    <div>
+                      <div className="mb-3 flex flex-wrap items-center gap-2">
+                        <span
+                          className={`inline-block rounded-md px-2.5 py-0.5 text-xs font-semibold ${featuredBook.coverAccent}`}
+                        >
+                          {featuredBook.badgeText}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs text-slate-500">
+                          <Layers className="h-3.5 w-3.5 text-slate-400" />
+                          {featuredBook.keyTakeaways.length} Poin Inti
+                        </span>
+                      </div>
+
+                      <p className="text-sm sm:text-base leading-relaxed text-slate-600">
+                        {featuredBook.tagline}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs sm:text-sm font-semibold text-emerald-700 group-hover:text-emerald-600">
+                      <span>Baca Ringkasan & Praktek</span>
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </a>
+              );
+            })()}
+
+            {/* Buku Lainnya Disusun Menyamping (Judul & Penulis Saja) */}
+            {displayedBooks.length > 1 && (
+              <div>
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Jelajahi Buku Lainnya
+                  </p>
+                  <span className="text-[11px] text-slate-400">
+                    Geser ke samping →
+                  </span>
+                </div>
+                <div className="flex gap-3.5 sm:gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
+                  {displayedBooks.slice(1).map((book) => (
+                    <a
+                      key={book.slug}
+                      href={`/buku/${book.slug}`}
+                      className="group flex w-44 sm:w-52 shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-md"
+                    >
+                      <div
+                        className={`relative flex aspect-[4/3] items-center justify-center bg-slate-900 bg-gradient-to-br ${book.coverGradient} p-4`}
+                      >
+                        {book.coverImage && (
+                          <div className="aspect-[3/4] h-24 sm:h-28 overflow-hidden rounded-lg bg-black/20 shadow-lg ring-1 ring-white/25">
+                            <img
+                              src={book.coverImage}
+                              alt={`Ilustrasi sampul buku ${book.title}`}
+                              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-1 flex-col justify-center p-3.5">
+                        <h3 className="line-clamp-2 text-sm font-bold leading-snug text-slate-900 group-hover:text-emerald-700">
+                          {book.title}
+                        </h3>
+                        <p className="mt-1 truncate text-xs font-medium text-slate-500">
+                          {book.author}
+                        </p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )
       ) : (
         <div className="mt-10 rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
           <p className="text-base font-semibold text-slate-800">
