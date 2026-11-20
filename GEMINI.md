@@ -16,6 +16,7 @@
 
 ## Operasional CLI (Windows)
 - Jalankan `npm run build`, `git push`, `npx wrangler`, `cf`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.
+- Jalankan `git add`, `git commit`, dan `git push` sebagai pemanggilan perintah yang **terpisah** (jangan digabung dalam satu baris perintah), agar approval prefix-matching tetap bekerja tanpa perlu meminta izin ulang untuk setiap commit message yang unik.
 - When interacting with Cloudflare, use the `cf` CLI unless the project has a Wrangler configuration file.
 
 ## Deployment & Rilis
