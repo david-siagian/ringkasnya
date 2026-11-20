@@ -22,6 +22,48 @@ interface BookReaderProps {
   relatedBooks: BookSummary[];
 }
 
+const FONT_SCALES = {
+  sm: {
+    micro: "text-[10px]",
+    label: "text-[11px]",
+    subtext: "text-[11px] sm:text-xs",
+    compact: "text-xs",
+    lead: "text-xs sm:text-sm",
+    body: "text-sm leading-relaxed",
+    conclusion: "text-base leading-relaxed",
+    sectionHeading: "text-base",
+    conclusionHeading: "text-base sm:text-lg",
+    blockHeading: "text-lg",
+    takeawayTitle: "text-lg sm:text-xl",
+  },
+  base: {
+    micro: "text-[11px]",
+    label: "text-xs",
+    subtext: "text-xs sm:text-sm",
+    compact: "text-sm",
+    lead: "text-sm sm:text-base",
+    body: "text-base leading-relaxed",
+    conclusion: "text-lg leading-relaxed",
+    sectionHeading: "text-lg",
+    conclusionHeading: "text-lg sm:text-xl",
+    blockHeading: "text-xl",
+    takeawayTitle: "text-xl sm:text-2xl",
+  },
+  lg: {
+    micro: "text-xs",
+    label: "text-sm",
+    subtext: "text-sm sm:text-base",
+    compact: "text-base",
+    lead: "text-base sm:text-lg",
+    body: "text-lg leading-relaxed",
+    conclusion: "text-xl leading-relaxed",
+    sectionHeading: "text-xl",
+    conclusionHeading: "text-xl sm:text-2xl",
+    blockHeading: "text-2xl",
+    takeawayTitle: "text-2xl sm:text-3xl",
+  },
+} as const;
+
 export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [readMode, setReadMode] = useState<"deep" | "quick">("deep");
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
@@ -67,19 +109,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setTimeout(() => setCopiedQuoteIdx(null), 2000);
   };
 
-  const fontSizeClass =
-    fontSize === "sm"
-      ? "text-sm leading-relaxed"
-      : fontSize === "lg"
-      ? "text-lg leading-relaxed"
-      : "text-base leading-relaxed";
-
-  const conclusionFontSizeClass =
-    fontSize === "sm"
-      ? "text-base leading-relaxed"
-      : fontSize === "lg"
-      ? "text-xl leading-relaxed"
-      : "text-lg leading-relaxed";
+  const fs = FONT_SCALES[fontSize];
 
   return (
     <div className="min-h-screen bg-slate-50/70 pb-20">
@@ -219,7 +249,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         {readMode === "quick" && (
           <div className="mb-6 flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
             <Zap className="h-5 w-5 shrink-0 text-amber-600" />
-            <p className="text-xs sm:text-sm font-medium">
+            <p className={`${fs.subtext} font-medium`}>
               <strong>Mode Kilat Aktif:</strong> Menampilkan intisari 1 kalimat
               dan tips praktis dari setiap bab agar Anda bisa menangkap ide utama
               buku ini dalam {book.quickTimeMinutes} menit.
@@ -229,15 +259,15 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
         {/* Seksi Sinopsis & Untuk Siapa Buku Ini */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-900">
+          <h2 className={`${fs.sectionHeading} font-bold text-slate-900`}>
             Sinopsis
           </h2>
-          <p className={`mt-2.5 text-slate-700 ${fontSizeClass}`}>
+          <p className={`mt-2.5 text-slate-700 ${fs.body}`}>
             {book.synopsis}
           </p>
 
           <div className="mt-6 rounded-xl bg-slate-50 p-5 border border-slate-100">
-            <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+            <h3 className={`flex items-center gap-2 ${fs.compact} font-bold text-slate-900`}>
               <Target className="h-4 w-4 text-emerald-600" />
               Buku Ini Sangat Cocok Untuk:
             </h3>
@@ -245,7 +275,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               {book.whoIsItFor.map((target, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-2.5 text-sm text-slate-700"
+                  className={`flex items-start gap-2.5 ${fs.compact} text-slate-700`}
                 >
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                   <span>{target}</span>
@@ -257,7 +287,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
         {/* Daftar Isi Cepat */}
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <h2 className={`${fs.label} font-bold uppercase tracking-wider text-slate-500`}>
             Daftar Poin Inti ({book.keyTakeaways.length} Bab Ringkas)
           </h2>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -265,7 +295,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               <a
                 key={item.number}
                 href={`#poin-${item.number}`}
-                className="flex items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50/60 hover:text-emerald-800"
+                className={`flex items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-2.5 ${fs.subtext} font-medium text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50/60 hover:text-emerald-800`}
               >
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
                   {item.number}
@@ -288,28 +318,28 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-sm font-extrabold text-white">
                   {takeaway.number}
                 </span>
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                <span className={`${fs.label} font-bold uppercase tracking-wider text-emerald-700`}>
                   Poin Inti #{takeaway.number}
                 </span>
               </div>
 
-              <h3 className="mt-3 text-xl font-extrabold text-slate-900 sm:text-2xl">
+              <h3 className={`mt-3 ${fs.takeawayTitle} font-extrabold text-slate-900`}>
                 {takeaway.title}
               </h3>
 
               {/* Box Intisari Kilat */}
               <div className="mt-4 rounded-xl border-l-4 border-emerald-500 bg-emerald-50/70 p-4">
-                <p className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                <p className={`${fs.label} font-bold uppercase tracking-wider text-emerald-800`}>
                   ⚡ Intisari 1 Kalimat
                 </p>
-                <p className="mt-1 text-sm sm:text-base font-semibold text-slate-900">
+                <p className={`mt-1 ${fs.lead} font-semibold text-slate-900`}>
                   {takeaway.quickSummary}
                 </p>
               </div>
 
               {/* Penjelasan Mendalam (Hanya muncul di Mode Mendalam) */}
               {readMode === "deep" && (
-                <div className={`animate-fade-slide mt-5 space-y-4 text-slate-700 ${fontSizeClass}`}>
+                <div className={`animate-fade-slide mt-5 space-y-4 text-slate-700 ${fs.body}`}>
                   {takeaway.deepContent.map((paragraph, pIdx) => (
                     <p key={pIdx}>{paragraph}</p>
                   ))}
@@ -320,10 +350,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               <div className="mt-5 flex items-start gap-3 rounded-xl bg-amber-50/90 border border-amber-200/80 p-4">
                 <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-900">
+                  <span className={`${fs.label} font-bold uppercase tracking-wider text-amber-900`}>
                     Tips Praktis Langsung Coba:
                   </span>
-                  <p className="mt-0.5 text-sm text-slate-800">
+                  <p className={`mt-0.5 ${fs.compact} text-slate-800`}>
                     {takeaway.practicalTip}
                   </p>
                 </div>
@@ -340,16 +370,16 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 <Sparkles className="h-4 w-4" />
               </span>
               <div>
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+                <span className={`block ${fs.micro} font-bold uppercase tracking-wider text-emerald-700`}>
                   Final Takeaway
                 </span>
-                <h2 className="text-lg font-extrabold text-slate-900 sm:text-xl">
+                <h2 className={`${fs.conclusionHeading} font-extrabold text-slate-900`}>
                   Kesimpulan Akhir
                 </h2>
               </div>
             </div>
           </div>
-          <div className={`mt-4 space-y-4 font-semibold text-slate-900 ${conclusionFontSizeClass}`}>
+          <div className={`mt-4 space-y-4 font-semibold text-slate-900 ${fs.conclusion}`}>
             {book.conclusion
               .split(/\n\s*\n/)
               .map((paragraph) => paragraph.trim())
@@ -366,14 +396,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             <div>
               <div className="inline-flex items-center gap-2 text-emerald-700">
                 <ListChecks className="h-5 w-5" />
-                <span className="text-xs font-bold uppercase tracking-wider">
+                <span className={`${fs.label} font-bold uppercase tracking-wider`}>
                   Action Checklist Interaktif
                 </span>
               </div>
-              <h2 className="mt-1 text-xl font-extrabold text-slate-900">
+              <h2 className={`mt-1 ${fs.blockHeading} font-extrabold text-slate-900`}>
                 Jangan Hanya Dibaca—Mari Praktikkan!
               </h2>
-              <p className="mt-1 text-xs sm:text-sm text-slate-600">
+              <p className={`mt-1 ${fs.subtext} text-slate-600`}>
                 Centang langkah-langkah di bawah ini setelah Anda mempraktikkannya.
                 Progres Anda tersimpan otomatis di perangkat ini.
               </p>
@@ -411,7 +441,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     onChange={() => {}}
                     className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                   />
-                  <span className="text-sm sm:text-base font-medium">
+                  <span className={`${fs.lead} font-medium`}>
                     {action}
                   </span>
                 </label>
@@ -424,11 +454,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
           <div className="flex items-center gap-2 text-slate-900">
             <Quote className="h-5 w-5 text-emerald-600" />
-            <h2 className="text-xl font-extrabold">
+            <h2 className={`${fs.blockHeading} font-extrabold`}>
               Kutipan Berkesan ({book.quotes.length})
             </h2>
           </div>
-          <p className="mt-1 text-xs sm:text-sm text-slate-500">
+          <p className={`mt-1 ${fs.subtext} text-slate-500`}>
             Klik tombol salin untuk membagikan kutipan favoritmu ke WhatsApp atau
             media sosial.
           </p>
@@ -439,7 +469,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 key={idx}
                 className="flex flex-col justify-between gap-4 rounded-xl border border-slate-100 bg-slate-50 p-5 sm:flex-row sm:items-center"
               >
-                <blockquote className="text-sm sm:text-base font-semibold italic text-slate-800">
+                <blockquote className={`${fs.lead} font-semibold italic text-slate-800`}>
                   &ldquo;{quote}&rdquo;
                 </blockquote>
                 <button
