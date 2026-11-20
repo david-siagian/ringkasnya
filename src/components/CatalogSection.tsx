@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import type { BookSummary, BookCategory } from "@/types/book";
 import { CATEGORIES } from "@/data/books";
 import BookCard from "./BookCard";
+import BookPreviewModal from "./BookPreviewModal";
 import { smoothScrollToElement } from "./SmoothNavigation";
 import {
   ArrowRight,
@@ -52,6 +53,7 @@ export default function CatalogSection({
   const [selectedCategory, setSelectedCategory] = useState<BookCategory | "Semua">("Semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [previewBook, setPreviewBook] = useState<BookSummary | null>(null);
 
   useEffect(() => {
     if (!isFull) return;
@@ -225,7 +227,7 @@ export default function CatalogSection({
             className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-6"
           >
             {displayedBooks.map((book) => (
-              <BookCard key={book.slug} book={book} />
+              <BookCard key={book.slug} book={book} onSelect={setPreviewBook} />
             ))}
           </div>
         ) : (
@@ -239,6 +241,11 @@ export default function CatalogSection({
               return (
                 <a
                   href={`/buku/${featuredBook.slug}`}
+                  data-no-transition="true"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPreviewBook(featuredBook);
+                  }}
                   className="group flex flex-col items-center gap-6 overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-7 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg md:flex-row"
                 >
                   {featuredBook.coverImage && (
@@ -319,7 +326,7 @@ export default function CatalogSection({
                       key={book.slug}
                       className="flex w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] shrink-0 snap-start"
                     >
-                      <BookCard book={book} />
+                      <BookCard book={book} onSelect={setPreviewBook} />
                     </div>
                   ))}
                 </div>
@@ -426,6 +433,11 @@ export default function CatalogSection({
           </nav>
         </div>
       )}
+      {/* Modal Preview Buku */}
+      <BookPreviewModal
+        book={previewBook}
+        onClose={() => setPreviewBook(null)}
+      />
     </section>
   );
 }

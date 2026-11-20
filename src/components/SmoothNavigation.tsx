@@ -118,7 +118,13 @@ export function PageTransitionWrapper({
       const anchor = target?.closest("a");
       if (!anchor) return;
 
-      if (anchor.hasAttribute("download") || anchor.target === "_blank") return;
+      if (
+        anchor.hasAttribute("download") ||
+        anchor.target === "_blank" ||
+        anchor.dataset.noTransition === "true"
+      ) {
+        return;
+      }
 
       const currentPathname = window.location.pathname;
       if (anchor.dataset.smoothHash === "true" && currentPathname === "/") {

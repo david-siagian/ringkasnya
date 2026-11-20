@@ -3,12 +3,20 @@ import { ArrowRight, Clock, Layers, Star, Zap } from "lucide-react";
 
 interface BookCardProps {
   book: BookSummary;
+  onSelect?: (book: BookSummary) => void;
 }
 
-export default function BookCard({ book }: BookCardProps) {
+export default function BookCard({ book, onSelect }: BookCardProps) {
   return (
     <a
       href={`/buku/${book.slug}`}
+      data-no-transition={onSelect ? "true" : undefined}
+      onClick={(e) => {
+        if (onSelect) {
+          e.preventDefault();
+          onSelect(book);
+        }
+      }}
       className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg"
     >
       {/* Sampul Buku Saja (Tanpa Background Warna) */}
