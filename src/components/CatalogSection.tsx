@@ -328,11 +328,11 @@ export default function CatalogSection({
                     Geser ke samping →
                   </span>
                 </div>
-                <div className="flex gap-4 sm:gap-5 overflow-x-auto pb-3 snap-x snap-mandatory">
+                <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-3 snap-x snap-mandatory">
                   {displayedBooks.slice(1).map((book) => (
                     <div
                       key={book.slug}
-                      className="flex w-72 sm:w-80 shrink-0 snap-start"
+                      className="flex w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] shrink-0 snap-start"
                     >
                       <BookCard book={book} />
                     </div>
