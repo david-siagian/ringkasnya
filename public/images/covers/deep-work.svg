@@ -18,10 +18,13 @@
       <stop offset="0%" stop-color="#FEF3C7" />
       <stop offset="100%" stop-color="#F59E0B" />
     </linearGradient>
-    <radialGradient id="gemGlow" cx="50%" cy="72%" r="36%">
+    <radialGradient id="gemGlow" cx="50%" cy="74%" r="36%">
       <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.45" />
       <stop offset="100%" stop-color="#090D26" stop-opacity="0" />
     </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#090D26" flood-opacity="0.65" />
+    </filter>
     <filter id="grain" x="0%" y="0%" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
       <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
@@ -32,31 +35,36 @@
   <rect width="600" height="800" fill="url(#bgGrad)" />
   <rect width="600" height="800" fill="url(#gemGlow)" />
 
-  <!-- Turbulent Surface Waves (Distractions Above) -->
-  <path d="M-20 190 Q80 125 185 185 T395 175 T620 195 L620 0 L-20 0 Z" fill="#0F172A" opacity="0.55" />
-  <path d="M-20 215 Q95 155 215 210 T445 198 T620 215" fill="none" stroke="#38BDF8" stroke-width="8" opacity="0.65" />
-  <path d="M-20 245 Q115 190 235 240 T475 225 T620 245" fill="none" stroke="#60A5FA" stroke-width="4" opacity="0.45" />
-  <path d="M40 155 Q130 105 230 150 T430 140 T560 155" fill="none" stroke="#93C5FD" stroke-width="3" opacity="0.35" />
+  <!-- Turbulent Surface Waves (Shifted below upper title zone) -->
+  <path d="M-20 275 Q80 215 185 270 T395 260 T620 280 L620 0 L-20 0 Z" fill="#0F172A" opacity="0.48" />
+  <path d="M-20 298 Q95 242 215 294 T445 282 T620 298" fill="none" stroke="#38BDF8" stroke-width="8" opacity="0.65" />
+  <path d="M-20 326 Q115 275 235 322 T475 308 T620 326" fill="none" stroke="#60A5FA" stroke-width="4" opacity="0.45" />
+  <path d="M40 245 Q130 202 230 242 T430 232 T560 245" fill="none" stroke="#93C5FD" stroke-width="3" opacity="0.35" />
 
   <!-- Focused Light Beam Descending to Deep Sanctuary -->
-  <polygon points="282,195 318,195 395,585 205,585" fill="url(#beamGrad)" />
-  <circle cx="300" cy="195" r="18" fill="#E0F2FE" />
+  <polygon points="282,282 318,282 395,600 205,600" fill="url(#beamGrad)" />
+  <circle cx="300" cy="282" r="18" fill="#E0F2FE" />
 
   <!-- Calm Concentric Sanctuary Ripples -->
-  <ellipse cx="300" cy="625" rx="205" ry="52" fill="none" stroke="#38BDF8" stroke-width="2" opacity="0.3" />
-  <ellipse cx="300" cy="625" rx="150" ry="38" fill="none" stroke="#7DD3FC" stroke-width="2.5" opacity="0.45" />
-  <ellipse cx="300" cy="625" rx="95" ry="24" fill="none" stroke="#FDE68A" stroke-width="2.5" opacity="0.6" />
+  <ellipse cx="300" cy="640" rx="205" ry="50" fill="none" stroke="#38BDF8" stroke-width="2" opacity="0.3" />
+  <ellipse cx="300" cy="640" rx="150" ry="36" fill="none" stroke="#7DD3FC" stroke-width="2.5" opacity="0.45" />
+  <ellipse cx="300" cy="640" rx="95" ry="22" fill="none" stroke="#FDE68A" stroke-width="2.5" opacity="0.6" />
 
   <!-- Faceted Diamond Prism (Deep Work Output) -->
-  <g transform="translate(300, 565)">
-    <!-- Top facets -->
+  <g transform="translate(300, 580)">
     <polygon points="-58,-28 58,-28 38,-56 -38,-56" fill="#F0F9FF" />
     <polygon points="0,-28 58,-28 38,-56 0,-56" fill="#FEF3C7" />
-    <!-- Bottom facets -->
     <polygon points="-58,-28 0,-28 0,58" fill="url(#gemLeft)" />
     <polygon points="0,-28 58,-28 0,58" fill="url(#gemRight)" />
     <polygon points="-24,-28 0,-28 0,58" fill="#7DD3FC" opacity="0.55" />
     <polygon points="0,-28 24,-28 0,58" fill="#FDE68A" opacity="0.55" />
+  </g>
+
+  <!-- Real Book Cover Title Placement: Bold Upper-Center -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="112" fill="#F8FAFC" font-size="76" font-weight="900" letter-spacing="4">DEEP</text>
+    <text x="300" y="186" fill="#FBBF24" font-size="76" font-weight="900" letter-spacing="4">WORK</text>
+    <text x="300" y="752" fill="#BAE6FD" font-size="19" font-weight="700" letter-spacing="6">CAL NEWPORT</text>
   </g>
 
   <!-- Subtle Paper Grain -->

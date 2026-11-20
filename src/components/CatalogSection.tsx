@@ -224,7 +224,7 @@ export default function CatalogSection({
         isFull ? (
           <div
             key={`${selectedCategory}-${searchQuery}-${safePage}`}
-            className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-6"
+            className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3"
           >
             {displayedBooks.map((book) => (
               <BookCard key={book.slug} book={book} onSelect={setPreviewBook} />

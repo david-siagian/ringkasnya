@@ -13,10 +13,13 @@
       <stop offset="0%" stop-color="#34D399" />
       <stop offset="100%" stop-color="#10B981" />
     </linearGradient>
-    <radialGradient id="vitalGlow" cx="50%" cy="68%" r="35%">
+    <radialGradient id="vitalGlow" cx="50%" cy="72%" r="35%">
       <stop offset="0%" stop-color="#34D399" stop-opacity="0.45" />
       <stop offset="100%" stop-color="#292524" stop-opacity="0" />
     </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#0C0A09" flood-opacity="0.6" />
+    </filter>
     <filter id="grain" x="0%" y="0%" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
       <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
@@ -27,42 +30,48 @@
   <rect width="600" height="800" fill="url(#bgGrad)" />
   <rect width="600" height="800" fill="url(#vitalGlow)" />
 
-  <!-- Subtle Architectural Grid / Framing -->
-  <circle cx="300" cy="560" r="190" fill="none" stroke="#57534E" stroke-width="1.5" opacity="0.4" />
-  <circle cx="300" cy="560" r="130" fill="none" stroke="#78716C" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.4" />
+  <!-- Real Book Cover Title Placement: Clean Upper-Center -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="106" fill="#F5F5F4" font-size="44" font-weight="800" letter-spacing="6">ESSENTIALISM</text>
+    <text x="300" y="140" fill="#A8A29E" font-size="14" font-weight="600" letter-spacing="3.5">THE DISCIPLINED PURSUIT OF LESS</text>
+    <line x1="230" y1="162" x2="370" y2="162" stroke="#34D399" stroke-width="2" opacity="0.7" />
+  </g>
 
-  <!-- Top: Scattered Noise (Trivial Many) -->
+  <!-- Subtle Architectural Grid / Framing -->
+  <circle cx="300" cy="595" r="175" fill="none" stroke="#57534E" stroke-width="1.5" opacity="0.4" />
+  <circle cx="300" cy="595" r="120" fill="none" stroke="#78716C" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.4" />
+
+  <!-- Scattered Noise (Trivial Many) -->
   <g fill="#78716C" opacity="0.7">
-    <circle cx="140" cy="115" r="10" />
-    <circle cx="215" cy="95" r="7" />
-    <circle cx="275" cy="130" r="12" />
-    <circle cx="345" cy="100" r="8" />
-    <circle cx="415" cy="125" r="11" />
-    <circle cx="465" cy="155" r="7" />
-    <circle cx="170" cy="175" r="9" />
-    <circle cx="245" cy="185" r="6" />
-    <circle cx="375" cy="178" r="10" />
-    <circle cx="310" cy="165" r="8" />
-    <rect x="195" y="135" width="22" height="6" rx="3" transform="rotate(24 195 135)" />
-    <rect x="395" y="88" width="24" height="6" rx="3" transform="rotate(-18 395 88)" />
-    <rect x="285" y="75" width="20" height="6" rx="3" transform="rotate(12 285 75)" />
+    <circle cx="145" cy="215" r="9" />
+    <circle cx="215" cy="198" r="7" />
+    <circle cx="275" cy="228" r="11" />
+    <circle cx="345" cy="202" r="8" />
+    <circle cx="415" cy="224" r="10" />
+    <circle cx="465" cy="252" r="7" />
+    <circle cx="172" cy="268" r="8" />
+    <circle cx="245" cy="276" r="6" />
+    <circle cx="375" cy="270" r="9" />
+    <circle cx="310" cy="258" r="7" />
+    <rect x="195" y="232" width="20" height="6" rx="3" transform="rotate(24 195 232)" />
+    <rect x="395" y="192" width="22" height="6" rx="3" transform="rotate(-18 395 192)" />
   </g>
   <!-- One Emerald Dot Among the Noise -->
-  <circle cx="300" cy="122" r="13" fill="#34D399" />
+  <circle cx="300" cy="218" r="12" fill="#34D399" />
 
   <!-- Geometric Filter / Funnel -->
-  <polygon points="115,245 485,245 342,405 258,405" fill="url(#funnelGrad)" opacity="0.92" />
-  <polygon points="115,245 300,245 300,405 258,405" fill="#F5F5F4" opacity="0.35" />
-  <rect x="258" y="405" width="84" height="22" rx="4" fill="#D6D3D1" />
+  <polygon points="125,315 475,315 340,455 260,455" fill="url(#funnelGrad)" opacity="0.92" />
+  <polygon points="125,315 300,315 300,455 260,455" fill="#F5F5F4" opacity="0.35" />
+  <rect x="260" y="455" width="80" height="20" rx="4" fill="#D6D3D1" />
 
   <!-- Single Pure Essential Beam & Sphere ("Less, But Better") -->
-  <line x1="300" y1="427" x2="300" y2="545" stroke="#34D399" stroke-width="6" stroke-linecap="round" />
-  <circle cx="300" cy="585" r="56" fill="url(#vitalGrad)" />
-  <circle cx="300" cy="585" r="24" fill="#ECFDF5" />
+  <line x1="300" y1="475" x2="300" y2="560" stroke="#34D399" stroke-width="6" stroke-linecap="round" />
+  <circle cx="300" cy="600" r="52" fill="url(#vitalGrad)" />
+  <circle cx="300" cy="600" r="22" fill="#ECFDF5" />
 
-  <!-- Clean Minimal Pedestal -->
-  <rect x="200" y="685" width="200" height="8" rx="4" fill="#A8A29E" opacity="0.6" />
-  <rect x="245" y="710" width="110" height="6" rx="3" fill="#78716C" opacity="0.45" />
+  <!-- Clean Minimal Pedestal & Author -->
+  <rect x="200" y="690" width="200" height="7" rx="3.5" fill="#A8A29E" opacity="0.6" />
+  <text x="300" y="752" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" fill="#D6D3D1" font-size="18" font-weight="700" letter-spacing="5">GREG McKEOWN</text>
 
   <!-- Subtle Paper Grain -->
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
