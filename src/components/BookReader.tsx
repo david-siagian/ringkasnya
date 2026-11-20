@@ -103,7 +103,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     totalChecklist > 0 ? Math.round((completedCount / totalChecklist) * 100) : 0;
 
   const handleCopyQuote = (quote: string, index: number) => {
-    const textToCopy = `"${quote}" — ${book.title} (${book.author}) via ringkasnya.id`;
+    const textToCopy = `"${quote}" — ${book.title} (${book.author}) via Ringkasnya`;
     navigator.clipboard.writeText(textToCopy);
     setCopiedQuoteIdx(index);
     setTimeout(() => setCopiedQuoteIdx(null), 2000);
@@ -390,7 +390,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           </div>
         </section>
 
-        {/* Fitur Khas ringkasnya.id: Action Checklist Interaktif */}
+        {/* Fitur Khas Ringkasnya: Action Checklist Interaktif */}
         <section className="mt-8 rounded-2xl border-2 border-accent-line/70 bg-surface p-6 sm:p-8 shadow-sm">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>

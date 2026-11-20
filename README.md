@@ -1,4 +1,4 @@
-# ringkasnya.id — Baca Intinya, Praktikkan Ilmunya
+# Ringkasnya — Baca Intinya, Praktikkan Ilmunya
 
 Website ringkasan buku populer dunia dalam Bahasa Indonesia dengan pendekatan **ATM (Amati, Tiru, Modifikasi)**:
 - **Mode Baca Dwi-Kecepatan**: *Mode Kilat (6–10 Menit)* & *Mode Mendalam (20–30 Menit)* dengan panjang teks terukur (~200 kata/menit).

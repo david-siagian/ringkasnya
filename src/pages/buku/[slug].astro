@@ -17,7 +17,7 @@ if (!book) {
 }
 
 const relatedBooks = BOOKS.filter((b) => b.slug !== book.slug).slice(0, 2);
-const pageTitle = `Ringkasan Buku ${book.title} (${book.author}) — ringkasnya.id`;
+const pageTitle = `Ringkasan Buku ${book.title} (${book.author}) — Ringkasnya`;
 const pageDescription = `${book.tagline} Baca ringkasan ${book.title} dalam ${book.quickTimeMinutes}-${book.readingTimeMinutes} menit lengkap dengan Action Checklist.`;
 ---
 

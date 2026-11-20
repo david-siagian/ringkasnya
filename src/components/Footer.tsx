@@ -10,7 +10,7 @@ export default function Footer() {
             <a href="/" className="flex items-center gap-2.5 group">
               <BrandLogo className="h-10 w-10 transition-transform group-hover:scale-105" />
               <span className="text-lg font-extrabold tracking-tight text-white">
-                ringkasnya<span className="text-emerald-400">.id</span>
+                Ringkasnya
               </span>
             </a>
             <p className="mt-3 text-sm leading-relaxed text-slate-400">
@@ -82,7 +82,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-2">
-          <p>© {new Date().getFullYear()} ringkasnya.id. Dibuat bertahap untuk pembelajar Indonesia.</p>
+          <p>© {new Date().getFullYear()} Ringkasnya. Dibuat bertahap untuk pembelajar Indonesia.</p>
           <p>Fase 1 (MVP) — Baca Intinya, Praktikkan Ilmunya</p>
         </div>
       </div>
