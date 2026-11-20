@@ -246,61 +246,65 @@ export default function CatalogSection({
                     e.preventDefault();
                     setPreviewBook(featuredBook);
                   }}
-                  className={`group flex flex-col items-center gap-6 overflow-hidden rounded-2xl border border-white/15 bg-slate-900 bg-gradient-to-br ${featuredBook.coverGradient} p-5 sm:p-7 text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:border-white/30 hover:shadow-xl md:flex-row md:gap-8`}
+                  className="group flex flex-col items-center gap-6 overflow-hidden rounded-2xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50/90 via-white to-amber-50/50 p-5 sm:p-7 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg md:flex-row md:gap-8"
                 >
                   {featuredBook.coverImage && (
-                    <div className="relative aspect-[3/4] w-44 sm:w-52 md:w-60 shrink-0 overflow-hidden rounded-xl bg-black/20 shadow-[0_18px_36px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/25">
-                      <img
-                        src={featuredBook.coverImage}
-                        alt={`Ilustrasi sampul buku ${featuredBook.title}`}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
+                    <div
+                      className={`flex w-full shrink-0 items-center justify-center rounded-xl bg-slate-900 bg-gradient-to-br ${featuredBook.coverGradient} p-5 sm:p-6 md:w-auto`}
+                    >
+                      <div className="relative aspect-[3/4] w-40 sm:w-48 md:w-52 overflow-hidden rounded-xl bg-black/20 shadow-[0_18px_36px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/25">
+                        <img
+                          src={featuredBook.coverImage}
+                          alt={`Ilustrasi sampul buku ${featuredBook.title}`}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
                     </div>
                   )}
 
                   <div className="flex min-w-0 flex-1 flex-col justify-between self-stretch">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="rounded-full border border-white/25 bg-white/20 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-white backdrop-blur-sm">
+                        <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 border border-emerald-200">
                           Buku Pilihan
                         </span>
-                        <span className="rounded-full bg-black/25 px-2.5 py-0.5 text-xs font-medium text-white/90">
+                        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
                           {featuredBook.category}
                         </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-0.5 text-xs font-semibold text-white">
-                          <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
+                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                           {featuredBook.rating}
                         </span>
                       </div>
 
-                      <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-white/80">
+                      <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-slate-500">
                         {featuredBook.author}
                       </p>
-                      <h3 className="mt-1 text-2xl sm:text-3xl font-extrabold leading-snug tracking-tight text-white transition-colors group-hover:text-amber-200">
+                      <h3 className="mt-1 text-2xl sm:text-3xl font-extrabold leading-snug tracking-tight text-slate-900 group-hover:text-emerald-700">
                         {featuredBook.title}
                       </h3>
 
-                      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-white/85">
-                        <span className="inline-flex items-center gap-1 font-medium text-amber-300">
-                          <Zap className="h-3.5 w-3.5 text-amber-300" />
+                      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
+                        <span className="inline-flex items-center gap-1 font-medium text-amber-700">
+                          <Zap className="h-3.5 w-3.5 text-amber-500" />
                           Mode Kilat {featuredBook.quickTimeMinutes} mnt
                         </span>
                         <span className="inline-flex items-center gap-1">
-                          <Clock className="h-3.5 w-3.5 text-white/75" />
+                          <Clock className="h-3.5 w-3.5 text-slate-400" />
                           Mendalam {featuredBook.readingTimeMinutes} mnt
                         </span>
                         <span className="inline-flex items-center gap-1">
-                          <Layers className="h-3.5 w-3.5 text-white/75" />
+                          <Layers className="h-3.5 w-3.5 text-slate-400" />
                           {featuredBook.keyTakeaways.length} Poin Inti
                         </span>
                       </div>
 
-                      <p className="mt-4 text-sm sm:text-base leading-relaxed text-white/90">
+                      <p className="mt-4 text-sm sm:text-base leading-relaxed text-slate-600">
                         {featuredBook.tagline}
                       </p>
                     </div>
 
-                    <div className="mt-6 flex items-center justify-between border-t border-white/15 pt-4 text-xs sm:text-sm font-semibold text-white transition-colors group-hover:text-amber-200">
+                    <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs sm:text-sm font-semibold text-emerald-700 group-hover:text-emerald-600">
                       <span>Baca Ringkasan & Praktek</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </div>
