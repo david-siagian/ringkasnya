@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import type { BookSummary } from "@/types/book";
 import { ArrowRight, BookOpen, Clock, Star, X, Zap } from "lucide-react";
 
@@ -11,6 +12,12 @@ export default function BookPreviewModal({
   book,
   onClose,
 }: BookPreviewModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     if (!book) return;
 
@@ -30,9 +37,9 @@ export default function BookPreviewModal({
     };
   }, [book, onClose]);
 
-  if (!book) return null;
+  if (!mounted || !book) return null;
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-md"
       onClick={onClose}
@@ -132,6 +139,7 @@ export default function BookPreviewModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
