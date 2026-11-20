@@ -324,7 +324,7 @@ export default function CatalogSection({
                   {displayedBooks.slice(1).map((book) => (
                     <div
                       key={book.slug}
-                      className="flex w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] md:w-[calc((100%-2.5rem)/3)] shrink-0 snap-start"
+                      className="flex w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] md:w-[calc((100%-3.75rem)/4)] shrink-0 snap-start"
                     >
                       <BookCard book={book} onSelect={setPreviewBook} />
                     </div>
