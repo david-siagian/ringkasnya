@@ -317,7 +317,7 @@ export default function CatalogSection({
               );
             })()}
 
-            {/* Buku Lainnya Disusun Menyamping (Judul & Penulis Saja) */}
+            {/* Buku Lainnya Disusun Menyamping (Kartu Lengkap) */}
             {displayedBooks.length > 1 && (
               <div>
                 <div className="mb-3 flex items-center justify-between">
@@ -328,35 +328,14 @@ export default function CatalogSection({
                     Geser ke samping →
                   </span>
                 </div>
-                <div className="flex gap-3.5 sm:gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
+                <div className="flex gap-4 sm:gap-5 overflow-x-auto pb-3 snap-x snap-mandatory">
                   {displayedBooks.slice(1).map((book) => (
-                    <a
+                    <div
                       key={book.slug}
-                      href={`/buku/${book.slug}`}
-                      className="group flex w-44 sm:w-52 shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-md"
+                      className="flex w-72 sm:w-80 shrink-0 snap-start"
                     >
-                      <div
-                        className={`relative flex aspect-[4/3] items-center justify-center bg-slate-900 bg-gradient-to-br ${book.coverGradient} p-4`}
-                      >
-                        {book.coverImage && (
-                          <div className="aspect-[3/4] h-24 sm:h-28 overflow-hidden rounded-lg bg-black/20 shadow-lg ring-1 ring-white/25">
-                            <img
-                              src={book.coverImage}
-                              alt={`Ilustrasi sampul buku ${book.title}`}
-                              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            />
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex flex-1 flex-col justify-center p-3.5">
-                        <h3 className="line-clamp-2 text-sm font-bold leading-snug text-slate-900 group-hover:text-emerald-700">
-                          {book.title}
-                        </h3>
-                        <p className="mt-1 truncate text-xs font-medium text-slate-500">
-                          {book.author}
-                        </p>
-                      </div>
-                    </a>
+                      <BookCard book={book} />
+                    </div>
                   ))}
                 </div>
               </div>
