@@ -246,11 +246,11 @@ export default function CatalogSection({
                     e.preventDefault();
                     setPreviewBook(featuredBook);
                   }}
-                  className="group flex flex-col items-center gap-6 overflow-hidden rounded-2xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50/90 via-white to-amber-50/50 p-5 sm:p-7 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg md:flex-row md:gap-8"
+                  className="group flex flex-col items-stretch overflow-hidden rounded-2xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50/90 via-white to-amber-50/50 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg md:flex-row"
                 >
                   {featuredBook.coverImage && (
                     <div
-                      className={`flex w-full shrink-0 items-center justify-center rounded-xl bg-slate-900 bg-gradient-to-br ${featuredBook.coverGradient} p-5 sm:p-6 md:w-auto`}
+                      className={`flex w-full shrink-0 items-center justify-center bg-slate-900 bg-gradient-to-br ${featuredBook.coverGradient} p-6 sm:p-8 md:w-72 lg:w-80`}
                     >
                       <div className="relative aspect-[3/4] w-40 sm:w-48 md:w-52 overflow-hidden rounded-xl bg-black/20 shadow-[0_18px_36px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/25">
                         <img
@@ -262,7 +262,7 @@ export default function CatalogSection({
                     </div>
                   )}
 
-                  <div className="flex min-w-0 flex-1 flex-col justify-between self-stretch">
+                  <div className="flex min-w-0 flex-1 flex-col justify-between p-5 sm:p-7">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 border border-emerald-200">
