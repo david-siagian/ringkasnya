@@ -11,7 +11,7 @@ export const psychologyOfMoney: BookSummary = {
   quickTimeMinutes: 7,
   rating: 4.9,
   coverGradient: "from-emerald-950 via-emerald-800 to-teal-800",
-  coverAccent: "bg-emerald-100 text-emerald-900",
+  coverAccent: "bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300",
   coverImage: "/images/covers/psychology-of-money.svg",
   badgeText: "Wajib Baca Finansial",
   tagline:

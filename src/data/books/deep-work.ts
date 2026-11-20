@@ -11,7 +11,7 @@ export const deepWork: BookSummary = {
   quickTimeMinutes: 7,
   rating: 4.8,
   coverGradient: "from-slate-950 via-indigo-950 to-blue-900",
-  coverAccent: "bg-indigo-100 text-indigo-900",
+  coverAccent: "bg-indigo-100 text-indigo-900 dark:bg-indigo-950/70 dark:text-indigo-300",
   coverImage: "/images/covers/deep-work.svg",
   badgeText: "Fokus Maksimal",
   tagline:

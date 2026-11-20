@@ -11,7 +11,7 @@ export const filosofiTeras: BookSummary = {
   quickTimeMinutes: 7,
   rating: 4.9,
   coverGradient: "from-slate-900 via-sky-900 to-blue-900",
-  coverAccent: "bg-sky-100 text-sky-900",
+  coverAccent: "bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300",
   coverImage: "/images/covers/filosofi-teras.svg",
   badgeText: "Best-Seller Indonesia",
   tagline:

@@ -11,7 +11,7 @@ export const showYourWork: BookSummary = {
   quickTimeMinutes: 7,
   rating: 4.8,
   coverGradient: "from-purple-950 via-fuchsia-900 to-rose-800",
-  coverAccent: "bg-rose-100 text-rose-900",
+  coverAccent: "bg-rose-100 text-rose-900 dark:bg-rose-950/70 dark:text-rose-300",
   coverImage: "/images/covers/show-your-work.svg",
   badgeText: "Karier & Personal Branding",
   tagline:

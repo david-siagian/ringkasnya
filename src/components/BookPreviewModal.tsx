@@ -41,14 +41,14 @@ export default function BookPreviewModal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-md"
+      className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-md dark:bg-black/75"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="preview-book-title"
     >
       <div
-        className="animate-fade-slide relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white shadow-2xl ring-1 ring-slate-900/10"
+        className="animate-fade-slide relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white shadow-2xl ring-1 ring-slate-900/10 dark:bg-slate-900 dark:ring-slate-700/60"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Tombol X di pojok kanan atas card */}
@@ -120,14 +120,14 @@ export default function BookPreviewModal({
 
         {/* Sinopsis & Tombol Baca */}
         <div className="p-6 sm:p-8">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             Sinopsis Buku
           </h3>
-          <p className="mt-2.5 text-sm sm:text-base leading-relaxed text-slate-700">
+          <p className="mt-2.5 text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300">
             {book.synopsis}
           </p>
 
-          <div className="mt-7 flex justify-center border-t border-slate-100 pt-6">
+          <div className="mt-7 flex justify-center border-t border-slate-100 pt-6 dark:border-slate-800">
             <a
               href={`/buku/${book.slug}`}
               className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-8 py-3.5 text-sm sm:text-base font-bold text-white shadow-md shadow-emerald-600/20 transition-all duration-200 hover:bg-emerald-700 active:scale-[0.98]"
