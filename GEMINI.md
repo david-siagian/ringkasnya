@@ -19,6 +19,18 @@
 - Jalankan `git add`, `git commit`, dan `git push` sebagai pemanggilan perintah yang **terpisah** (jangan digabung dalam satu baris perintah), agar approval prefix-matching tetap bekerja tanpa perlu meminta izin ulang untuk setiap commit message yang unik.
 - When interacting with Cloudflare, use the `cf` CLI unless the project has a Wrangler configuration file.
 
+## Git Workflow & Branching
+- **Branch `main` Hanya untuk Rilis (Production)**: Jangan melakukan commit atau push langsung ke `main` untuk pengerjaan fitur, bugfix, atau perubahan harian.
+- **Branch `dev` sebagai Integrasi & Preview**: Semua perubahan fitur/bugfix digabungkan terlebih dahulu ke branch `dev`.
+- **Alur Kerja Fitur / Bugfix / Lainnya**:
+  1. Pastikan berada di branch `dev` terbaru (`git checkout dev`, lalu `git pull origin dev`), kemudian buat branch baru dari `dev` (misalnya `feat/<nama-fitur>`, `fix/<nama-bug>`, `docs/<topik>`, `chore/<topik>`).
+  2. Kerjakan perubahan pada branch baru tersebut dan pastikan verifikasi (`npx tsc --noEmit` dan `npm run build`) lulus.
+  3. Commit dan push perubahan ke branch baru tersebut (`git push -u origin <nama-branch>`).
+  4. Merge branch tersebut ke `dev` (`git checkout dev`, `git merge <nama-branch>`, `git push origin dev`).
+
 ## Deployment & Rilis
-- **Auto-Deploy Cloudflare Aktif**: Build dan deploy otomatis sudah diaktifkan di Cloudflare saat `git push` ke branch `main`. Tidak perlu menjalankan `npx wrangler deploy` secara manual setelah `git push` (cukup pastikan `npx tsc --noEmit` dan `npm run build` lulus secara lokal sebelum commit/push).
-- **Auto-Push Setelah Selesai Fitur/Bug**: Setiap kali selesai mengerjakan fitur atau perbaikan bug dan verifikasi (`npx tsc --noEmit` / `npm run build`) lulus, langsung lakukan `git commit` dan `git push`, kecuali user meminta untuk tidak di-push terlebih dahulu.
+- **Auto-Deploy Cloudflare Aktif**:
+  - **Preview (`dev`)**: Push/merge ke branch `dev` memicu build & deploy Preview di Cloudflare Workers (`npx wrangler preview`).
+  - **Production (`main`)**: Push/merge ke branch `main` (khusus rilis) memicu build & deploy Production di Cloudflare Workers (`npx wrangler deploy`).
+  - Tidak perlu menjalankan `npx wrangler deploy` secara manual setelah `git push` (cukup pastikan `npx tsc --noEmit` dan `npm run build` lulus secara lokal sebelum commit/push).
+- **Auto-Push Setelah Selesai Fitur/Bug**: Setiap kali selesai mengerjakan fitur atau perbaikan bug dan verifikasi (`npx tsc --noEmit` / `npm run build`) lulus, langsung lakukan `git commit` dan `git push` ke branch kerja (yang ditarik dari `dev`), lalu merge ke `dev` dan push `dev`, kecuali user meminta untuk tidak di-push terlebih dahulu.
