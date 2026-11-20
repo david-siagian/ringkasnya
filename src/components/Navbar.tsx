@@ -66,7 +66,7 @@ export default function Navbar() {
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
                 <span className="text-lg font-extrabold tracking-tight text-ink">
-                  ringkasnya<span className="text-accent-strong">.id</span>
+                  sherin<span className="text-accent-strong">.id</span>
                 </span>
                 <span className="rounded-full border border-accent-line bg-accent-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent-text">
                   MVP
@@ -181,7 +181,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <BrandLogo className="h-8 w-8" />
             <span className="text-base font-extrabold tracking-tight text-ink">
-              ringkasnya<span className="text-accent-strong">.id</span>
+              sherin<span className="text-accent-strong">.id</span>
             </span>
           </div>
           <button
