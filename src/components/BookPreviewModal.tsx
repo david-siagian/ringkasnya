@@ -104,14 +104,14 @@ export default function BookPreviewModal({
               </p>
 
               {/* Kecepatan Baca */}
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                <span className="inline-flex items-center gap-1.5 rounded-xl bg-black/25 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
-                  <Zap className="h-3.5 w-3.5 text-amber-300" />
-                  Mode Kilat: {book.quickTimeMinutes} Menit
+              <div className="mt-4 flex flex-nowrap items-center justify-center gap-1.5 sm:gap-2 sm:justify-start">
+                <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-xl bg-black/25 px-2.5 py-1.5 text-[11px] sm:px-3 sm:text-xs font-semibold text-white backdrop-blur-sm">
+                  <Zap className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 text-amber-300" />
+                  Mode Kilat: {book.quickTimeMinutes} Mnt
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-xl bg-black/25 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
-                  <Clock className="h-3.5 w-3.5 text-white/85" />
-                  Mode Mendalam: {book.readingTimeMinutes} Menit
+                <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-xl bg-black/25 px-2.5 py-1.5 text-[11px] sm:px-3 sm:text-xs font-semibold text-white backdrop-blur-sm">
+                  <Clock className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 text-white/85" />
+                  Mode Mendalam: {book.readingTimeMinutes} Mnt
                 </span>
               </div>
             </div>
