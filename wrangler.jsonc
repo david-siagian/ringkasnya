@@ -10,7 +10,8 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "previews": {}
   // Siap diaktifkan untuk Fase 3 (Login Auth & Payment Gateway):
   // "d1_databases": [
   //   {
