@@ -65,7 +65,7 @@ export default function BookPreviewModal({
         <div
           className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} p-6 sm:p-8 text-white`}
         >
-          <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-center sm:gap-7 pr-8 sm:pr-0">
+          <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-center sm:gap-7">
             {book.coverImage && (
               <div className="relative aspect-[3/4] w-36 sm:w-40 shrink-0 overflow-hidden rounded-2xl bg-black/20 shadow-[0_18px_36px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/25">
                 <img
@@ -76,7 +76,7 @@ export default function BookPreviewModal({
               </div>
             )}
 
-            <div className="min-w-0 flex-1 text-center sm:text-left">
+            <div className="min-w-0 w-full flex-1 text-center sm:text-left">
               <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
                 <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
                   {book.category}
