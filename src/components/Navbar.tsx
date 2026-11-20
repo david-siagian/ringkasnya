@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
-import { Menu, X, BookOpen, Compass, ArrowRight } from "lucide-react";
-import { SmoothHashLink } from "@/components/SmoothNavigation";
+import {
+  Menu,
+  X,
+  BookOpen,
+  ArrowRight,
+  Search,
+  Moon,
+  LogIn,
+} from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 
 const NAV_ITEMS = [
   { label: "Katalog Buku", href: "/katalog", icon: BookOpen },
-  { label: "Cara Kerja", targetId: "metode", icon: Compass },
 ] as const;
 
 export default function Navbar() {
@@ -44,11 +50,15 @@ export default function Navbar() {
     setIsOpen(false);
   };
 
+  const iconButtonClass =
+    "inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-xs transition-colors hover:bg-slate-50 hover:text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 active:scale-95";
+
   return (
     <>
       <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
-          <a href="/" className="flex items-center gap-2.5 group">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
+          {/* Kiri: Brand Logo */}
+          <a href="/" className="flex items-center gap-2.5 group shrink-0">
             <BrandLogo className="h-11 w-11 transition-transform group-hover:scale-105" />
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
@@ -65,38 +75,59 @@ export default function Navbar() {
             </div>
           </a>
 
-          <div className="flex items-center gap-3 sm:gap-4">
-            {/* Menu Navigasi Desktop */}
-            <nav
-              aria-label="Menu Navigasi Utama"
-              className="hidden md:flex items-center gap-1.5"
+          {/* Tengah: Menu Navigasi Desktop */}
+          <nav
+            aria-label="Menu Navigasi Utama"
+            className="hidden md:flex items-center gap-1"
+          >
+            {NAV_ITEMS.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
+                >
+                  <Icon className="h-4 w-4 text-emerald-600" />
+                  <span>{item.label}</span>
+                </a>
+              );
+            })}
+          </nav>
+
+          {/* Kanan: Pencarian, Mode Gelap/Terang, Masuk/Daftar (Desktop), & Menu Mobile */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Tombol Pencarian Judul Buku */}
+            <button
+              type="button"
+              aria-label="Cari judul buku"
+              title="Cari judul buku"
+              className={iconButtonClass}
             >
-              {NAV_ITEMS.map((item) => {
-                const Icon = item.icon;
-                const desktopClass =
-                  "inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700";
+              <Search className="h-4 w-4" />
+            </button>
 
-                if ("href" in item) {
-                  return (
-                    <a key={item.label} href={item.href} className={desktopClass}>
-                      <Icon className="h-4 w-4 text-emerald-600" />
-                      <span>{item.label}</span>
-                    </a>
-                  );
-                }
+            {/* Tombol Mode Gelap / Terang */}
+            <button
+              type="button"
+              aria-label="Ubah mode gelap atau terang"
+              title="Mode Gelap / Terang"
+              className={iconButtonClass}
+            >
+              <Moon className="h-4 w-4" />
+            </button>
 
-                return (
-                  <SmoothHashLink
-                    key={item.label}
-                    targetId={item.targetId}
-                    className={desktopClass}
-                  >
-                    <Icon className="h-4 w-4 text-emerald-600" />
-                    <span>{item.label}</span>
-                  </SmoothHashLink>
-                );
-              })}
-            </nav>
+            {/* Pemisah & Tombol Masuk/Daftar (Desktop) */}
+            <div className="hidden md:flex items-center gap-2 pl-1">
+              <span className="h-5 w-px bg-slate-200" aria-hidden="true" />
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 active:scale-95"
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Masuk / Daftar</span>
+              </button>
+            </div>
 
             {/* Tombol Menu 3 Garis Horizontal (Mobile) */}
             <button
@@ -105,7 +136,7 @@ export default function Navbar() {
               aria-label="Buka menu navigasi"
               aria-expanded={isOpen}
               aria-controls="mobile-slide-drawer"
-              className="inline-flex md:hidden h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-xs transition-colors hover:bg-slate-50 hover:text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 active:scale-95"
+              className={`${iconButtonClass} md:hidden`}
             >
               <Menu className="h-5 w-5" />
             </button>
@@ -160,39 +191,31 @@ export default function Navbar() {
           </p>
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
-            const mobileClass =
-              "flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700";
-
-            const innerContent = (
-              <>
-                <span className="flex items-center gap-3">
-                  <Icon className="h-4 w-4 text-emerald-600" />
-                  <span>{item.label}</span>
-                </span>
-                <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-              </>
-            );
-
             return (
               <div key={item.label} onClick={handleLinkClick}>
-                {"href" in item ? (
-                  <a href={item.href} className={mobileClass}>
-                    {innerContent}
-                  </a>
-                ) : (
-                  <SmoothHashLink
-                    targetId={item.targetId}
-                    className={mobileClass}
-                  >
-                    {innerContent}
-                  </SmoothHashLink>
-                )}
+                <a
+                  href={item.href}
+                  className="flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
+                >
+                  <span className="flex items-center gap-3">
+                    <Icon className="h-4 w-4 text-emerald-600" />
+                    <span>{item.label}</span>
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                </a>
               </div>
             );
           })}
         </nav>
 
-        <div className="border-t border-slate-100 p-4">
+        <div className="border-t border-slate-100 p-4 space-y-3">
+          <button
+            type="button"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 active:scale-95"
+          >
+            <LogIn className="h-4 w-4" />
+            <span>Masuk / Daftar</span>
+          </button>
           <p className="text-center text-[11px] text-slate-400">
             Baca Intinya, Praktikkan Ilmunya
           </p>
