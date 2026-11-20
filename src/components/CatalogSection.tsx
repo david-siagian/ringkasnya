@@ -246,10 +246,10 @@ export default function CatalogSection({
                     e.preventDefault();
                     setPreviewBook(featuredBook);
                   }}
-                  className="group flex flex-col items-center gap-6 overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-7 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg md:flex-row"
+                  className="group flex flex-col items-center gap-6 overflow-hidden rounded-2xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50/90 via-white to-amber-50/50 p-5 sm:p-7 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg md:flex-row md:gap-8"
                 >
                   {featuredBook.coverImage && (
-                    <div className="relative aspect-[3/4] w-40 sm:w-48 shrink-0 overflow-hidden rounded-xl shadow-md ring-1 ring-slate-200/80">
+                    <div className="relative aspect-[3/4] w-44 sm:w-52 md:w-60 shrink-0 overflow-hidden rounded-xl shadow-md ring-1 ring-slate-200/80">
                       <img
                         src={featuredBook.coverImage}
                         alt={`Ilustrasi sampul buku ${featuredBook.title}`}
@@ -324,7 +324,7 @@ export default function CatalogSection({
                   {displayedBooks.slice(1).map((book) => (
                     <div
                       key={book.slug}
-                      className="flex w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] shrink-0 snap-start"
+                      className="flex w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] md:w-[calc((100%-2.5rem)/3)] shrink-0 snap-start"
                     >
                       <BookCard book={book} onSelect={setPreviewBook} />
                     </div>
