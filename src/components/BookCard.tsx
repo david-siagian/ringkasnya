@@ -63,7 +63,7 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
             </span>
           </div>
 
-          <div className="mt-2.5 mb-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <div className="mt-2.5 flex flex-wrap items-center gap-1.5 sm:gap-2">
             <span
               className={`inline-block rounded-md px-2 py-0.5 text-[10px] sm:text-[11px] font-semibold ${book.coverAccent}`}
             >
@@ -74,10 +74,6 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
               {book.keyTakeaways.length} Poin Inti
             </span>
           </div>
-
-          <p className="line-clamp-3 text-xs sm:text-sm leading-relaxed text-slate-600">
-            {book.tagline}
-          </p>
         </div>
 
         <div className="mt-4 sm:mt-5 flex items-center justify-between border-t border-slate-100 pt-3 text-[11px] sm:text-xs font-semibold text-emerald-700 group-hover:text-emerald-600">
