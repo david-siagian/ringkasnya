@@ -2,6 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-bg-page: 248 250 252;
+  --color-bg-surface: 255 255 255;
+  --color-bg-subtle: 241 245 249;
+
+  --color-text-primary: 15 23 42;
+  --color-text-secondary: 51 65 85;
+  --color-text-muted: 71 85 105;
+  --color-text-subtle: 100 116 139;
+  --color-text-faint: 148 163 184;
+
+  --color-border-default: 226 232 240;
+  --color-border-subtle: 241 245 249;
+  --color-border-strong: 203 213 225;
+
+  --color-accent-soft: 236 253 245;
+  --color-accent-tint: 209 250 229;
+  --color-accent-text: 4 120 87;
+  --color-accent-strong: 5 150 105;
+  --color-accent-line: 167 243 208;
+
+  --color-amber-soft: 255 251 235;
+  --color-amber-tint: 254 243 199;
+  --color-amber-text: 180 83 9;
+  --color-amber-heading: 120 53 15;
+  --color-amber-line: 253 230 138;
+}
+
+html.dark {
+  --color-bg-page: 2 6 23;
+  --color-bg-surface: 15 23 42;
+  --color-bg-subtle: 30 41 59;
+
+  --color-text-primary: 248 250 252;
+  --color-text-secondary: 226 232 240;
+  --color-text-muted: 203 213 225;
+  --color-text-subtle: 148 163 184;
+  --color-text-faint: 100 116 139;
+
+  --color-border-default: 30 41 59;
+  --color-border-subtle: 30 41 59;
+  --color-border-strong: 51 65 85;
+
+  --color-accent-soft: 7 46 37;
+  --color-accent-tint: 10 62 49;
+  --color-accent-text: 110 231 183;
+  --color-accent-strong: 52 211 153;
+  --color-accent-line: 6 95 70;
+
+  --color-amber-soft: 45 24 10;
+  --color-amber-tint: 69 34 10;
+  --color-amber-text: 252 211 77;
+  --color-amber-heading: 253 230 138;
+  --color-amber-line: 146 64 14;
+}
+
 html {
   scroll-behavior: smooth;
   color-scheme: light;
@@ -12,16 +68,11 @@ html.dark {
 }
 
 body {
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: rgb(var(--color-bg-page));
+  color: rgb(var(--color-text-primary));
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-html.dark body {
-  background-color: #020617;
-  color: #f1f5f9;
 }
 
 @keyframes pageEnter {

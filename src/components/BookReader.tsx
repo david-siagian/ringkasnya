@@ -112,7 +112,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const fs = FONT_SCALES[fontSize];
 
   return (
-    <div className="min-h-screen bg-slate-50/70 pb-20 dark:bg-slate-950">
+    <div className="min-h-screen bg-page pb-20">
       {/* Banner Header Buku */}
       <div className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}>
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
@@ -173,20 +173,20 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       </div>
 
       {/* Sticky Reader Toolbar (Mode Baca & Ukuran Huruf) */}
-      <div className="sticky top-[61px] z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95">
+      <div className="sticky top-[61px] z-40 border-b border-line bg-surface/95 shadow-sm backdrop-blur-md">
         <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           {/* Toggle Mode Kilat vs Mendalam */}
-          <div className="flex items-center rounded-xl bg-slate-100 p-1 dark:bg-slate-800">
+          <div className="flex items-center rounded-xl bg-surface-subtle p-1">
             <button
               type="button"
               onClick={() => setReadMode("deep")}
               className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
                 readMode === "deep"
-                  ? "bg-white text-slate-900 shadow-sm dark:bg-slate-700 dark:text-slate-50"
-                  : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                  ? "bg-surface text-ink shadow-sm"
+                  : "text-ink-muted hover:text-ink"
               }`}
             >
-              <BookOpen className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <BookOpen className="h-4 w-4 text-accent-strong" />
               <span>Mendalam ({book.readingTimeMinutes} mnt)</span>
             </button>
             <button
@@ -195,7 +195,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
                 readMode === "quick"
                   ? "bg-amber-500 text-white shadow-sm"
-                  : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                  : "text-ink-muted hover:text-ink"
               }`}
             >
               <Zap className="h-4 w-4" />
@@ -205,14 +205,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
           {/* Kontrol Ukuran Teks */}
           <div className="flex items-center gap-1.5">
-            <Type className="h-4 w-4 text-slate-400 dark:text-slate-500 mr-1 hidden sm:inline" />
+            <Type className="h-4 w-4 text-ink-faint mr-1 hidden sm:inline" />
             <button
               type="button"
               onClick={() => setFontSize("sm")}
               className={`rounded-lg px-2.5 py-1 text-xs font-semibold border ${
                 fontSize === "sm"
-                  ? "border-emerald-600 bg-emerald-50 text-emerald-700 dark:border-emerald-500 dark:bg-emerald-950/70 dark:text-emerald-300"
-                  : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                  ? "border-accent-strong bg-accent-soft text-accent-text"
+                  : "border-line text-ink-muted hover:bg-page"
               }`}
             >
               A-
@@ -222,8 +222,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               onClick={() => setFontSize("base")}
               className={`rounded-lg px-2.5 py-1 text-xs font-semibold border ${
                 fontSize === "base"
-                  ? "border-emerald-600 bg-emerald-50 text-emerald-700 dark:border-emerald-500 dark:bg-emerald-950/70 dark:text-emerald-300"
-                  : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                  ? "border-accent-strong bg-accent-soft text-accent-text"
+                  : "border-line text-ink-muted hover:bg-page"
               }`}
             >
               A
@@ -233,8 +233,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               onClick={() => setFontSize("lg")}
               className={`rounded-lg px-2.5 py-1 text-xs font-semibold border ${
                 fontSize === "lg"
-                  ? "border-emerald-600 bg-emerald-50 text-emerald-700 dark:border-emerald-500 dark:bg-emerald-950/70 dark:text-emerald-300"
-                  : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                  ? "border-accent-strong bg-accent-soft text-accent-text"
+                  : "border-line text-ink-muted hover:bg-page"
               }`}
             >
               A+
@@ -247,8 +247,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       <main className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
         {/* Banner Info Mode Kilat */}
         {readMode === "quick" && (
-          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900 dark:border-amber-800/60 dark:bg-amber-950/50 dark:text-amber-200">
-            <Zap className="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-warm-line bg-warm-soft p-4 text-warm-heading">
+            <Zap className="h-5 w-5 shrink-0 text-warm-text" />
             <p className={`${fs.subtext} font-medium`}>
               <strong>Mode Kilat Aktif:</strong> Menampilkan intisari 1 kalimat
               dan tips praktis dari setiap bab agar Anda bisa menangkap ide utama
@@ -258,26 +258,26 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         )}
 
         {/* Seksi Sinopsis & Untuk Siapa Buku Ini */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <h2 className={`${fs.sectionHeading} font-bold text-slate-900 dark:text-slate-50`}>
+        <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm">
+          <h2 className={`${fs.sectionHeading} font-bold text-ink`}>
             Sinopsis
           </h2>
-          <p className={`mt-2.5 text-slate-700 dark:text-slate-300 ${fs.body}`}>
+          <p className={`mt-2.5 text-ink-secondary ${fs.body}`}>
             {book.synopsis}
           </p>
 
-          <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/60">
-            <h3 className={`flex items-center gap-2 ${fs.compact} font-bold text-slate-900 dark:text-slate-100`}>
-              <Target className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+          <div className="mt-6 rounded-xl border border-line-subtle bg-page p-5">
+            <h3 className={`flex items-center gap-2 ${fs.compact} font-bold text-ink`}>
+              <Target className="h-4 w-4 text-accent-strong" />
               Buku Ini Sangat Cocok Untuk:
             </h3>
             <ul className="mt-3 space-y-2">
               {book.whoIsItFor.map((target, idx) => (
                 <li
                   key={idx}
-                  className={`flex items-start gap-2.5 ${fs.compact} text-slate-700 dark:text-slate-300`}
+                  className={`flex items-start gap-2.5 ${fs.compact} text-ink-secondary`}
                 >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent-strong" />
                   <span>{target}</span>
                 </li>
               ))}
@@ -286,8 +286,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         </div>
 
         {/* Daftar Isi Cepat */}
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <h2 className={`${fs.label} font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400`}>
+        <div className="mt-6 rounded-2xl border border-line bg-surface p-5 sm:p-6 shadow-sm">
+          <h2 className={`${fs.label} font-bold uppercase tracking-wider text-ink-subtle`}>
             Daftar Poin Inti ({book.keyTakeaways.length} Bab Ringkas)
           </h2>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -295,7 +295,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               <a
                 key={item.number}
                 href={`#poin-${item.number}`}
-                className={`flex items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-2.5 ${fs.subtext} font-medium text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50/60 hover:text-emerald-800 dark:border-slate-800 dark:bg-slate-800/50 dark:text-slate-200 dark:hover:border-emerald-700 dark:hover:bg-emerald-950/50 dark:hover:text-emerald-300`}
+                className={`flex items-center gap-2.5 rounded-xl border border-line-subtle bg-page/70 px-3.5 py-2.5 ${fs.subtext} font-medium text-ink-secondary transition hover:border-accent-line hover:bg-accent-soft/70 hover:text-accent-text`}
               >
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
                   {item.number}
@@ -312,34 +312,34 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             <article
               key={takeaway.number}
               id={`poin-${takeaway.number}`}
-              className="scroll-mt-32 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all dark:border-slate-800 dark:bg-slate-900"
+              className="scroll-mt-32 rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm transition-all"
             >
               <div className="flex items-center gap-3">
                 <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-sm font-extrabold text-white">
                   {takeaway.number}
                 </span>
-                <span className={`${fs.label} font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400`}>
+                <span className={`${fs.label} font-bold uppercase tracking-wider text-accent-text`}>
                   Poin Inti #{takeaway.number}
                 </span>
               </div>
 
-              <h3 className={`mt-3 ${fs.takeawayTitle} font-extrabold text-slate-900 dark:text-slate-50`}>
+              <h3 className={`mt-3 ${fs.takeawayTitle} font-extrabold text-ink`}>
                 {takeaway.title}
               </h3>
 
               {/* Box Intisari Kilat */}
-              <div className="mt-4 rounded-xl border-l-4 border-emerald-500 bg-emerald-50/70 p-4 dark:bg-emerald-950/40">
-                <p className={`${fs.label} font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300`}>
+              <div className="mt-4 rounded-xl border-l-4 border-emerald-500 bg-accent-soft p-4">
+                <p className={`${fs.label} font-bold uppercase tracking-wider text-accent-text`}>
                   ⚡ Intisari 1 Kalimat
                 </p>
-                <p className={`mt-1 ${fs.lead} font-semibold text-slate-900 dark:text-slate-100`}>
+                <p className={`mt-1 ${fs.lead} font-semibold text-ink`}>
                   {takeaway.quickSummary}
                 </p>
               </div>
 
               {/* Penjelasan Mendalam (Hanya muncul di Mode Mendalam) */}
               {readMode === "deep" && (
-                <div className={`animate-fade-slide mt-5 space-y-4 text-slate-700 dark:text-slate-300 ${fs.body}`}>
+                <div className={`animate-fade-slide mt-5 space-y-4 text-ink-secondary ${fs.body}`}>
                   {takeaway.deepContent.map((paragraph, pIdx) => (
                     <p key={pIdx}>{paragraph}</p>
                   ))}
@@ -347,13 +347,13 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               )}
 
               {/* Tips Praktis */}
-              <div className="mt-5 flex items-start gap-3 rounded-xl border border-amber-200/80 bg-amber-50/90 p-4 dark:border-amber-800/50 dark:bg-amber-950/40">
-                <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
+              <div className="mt-5 flex items-start gap-3 rounded-xl border border-warm-line bg-warm-soft p-4">
+                <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-warm-text" />
                 <div>
-                  <span className={`${fs.label} font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300`}>
+                  <span className={`${fs.label} font-bold uppercase tracking-wider text-warm-heading`}>
                     Tips Praktis Langsung Coba:
                   </span>
-                  <p className={`mt-0.5 ${fs.compact} text-slate-800 dark:text-amber-100/90`}>
+                  <p className={`mt-0.5 ${fs.compact} text-ink-secondary`}>
                     {takeaway.practicalTip}
                   </p>
                 </div>
@@ -363,23 +363,23 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         </div>
 
         {/* Kesimpulan Akhir */}
-        <section className="mt-8 rounded-2xl border-2 border-emerald-300/90 border-l-[6px] border-l-emerald-600 bg-gradient-to-br from-emerald-100/75 via-emerald-50/70 to-teal-50/80 p-6 sm:p-8 shadow-md shadow-emerald-950/5 dark:border-emerald-800/70 dark:border-l-emerald-500 dark:from-emerald-950/60 dark:via-slate-900 dark:to-teal-950/50">
+        <section className="mt-8 rounded-2xl border-2 border-accent-line border-l-[6px] border-l-emerald-600 dark:border-l-emerald-500 bg-gradient-to-br from-accent-tint/75 via-accent-soft/70 to-surface p-6 sm:p-8 shadow-md shadow-emerald-950/5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-3">
               <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
                 <Sparkles className="h-4 w-4" />
               </span>
               <div>
-                <span className={`block ${fs.micro} font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400`}>
+                <span className={`block ${fs.micro} font-bold uppercase tracking-wider text-accent-text`}>
                   Final Takeaway
                 </span>
-                <h2 className={`${fs.conclusionHeading} font-extrabold text-slate-900 dark:text-slate-50`}>
+                <h2 className={`${fs.conclusionHeading} font-extrabold text-ink`}>
                   Kesimpulan Akhir
                 </h2>
               </div>
             </div>
           </div>
-          <div className={`mt-4 space-y-4 font-semibold text-slate-900 dark:text-slate-100 ${fs.conclusion}`}>
+          <div className={`mt-4 space-y-4 font-semibold text-ink ${fs.conclusion}`}>
             {book.conclusion
               .split(/\n\s*\n/)
               .map((paragraph) => paragraph.trim())
@@ -391,29 +391,29 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         </section>
 
         {/* Fitur Khas ringkasnya.id: Action Checklist Interaktif */}
-        <section className="mt-8 rounded-2xl border-2 border-emerald-500/30 bg-white p-6 sm:p-8 shadow-sm dark:border-emerald-700/40 dark:bg-slate-900">
+        <section className="mt-8 rounded-2xl border-2 border-accent-line/70 bg-surface p-6 sm:p-8 shadow-sm">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <div className="inline-flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
+              <div className="inline-flex items-center gap-2 text-accent-text">
                 <ListChecks className="h-5 w-5" />
                 <span className={`${fs.label} font-bold uppercase tracking-wider`}>
                   Action Checklist Interaktif
                 </span>
               </div>
-              <h2 className={`mt-1 ${fs.blockHeading} font-extrabold text-slate-900 dark:text-slate-50`}>
+              <h2 className={`mt-1 ${fs.blockHeading} font-extrabold text-ink`}>
                 Jangan Hanya Dibaca—Mari Praktikkan!
               </h2>
-              <p className={`mt-1 ${fs.subtext} text-slate-600 dark:text-slate-300`}>
+              <p className={`mt-1 ${fs.subtext} text-ink-muted`}>
                 Centang langkah-langkah di bawah ini setelah Anda mempraktikkannya.
                 Progres Anda tersimpan otomatis di perangkat ini.
               </p>
             </div>
 
             <div className="flex flex-col items-end">
-              <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
+              <span className="text-xs font-bold text-ink-secondary">
                 {completedCount} dari {totalChecklist} Selesai ({progressPercent}%)
               </span>
-              <div className="mt-1.5 h-2.5 w-36 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+              <div className="mt-1.5 h-2.5 w-36 overflow-hidden rounded-full bg-surface-subtle">
                 <div
                   className="h-full rounded-full bg-emerald-600 transition-all duration-300"
                   style={{ width: `${progressPercent}%` }}
@@ -431,15 +431,15 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   onClick={() => toggleChecklist(idx)}
                   className={`flex cursor-pointer items-start gap-3.5 rounded-xl border p-4 transition-all ${
                     isChecked
-                      ? "border-emerald-300 bg-emerald-50/60 text-slate-500 line-through dark:border-emerald-800/70 dark:bg-emerald-950/40 dark:text-slate-400"
-                      : "border-slate-200 bg-white text-slate-800 hover:border-emerald-300 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800/40 dark:text-slate-200 dark:hover:border-emerald-700 dark:hover:bg-slate-800"
+                      ? "border-accent-line bg-accent-soft/70 text-ink-subtle line-through"
+                      : "border-line bg-surface text-ink-secondary hover:border-accent-line hover:bg-page"
                   }`}
                 >
                   <input
                     type="checkbox"
                     checked={isChecked}
                     onChange={() => {}}
-                    className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-600 dark:bg-slate-900"
+                    className="mt-1 h-4 w-4 rounded border-line-strong bg-surface text-emerald-600 focus:ring-emerald-500"
                   />
                   <span className={`${fs.lead} font-medium`}>
                     {action}
@@ -451,14 +451,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         </section>
 
         {/* Kutipan Berkesan (Shareable Quotes) */}
-        <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center gap-2 text-slate-900 dark:text-slate-50">
-            <Quote className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+        <section className="mt-8 rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm">
+          <div className="flex items-center gap-2 text-ink">
+            <Quote className="h-5 w-5 text-accent-strong" />
             <h2 className={`${fs.blockHeading} font-extrabold`}>
               Kutipan Berkesan ({book.quotes.length})
             </h2>
           </div>
-          <p className={`mt-1 ${fs.subtext} text-slate-500 dark:text-slate-400`}>
+          <p className={`mt-1 ${fs.subtext} text-ink-subtle`}>
             Klik tombol salin untuk membagikan kutipan favoritmu ke WhatsApp atau
             media sosial.
           </p>
@@ -467,20 +467,20 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             {book.quotes.map((quote, idx) => (
               <div
                 key={idx}
-                className="flex flex-col justify-between gap-4 rounded-xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50 sm:flex-row sm:items-center"
+                className="flex flex-col justify-between gap-4 rounded-xl border border-line-subtle bg-page p-5 sm:flex-row sm:items-center"
               >
-                <blockquote className={`${fs.lead} font-semibold italic text-slate-800 dark:text-slate-100`}>
+                <blockquote className={`${fs.lead} font-semibold italic text-ink`}>
                   &ldquo;{quote}&rdquo;
                 </blockquote>
                 <button
                   type="button"
                   onClick={() => handleCopyQuote(quote, idx)}
-                  className="inline-flex shrink-0 items-center gap-1.5 self-end rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-emerald-400 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-emerald-500 dark:hover:text-emerald-400 sm:self-center"
+                  className="inline-flex shrink-0 items-center gap-1.5 self-end rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text sm:self-center"
                 >
                   {copiedQuoteIdx === idx ? (
                     <>
-                      <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                      <span className="text-emerald-700 dark:text-emerald-400">Tersalin!</span>
+                      <Check className="h-3.5 w-3.5 text-accent-strong" />
+                      <span className="text-accent-text">Tersalin!</span>
                     </>
                   ) : (
                     <>
@@ -497,7 +497,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         {/* Rekomendasi Buku Lainnya */}
         {relatedBooks.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-50">
+            <h2 className="text-xl font-extrabold text-ink">
               Lanjutkan Membaca Buku Lainnya
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -505,23 +505,23 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 <a
                   key={other.slug}
                   href={`/buku/${other.slug}`}
-                  className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-emerald-400 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-600"
+                  className="group flex flex-col justify-between rounded-2xl border border-line bg-surface p-5 shadow-sm transition hover:border-accent-strong hover:shadow-md"
                 >
                   <div>
-                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                    <span className="text-xs font-bold text-accent-strong">
                       {other.category}
                     </span>
-                    <h3 className="mt-1 text-lg font-extrabold text-slate-900 group-hover:text-emerald-600 dark:text-slate-50 dark:group-hover:text-emerald-400">
+                    <h3 className="mt-1 text-lg font-extrabold text-ink group-hover:text-accent-strong">
                       {other.title}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-ink-subtle">
                       {other.author} • {other.readingTimeMinutes} menit baca
                     </p>
-                    <p className="mt-2 line-clamp-2 text-xs text-slate-600 dark:text-slate-300">
+                    <p className="mt-2 line-clamp-2 text-xs text-ink-muted">
                       {other.tagline}
                     </p>
                   </div>
-                  <span className="mt-4 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+                  <span className="mt-4 text-xs font-semibold text-accent-text">
                     Baca Ringkasan →
                   </span>
                 </a>

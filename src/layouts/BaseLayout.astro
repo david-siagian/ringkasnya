@@ -6,6 +6,7 @@ import {
   SmoothScrollHandler,
   PageTransitionWrapper,
 } from "@/components/SmoothNavigation";
+import { THEME_STORAGE_KEY } from "@/lib/theme";
 
 interface Props {
   title?: string;
@@ -27,10 +28,10 @@ const {
     <link rel="alternate icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <script is:inline>
+    <script is:inline define:vars={{ THEME_STORAGE_KEY }}>
       (function () {
         try {
-          var saved = localStorage.getItem("ringkasnya_theme");
+          var saved = localStorage.getItem(THEME_STORAGE_KEY);
           var isDark =
             saved === "dark" ||
             (!saved &&

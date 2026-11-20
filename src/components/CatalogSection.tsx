@@ -136,49 +136,49 @@ export default function CatalogSection({
       }`}
     >
       {isFull && (
-        <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-          <a href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+        <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-2 text-xs text-ink-subtle">
+          <a href="/" className="hover:text-accent-strong transition-colors">
             Beranda
           </a>
           <span>/</span>
-          <span className="font-semibold text-slate-700 dark:text-slate-200">Katalog Buku</span>
+          <span className="font-semibold text-ink-secondary">Katalog Buku</span>
         </nav>
       )}
 
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+          <span className="text-xs font-bold uppercase tracking-wider text-accent-strong">
             {isFull ? "Katalog Lengkap" : "Perpustakaan Kurasi"}
           </span>
           {isFull ? (
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
+            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
               Daftar Semua Buku
             </h1>
           ) : (
-            <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
+            <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
               Pilih Buku, Serap Intisarinya
             </h2>
           )}
-          <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">
+          <p className="mt-1.5 text-sm text-ink-muted">
             Dirangkum dengan metode poin inti & langkah aksi nyata dalam Bahasa Indonesia.
           </p>
         </div>
 
         {/* Kolom Pencarian */}
         <div className="relative w-full md:w-80">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Cari judul buku, penulis, topik..."
-            className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-9 text-sm text-slate-900 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+            className="w-full rounded-xl border border-line bg-surface py-2.5 pl-10 pr-9 text-sm text-ink placeholder:text-ink-faint focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => handleSearchChange("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink-muted"
               aria-label="Hapus pencarian"
             >
               <X className="h-4 w-4" />
@@ -194,8 +194,8 @@ export default function CatalogSection({
           onClick={() => handleCategoryChange("Semua")}
           className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
             selectedCategory === "Semua"
-              ? "bg-slate-900 text-white shadow-sm dark:bg-slate-100 dark:text-slate-900"
-              : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-300 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+              ? "bg-ink text-surface shadow-sm"
+              : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
           }`}
         >
           Semua ({books.length})
@@ -210,7 +210,7 @@ export default function CatalogSection({
               className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
                 selectedCategory === category
                   ? "bg-emerald-600 text-white shadow-sm"
-                  : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-300 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+                  : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
               }`}
             >
               {category} ({count})
@@ -246,7 +246,7 @@ export default function CatalogSection({
                     e.preventDefault();
                     setPreviewBook(featuredBook);
                   }}
-                  className="group flex flex-col items-stretch overflow-hidden rounded-2xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50/90 via-white to-amber-50/50 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 dark:hover:border-emerald-700 md:flex-row"
+                  className="group flex flex-col items-stretch overflow-hidden rounded-2xl border border-accent-line/90 bg-gradient-to-br from-accent-soft/90 via-surface to-warm-soft/50 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-lg md:flex-row"
                 >
                   {featuredBook.coverImage && (
                     <div
@@ -265,46 +265,46 @@ export default function CatalogSection({
                   <div className="flex min-w-0 flex-1 flex-col justify-between p-5 sm:p-7">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300">
+                        <span className="rounded-full border border-accent-line bg-accent-soft px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-accent-text">
                           Buku Pilihan
                         </span>
-                        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                        <span className="rounded-full bg-surface-subtle px-2.5 py-0.5 text-xs font-medium text-ink-muted">
                           {featuredBook.category}
                         </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-950/60 dark:text-amber-300">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-warm-soft px-2.5 py-0.5 text-xs font-semibold text-warm-text">
                           <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                           {featuredBook.rating}
                         </span>
                       </div>
 
-                      <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                      <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-ink-subtle">
                         {featuredBook.author}
                       </p>
-                      <h3 className="mt-1 text-2xl sm:text-3xl font-extrabold leading-snug tracking-tight text-slate-900 group-hover:text-emerald-700 dark:text-slate-50 dark:group-hover:text-emerald-400">
+                      <h3 className="mt-1 text-2xl sm:text-3xl font-extrabold leading-snug tracking-tight text-ink group-hover:text-accent-text">
                         {featuredBook.title}
                       </h3>
 
-                      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600 dark:text-slate-300">
-                        <span className="inline-flex items-center gap-1 font-medium text-amber-700 dark:text-amber-400">
+                      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-muted">
+                        <span className="inline-flex items-center gap-1 font-medium text-warm-text">
                           <Zap className="h-3.5 w-3.5 text-amber-500" />
                           Mode Kilat {featuredBook.quickTimeMinutes} mnt
                         </span>
                         <span className="inline-flex items-center gap-1">
-                          <Clock className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
+                          <Clock className="h-3.5 w-3.5 text-ink-faint" />
                           Mendalam {featuredBook.readingTimeMinutes} mnt
                         </span>
                         <span className="inline-flex items-center gap-1">
-                          <Layers className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
+                          <Layers className="h-3.5 w-3.5 text-ink-faint" />
                           {featuredBook.keyTakeaways.length} Poin Inti
                         </span>
                       </div>
 
-                      <p className="mt-4 text-sm sm:text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                      <p className="mt-4 text-sm sm:text-base leading-relaxed text-ink-muted">
                         {featuredBook.tagline}
                       </p>
                     </div>
 
-                    <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs sm:text-sm font-semibold text-emerald-700 group-hover:text-emerald-600 dark:border-slate-800 dark:text-emerald-400 dark:group-hover:text-emerald-300">
+                    <div className="mt-6 flex items-center justify-between border-t border-line-subtle pt-4 text-xs sm:text-sm font-semibold text-accent-text group-hover:text-accent-strong">
                       <span>Baca Ringkasan & Praktek</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </div>
@@ -317,10 +317,10 @@ export default function CatalogSection({
             {displayedBooks.length > 1 && (
               <div>
                 <div className="mb-3 flex items-center justify-between">
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
                     Jelajahi Buku Lainnya
                   </p>
-                  <span className="text-[11px] text-slate-400 dark:text-slate-500">
+                  <span className="text-[11px] text-ink-faint">
                     Geser ke samping →
                   </span>
                 </div>
@@ -339,11 +339,11 @@ export default function CatalogSection({
           </div>
         )
       ) : (
-        <div className="mt-10 rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
-          <p className="text-base font-semibold text-slate-800 dark:text-slate-100">
+        <div className="mt-10 rounded-2xl border border-dashed border-line-strong bg-surface p-12 text-center">
+          <p className="text-base font-semibold text-ink">
             Buku yang kamu cari belum ditemukan
           </p>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-ink-subtle">
             Coba gunakan kata kunci lain atau pilih kategori &ldquo;Semua&rdquo;.
           </p>
           <button
@@ -364,7 +364,7 @@ export default function CatalogSection({
         <div className="mt-10 flex justify-center">
           <a
             href="/katalog"
-            className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-6 py-3 text-sm font-bold text-emerald-700 shadow-sm transition-all duration-200 hover:border-emerald-300 hover:bg-emerald-600 hover:text-white active:scale-[0.98] dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:border-emerald-600 dark:hover:bg-emerald-600 dark:hover:text-white"
+            className="inline-flex items-center gap-2 rounded-xl border border-accent-line bg-accent-soft px-6 py-3 text-sm font-bold text-accent-text shadow-sm transition-all duration-200 hover:border-emerald-600 hover:bg-emerald-600 hover:text-white active:scale-[0.98]"
           >
             <span>Lihat Semua Buku</span>
             <ArrowRight className="h-4 w-4" />
@@ -374,14 +374,14 @@ export default function CatalogSection({
 
       {/* Pagination (Mode Full) */}
       {isFull && filteredBooks.length > 0 && (
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200/80 pt-6 dark:border-slate-800 sm:flex-row">
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-line/80 pt-6 sm:flex-row">
+          <p className="text-xs sm:text-sm text-ink-subtle">
             Menampilkan{" "}
-            <span className="font-semibold text-slate-700 dark:text-slate-200">
+            <span className="font-semibold text-ink-secondary">
               {startItem}–{endItem}
             </span>{" "}
             dari{" "}
-            <span className="font-semibold text-slate-700 dark:text-slate-200">
+            <span className="font-semibold text-ink-secondary">
               {filteredBooks.length}
             </span>{" "}
             buku (Halaman {safePage} dari {totalPages})
@@ -393,7 +393,7 @@ export default function CatalogSection({
               onClick={() => handlePageChange(safePage - 1)}
               disabled={safePage <= 1}
               aria-label="Halaman sebelumnya"
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+              className="inline-flex items-center gap-1 rounded-lg border border-line bg-surface px-3 py-2 text-xs font-semibold text-ink-secondary transition-colors hover:bg-page disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronLeft className="h-4 w-4" />
               <span className="hidden sm:inline">Sebelumnya</span>
@@ -403,7 +403,7 @@ export default function CatalogSection({
               item === "ellipsis" ? (
                 <span
                   key={`ellipsis-${idx}`}
-                  className="px-2 text-xs font-semibold text-slate-400 dark:text-slate-500"
+                  className="px-2 text-xs font-semibold text-ink-faint"
                 >
                   ...
                 </span>
@@ -416,7 +416,7 @@ export default function CatalogSection({
                   className={`inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-lg px-2.5 text-xs font-bold transition-colors ${
                     item === safePage
                       ? "bg-emerald-600 text-white shadow-sm"
-                      : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+                      : "border border-line bg-surface text-ink-secondary hover:bg-page"
                   }`}
                 >
                   {item}
@@ -429,7 +429,7 @@ export default function CatalogSection({
               onClick={() => handlePageChange(safePage + 1)}
               disabled={safePage >= totalPages}
               aria-label="Halaman berikutnya"
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+              className="inline-flex items-center gap-1 rounded-lg border border-line bg-surface px-3 py-2 text-xs font-semibold text-ink-secondary transition-colors hover:bg-page disabled:cursor-not-allowed disabled:opacity-40"
             >
               <span className="hidden sm:inline">Berikutnya</span>
               <ChevronRight className="h-4 w-4" />
