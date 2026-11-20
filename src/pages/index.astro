@@ -2,7 +2,6 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { BOOKS } from "@/data/books";
 import CatalogSection from "@/components/CatalogSection";
-import { SmoothHashLink } from "@/components/SmoothNavigation";
 import {
   ArrowRight,
   ListChecks,
@@ -48,14 +47,13 @@ import {
           </p>
 
           <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
-            <SmoothHashLink
-              client:load
-              targetId="katalog"
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition-all duration-200 hover:bg-emerald-700 active:scale-[0.98]"
+            <a
+              href="/katalog"
+              class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition-all duration-200 hover:bg-emerald-700 active:scale-[0.98]"
             >
               <span>Jelajahi Katalog Buku</span>
-              <ArrowRight className="h-4 w-4" />
-            </SmoothHashLink>
+              <ArrowRight class="h-4 w-4" />
+            </a>
             <a
               href="/buku/atomic-habits"
               class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98]"

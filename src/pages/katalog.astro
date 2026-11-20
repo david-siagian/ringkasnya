@@ -1,0 +1,20 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { BOOKS } from "@/data/books";
+import CatalogSection from "@/components/CatalogSection";
+
+const pageTitle = "Katalog Buku Lengkap — ringkasnya.id";
+const pageDescription =
+  "Jelajahi seluruh koleksi ringkasan buku best-seller dunia dalam Bahasa Indonesia lengkap dengan Mode Kilat dan Action Checklist.";
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <div class="min-h-screen bg-slate-50/40">
+    <CatalogSection
+      client:load
+      books={BOOKS}
+      mode="full"
+      itemsPerPage={20}
+    />
+  </div>
+</BaseLayout>

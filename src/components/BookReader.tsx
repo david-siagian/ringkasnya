@@ -87,7 +87,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       <div className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}>
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
           <a
-            href="/#katalog"
+            href="/katalog"
             className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm transition hover:bg-black/30"
           >
             <ArrowLeft className="h-3.5 w-3.5" />

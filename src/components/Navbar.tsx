@@ -114,8 +114,8 @@ export default function Navbar() {
             Navigasi
           </p>
           <div onClick={handleLinkClick}>
-            <SmoothHashLink
-              targetId="katalog"
+            <a
+              href="/katalog"
               className="flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
             >
               <span className="flex items-center gap-3">
@@ -123,7 +123,7 @@ export default function Navbar() {
                 <span>Katalog Buku</span>
               </span>
               <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-            </SmoothHashLink>
+            </a>
           </div>
 
           <div onClick={handleLinkClick}>
