@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Zap, Menu, X, BookOpen, Compass, ArrowRight } from "lucide-react";
+import { Menu, X, BookOpen, Compass, ArrowRight } from "lucide-react";
 import { SmoothHashLink } from "@/components/SmoothNavigation";
 import BrandLogo from "@/components/BrandLogo";
 
@@ -53,14 +53,6 @@ export default function Navbar() {
           </a>
 
           <div className="flex items-center gap-3 sm:gap-4">
-            <a
-              href="/buku/atomic-habits"
-              className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-emerald-600 active:scale-95"
-            >
-              <Zap className="h-3.5 w-3.5 text-amber-400" />
-              <span>Mulai Baca</span>
-            </a>
-
             {/* Tombol Menu 3 Garis Horizontal */}
             <button
               type="button"
@@ -149,15 +141,7 @@ export default function Navbar() {
         </nav>
 
         <div className="border-t border-slate-100 p-4">
-          <a
-            href="/buku/atomic-habits"
-            onClick={handleLinkClick}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600"
-          >
-            <Zap className="h-4 w-4 text-amber-400" />
-            <span>Mulai Baca Sekarang</span>
-          </a>
-          <p className="mt-3 text-center text-[11px] text-slate-400">
+          <p className="text-center text-[11px] text-slate-400">
             Baca Intinya, Praktikkan Ilmunya
           </p>
         </div>
