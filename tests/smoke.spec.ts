@@ -51,6 +51,39 @@ test.describe("Ringkasnya Smoke Tests", () => {
     expect(errors).toEqual([]);
   });
 
+  test("katalog (/katalog): jumlah kolom proporsional terhadap ukuran layar", async ({
+    page,
+  }, testInfo) => {
+    const errors = trackRuntimeErrors(page);
+
+    await page.goto("/katalog");
+    await waitForAstroIslands(page);
+    await expect(
+      page.getByRole("heading", { name: "Daftar Semua Buku" })
+    ).toBeVisible();
+
+    const grid = page.locator("#katalog .grid").first();
+    const getColCount = () =>
+      grid.evaluate(
+        (el) => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length
+      );
+
+    if (testInfo.project.name === "mobile") {
+      expect(await getColCount()).toBe(2);
+    } else {
+      await page.setViewportSize({ width: 768, height: 800 });
+      expect(await getColCount()).toBe(3);
+
+      await page.setViewportSize({ width: 1024, height: 800 });
+      expect(await getColCount()).toBe(4);
+
+      await page.setViewportSize({ width: 1280, height: 800 });
+      expect(await getColCount()).toBe(5);
+    }
+
+    expect(errors).toEqual([]);
+  });
+
   test("reader (/buku/atomic-habits): mode baca, checklist, salin kutipan & tema bekerja", async ({
     page,
     context,

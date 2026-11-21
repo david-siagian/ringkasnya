@@ -147,8 +147,8 @@ export default function CatalogSection({
   return (
     <section
       id="katalog"
-      className={`scroll-mt-20 mx-auto max-w-6xl px-4 sm:px-6 ${
-        isFull ? "py-10 sm:py-14" : "py-14"
+      className={`scroll-mt-20 mx-auto px-4 sm:px-6 ${
+        isFull ? "max-w-7xl py-10 sm:py-14" : "max-w-6xl py-14"
       }`}
     >
       {isFull && (
@@ -242,7 +242,7 @@ export default function CatalogSection({
         isFull ? (
           <div
             key={`${selectedCategory}-${searchQuery}-${safePage}`}
-            className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-3"
+            className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
           >
             {displayedBooks.map((book) => (
               <BookCard key={book.slug} book={book} onSelect={setPreviewBook} />
