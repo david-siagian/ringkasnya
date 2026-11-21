@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { BookSummary } from "@/types/book";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import QuoteCardModal from "./QuoteCardModal";
 import {
   AlertCircle,
   ArrowLeft,
@@ -11,6 +12,7 @@ import {
   CheckCircle2,
   Clock,
   Copy,
+  ImageDown,
   LayoutGrid,
   Lightbulb,
   ListChecks,
@@ -105,6 +107,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
   const [readingProgress, setReadingProgress] = useState(0);
+  const [activeQuoteForCard, setActiveQuoteForCard] = useState<string | null>(
+    null
+  );
   const copyTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const readingAreaRef = useRef<HTMLDivElement>(null);
@@ -610,32 +615,43 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 <blockquote className={`${fs.lead} font-semibold italic text-ink`}>
                   &ldquo;{quote}&rdquo;
                 </blockquote>
-                <button
-                  type="button"
-                  onClick={() => handleCopyQuote(quote, idx)}
-                  className="inline-flex shrink-0 items-center gap-1.5 self-end rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text sm:self-center"
-                >
-                  {copyFeedback?.index === idx &&
-                  copyFeedback.status === "success" ? (
-                    <>
-                      <Check className="h-3.5 w-3.5 text-accent-strong" />
-                      <span className="text-accent-text">Tersalin!</span>
-                    </>
-                  ) : copyFeedback?.index === idx &&
-                    copyFeedback.status === "error" ? (
-                    <>
-                      <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
-                      <span className="text-rose-600 dark:text-rose-400">
-                        Gagal menyalin
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-3.5 w-3.5" />
-                      <span>Salin Kutipan</span>
-                    </>
-                  )}
-                </button>
+                <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:self-center">
+                  <button
+                    type="button"
+                    onClick={() => handleCopyQuote(quote, idx)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
+                  >
+                    {copyFeedback?.index === idx &&
+                    copyFeedback.status === "success" ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-accent-strong" />
+                        <span className="text-accent-text">Tersalin!</span>
+                      </>
+                    ) : copyFeedback?.index === idx &&
+                      copyFeedback.status === "error" ? (
+                      <>
+                        <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
+                        <span className="text-rose-600 dark:text-rose-400">
+                          Gagal menyalin
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        <span>Salin Kutipan</span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveQuoteForCard(quote)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
+                  >
+                    <ImageDown className="h-3.5 w-3.5" />
+                    <span>Buat Kartu</span>
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -724,6 +740,15 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           </div>
         </section>
       </main>
+
+      <QuoteCardModal
+        quote={activeQuoteForCard}
+        bookTitle={book.title}
+        bookAuthor={book.author}
+        bookCategory={book.category}
+        bookSlug={book.slug}
+        onClose={() => setActiveQuoteForCard(null)}
+      />
     </div>
   );
 }
