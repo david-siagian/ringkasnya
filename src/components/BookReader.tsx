@@ -102,8 +102,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
+  const [readingProgress, setReadingProgress] = useState(0);
   const copyTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
+  const readingAreaRef = useRef<HTMLDivElement>(null);
 
   const storageKey = `ringkasnya_checklist_${book.slug}`;
 
@@ -129,6 +131,46 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   useEffect(() => {
     return () => window.clearTimeout(copyTimerRef.current);
   }, []);
+
+  // Hitung progres membaca berdasarkan posisi scroll pada area konten buku
+  useEffect(() => {
+    let rafId = 0;
+
+    const calculateProgress = () => {
+      rafId = 0;
+      const area = readingAreaRef.current;
+      if (!area) return;
+
+      const rect = area.getBoundingClientRect();
+      const stickyBottom = toolbarRef.current?.getBoundingClientRect().bottom ?? 0;
+      const startY = window.scrollY + rect.top - stickyBottom;
+      const endY = window.scrollY + rect.bottom - window.innerHeight;
+
+      if (endY <= startY) {
+        setReadingProgress(window.scrollY >= startY ? 100 : 0);
+        return;
+      }
+
+      const raw = ((window.scrollY - startY) / (endY - startY)) * 100;
+      const clamped = Math.min(100, Math.max(0, Math.round(raw)));
+      setReadingProgress(clamped);
+    };
+
+    const scheduleUpdate = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(calculateProgress);
+    };
+
+    calculateProgress();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (rafId) window.cancelAnimationFrame(rafId);
+    };
+  }, [readMode, fontSize, book.slug]);
 
   useEffect(() => {
     try {
@@ -303,12 +345,36 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             >
               A+
             </button>
+            <span
+              className="ml-1.5 min-w-[2.5rem] text-right text-xs font-semibold tabular-nums text-ink-muted"
+              title="Progres membaca"
+            >
+              {readingProgress}%
+            </span>
           </div>
+        </div>
+
+        {/* Reading Progress Bar */}
+        <div
+          role="progressbar"
+          aria-label="Progres membaca"
+          aria-valuenow={readingProgress}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          className="h-[3px] w-full bg-surface-subtle"
+        >
+          <div
+            className={`h-full transition-[width] duration-150 ease-out ${
+              readMode === "quick" ? "bg-amber-500" : "bg-accent-strong"
+            }`}
+            style={{ width: `${readingProgress}%` }}
+          />
         </div>
       </div>
 
       {/* Konten Utama Ringkasan */}
       <main className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
+        <div ref={readingAreaRef}>
         {/* Seksi Sinopsis & Untuk Siapa Buku Ini */}
         <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm">
           <h2 className={`${fs.sectionHeading} font-bold text-ink`}>
@@ -554,6 +620,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             ))}
           </div>
         </section>
+        </div>
 
         {/* Rekomendasi Buku Lainnya & CTA Katalog */}
         <section className="mt-12">
