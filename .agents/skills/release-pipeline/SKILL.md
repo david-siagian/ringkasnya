@@ -21,11 +21,11 @@ Jalankan langkah-langkah berikut secara berurutan di `E:\MyApp\ringkasnya`. Pada
 ## 2. Production Build (Astro + Cloudflare Worker Adapter)
 - Jalankan `npm run build` (`BypassSandbox: true`) dan pastikan seluruh halaman prerender serta bundle Cloudflare Worker (`dist/_worker.js`) terbentuk dengan exit code 0.
 
-## 3. Verifikasi UI via Playwright
-- Jalankan server preview lokal (`npm run preview` di port `4321`) dan verifikasi dengan Playwright (desktop & mobile):
+## 3. Verifikasi UI via Playwright (Opsional / Khusus Rilis ke `main`)
+- **Lewati langkah ini** untuk pengerjaan harian atau merge ke `dev` agar proses deploy tetap cepat (cukup Typecheck + Production Build).
+- **Jalankan hanya saat diminta eksplisit atau sebelum rilis ke `main`** (`npm run test:e2e` dengan `tests/smoke.spec.ts`, desktop & mobile):
   - Beranda (`/`): tidak ada console/page error, pencarian & filter kategori berfungsi, klik **Katalog Buku** melakukan smooth scroll ke `#katalog`.
   - Halaman Reader (`/buku/atomic-habits`): kontras hijau emerald terbaca jelas, toggle **Mode Kilat** vs **Mode Mendalam** berfungsi, **Action Checklist** tersimpan, dan tombol salin kutipan bekerja.
-- Hentikan server lokal setelah selesai.
 
 ## 4. Git Commit & Push
 - Pastikan berada di branch `main` (atau merge ke `main`):
