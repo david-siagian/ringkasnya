@@ -578,54 +578,35 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   {/* Navigasi Panah Sebelumnya / Selanjutnya */}
                   <nav
                     aria-label="Navigasi halaman Mode Mendalam"
-                    className="mt-6 grid grid-cols-2 gap-3"
+                    className="mt-6 flex items-center justify-between gap-3"
                   >
                     <button
                       type="button"
                       onClick={() => goToDeepStep(clampedDeepStep - 1)}
-                      className="flex items-center gap-2.5 rounded-2xl border border-line bg-surface px-4 py-3.5 text-left shadow-sm transition hover:border-accent-line hover:bg-page active:scale-[0.99]"
+                      aria-label={`Sebelumnya: ${prevLabel}`}
+                      className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-page active:scale-[0.98]"
                     >
                       <ArrowLeft className="h-4 w-4 shrink-0 text-ink-muted" />
-                      <div className="min-w-0">
-                        <span className="block text-[11px] font-medium text-ink-subtle">
-                          Sebelumnya
-                        </span>
-                        <span className="block truncate text-xs sm:text-sm font-bold text-ink">
-                          {prevLabel}
-                        </span>
-                      </div>
+                      <span className="truncate">{prevLabel}</span>
                     </button>
 
                     {clampedDeepStep < finalStep ? (
                       <button
                         type="button"
                         onClick={() => goToDeepStep(clampedDeepStep + 1)}
-                        className="flex items-center justify-end gap-2.5 rounded-2xl bg-emerald-600 px-4 py-3.5 text-right text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.99]"
+                        aria-label={`Selanjutnya: ${nextLabel}`}
+                        className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
                       >
-                        <div className="min-w-0">
-                          <span className="block text-[11px] font-medium text-emerald-100">
-                            Selanjutnya
-                          </span>
-                          <span className="block truncate text-xs sm:text-sm font-bold">
-                            {nextLabel}
-                          </span>
-                        </div>
+                        <span className="truncate">{nextLabel}</span>
                         <ArrowRight className="h-4 w-4 shrink-0" />
                       </button>
                     ) : (
                       <button
                         type="button"
                         onClick={() => goToDeepStep(0)}
-                        className="flex items-center justify-end gap-2.5 rounded-2xl border border-accent-line bg-accent-soft px-4 py-3.5 text-right text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.99]"
+                        className="inline-flex items-center gap-2 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.98]"
                       >
-                        <div className="min-w-0">
-                          <span className="block text-[11px] font-medium opacity-80">
-                            Selesai Dibaca
-                          </span>
-                          <span className="block truncate text-xs sm:text-sm font-bold">
-                            Kembali ke Pengantar
-                          </span>
-                        </div>
+                        <span className="truncate">Kembali ke Pengantar</span>
                         <RotateCcw className="h-4 w-4 shrink-0" />
                       </button>
                     )}
@@ -636,7 +617,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           )}
         </div>
 
-        <RelatedBooksSection relatedBooks={relatedBooks} />
+        {(readMode === "quick" || clampedDeepStep === finalStep) && (
+          <RelatedBooksSection relatedBooks={relatedBooks} />
+        )}
       </main>
 
       <QuoteCardModal
