@@ -77,11 +77,21 @@ export function useCompletedBooks() {
     });
   }, []);
 
+  const unmarkCompleted = useCallback((slug: string) => {
+    setCompletedSlugs((prev) => {
+      if (!prev.includes(slug)) return prev;
+      const next = prev.filter((s) => s !== slug);
+      writeStoredCompleted(next);
+      return next;
+    });
+  }, []);
+
   return {
     completedSlugs,
     completedCount: mounted ? completedSlugs.length : 0,
     mounted,
     isCompleted,
     markCompleted,
+    unmarkCompleted,
   };
 }

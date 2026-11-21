@@ -34,6 +34,7 @@ import {
   Quote,
   RotateCcw,
   Type,
+  X,
   Zap,
 } from "lucide-react";
 
@@ -92,9 +93,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const readingAreaRef = useRef<HTMLDivElement>(null);
   const pendingScrollTargetRef = useRef<string | null>(null);
   const pendingScrollToReadingTopRef = useRef(false);
+  const wasAtCompletionEndRef = useRef(false);
 
   const { isBookmarked, toggleBookmark } = useBookmarks();
-  const { isCompleted, markCompleted } = useCompletedBooks();
+  const { isCompleted, markCompleted, unmarkCompleted } = useCompletedBooks();
   const saved = isBookmarked(book.slug);
   const completed = isCompleted(book.slug);
 
@@ -113,18 +115,19 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setDeepStep(0);
     setIsChecklistModalOpen(false);
     setIsQuotesModalOpen(false);
+    wasAtCompletionEndRef.current = false;
   }, [book.slug]);
 
-  // Tandai buku selesai dibaca otomatis saat mencapai akhir di Mode Mendalam atau Mode Kilat
+  // Tandai buku selesai dibaca otomatis hanya saat transisi baru mencapai bagian akhir
   useEffect(() => {
-    if (readMode === "deep" && clampedDeepStep === finalStep) {
-      markCompleted(book.slug);
-      return;
-    }
+    const isAtCompletionEnd =
+      (readMode === "deep" && clampedDeepStep === finalStep) ||
+      (readMode === "quick" && scrollProgress >= 90);
 
-    if (readMode === "quick" && scrollProgress >= 90) {
+    if (isAtCompletionEnd && !wasAtCompletionEndRef.current) {
       markCompleted(book.slug);
     }
+    wasAtCompletionEndRef.current = isAtCompletionEnd;
   }, [
     readMode,
     clampedDeepStep,
@@ -366,10 +369,21 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   {book.category}
                 </span>
                 {completed && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/90 px-3 py-1 text-xs font-bold text-white shadow-sm">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      unmarkCompleted(book.slug);
+                      setIsChecklistModalOpen(false);
+                      setIsQuotesModalOpen(false);
+                    }}
+                    title="Klik untuk hapus tanda selesai dibaca"
+                    aria-label="Hapus tanda selesai dibaca"
+                    className="group inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 px-3 py-1 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-600 active:scale-[0.98]"
+                  >
                     <CheckCircle2 className="h-3.5 w-3.5" />
-                    Selesai Dibaca
-                  </span>
+                    <span>Selesai Dibaca</span>
+                    <X className="h-3 w-3 opacity-80 transition group-hover:opacity-100" />
+                  </button>
                 )}
                 <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
                   <Zap className="h-3.5 w-3.5 text-amber-300" />
