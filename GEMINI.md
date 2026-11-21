@@ -5,7 +5,7 @@
 
 ## Desain & UX (Ringkasnya)
 - **Kontras Cover & Header**: Kartu buku (`BookCard`) dan banner header pembaca (`BookReader`) menggunakan `book.coverGradient` dengan nuansa gelap (`800`–`950`) yang serasi dengan warna ilustrasi `.svg` masing-masing buku agar teks putih selalu kontras dan tidak bertabrakan.
-- **Ilustrasi Sampul Buku (.svg)**: Setiap kali membuat atau meng-generate gambar sampul buku, buat dalam format vektor `.svg` saja (simpan di `public/images/covers/<slug>.svg` dan daftarkan di `coverImage` pada `src/data/books/<slug>.ts`) dengan gaya editorial datar (ala Headway/Blinkist/Booksnap) tanpa teks, alih-alih file raster `.jpg`/`.png`.
+- **Ilustrasi Sampul Buku (.svg)**: Setiap kali membuat atau meng-generate gambar sampul buku, buat dalam format vektor `.svg` saja (`viewBox="0 0 600 800"`, simpan di `public/images/covers/<slug>.svg` dan daftarkan di `coverImage` pada `src/data/books/<slug>.ts`) dengan gaya editorial datar (ala Headway/Blinkist/Booksnap) alih-alih file raster `.jpg`/`.png`. Desain sampul harus sebisa mungkin menyerupai sampul buku aslinya (palet warna & motif visual khas) serta menyertakan **judul buku dan nama penulis** dengan posisi tipografi yang mirip seperti sampul buku aslinya (mengacu pada contoh `.svg` yang sudah ada).
 - **Navigasi & Transisi Smooth**: Jangan mengandalkan CSS `scroll-behavior: smooth` bawaan browser untuk hash scroll; gunakan `SmoothHashLink` dan `PageTransitionWrapper` (`src/components/SmoothNavigation.tsx`) agar scroll dan perpindahan halaman selalu mulus.
 
 ## Standar Konten & Durasi Baca
@@ -50,21 +50,41 @@ Setiap kali diminta menambahkan **fitur baru**, mengubah **alur pengguna**, atau
 
 *(Bypass: Jika instruksi secara eksplisit menyertakan `"skip review"`, `"no review"` atau `"eksekusi"`, lewati Review Board dan langsung eksekusi.)*
 
-### A. Product & UX Reviewer (Human-Centric & Tren)
+### I. Role Wajib (Selalu Aktif untuk Fitur & Perubahan Antarmuka)
+
+#### 1. Product & UX Reviewer (Human-Centric & Tren)
 - **Nilai & Kebiasaan Pengguna:** Apakah fitur/perbaikan menjawab kebutuhan pembaca ringkasan buku dan pendengar audio secara nyata, atau menambah beban visual/aliran yang tidak perlu?
 - **Ergonomi & Tren Produk:** Evaluasi alur baca, pemutar audio, highlight, dan kuis terhadap pola aplikasi modern (kecepatan *time-to-value*, *mobile-first*, transisi halus, tanpa gangguan berlebih). Sarankan alternatif yang lebih ringan jika diperlukan.
 
-### B. Growth & Retention Strategist (Retensi & Kebiasaan Pengguna)
-- **Dampak pada Retensi & Alur Kembali:** Apakah fitur/perbaikan membantu pengguna kembali menggunakan aplikasi secara alami dan menyelesaikan nilai utamanya, atau justru menambah friksi yang membuat pengguna berhenti di tengah jalan?
-- **Nilai Jangka Panjang vs Gimmick:** Apakah efeknya mendorong kebiasaan penggunaan yang sehat dan berkelanjutan, atau sekadar kebaruan sesaat yang cepat dilupakan?
-
-### C. QA & Edge-Case Skeptic (Keandalan & Akar Masalah)
+#### 2. QA & Edge-Case Skeptic (Keandalan & Akar Masalah)
 - **State & Kegagalan:** Periksa *empty state*, *loading state*, jaringan terputus/lambat, teks panjang, audio belum tersedia/gagal dimuat, dan klik ganda cepat.
 - **Akar Masalah vs Tambalan:** Pastikan *bug fix* menyentuh akar penyebab, bukan sekadar menyembunyikan *error* di UI.
 - **Verifikasi:** Rencanakan skenario pengujian spesifik (termasuk uji browser Playwright untuk alur UI utama) agar regresi mudah terdeteksi.
 
+---
+
+### II. Role Kondisional (Aktifkan Hanya Sesuai Konteks Perubahan)
+
+#### 3. Growth & Retention Strategist *(Aktifkan jika menyentuh alur utama, onboarding, navigasi, atau pengalaman konsumsi konten)*
+- **Dampak pada Retensi & Alur Kembali:** Apakah fitur/perbaikan membantu pengguna kembali menggunakan aplikasi secara alami dan menyelesaikan nilai utamanya, atau justru menambah friksi yang membuat pengguna berhenti di tengah jalan?
+- **Nilai Jangka Panjang vs Gimmick:** Apakah efeknya mendorong kebiasaan penggunaan yang sehat dan berkelanjutan, atau sekadar kebaruan sesaat yang cepat diabaikan?
+
+#### 4. Cost & Unit Economics Auditor *(Aktifkan HANYA jika menyentuh AI/LLM, TTS, API berbayar, atau storage/egress Cloudflare R2)*
+- **Biaya Marginal & Caching:** Pastikan hasil generasi LLM/TTS dan aset audio di Cloudflare R2 di-*cache* atau dideduplikasi agar tidak memicu generasi maupun *request* berulang yang boros.
+- **Proteksi Abuse & Kuota:** Cegah *loop* permintaan ulang, eksekusi *batch* tak terkendali, atau pemanggilan API tanpa batas yang dapat membengkakkan tagihan.
+
+#### 5. Systems & Reliability Engineer *(Aktifkan HANYA jika mengubah alur data, skema database, batch pipeline, atau logika backend)*
+- **Ketahanan & Konsistensi Data:** Bagaimana perilaku sistem saat koneksi terputus, *retry* dijalankan, *payload* besar, atau proses *batch* gagal di tengah jalan (idempotensi dan *rollback*)?
+- **Performa & Maintainability:** Apakah *query*, *indexing*, atau manajemen *state* tetap efisien dan mudah di-*debug* seiring bertambahnya jumlah buku dan pengguna?
+
+#### 6. Security & Privacy Gatekeeper *(Aktifkan HANYA jika menyentuh auth, data pengguna, RLS, atau endpoint/API route)*
+- **Otorisasi & Validasi Server-Side:** Pastikan hak akses diperiksa di sisi *server* dan database (*Row Level Security* Supabase), bukan hanya disembunyikan di UI.
+- **Proteksi Input & Kebocoran Data:** Validasi seluruh input *endpoint*, cegah eksposur *secret*/kredensial, dan pastikan pengguna hanya dapat mengakses atau mengubah data miliknya sendiri.
+
+---
+
 ### Format Output Wajib Sebelum Mengubah Kode:
-1. **Review Singkat (3 Role):** Maksimal 2 kalimat per *role* agar padat dan mudah dibaca cepat.
-2. **Dampak Retensi:** Nyatakan secara singkat apakah dampaknya **Positif**, **Perlu dijaga (risiko friksi)**, atau **Netral**.
+1. **Role Aktif:** Sebutkan *role* wajib + *role* kondisional mana saja yang diaktifkan (dan abaikan *role* kondisional yang tidak relevan).
+2. **Review Singkat:** Maksimal 2 kalimat per *role* aktif agar padat dan mudah dibaca cepat dari layar ponsel.
 3. **Keputusan:** Nyatakan **Layak lanjut apa adanya**, **Lanjut dengan penyesuaian**, atau **Sebaiknya disederhanakan**, disertai alasan utama.
 4. **Konfirmasi:** Jika keputusan adalah **Layak lanjut apa adanya**, langsung terapkan perubahan tanpa perlu meminta konfirmasi user terlebih dahulu. Untuk keputusan selain itu (**Lanjut dengan penyesuaian** atau **Sebaiknya disederhanakan**), minta persetujuan eksplisit sebelum mulai menulis/mengubah kode.

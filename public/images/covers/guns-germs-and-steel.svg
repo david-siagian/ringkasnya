@@ -1,21 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="360" y2="480" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#1c1917"/>
-      <stop offset="55%" stop-color="#44403c"/>
-      <stop offset="100%" stop-color="#57534e"/>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1C1917" />
+      <stop offset="55%" stop-color="#44403C" />
+      <stop offset="100%" stop-color="#292524" />
     </linearGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0C0A09" flood-opacity="0.65" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
   </defs>
-  <rect width="360" height="480" fill="url(#bg)"/>
-  <circle cx="180" cy="220" r="115" stroke="#d6d3d1" stroke-opacity="0.22" stroke-width="2"/>
-  <ellipse cx="180" cy="220" rx="115" ry="44" stroke="#d6d3d1" stroke-opacity="0.2" stroke-width="1.5"/>
-  <path d="M110 270 C130 220 145 185 152 145" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
-  <ellipse cx="148" cy="175" rx="8" ry="16" transform="rotate(-20 148 175)" fill="#fcd34d"/>
-  <ellipse cx="136" cy="212" rx="8" ry="16" transform="rotate(-20 136 212)" fill="#fcd34d"/>
-  <path d="M180 120 L196 250 L180 264 L164 250 Z" fill="#e7e5e4"/>
-  <rect x="174" y="264" width="12" height="44" rx="4" fill="#a8a29e"/>
-  <circle cx="242" cy="228" r="32" stroke="#38bdf8" stroke-width="4" fill="#0c4a6e" fill-opacity="0.4"/>
-  <circle cx="242" cy="228" r="12" fill="#7dd3fc"/>
-  <path d="M72 356 L288 356" stroke="#fbbf24" stroke-opacity="0.45" stroke-width="2"/>
-  <rect x="108" y="376" width="144" height="8" rx="4" fill="#d6d3d1" fill-opacity="0.3"/>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <circle cx="300" cy="465" r="185" stroke="#D6D3D1" stroke-opacity="0.2" stroke-width="2.5" fill="none" />
+  <ellipse cx="300" cy="465" rx="185" ry="70" stroke="#D6D3D1" stroke-opacity="0.18" stroke-width="2" fill="none" />
+
+  <!-- Wheat, Steel Blade, and Germ/Microbe Motif -->
+  <path d="M180 560 C210 490 230 435 242 375" stroke="#FBBF24" stroke-width="5" stroke-linecap="round" />
+  <ellipse cx="236" cy="415" rx="11" ry="22" transform="rotate(-20 236 415)" fill="#FCD34D" />
+  <ellipse cx="218" cy="465" rx="11" ry="22" transform="rotate(-20 218 465)" fill="#FCD34D" />
+
+  <path d="M300 325 L324 510 L300 532 L276 510 Z" fill="#E7E5E4" />
+  <rect x="291" y="532" width="18" height="68" rx="5" fill="#A8A29E" />
+
+  <circle cx="400" cy="475" r="46" stroke="#38BDF8" stroke-width="5" fill="#0C4A6E" fill-opacity="0.45" />
+  <circle cx="400" cy="475" r="18" fill="#7DD3FC" />
+
+  <!-- Title & Author (Real Cover Placement: Upper Stacked, Author at Bottom) -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="96" fill="#FFFBEB" font-size="48" font-weight="900" letter-spacing="2">GUNS, GERMS,</text>
+    <text x="300" y="154" fill="#FCD34D" font-size="48" font-weight="900" letter-spacing="2">AND STEEL</text>
+    <text x="300" y="192" fill="#D6D3D1" font-size="16" font-weight="600" letter-spacing="2">THE FATES OF HUMAN SOCIETIES</text>
+    <line x1="210" y1="214" x2="390" y2="214" stroke="#FBBF24" stroke-width="2" opacity="0.65" />
+    <text x="300" y="728" fill="#F5F5F4" font-size="22" font-weight="800" letter-spacing="5">JARED DIAMOND</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
 </svg>
