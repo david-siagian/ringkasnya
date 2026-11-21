@@ -1,6 +1,7 @@
 import type { BookCatalogItem } from "@/types/book";
 import { useBookmarks } from "@/hooks/useBookmarks";
-import { ArrowRight, Bookmark, Clock, Layers, Zap } from "lucide-react";
+import { useCompletedBooks } from "@/hooks/useCompletedBooks";
+import { ArrowRight, Bookmark, CheckCircle2, Clock, Layers, Zap } from "lucide-react";
 
 interface BookCardProps {
   book: BookCatalogItem;
@@ -9,7 +10,9 @@ interface BookCardProps {
 
 export default function BookCard({ book, onSelect }: BookCardProps) {
   const { isBookmarked, toggleBookmark } = useBookmarks();
+  const { isCompleted } = useCompletedBooks();
   const saved = isBookmarked(book.slug);
+  const completed = isCompleted(book.slug);
   return (
     <a
       href={`/buku/${book.slug}`}
@@ -31,6 +34,12 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
               alt={`Ilustrasi sampul buku ${book.title}`}
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
+            {completed && (
+              <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-emerald-600/90 px-2 py-1 text-[10px] font-bold text-white shadow-sm backdrop-blur-md">
+                <CheckCircle2 className="h-3 w-3" />
+                <span>Selesai</span>
+              </span>
+            )}
             <button
               type="button"
               onClick={(e) => {

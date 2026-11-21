@@ -1,7 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import type { BookCatalogItem, BookSummary } from "@/types/book";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import { useCompletedBooks } from "@/hooks/useCompletedBooks";
 import QuoteCardModal from "./QuoteCardModal";
+import {
+  QuickChecklistModal,
+  QuickQuotesModal,
+} from "./BookReaderModals";
 import {
   smoothScrollToElement,
   smoothScrollToY,
@@ -22,8 +27,11 @@ import {
   ArrowRight,
   Bookmark,
   BookOpen,
+  CheckCircle2,
   Clock,
   List,
+  ListChecks,
+  Quote,
   RotateCcw,
   Type,
   Zap,
@@ -76,6 +84,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [activeQuoteForCard, setActiveQuoteForCard] = useState<string | null>(
     null
   );
+  const [isChecklistModalOpen, setIsChecklistModalOpen] = useState(false);
+  const [isQuotesModalOpen, setIsQuotesModalOpen] = useState(false);
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
@@ -84,7 +94,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const pendingScrollToReadingTopRef = useRef(false);
 
   const { isBookmarked, toggleBookmark } = useBookmarks();
+  const { isCompleted, markCompleted } = useCompletedBooks();
   const saved = isBookmarked(book.slug);
+  const completed = isCompleted(book.slug);
 
   const storageKey = `ringkasnya_checklist_${book.slug}`;
   const totalTakeaways = book.keyTakeaways.length;
@@ -96,10 +108,31 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       ? Math.round((clampedDeepStep / Math.max(1, finalStep)) * 100)
       : scrollProgress;
 
-  // Reset step Mode Mendalam bila berpindah buku
+  // Reset step Mode Mendalam & modal cepat bila berpindah buku
   useEffect(() => {
     setDeepStep(0);
+    setIsChecklistModalOpen(false);
+    setIsQuotesModalOpen(false);
   }, [book.slug]);
+
+  // Tandai buku selesai dibaca otomatis saat mencapai akhir di Mode Mendalam atau Mode Kilat
+  useEffect(() => {
+    if (readMode === "deep" && clampedDeepStep === finalStep) {
+      markCompleted(book.slug);
+      return;
+    }
+
+    if (readMode === "quick" && scrollProgress >= 90) {
+      markCompleted(book.slug);
+    }
+  }, [
+    readMode,
+    clampedDeepStep,
+    finalStep,
+    scrollProgress,
+    book.slug,
+    markCompleted,
+  ]);
 
   // Sinkronkan tinggi toolbar sticky (bisa 2 baris di mobile) ke CSS var `--reader-toolbar-h`
   useEffect(() => {
@@ -208,6 +241,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const toggleChecklist = (index: number) => {
     setCheckedItems((prev) => {
       const updated = { ...prev, [index]: !prev[index] };
+      if (updated[index]) {
+        markCompleted(book.slug);
+      }
       try {
         localStorage.setItem(storageKey, JSON.stringify(updated));
       } catch {
@@ -216,6 +252,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       return updated;
     });
   };
+
+  const checkedCount = Object.values(checkedItems).filter(Boolean).length;
 
   const handleCopyQuote = async (quote: string, index: number) => {
     const textToCopy = `"${quote}" — ${book.title} (${book.author}) via Ringkasnya`;
@@ -327,6 +365,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
                   {book.category}
                 </span>
+                {completed && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/90 px-3 py-1 text-xs font-bold text-white shadow-sm">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    Selesai Dibaca
+                  </span>
+                )}
                 <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
                   <Zap className="h-3.5 w-3.5 text-amber-300" />
                   Mode Kilat: {book.quickTimeMinutes} Mnt
@@ -352,6 +396,29 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-white/90">
                 {book.tagline}
               </p>
+
+              {completed && (
+                <div className="mt-5 flex flex-wrap items-center gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsChecklistModalOpen(true)}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-white/95 px-3.5 py-2 text-xs font-bold text-emerald-900 shadow-sm transition hover:bg-white active:scale-[0.98]"
+                  >
+                    <ListChecks className="h-4 w-4 text-emerald-600" />
+                    <span>
+                      Checklist ({checkedCount}/{book.actionChecklist.length})
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsQuotesModalOpen(true)}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-black/30 px-3.5 py-2 text-xs font-bold text-white ring-1 ring-white/25 backdrop-blur-sm transition hover:bg-black/45 active:scale-[0.98]"
+                  >
+                    <Quote className="h-4 w-4 text-emerald-300" />
+                    <span>Kutipan ({book.quotes.length})</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -636,6 +703,25 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           <RelatedBooksSection relatedBooks={relatedBooks} />
         )}
       </main>
+
+      <QuickChecklistModal
+        open={isChecklistModalOpen}
+        onClose={() => setIsChecklistModalOpen(false)}
+        bookTitle={book.title}
+        actionChecklist={book.actionChecklist}
+        checkedItems={checkedItems}
+        onToggle={toggleChecklist}
+      />
+
+      <QuickQuotesModal
+        open={isQuotesModalOpen}
+        onClose={() => setIsQuotesModalOpen(false)}
+        bookTitle={book.title}
+        quotes={book.quotes}
+        copyFeedback={copyFeedback}
+        onCopyQuote={handleCopyQuote}
+        onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
+      />
 
       <QuoteCardModal
         quote={activeQuoteForCard}
