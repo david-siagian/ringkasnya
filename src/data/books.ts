@@ -14,6 +14,16 @@ import { whyWeSleep } from "./books/why-we-sleep";
 import { howToWinFriendsAndInfluencePeople } from "./books/how-to-win-friends-and-influence-people";
 import { nudge } from "./books/nudge";
 import { factfulness } from "./books/factfulness";
+import { digitalMinimalism } from "./books/digital-minimalism";
+import { theShallows } from "./books/the-shallows";
+import { mansSearchForMeaning } from "./books/mans-search-for-meaning";
+import { the7HabitsOfHighlyEffectivePeople } from "./books/the-7-habits-of-highly-effective-people";
+import { freakonomics } from "./books/freakonomics";
+import { thinkAgain } from "./books/think-again";
+import { theSimplePathToWealth } from "./books/the-simple-path-to-wealth";
+import { range } from "./books/range";
+import { theGrandDesign } from "./books/the-grand-design";
+import { everybodyLies } from "./books/everybody-lies";
 
 export const CATEGORIES: BookCategory[] = [
   "Kebiasaan & Produktivitas",
@@ -79,6 +89,16 @@ export const BOOKS: BookSummary[] = [
   howToWinFriendsAndInfluencePeople,
   nudge,
   factfulness,
+  digitalMinimalism,
+  theShallows,
+  mansSearchForMeaning,
+  the7HabitsOfHighlyEffectivePeople,
+  freakonomics,
+  thinkAgain,
+  theSimplePathToWealth,
+  range,
+  theGrandDesign,
+  everybodyLies,
 ].map(withCalculatedReadingTimes);
 
 /**
