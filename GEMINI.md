@@ -9,10 +9,12 @@
 - **Navigasi & Transisi Smooth**: Jangan mengandalkan CSS `scroll-behavior: smooth` bawaan browser untuk hash scroll; gunakan `SmoothHashLink` dan `PageTransitionWrapper` (`src/components/SmoothNavigation.tsx`) agar scroll dan perpindahan halaman selalu mulus.
 
 ## Standar Konten & Durasi Baca
-- Hitung estimasi baca pada kecepatan ~200 kata/menit dan simpan tiap buku sebagai modul terpisah di `src/data/books/<slug>.ts`:
-  - **Mode Kilat (6–10 Menit)**: 1.350–1.750 kata (`quickTimeMinutes` di kisaran 6–10).
-  - **Mode Mendalam (20–30 Menit)**: 4.150–5.500 kata (`readingTimeMinutes` di kisaran 20–30).
-- **Format Sinopsis**: Bagian `synopsis` pada setiap buku cukup ditulis **1 paragraf ringkas (4–7 baris)** saja. Jika pemangkasan sinopsis mengurangi total kata, kompensasikan penambahan teks pada `deepContent`, `quickSummary`, atau `conclusion` agar estimasi durasi baca tetap konsisten.
+- **Arah Kurasi & Gaya Bahasa**: Fokuskan katalog utama pada ringkasan buku nonfiksi berbasis pengetahuan (sains, ekonomi, politik, psikologi, sejarah, masyarakat, perilaku, organisasi, budaya kerja) dan hindari menonjolkan *self-help* populer yang minim landasan ilmiah. Tulis seluruh ringkasan, `keyNote`, dan `keyConcepts` dalam Bahasa Indonesia yang luwes, jernih, dan mudah dipahami pembaca awam—seminimal mungkin memakai jargon akademis yang berat.
+- **Standar Wajib Setiap Penambahan/Pembaruan Buku**: Setiap kali menambahkan buku baru di `src/data/books/<slug>.ts` (atau memperbarui konten buku yang ada), jumlah kata wajib disesuaikan agar hasil perhitungan dinamis `withCalculatedReadingTimes` (`WORDS_PER_MINUTE = 200` di `src/data/books.ts`) memenuhi rentang kedua mode berikut:
+  - **Mode Kilat (5–7 Menit)**: ~950–1.450 kata untuk gabungan teks Mode Kilat (`synopsis`, `whoIsItFor`, `keyConcepts`, `quotes`, `conclusion`, serta `title`, `quickSummary`, dan `keyNote` pada tiap `keyTakeaways`) sehingga `quickTimeMinutes` berada di kisaran **5–7 menit**.
+  - **Mode Mendalam (15–20 Menit)**: ~2.950–4.050 kata untuk gabungan Mode Kilat + `deepContent` (sekitar **2.000–2.600 kata** khusus pada `deepContent` di seluruh `keyTakeaways`) sehingga `readingTimeMinutes` berada di kisaran **15–20 menit** (~2,5x–3x lebih dalam dari Mode Kilat).
+  - Selaraskan juga properti statis `quickTimeMinutes` dan `readingTimeMinutes` di dalam `src/data/books/<slug>.ts` agar sesuai dengan hasil estimasi di atas.
+- **Format Sinopsis**: Bagian `synopsis` pada setiap buku cukup ditulis **1 paragraf ringkas (4–7 baris)** saja. Jika pemangkasan sinopsis mengurangi total kata, kompensasikan penambahan teks pada `deepContent`, `quickSummary`, atau `conclusion` agar estimasi durasi baca tetap berada dalam rentang standar.
 
 ## Operasional CLI (Windows)
 - Jalankan `npm run build`, `git push`, `npx wrangler`, `cf`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.
@@ -43,7 +45,7 @@
   - **On-demand / Pra-rilis**: Hanya dijalankan jika diminta secara eksplisit oleh user atau khusus sebelum rilis ke `main`.
 - **Skenario Minimal yang Diverifikasi**:
   - **Beranda (`/`)**: Zero `console.error` / `pageerror`, pencarian & filter kategori berfungsi, serta navigasi/smooth scroll ke katalog berjalan normal.
-  - **Halaman Reader (`/buku/<slug>`, mis. `/buku/atomic-habits`)**: Toggle **Mode Kilat vs Mode Mendalam** berfungsi, **Action Checklist** tersimpan, tombol salin kutipan & tema (`useTheme`) bekerja, serta endpoint `/api/health` merespons normal.
+  - **Halaman Reader (`/buku/<slug>`, mis. `/buku/sapiens`)**: Toggle **Mode Kilat vs Mode Mendalam** berfungsi, bagian **Konsep Kunci** tampil normal, tombol salin kutipan & tema (`useTheme`) bekerja, serta endpoint `/api/health` merespons normal.
 
 ## Feature & Bugfix Review Board (Wajib Sebelum Coding)
 Setiap kali diminta menambahkan **fitur baru**, mengubah **alur pengguna**, atau melakukan **perbaikan bug (fixing)**, JANGAN langsung menulis atau mengubah kode terlebih dahulu. Lakukan evaluasi ringkas melalui 3 *role* berikut sebelum menyusun rencana implementasi.
@@ -54,7 +56,7 @@ Setiap kali diminta menambahkan **fitur baru**, mengubah **alur pengguna**, atau
 
 #### 1. Product & UX Reviewer (Human-Centric & Tren)
 - **Nilai & Kebiasaan Pengguna:** Apakah fitur/perbaikan menjawab kebutuhan pembaca ringkasan buku dan pendengar audio secara nyata, atau menambah beban visual/aliran yang tidak perlu?
-- **Ergonomi & Tren Produk:** Evaluasi alur baca, pemutar audio, highlight, dan kuis terhadap pola aplikasi modern (kecepatan *time-to-value*, *mobile-first*, transisi halus, tanpa gangguan berlebih). Sarankan alternatif yang lebih ringan jika diperlukan.
+- **Ergonomi & Tren Produk:** Evaluasi alur baca, konsep kunci, pemutar audio, dan highlight terhadap pola aplikasi modern (kecepatan *time-to-value*, *mobile-first*, transisi halus, tanpa gangguan berlebih). Sarankan alternatif yang lebih ringan jika diperlukan.
 
 #### 2. QA & Edge-Case Skeptic (Keandalan & Akar Masalah)
 - **State & Kegagalan:** Periksa *empty state*, *loading state*, jaringan terputus/lambat, teks panjang, audio belum tersedia/gagal dimuat, dan klik ganda cepat.

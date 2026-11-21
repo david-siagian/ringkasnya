@@ -27,7 +27,7 @@ export default function Footer() {
             <ul className="mt-3 space-y-2.5 text-sm text-slate-300">
               <li className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span>Mode Kilat (6–10 Menit) &amp; Mode Mendalam (20–30 Menit)</span>
+                <span>Mode Kilat (5–7 Menit) &amp; Mode Mendalam (15–20 Menit)</span>
               </li>
               <li className="flex items-center gap-2">
                 <Layers className="h-4 w-4 text-emerald-400 shrink-0" />

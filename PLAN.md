@@ -18,7 +18,7 @@ Rencana final ini mengikuti arahan editorial terbaru:
      - `"Organisasi & Budaya Kerja"`
    - `BookTakeaway`: Mengganti `practicalTip: string` menjadi `keyNote: string` (*Hal yang Perlu Diingat*).
    - `BookSummary`: Mengganti `actionChecklist: string[]` menjadi `keyConcepts: { title: string; explanation: string }[]` (*Konsep Kunci*).
-   - `withCalculatedReadingTimes`: Menghitung jumlah kata dari `keyNote` dan `keyConcepts` (`title` + `explanation`) agar durasi **Mode Kilat (6–10 menit)** dan **Mode Mendalam (20–30 menit)** tetap akurat.
+   - `withCalculatedReadingTimes`: Menghitung jumlah kata dari `keyNote` dan `keyConcepts` (`title` + `explanation`) agar durasi **Mode Kilat (5–7 menit)** dan **Mode Mendalam (15–20 menit)** tetap akurat.
 
 2. **Komponen Reader (`BookReader.tsx`, `BookReaderSections.tsx`, `BookReaderModals.tsx`)**
    - **`TakeawayCard`**: Mengubah kotak *"Tips Praktis Langsung Coba:"* menjadi **"Hal yang Perlu Diingat:"**.
