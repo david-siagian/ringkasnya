@@ -32,7 +32,6 @@ const FONT_SCALES = {
     compact: "text-xs",
     lead: "text-xs sm:text-sm",
     body: "text-sm leading-relaxed",
-    conclusion: "text-base leading-relaxed",
     sectionHeading: "text-base",
     conclusionHeading: "text-base sm:text-lg",
     blockHeading: "text-lg",
@@ -45,7 +44,6 @@ const FONT_SCALES = {
     compact: "text-sm",
     lead: "text-sm sm:text-base",
     body: "text-base leading-relaxed",
-    conclusion: "text-lg leading-relaxed",
     sectionHeading: "text-lg",
     conclusionHeading: "text-lg sm:text-xl",
     blockHeading: "text-xl",
@@ -58,7 +56,6 @@ const FONT_SCALES = {
     compact: "text-base",
     lead: "text-base sm:text-lg",
     body: "text-lg leading-relaxed",
-    conclusion: "text-xl leading-relaxed",
     sectionHeading: "text-xl",
     conclusionHeading: "text-xl sm:text-2xl",
     blockHeading: "text-2xl",
@@ -435,7 +432,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               </div>
             </div>
           </div>
-          <div className={`mt-4 space-y-4 font-semibold text-ink ${fs.conclusion}`}>
+          <div className={`mt-4 space-y-4 font-semibold text-ink ${fs.body}`}>
             {book.conclusion
               .split(/\n\s*\n/)
               .map((paragraph) => paragraph.trim())
