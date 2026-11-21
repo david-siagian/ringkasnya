@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import type { BookSummary } from "@/types/book";
+import { useBookmarks } from "@/hooks/useBookmarks";
 import {
   AlertCircle,
   ArrowLeft,
   ArrowRight,
+  Bookmark,
   BookOpen,
   Check,
   CheckCircle2,
@@ -106,6 +108,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const copyTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const readingAreaRef = useRef<HTMLDivElement>(null);
+  const { isBookmarked, toggleBookmark } = useBookmarks();
+  const saved = isBookmarked(book.slug);
 
   const storageKey = `ringkasnya_checklist_${book.slug}`;
 
@@ -220,13 +224,29 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       {/* Banner Header Buku */}
       <div className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}>
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
-          <a
-            href="/katalog"
-            className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm transition hover:bg-black/30"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Kembali ke Katalog
-          </a>
+          <div className="flex items-center justify-between gap-3">
+            <a
+              href="/katalog"
+              className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm transition hover:bg-black/30"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Kembali ke Katalog
+            </a>
+
+            <button
+              type="button"
+              onClick={() => toggleBookmark(book.slug)}
+              aria-pressed={saved}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold backdrop-blur-sm transition ${
+                saved
+                  ? "bg-emerald-500 text-white shadow-sm hover:bg-emerald-600"
+                  : "bg-black/20 text-white/90 hover:bg-black/30"
+              }`}
+            >
+              <Bookmark className={`h-3.5 w-3.5 ${saved ? "fill-current" : ""}`} />
+              <span>{saved ? "Tersimpan" : "Simpan Buku"}</span>
+            </button>
+          </div>
 
           <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
             {book.coverImage && (

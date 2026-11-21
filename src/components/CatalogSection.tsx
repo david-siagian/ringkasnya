@@ -8,8 +8,10 @@ import {
 import BookCard from "./BookCard";
 import BookPreviewModal from "./BookPreviewModal";
 import { smoothScrollToElement } from "./SmoothNavigation";
+import { useBookmarks } from "@/hooks/useBookmarks";
 import {
   ArrowRight,
+  Bookmark,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -53,11 +55,14 @@ export default function CatalogSection({
   itemsPerPage = DEFAULT_ITEMS_PER_PAGE,
 }: CatalogSectionProps) {
   const isFull = mode === "full";
-  const [selectedCategory, setSelectedCategory] = useState<BookCategory | "Semua">("Semua");
+  const [selectedCategory, setSelectedCategory] = useState<
+    BookCategory | "Semua" | "Tersimpan"
+  >("Semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [previewBook, setPreviewBook] = useState<BookSummary | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const { bookmarkedCount, isBookmarked } = useBookmarks();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -83,7 +88,10 @@ export default function CatalogSection({
   const filteredBooks = useMemo(() => {
     return books.filter((book) => {
       const matchesCategory =
-        selectedCategory === "Semua" || book.category === selectedCategory;
+        selectedCategory === "Semua" ||
+        (selectedCategory === "Tersimpan"
+          ? isBookmarked(book.slug)
+          : book.category === selectedCategory);
       const query = searchQuery.toLowerCase().trim();
       const matchesQuery =
         !query ||
@@ -94,7 +102,7 @@ export default function CatalogSection({
 
       return matchesCategory && matchesQuery;
     });
-  }, [books, selectedCategory, searchQuery]);
+  }, [books, selectedCategory, searchQuery, isBookmarked]);
 
   const totalPages = isFull
     ? Math.max(1, Math.ceil(filteredBooks.length / itemsPerPage))
@@ -120,7 +128,9 @@ export default function CatalogSection({
     window.history.replaceState(null, "", url.pathname + url.search);
   };
 
-  const handleCategoryChange = (category: BookCategory | "Semua") => {
+  const handleCategoryChange = (
+    category: BookCategory | "Semua" | "Tersimpan"
+  ) => {
     setSelectedCategory(category);
     setCurrentPage(1);
     syncPageUrl(1);
@@ -217,6 +227,22 @@ export default function CatalogSection({
           }`}
         >
           Semua ({books.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => handleCategoryChange("Tersimpan")}
+          className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
+            selectedCategory === "Tersimpan"
+              ? "bg-emerald-600 text-white shadow-sm"
+              : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
+          }`}
+        >
+          <Bookmark
+            className={`h-3.5 w-3.5 ${
+              selectedCategory === "Tersimpan" ? "fill-current" : ""
+            }`}
+          />
+          Tersimpan ({bookmarkedCount})
         </button>
         {CATEGORIES.map((category) => {
           const count = books.filter((b) => b.category === category).length;
@@ -349,10 +375,14 @@ export default function CatalogSection({
       ) : (
         <div className="mt-10 rounded-2xl border border-dashed border-line-strong bg-surface p-12 text-center">
           <p className="text-base font-semibold text-ink">
-            Buku yang kamu cari belum ditemukan
+            {selectedCategory === "Tersimpan" && bookmarkedCount === 0
+              ? "Belum ada buku yang disimpan"
+              : "Buku yang kamu cari belum ditemukan"}
           </p>
           <p className="mt-1 text-sm text-ink-subtle">
-            Coba gunakan kata kunci lain atau pilih kategori &ldquo;Semua&rdquo;.
+            {selectedCategory === "Tersimpan" && bookmarkedCount === 0
+              ? "Klik ikon bookmark pada kartu buku untuk menyimpannya di sini."
+              : "Coba gunakan kata kunci lain atau pilih kategori \"Semua\"."}
           </p>
           <button
             type="button"

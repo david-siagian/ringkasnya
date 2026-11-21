@@ -1,5 +1,6 @@
 import type { BookSummary } from "@/types/book";
-import { ArrowRight, Clock, Layers, Zap } from "lucide-react";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { ArrowRight, Bookmark, Clock, Layers, Zap } from "lucide-react";
 
 interface BookCardProps {
   book: BookSummary;
@@ -7,6 +8,8 @@ interface BookCardProps {
 }
 
 export default function BookCard({ book, onSelect }: BookCardProps) {
+  const { isBookmarked, toggleBookmark } = useBookmarks();
+  const saved = isBookmarked(book.slug);
   return (
     <a
       href={`/buku/${book.slug}`}
@@ -28,6 +31,27 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
               alt={`Ilustrasi sampul buku ${book.title}`}
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleBookmark(book.slug);
+              }}
+              aria-label={
+                saved
+                  ? `Hapus ${book.title} dari daftar tersimpan`
+                  : `Simpan ${book.title} ke daftar favorit`
+              }
+              aria-pressed={saved}
+              className={`absolute top-2 right-2 inline-flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition ${
+                saved
+                  ? "bg-emerald-600 text-white shadow-md hover:bg-emerald-700"
+                  : "bg-black/35 text-white/90 hover:bg-black/55 hover:text-white"
+              }`}
+            >
+              <Bookmark className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
+            </button>
           </div>
         </div>
       )}
