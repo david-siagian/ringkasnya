@@ -36,6 +36,16 @@
   - Tidak perlu menjalankan `npx wrangler deploy` secara manual setelah `git push` (cukup pastikan `npx tsc --noEmit` dan `npm run build` lulus secara lokal sebelum commit/push).
 - **Auto-Push Setelah Selesai Fitur/Bug**: Setiap kali selesai mengerjakan fitur atau perbaikan bug dan verifikasi (`npx tsc --noEmit` / `npm run build`) lulus, langsung lakukan `git commit` dan `git push` ke branch kerja (yang ditarik dari `dev`), lalu merge ke `dev` dan push `dev`, kecuali user meminta untuk tidak di-push terlebih dahulu.
 
+## Pengujian & Verifikasi (Playwright)
+- **Lingkup Uji**: Gunakan **Playwright smoke test** yang ringan dan terfokus pada alur UI utama (desktop & mobile) terhadap hasil build (`npm run preview`), bukan *test suite* yang berat.
+- **Kapan Wajib Dijalankan**:
+  - Setiap perubahan pada UI, komponen interaktif, navigasi, state/storage, atau konfigurasi Astro/React.
+  - Sebelum melakukan merge ke `dev` atau rilis ke `main`.
+  - *(Opsional untuk perubahan konten buku saja di `src/data/books/*.ts` — cukup `npx tsc --noEmit` dan `npm run build`.)*
+- **Skenario Minimal yang Diverifikasi**:
+  - **Beranda (`/`)**: Zero `console.error` / `pageerror`, pencarian & filter kategori berfungsi, serta navigasi/smooth scroll ke katalog berjalan normal.
+  - **Halaman Reader (`/buku/<slug>`, mis. `/buku/atomic-habits`)**: Toggle **Mode Kilat vs Mode Mendalam** berfungsi, **Action Checklist** tersimpan, tombol salin kutipan & tema (`useTheme`) bekerja, serta endpoint `/api/health` merespons normal.
+
 ## Feature & Bugfix Review Board (Wajib Sebelum Coding)
 Setiap kali diminta menambahkan **fitur baru**, mengubah **alur pengguna**, atau melakukan **perbaikan bug (fixing)**, JANGAN langsung menulis atau mengubah kode terlebih dahulu. Lakukan evaluasi ringkas melalui 3 *role* berikut sebelum menyusun rencana implementasi.
 

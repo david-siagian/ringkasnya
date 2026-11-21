@@ -5,6 +5,8 @@
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
 
 # astro & cloudflare build output
 /dist/
