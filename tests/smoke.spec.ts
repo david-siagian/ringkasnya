@@ -182,6 +182,31 @@ test.describe("Ringkasnya Smoke Tests", () => {
     expect(errors).toEqual([]);
   });
 
+  test("beranda (/): animasi scroll-reveal muncul saat scroll ke Perpustakaan Kurasi & Mengapa Ringkasnya", async ({
+    page,
+  }) => {
+    const errors = trackRuntimeErrors(page);
+
+    await page.goto("/");
+    await waitForAstroIslands(page);
+
+    const catalogReveal = page.locator("[data-reveal]").filter({
+      has: page.locator("#katalog"),
+    });
+    const metodeHeadingReveal = page.locator("#metode [data-reveal]").first();
+    const metodeCards = page.locator("#metode .grid [data-reveal]");
+
+    await catalogReveal.scrollIntoViewIfNeeded();
+    await expect(catalogReveal).toHaveClass(/is-revealed/);
+
+    await page.locator("#metode").scrollIntoViewIfNeeded();
+    await expect(metodeHeadingReveal).toHaveClass(/is-revealed/);
+    await expect(metodeCards.first()).toHaveClass(/is-revealed/);
+    await expect(metodeCards.last()).toHaveClass(/is-revealed/);
+
+    expect(errors).toEqual([]);
+  });
+
   test("api health merespons normal", async ({ request }) => {
     const response = await request.get("/api/health");
     expect(response.status()).toBe(200);
