@@ -7,6 +7,9 @@ import {
   Search,
   Moon,
   Sun,
+  Home,
+  Compass,
+  Info,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import {
@@ -20,13 +23,28 @@ import {
 } from "@/lib/search";
 
 const NAV_ITEMS = [
+  { label: "Beranda", href: "/", icon: Home },
   { label: "Katalog Buku", href: "/katalog", icon: BookOpen },
+  { label: "Topik", href: "/topik", icon: Compass },
+  { label: "Tentang", href: "/tentang", icon: Info },
 ] as const;
+
+function normalizePath(path: string): string {
+  if (path.length > 1 && path.endsWith("/")) {
+    return path.slice(0, -1);
+  }
+  return path || "/";
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState<string>("");
   const { isDark, mounted, toggleTheme } = useTheme();
   const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setCurrentPath(normalizePath(window.location.pathname));
+  }, []);
 
   // Sinkronkan tinggi navbar aktual ke CSS var `--header-h` (dipakai toolbar sticky & scroll offset)
   useEffect(() => {
@@ -130,11 +148,19 @@ export default function Navbar() {
           >
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon;
+              const isActive =
+                currentPath !== "" &&
+                normalizePath(item.href) === currentPath;
               return (
                 <a
                   key={item.label}
                   href={item.href}
-                  className="inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold text-ink-secondary transition-colors hover:bg-accent-soft hover:text-accent-text"
+                  aria-current={isActive ? "page" : undefined}
+                  className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors ${
+                    isActive
+                      ? "bg-accent-soft text-accent-text"
+                      : "text-ink-secondary hover:bg-accent-soft hover:text-accent-text"
+                  }`}
                 >
                   <Icon className="h-4 w-4 text-accent-strong" />
                   <span>{item.label}</span>
@@ -234,11 +260,19 @@ export default function Navbar() {
           </p>
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
+            const isActive =
+              currentPath !== "" &&
+              normalizePath(item.href) === currentPath;
             return (
               <div key={item.label} onClick={handleLinkClick}>
                 <a
                   href={item.href}
-                  className="flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-sm font-semibold text-ink-secondary transition-colors hover:bg-accent-soft hover:text-accent-text"
+                  aria-current={isActive ? "page" : undefined}
+                  className={`flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-sm font-semibold transition-colors ${
+                    isActive
+                      ? "bg-accent-soft text-accent-text"
+                      : "text-ink-secondary hover:bg-accent-soft hover:text-accent-text"
+                  }`}
                 >
                   <span className="flex items-center gap-3">
                     <Icon className="h-4 w-4 text-accent-strong" />

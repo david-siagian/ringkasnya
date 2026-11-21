@@ -79,6 +79,15 @@ export default function CatalogSection({
     }
 
     if (!isFull) return;
+    const categoryParam = params.get("kategori");
+    if (
+      categoryParam &&
+      (CATEGORIES.includes(categoryParam as BookCategory) ||
+        categoryParam === "Tersimpan")
+    ) {
+      setSelectedCategory(categoryParam as BookCategory | "Tersimpan");
+    }
+
     const pageParam = Number(params.get("page"));
     if (Number.isInteger(pageParam) && pageParam > 1) {
       setCurrentPage(pageParam);
@@ -117,13 +126,21 @@ export default function CatalogSection({
     return filteredBooks.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredBooks, isFull, safePage, itemsPerPage]);
 
-  const syncPageUrl = (page: number) => {
+  const syncCatalogUrl = (
+    page: number,
+    category: BookCategory | "Semua" | "Tersimpan" = selectedCategory
+  ) => {
     if (!isFull || typeof window === "undefined") return;
     const url = new URL(window.location.href);
     if (page <= 1) {
       url.searchParams.delete("page");
     } else {
       url.searchParams.set("page", String(page));
+    }
+    if (category === "Semua") {
+      url.searchParams.delete("kategori");
+    } else {
+      url.searchParams.set("kategori", category);
     }
     window.history.replaceState(null, "", url.pathname + url.search);
   };
@@ -133,20 +150,20 @@ export default function CatalogSection({
   ) => {
     setSelectedCategory(category);
     setCurrentPage(1);
-    syncPageUrl(1);
+    syncCatalogUrl(1, category);
   };
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
     setCurrentPage(1);
-    syncPageUrl(1);
+    syncCatalogUrl(1);
   };
 
   const handlePageChange = (page: number) => {
     const nextPage = Math.max(1, Math.min(page, totalPages));
     if (nextPage === safePage) return;
     setCurrentPage(nextPage);
-    syncPageUrl(nextPage);
+    syncCatalogUrl(nextPage);
     smoothScrollToElement("katalog", 500);
   };
 
