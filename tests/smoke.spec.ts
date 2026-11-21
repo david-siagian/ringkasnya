@@ -202,6 +202,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await page.locator("#metode").scrollIntoViewIfNeeded();
     await expect(metodeHeadingReveal).toHaveClass(/is-revealed/);
     await expect(metodeCards.first()).toHaveClass(/is-revealed/);
+    await metodeCards.last().scrollIntoViewIfNeeded();
     await expect(metodeCards.last()).toHaveClass(/is-revealed/);
 
     expect(errors).toEqual([]);

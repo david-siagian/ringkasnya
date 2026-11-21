@@ -155,11 +155,3 @@ html.reveal-ready [data-reveal].is-revealed {
   transform: translateY(0) scale(1);
   will-change: auto;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  html.reveal-ready [data-reveal] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
