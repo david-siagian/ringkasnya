@@ -1,10 +1,10 @@
-import type { BookSummary } from "@/types/book";
+import type { BookCatalogItem } from "@/types/book";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { ArrowRight, Bookmark, Clock, Layers, Zap } from "lucide-react";
 
 interface BookCardProps {
-  book: BookSummary;
-  onSelect?: (book: BookSummary) => void;
+  book: BookCatalogItem;
+  onSelect?: (book: BookCatalogItem) => void;
 }
 
 export default function BookCard({ book, onSelect }: BookCardProps) {
@@ -91,7 +91,7 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
             </span>
             <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs text-ink-subtle">
               <Layers className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-ink-faint" />
-              {book.keyTakeaways.length} Poin Inti
+              {book.takeawaysCount} Poin Inti
             </span>
           </div>
         </div>

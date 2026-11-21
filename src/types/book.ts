@@ -34,3 +34,16 @@ export interface BookSummary {
   quotes: string[];
   conclusion: string;
 }
+
+/**
+ * Metadata ringan buku untuk daftar katalog, preview modal, dan rekomendasi
+ * agar konten panjang (`keyTakeaways`, `actionChecklist`, `quotes`, `conclusion`)
+ * tidak ikut ter-serialize ke HTML halaman beranda/katalog.
+ */
+export interface BookCatalogItem
+  extends Omit<
+    BookSummary,
+    "keyTakeaways" | "actionChecklist" | "quotes" | "conclusion"
+  > {
+  takeawaysCount: number;
+}

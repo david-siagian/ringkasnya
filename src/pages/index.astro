@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { BOOKS } from "@/data/books";
+import { BOOK_CATALOG } from "@/data/books";
 import CatalogSection from "@/components/CatalogSection";
 import {
   ArrowRight,
@@ -10,7 +10,7 @@ import {
   Zap,
 } from "lucide-react";
 
-const minQuickMinutes = Math.min(...BOOKS.map((b) => b.quickTimeMinutes));
+const minQuickMinutes = Math.min(...BOOK_CATALOG.map((b) => b.quickTimeMinutes));
 ---
 
 <BaseLayout>
@@ -102,7 +102,7 @@ const minQuickMinutes = Math.min(...BOOKS.map((b) => b.quickTimeMinutes));
 
     {/* Katalog Buku Interaktif */}
     <div data-reveal>
-      <CatalogSection client:load books={BOOKS} />
+      <CatalogSection client:load books={BOOK_CATALOG} />
     </div>
 
     {/* Seksi Metode Membaca (ATM Value Proposition) */}

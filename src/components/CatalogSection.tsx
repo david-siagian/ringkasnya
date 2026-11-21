@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-import type { BookSummary, BookCategory } from "@/types/book";
+import type { BookCatalogItem, BookCategory } from "@/types/book";
 import { CATEGORIES } from "@/data/books";
 import {
   CATALOG_SEARCH_FOCUS_PARAM,
@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 interface CatalogSectionProps {
-  books: BookSummary[];
+  books: BookCatalogItem[];
   mode?: "preview" | "full";
   itemsPerPage?: number;
 }
@@ -60,7 +60,7 @@ export default function CatalogSection({
   >("Semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [previewBook, setPreviewBook] = useState<BookSummary | null>(null);
+  const [previewBook, setPreviewBook] = useState<BookCatalogItem | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { bookmarkedCount, isBookmarked } = useBookmarks();
 
@@ -352,7 +352,7 @@ export default function CatalogSection({
                         </span>
                         <span className="inline-flex items-center gap-1">
                           <Layers className="h-3.5 w-3.5 text-ink-faint" />
-                          {featuredBook.keyTakeaways.length} Poin Inti
+                          {featuredBook.takeawaysCount} Poin Inti
                         </span>
                       </div>
 

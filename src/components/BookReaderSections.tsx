@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { BookSummary } from "@/types/book";
+import type { BookCatalogItem, BookSummary } from "@/types/book";
 import {
   AlertCircle,
   ArrowRight,
@@ -475,7 +475,7 @@ export function QuotesSection({
 export function RelatedBooksSection({
   relatedBooks,
 }: {
-  relatedBooks: BookSummary[];
+  relatedBooks: BookCatalogItem[];
 }) {
   return (
     <section className="mt-12">

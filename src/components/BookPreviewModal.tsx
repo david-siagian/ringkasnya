@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import type { BookSummary } from "@/types/book";
+import type { BookCatalogItem } from "@/types/book";
 import { ArrowRight, BookOpen, CheckCircle2, Clock, Target, X, Zap } from "lucide-react";
 
 interface BookPreviewModalProps {
-  book: BookSummary | null;
+  book: BookCatalogItem | null;
   onClose: () => void;
 }
 

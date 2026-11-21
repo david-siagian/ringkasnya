@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import type { BookSummary } from "@/types/book";
+import type { BookCatalogItem, BookSummary } from "@/types/book";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import QuoteCardModal from "./QuoteCardModal";
 import {
@@ -31,7 +31,7 @@ import {
 
 interface BookReaderProps {
   book: BookSummary;
-  relatedBooks: BookSummary[];
+  relatedBooks: BookCatalogItem[];
 }
 
 /** Offset scroll untuk tiap Poin Inti: tinggi navbar + toolbar reader (keduanya sticky). */

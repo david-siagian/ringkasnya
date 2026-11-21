@@ -1,4 +1,4 @@
-import type { BookSummary, BookCategory } from "@/types/book";
+import type { BookSummary, BookCatalogItem, BookCategory } from "@/types/book";
 import { atomicHabits } from "./books/atomic-habits";
 import { psychologyOfMoney } from "./books/psychology-of-money";
 import { deepWork } from "./books/deep-work";
@@ -60,6 +60,26 @@ export const BOOKS: BookSummary[] = [
   filosofiTeras,
   essentialism,
 ].map(withCalculatedReadingTimes);
+
+/**
+ * Memproyeksikan data buku penuh menjadi metadata katalog ringan.
+ */
+export function toBookCatalogItem(book: BookSummary): BookCatalogItem {
+  const {
+    keyTakeaways: _keyTakeaways,
+    actionChecklist: _actionChecklist,
+    quotes: _quotes,
+    conclusion: _conclusion,
+    ...catalogFields
+  } = book;
+
+  return {
+    ...catalogFields,
+    takeawaysCount: _keyTakeaways.length,
+  };
+}
+
+export const BOOK_CATALOG: BookCatalogItem[] = BOOKS.map(toBookCatalogItem);
 
 export function getBookBySlug(slug: string): BookSummary | undefined {
   return BOOKS.find((book) => book.slug === slug);

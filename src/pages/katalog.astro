@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { BOOKS } from "@/data/books";
+import { BOOK_CATALOG } from "@/data/books";
 import CatalogSection from "@/components/CatalogSection";
 
 const pageTitle = "Katalog Buku Lengkap — Ringkasnya";
@@ -12,7 +12,7 @@ const pageDescription =
   <div class="min-h-screen bg-page">
     <CatalogSection
       client:load
-      books={BOOKS}
+      books={BOOK_CATALOG}
       mode="full"
       itemsPerPage={20}
     />
