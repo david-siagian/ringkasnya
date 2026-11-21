@@ -3,7 +3,7 @@ import BrandLogo from "@/components/BrandLogo";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-800 bg-slate-900 text-slate-300">
+    <footer className="border-t border-slate-800 bg-slate-900 text-slate-300 dark:border-line dark:bg-surface dark:text-ink-secondary">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
@@ -81,7 +81,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-2">
+        <div className="mt-10 border-t border-slate-800 dark:border-line pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 dark:text-ink-muted gap-2">
           <p>© {new Date().getFullYear()} Ringkasnya. Dibuat bertahap untuk pembelajar Indonesia.</p>
           <p>Fase 1 (MVP) — Baca Intinya, Praktikkan Ilmunya</p>
         </div>

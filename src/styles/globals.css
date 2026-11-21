@@ -31,31 +31,31 @@
 }
 
 html.dark {
-  --color-bg-page: 2 6 23;
-  --color-bg-surface: 15 23 42;
-  --color-bg-subtle: 30 41 59;
+  --color-bg-page: 10 10 11;
+  --color-bg-surface: 18 18 20;
+  --color-bg-subtle: 28 28 31;
 
-  --color-text-primary: 248 250 252;
-  --color-text-secondary: 226 232 240;
-  --color-text-muted: 203 213 225;
-  --color-text-subtle: 148 163 184;
-  --color-text-faint: 100 116 139;
+  --color-text-primary: 228 228 231;
+  --color-text-secondary: 212 212 216;
+  --color-text-muted: 161 161 170;
+  --color-text-subtle: 113 113 122;
+  --color-text-faint: 82 82 91;
 
-  --color-border-default: 30 41 59;
-  --color-border-subtle: 30 41 59;
-  --color-border-strong: 51 65 85;
+  --color-border-default: 39 39 42;
+  --color-border-subtle: 28 28 31;
+  --color-border-strong: 63 63 70;
 
-  --color-accent-soft: 7 46 37;
-  --color-accent-tint: 10 62 49;
+  --color-accent-soft: 6 35 28;
+  --color-accent-tint: 9 48 39;
   --color-accent-text: 110 231 183;
   --color-accent-strong: 52 211 153;
-  --color-accent-line: 6 95 70;
+  --color-accent-line: 6 78 59;
 
-  --color-amber-soft: 45 24 10;
-  --color-amber-tint: 69 34 10;
+  --color-amber-soft: 33 21 10;
+  --color-amber-tint: 48 29 12;
   --color-amber-text: 252 211 77;
   --color-amber-heading: 253 230 138;
-  --color-amber-line: 146 64 14;
+  --color-amber-line: 120 53 15;
 }
 
 html {
