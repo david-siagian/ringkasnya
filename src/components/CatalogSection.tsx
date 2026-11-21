@@ -25,7 +25,7 @@ interface CatalogSectionProps {
   itemsPerPage?: number;
 }
 
-const DEFAULT_PREVIEW_SCROLL_LIMIT = 10;
+const DEFAULT_PREVIEW_BOOKS_LIMIT = 6;
 const DEFAULT_ITEMS_PER_PAGE = 20;
 
 function getPageNumbers(currentPage: number, totalPages: number): (number | "ellipsis")[] {
@@ -103,7 +103,7 @@ export default function CatalogSection({
 
   const displayedBooks = useMemo(() => {
     if (!isFull) {
-      return filteredBooks.slice(0, 1 + DEFAULT_PREVIEW_SCROLL_LIMIT);
+      return filteredBooks.slice(0, 1 + DEFAULT_PREVIEW_BOOKS_LIMIT);
     }
     const startIndex = (safePage - 1) * itemsPerPage;
     return filteredBooks.slice(startIndex, startIndex + itemsPerPage);
@@ -327,25 +327,19 @@ export default function CatalogSection({
               );
             })()}
 
-            {/* Buku Lainnya Disusun Menyamping (Kartu Lengkap) */}
+            {/* Buku Lainnya (Grid Vertikal) */}
             {displayedBooks.length > 1 && (
               <div>
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
-                    Jelajahi Buku Lainnya
-                  </p>
-                  <span className="text-[11px] text-ink-faint">
-                    Geser ke samping →
-                  </span>
-                </div>
-                <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-3 snap-x snap-mandatory">
+                <p className="mb-3 text-xs font-bold uppercase tracking-wider text-ink-subtle">
+                  Jelajahi Buku Lainnya
+                </p>
+                <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
                   {displayedBooks.slice(1).map((book) => (
-                    <div
+                    <BookCard
                       key={book.slug}
-                      className="flex w-[44%] shrink-0 snap-start md:w-[calc((100%-3.75rem)/4)] lg:w-[calc((100%-5rem)/5)] xl:w-[calc((100%-6.25rem)/6)]"
-                    >
-                      <BookCard book={book} onSelect={setPreviewBook} />
-                    </div>
+                      book={book}
+                      onSelect={setPreviewBook}
+                    />
                   ))}
                 </div>
               </div>
