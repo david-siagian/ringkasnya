@@ -84,35 +84,26 @@ test.describe("Ringkasnya Smoke Tests", () => {
     expect(errors).toEqual([]);
   });
 
-  test("perpustakaan kurasi (/): kartu buku lain menampilkan +1 kolom dari katalog di desktop", async ({
+  test("perpustakaan kurasi (/): kartu buku lain menggunakan grid vertikal maksimal 6 buku", async ({
     page,
   }, testInfo) => {
-    test.skip(testInfo.project.name === "mobile", "Khusus verifikasi proporsi desktop");
     const errors = trackRuntimeErrors(page);
 
     await page.goto("/");
     await waitForAstroIslands(page);
 
-    const carousel = page.locator("#katalog .overflow-x-auto").first();
-    const firstCard = carousel.locator("> div").first();
+    const grid = page.locator("#katalog .grid").first();
+    await expect(grid).toBeVisible();
+    const cardCount = await grid.locator("> a").count();
+    expect(cardCount).toBeGreaterThan(0);
+    expect(cardCount).toBeLessThanOrEqual(6);
 
-    const measureCardsPerRow = async () => {
-      const { containerWidth, cardWidth } = await Promise.all([
-        carousel.evaluate((el) => el.clientWidth),
-        firstCard.evaluate((el) => el.getBoundingClientRect().width),
-      ]).then(([containerWidth, cardWidth]) => ({ containerWidth, cardWidth }));
-      const gap = 20; // sm:gap-5
-      return Math.round((containerWidth + gap) / (cardWidth + gap));
-    };
-
-    await page.setViewportSize({ width: 768, height: 800 });
-    expect(await measureCardsPerRow()).toBe(4);
-
-    await page.setViewportSize({ width: 1024, height: 800 });
-    expect(await measureCardsPerRow()).toBe(5);
-
-    await page.setViewportSize({ width: 1280, height: 800 });
-    expect(await measureCardsPerRow()).toBe(6);
+    if (testInfo.project.name === "mobile") {
+      const cols = await grid.evaluate(
+        (el) => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length
+      );
+      expect(cols).toBe(2);
+    }
 
     expect(errors).toEqual([]);
   });
@@ -178,6 +169,79 @@ test.describe("Ringkasnya Smoke Tests", () => {
         )
       )
       .toBe(!wasDark);
+
+    expect(errors).toEqual([]);
+  });
+
+  test("fase 2: progress bar, bookmark, & buat kartu kutipan PNG bekerja", async ({
+    page,
+  }) => {
+    const errors = trackRuntimeErrors(page);
+
+    await page.goto("/buku/atomic-habits");
+    await waitForAstroIslands(page);
+
+    // 1. Reading Progress Bar
+    const progressBar = page.getByRole("progressbar", {
+      name: "Progres membaca",
+    });
+    await expect(progressBar).toBeVisible();
+
+    // 2. Buat Kartu Kutipan PNG
+    const createCardBtn = page
+      .getByRole("button", { name: "Buat Kartu" })
+      .first();
+    await createCardBtn.scrollIntoViewIfNeeded();
+    await expect(createCardBtn).toBeVisible();
+
+    // Setelah scroll ke bagian kutipan, progres membaca harus > 0
+    const progressAfterScroll = Number(
+      await progressBar.getAttribute("aria-valuenow")
+    );
+    expect(progressAfterScroll).toBeGreaterThan(0);
+
+    await createCardBtn.click();
+
+    const dialog = page.getByRole("dialog", { name: "Buat Kartu Kutipan" });
+    await expect(dialog).toBeVisible();
+
+    const canvas = dialog.locator("canvas");
+    await expect(canvas).toBeVisible();
+    expect(await canvas.evaluate((el: HTMLCanvasElement) => el.width)).toBe(1080);
+    expect(await canvas.evaluate((el: HTMLCanvasElement) => el.height)).toBe(1080);
+
+    await dialog.getByRole("button", { name: "4:5 Potret" }).click();
+    expect(await canvas.evaluate((el: HTMLCanvasElement) => el.height)).toBe(1350);
+
+    await dialog.getByRole("button", { name: "Kertas" }).click();
+
+    const downloadPromise = page.waitForEvent("download");
+    await dialog.getByRole("button", { name: "Unduh PNG" }).click();
+    const download = await downloadPromise;
+    expect(download.suggestedFilename()).toBe("atomic-habits-kutipan.png");
+
+    await dialog
+      .getByRole("button", { name: "Tutup modal kartu kutipan" })
+      .click();
+    await expect(dialog).toBeHidden();
+
+    // 3. Bookmark Buku Favorit & Filter di Katalog
+    const bookmarkBtn = page.getByRole("button", { name: /Simpan Buku/i });
+    await bookmarkBtn.click();
+    await expect(
+      page.getByRole("button", { name: /Tersimpan/i })
+    ).toBeVisible();
+
+    await page.goto("/katalog");
+    await waitForAstroIslands(page);
+    const savedFilterBtn = page.getByRole("button", {
+      name: /Tersimpan \(1\)/i,
+    });
+    await expect(savedFilterBtn).toBeVisible();
+    await savedFilterBtn.click();
+    await expect(
+      page.getByRole("heading", { name: "Atomic Habits" })
+    ).toBeVisible();
 
     expect(errors).toEqual([]);
   });
