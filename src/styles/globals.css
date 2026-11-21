@@ -49,17 +49,17 @@ html.dark {
   --color-border-subtle: 28 28 31;
   --color-border-strong: 63 63 70;
 
-  --color-accent-soft: 6 35 28;
-  --color-accent-tint: 9 48 39;
+  --color-accent-soft: 16 26 23;
+  --color-accent-tint: 20 36 31;
   --color-accent-text: 110 231 183;
   --color-accent-strong: 52 211 153;
-  --color-accent-line: 6 78 59;
+  --color-accent-line: 22 60 49;
 
-  --color-amber-soft: 33 21 10;
-  --color-amber-tint: 48 29 12;
-  --color-amber-text: 252 211 77;
-  --color-amber-heading: 253 230 138;
-  --color-amber-line: 120 53 15;
+  --color-amber-soft: 24 21 17;
+  --color-amber-tint: 34 27 20;
+  --color-amber-text: 245 196 81;
+  --color-amber-heading: 235 208 145;
+  --color-amber-line: 66 52 34;
 }
 
 html {
@@ -107,4 +107,27 @@ body {
 
 .animate-fade-slide {
   animation: fadeSlideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes welcomeRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-welcome {
+  animation: welcomeRise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-page-enter,
+  .animate-fade-slide,
+  .animate-welcome {
+    animation: none !important;
+  }
 }

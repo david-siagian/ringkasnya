@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import type { BookSummary } from "@/types/book";
-import { ArrowRight, BookOpen, Clock, X, Zap } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, Clock, Target, X, Zap } from "lucide-react";
 
 interface BookPreviewModalProps {
   book: BookSummary | null;
@@ -122,6 +122,24 @@ export default function BookPreviewModal({
           <p className="mt-2.5 text-sm sm:text-base leading-relaxed text-ink-secondary">
             {book.synopsis}
           </p>
+
+          <div className="mt-5 rounded-xl border border-line-subtle bg-page p-4 sm:p-5">
+            <h4 className="flex items-center gap-2 text-xs font-bold text-ink sm:text-sm">
+              <Target className="h-4 w-4 text-accent-strong" />
+              Buku Ini Sangat Cocok Untuk:
+            </h4>
+            <ul className="mt-2.5 space-y-2">
+              {book.whoIsItFor.map((target, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-start gap-2.5 text-xs sm:text-sm text-ink-secondary"
+                >
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent-strong" />
+                  <span>{target}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <div className="mt-7 flex justify-center border-t border-line-subtle pt-6">
             <a

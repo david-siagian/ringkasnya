@@ -342,7 +342,7 @@ export default function CatalogSection({
                   {displayedBooks.slice(1).map((book) => (
                     <div
                       key={book.slug}
-                      className="flex w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] md:w-[calc((100%-3.75rem)/4)] shrink-0 snap-start"
+                      className="flex w-[44%] sm:w-[44%] md:w-[23%] shrink-0 snap-start"
                     >
                       <BookCard book={book} onSelect={setPreviewBook} />
                     </div>
@@ -378,7 +378,7 @@ export default function CatalogSection({
         <div className="mt-10 flex justify-center">
           <a
             href="/katalog"
-            className="inline-flex items-center gap-2 rounded-xl border border-accent-line bg-accent-soft px-6 py-3 text-sm font-bold text-accent-text shadow-sm transition-all duration-200 hover:border-emerald-600 hover:bg-emerald-600 hover:text-white active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-bold text-white shadow-md shadow-emerald-500/25 transition-all duration-200 hover:bg-emerald-600 active:scale-[0.98]"
           >
             <span>Lihat Semua Buku</span>
             <ArrowRight className="h-4 w-4" />

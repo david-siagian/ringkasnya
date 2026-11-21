@@ -99,7 +99,7 @@ async function copyTextToClipboard(text: string): Promise<boolean> {
 type CopyFeedback = { index: number; status: "success" | "error" } | null;
 
 export default function BookReader({ book, relatedBooks }: BookReaderProps) {
-  const [readMode, setReadMode] = useState<"deep" | "quick">("deep");
+  const [readMode, setReadMode] = useState<"deep" | "quick">("quick");
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
@@ -204,10 +204,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   {book.category}
                 </span>
                 <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
+                  <Zap className="h-3.5 w-3.5 text-amber-300" />
+                  Mode Kilat: {book.quickTimeMinutes} Mnt
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
                   <Clock className="h-3.5 w-3.5" />
-                  {readMode === "quick"
-                    ? `${book.quickTimeMinutes} menit baca (Mode Kilat)`
-                    : `${book.readingTimeMinutes} menit baca (Mode Mendalam)`}
+                  Mode Mendalam: {book.readingTimeMinutes} Mnt
                 </span>
               </div>
 
@@ -308,18 +310,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
       {/* Konten Utama Ringkasan */}
       <main className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
-        {/* Banner Info Mode Kilat */}
-        {readMode === "quick" && (
-          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-warm-line bg-warm-soft p-4 text-warm-heading">
-            <Zap className="h-5 w-5 shrink-0 text-warm-text" />
-            <p className={`${fs.subtext} font-medium`}>
-              <strong>Mode Kilat Aktif:</strong> Menampilkan intisari tiap bab
-              dan tips praktis agar Anda bisa menangkap ide utama buku ini dalam{" "}
-              {book.quickTimeMinutes} menit.
-            </p>
-          </div>
-        )}
-
         {/* Seksi Sinopsis & Untuk Siapa Buku Ini */}
         <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm">
           <h2 className={`${fs.sectionHeading} font-bold text-ink`}>
@@ -358,12 +348,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               <a
                 key={item.number}
                 href={`#poin-${item.number}`}
-                className={`flex items-center gap-2.5 rounded-xl border border-line-subtle bg-page/70 px-3.5 py-2.5 ${fs.subtext} font-medium text-ink-secondary transition hover:border-accent-line hover:bg-accent-soft/70 hover:text-accent-text`}
+                className={`flex items-start gap-2.5 rounded-xl border border-line-subtle bg-page/70 px-3.5 py-2.5 ${fs.subtext} font-medium text-ink-secondary transition hover:border-accent-line hover:bg-accent-soft/70 hover:text-accent-text`}
               >
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
                   {item.number}
                 </span>
-                <span className="line-clamp-1">{item.title}</span>
+                <span>{item.title}</span>
               </a>
             ))}
           </div>
