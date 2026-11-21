@@ -9,9 +9,9 @@ import {
   ChevronDown,
   Copy,
   ImageDown,
+  Layers,
   LayoutGrid,
   Lightbulb,
-  ListChecks,
   Quote,
   Sparkles,
   Target,
@@ -245,17 +245,17 @@ export function TakeawayCard({
         </div>
       )}
 
-      {/* Tips Praktis */}
+      {/* Hal yang Perlu Diingat */}
       <div className="mt-5 flex items-start gap-3 rounded-xl border border-warm-line bg-warm-soft p-4">
         <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-warm-text" />
         <div>
           <span
             className={`${fs.label} font-bold uppercase tracking-wider text-warm-heading`}
           >
-            Tips Praktis Langsung Coba:
+            Hal yang Perlu Diingat:
           </span>
           <p className={`mt-0.5 ${fs.compact} text-ink-secondary`}>
-            {takeaway.practicalTip}
+            {takeaway.keyNote}
           </p>
         </div>
       </div>
@@ -311,79 +311,55 @@ export function ConclusionSection({
   );
 }
 
-interface ActionChecklistSectionProps {
-  actionChecklist: string[];
-  checkedItems: Record<number, boolean>;
-  onToggle: (index: number) => void;
+interface KeyConceptsSectionProps {
+  keyConcepts: BookSummary["keyConcepts"];
   fs: FontScale;
 }
 
-/** Checklist aktivitas interaktif dengan progres tersimpan. */
-export function ActionChecklistSection({
-  actionChecklist,
-  checkedItems,
-  onToggle,
+/** Daftar kartu Konsep Kunci sebagai rangkuman gagasan utama buku. */
+export function KeyConceptsSection({
+  keyConcepts,
   fs,
-}: ActionChecklistSectionProps) {
-  const completedCount = Object.values(checkedItems).filter(Boolean).length;
-  const totalChecklist = actionChecklist.length;
-  const progressPercent =
-    totalChecklist > 0 ? Math.round((completedCount / totalChecklist) * 100) : 0;
-
+}: KeyConceptsSectionProps) {
   return (
     <section className="mt-8 rounded-2xl border-2 border-accent-line/70 bg-surface p-6 sm:p-8 shadow-sm">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
-          <div className="inline-flex items-center gap-2 text-accent-text">
-            <ListChecks className="h-5 w-5" />
-            <span className={`${fs.label} font-bold uppercase tracking-wider`}>
-              Action Checklist Interaktif
-            </span>
-          </div>
-          <h2 className={`mt-1 ${fs.blockHeading} font-extrabold text-ink`}>
-            Jangan Hanya Dibaca—Mari Praktikkan!
-          </h2>
-          <p className={`mt-1 ${fs.subtext} text-ink-muted`}>
-            Centang langkah-langkah di bawah ini setelah Anda mempraktikkannya.
-            Progres Anda tersimpan otomatis di perangkat ini.
-          </p>
-        </div>
-
-        <div className="flex flex-col items-end">
-          <span className="text-xs font-bold text-ink-secondary">
-            {completedCount} dari {totalChecklist} Selesai ({progressPercent}%)
+      <div>
+        <div className="inline-flex items-center gap-2 text-accent-text">
+          <Layers className="h-5 w-5" />
+          <span className={`${fs.label} font-bold uppercase tracking-wider`}>
+            Konsep Kunci ({keyConcepts.length})
           </span>
-          <div className="mt-1.5 h-2.5 w-36 overflow-hidden rounded-full bg-surface-subtle">
-            <div
-              className="h-full rounded-full bg-emerald-600 transition-all duration-300"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
         </div>
+        <h2 className={`mt-1 ${fs.blockHeading} font-extrabold text-ink`}>
+          Gagasan Utama yang Perlu Dibawa Pulang
+        </h2>
+        <p className={`mt-1 ${fs.subtext} text-ink-muted`}>
+          Rangkuman konsep inti dari buku ini dalam bahasa yang ringkas agar
+          mudah diingat kembali kapan saja.
+        </p>
       </div>
 
-      <div className="mt-6 space-y-3">
-        {actionChecklist.map((action, idx) => {
-          const isChecked = !!checkedItems[idx];
-          return (
-            <label
-              key={idx}
-              className={`flex cursor-pointer items-start gap-3.5 rounded-xl border p-4 transition-all ${
-                isChecked
-                  ? "border-accent-line bg-accent-soft/70 text-ink-subtle line-through"
-                  : "border-line bg-surface text-ink-secondary hover:border-accent-line hover:bg-page"
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={() => onToggle(idx)}
-                className="mt-1 h-4 w-4 rounded border-line-strong bg-surface text-emerald-600 focus:ring-emerald-500"
-              />
-              <span className={`${fs.lead} font-medium`}>{action}</span>
-            </label>
-          );
-        })}
+      <div className="mt-6 grid gap-3.5 sm:grid-cols-2">
+        {keyConcepts.map((concept, idx) => (
+          <div
+            key={idx}
+            className="rounded-xl border border-line bg-page/70 p-4 sm:p-5 transition-colors hover:border-accent-line"
+          >
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-xs font-bold text-white">
+                {idx + 1}
+              </span>
+              <div className="min-w-0">
+                <h3 className={`${fs.lead} font-extrabold text-ink`}>
+                  {concept.title}
+                </h3>
+                <p className={`mt-1.5 ${fs.compact} leading-relaxed text-ink-secondary`}>
+                  {concept.explanation}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -621,7 +597,7 @@ export function DeepStepDropdown({
       ? "Pengantar"
       : activeTakeaway
         ? `Poin ${activeTakeaway.number}/${totalTakeaways}: ${activeTakeaway.title}`
-        : "Penutup: Kesimpulan & Aksi";
+        : "Penutup: Kesimpulan & Konsep";
 
   const handleChoose = (step: number) => {
     setIsOpen(false);
@@ -736,7 +712,7 @@ export function DeepStepDropdown({
                 <Sparkles className="h-3.5 w-3.5" />
               </span>
               <span className="flex-1 truncate">
-                Penutup: Kesimpulan &amp; Aksi
+                Penutup: Kesimpulan &amp; Konsep
               </span>
               {currentStep === finalStep && (
                 <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />

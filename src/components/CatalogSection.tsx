@@ -203,7 +203,7 @@ export default function CatalogSection({
             </h2>
           )}
           <p className="mt-1.5 text-sm text-ink-muted">
-            Dirangkum dengan metode poin inti & langkah aksi nyata dalam Bahasa Indonesia.
+            Dirangkum dengan metode poin inti &amp; konsep kunci dalam Bahasa Indonesia yang mudah dipahami.
           </p>
         </div>
 
@@ -362,7 +362,7 @@ export default function CatalogSection({
                     </div>
 
                     <div className="mt-6 flex items-center justify-between border-t border-line-subtle pt-4 text-xs sm:text-sm font-semibold text-accent-text group-hover:text-accent-strong">
-                      <span>Baca Ringkasan & Praktek</span>
+                      <span>Baca Ringkasan &amp; Konsep Kunci</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </div>
                   </div>

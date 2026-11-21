@@ -5,10 +5,11 @@ import {
   Check,
   Copy,
   ImageDown,
-  ListChecks,
+  Layers,
   Quote,
   X,
 } from "lucide-react";
+import type { BookKeyConcept } from "@/types/book";
 import type { CopyFeedback } from "./BookReaderSections";
 
 interface ReaderModalShellProps {
@@ -71,43 +72,34 @@ function ReaderModalShell({
   );
 }
 
-interface QuickChecklistModalProps {
+interface QuickKeyConceptsModalProps {
   open: boolean;
   onClose: () => void;
   bookTitle: string;
-  actionChecklist: string[];
-  checkedItems: Record<number, boolean>;
-  onToggle: (index: number) => void;
+  keyConcepts: BookKeyConcept[];
 }
 
-/** Modal cepat untuk mencentang ulang Action Checklist pada buku yang sudah selesai dibaca. */
-export function QuickChecklistModal({
+/** Modal cepat untuk melihat ulang daftar Konsep Kunci pada buku yang sudah selesai dibaca. */
+export function QuickKeyConceptsModal({
   open,
   onClose,
   bookTitle,
-  actionChecklist,
-  checkedItems,
-  onToggle,
-}: QuickChecklistModalProps) {
-  const completedCount = Object.values(checkedItems).filter(Boolean).length;
-  const totalChecklist = actionChecklist.length;
-  const progressPercent =
-    totalChecklist > 0 ? Math.round((completedCount / totalChecklist) * 100) : 0;
-
+  keyConcepts,
+}: QuickKeyConceptsModalProps) {
   return (
     <ReaderModalShell
       open={open}
       onClose={onClose}
-      titleId="quick-checklist-modal-title"
+      titleId="quick-concepts-modal-title"
     >
       <div className="flex items-start justify-between gap-3 border-b border-line px-6 py-4">
         <div className="min-w-0">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-accent-text">
-            <ListChecks className="h-4 w-4" />
-            <span>Action Checklist</span>
+            <Layers className="h-4 w-4" />
+            <span>Konsep Kunci ({keyConcepts.length})</span>
           </div>
           <h2
-            id="quick-checklist-modal-title"
+            id="quick-concepts-modal-title"
             className="mt-1 truncate text-lg font-extrabold text-ink"
           >
             {bookTitle}
@@ -117,52 +109,34 @@ export function QuickChecklistModal({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Tutup modal checklist"
+          aria-label="Tutup modal konsep kunci"
           className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-subtle text-ink-muted transition hover:bg-page hover:text-ink"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
 
-      <div className="border-b border-line-subtle bg-page/60 px-6 py-3">
-        <div className="flex items-center justify-between text-xs font-bold text-ink-secondary">
-          <span>Progres Praktik</span>
-          <span>
-            {completedCount} dari {totalChecklist} Selesai ({progressPercent}%)
-          </span>
-        </div>
-        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-surface-subtle">
+      <div className="flex-1 space-y-3 overflow-y-auto p-6">
+        {keyConcepts.map((concept, idx) => (
           <div
-            className="h-full rounded-full bg-emerald-600 transition-all duration-300"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-      </div>
-
-      <div className="flex-1 space-y-2.5 overflow-y-auto p-6">
-        {actionChecklist.map((action, idx) => {
-          const isChecked = !!checkedItems[idx];
-          return (
-            <label
-              key={idx}
-              className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3.5 transition-all ${
-                isChecked
-                  ? "border-accent-line bg-accent-soft/70 text-ink-subtle line-through"
-                  : "border-line bg-surface text-ink-secondary hover:border-accent-line hover:bg-page"
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={() => onToggle(idx)}
-                className="mt-0.5 h-4 w-4 rounded border-line-strong bg-surface text-emerald-600 focus:ring-emerald-500"
-              />
-              <span className="text-sm font-medium leading-relaxed">
-                {action}
+            key={idx}
+            className="rounded-xl border border-line-subtle bg-page p-4"
+          >
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-xs font-bold text-white">
+                {idx + 1}
               </span>
-            </label>
-          );
-        })}
+              <div className="min-w-0">
+                <h3 className="text-sm font-extrabold text-ink">
+                  {concept.title}
+                </h3>
+                <p className="mt-1 text-xs sm:text-sm leading-relaxed text-ink-secondary">
+                  {concept.explanation}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </ReaderModalShell>
   );

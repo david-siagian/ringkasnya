@@ -1,4 +1,4 @@
-import { CheckCircle2, Clock, Sparkles } from "lucide-react";
+import { Clock, Layers, Sparkles } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 
 export default function Footer() {
@@ -14,9 +14,9 @@ export default function Footer() {
               </span>
             </a>
             <p className="mt-3 text-sm leading-relaxed text-slate-400">
-              Platform ringkasan buku populer dunia dalam Bahasa Indonesia yang
-              luwes, praktis, dan dilengkapi daftar aksi nyata agar ilmu dari
-              buku benar-benar berdampak di hidup Anda.
+              Platform ringkasan buku nonfiksi pilihan—dari sains, sejarah,
+              ekonomi, hingga psikologi—dalam Bahasa Indonesia yang mengalir dan
+              mudah dipahami siapa saja.
             </p>
           </div>
 
@@ -27,11 +27,11 @@ export default function Footer() {
             <ul className="mt-3 space-y-2.5 text-sm text-slate-300">
               <li className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span>Mode Kilat (6–10 Menit) & Mode Mendalam (20–30 Menit)</span>
+                <span>Mode Kilat (6–10 Menit) &amp; Mode Mendalam (20–30 Menit)</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span>Action Checklist interaktif di setiap buku</span>
+                <Layers className="h-4 w-4 text-emerald-400 shrink-0" />
+                <span>Konsep Kunci ringkas di akhir setiap buku</span>
               </li>
               <li className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-emerald-400 shrink-0" />
@@ -42,25 +42,9 @@ export default function Footer() {
 
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-white">
-              Ringkasan Terpopuler
+              Bacaan Pilihan
             </h3>
             <ul className="mt-3 space-y-2 text-sm text-slate-300">
-              <li>
-                <a
-                  href="/buku/atomic-habits"
-                  className="hover:text-emerald-400 transition-colors"
-                >
-                  Atomic Habits — James Clear
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/buku/psychology-of-money"
-                  className="hover:text-emerald-400 transition-colors"
-                >
-                  The Psychology of Money — Morgan Housel
-                </a>
-              </li>
               <li>
                 <a
                   href="/buku/sapiens"
@@ -71,10 +55,26 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/buku/deep-work"
+                  href="/buku/thinking-fast-and-slow"
                   className="hover:text-emerald-400 transition-colors"
                 >
-                  Deep Work — Cal Newport
+                  Thinking, Fast and Slow — Daniel Kahneman
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/buku/why-nations-fail"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  Why Nations Fail — Daron Acemoglu &amp; James Robinson
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/buku/the-selfish-gene"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  The Selfish Gene — Richard Dawkins
                 </a>
               </li>
             </ul>
@@ -83,7 +83,7 @@ export default function Footer() {
 
         <div className="mt-10 border-t border-slate-800 dark:border-line pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 dark:text-ink-muted gap-2">
           <p>© {new Date().getFullYear()} Ringkasnya. Dibuat bertahap untuk pembelajar Indonesia.</p>
-          <p>Baca Intinya, Praktikkan Ilmunya</p>
+          <p>Baca Intinya, Pahami Dunianya</p>
         </div>
       </div>
     </footer>

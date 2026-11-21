@@ -4,17 +4,17 @@ import { BOOKS, CATEGORIES } from "@/data/books";
 import {
   ArrowRight,
   BookOpen,
-  CheckCircle2,
   Clock,
   Info,
+  Layers,
   Share2,
   Sparkles,
   Zap,
 } from "lucide-react";
 
-const pageTitle = "Tentang Ringkasnya — Baca Intinya, Praktikkan Ilmunya";
+const pageTitle = "Tentang Ringkasnya — Baca Intinya, Pahami Dunianya";
 const pageDescription =
-  "Kenali misi Ringkasnya dalam merangkum buku best-seller dunia ke Bahasa Indonesia yang luwes lengkap dengan Mode Kilat, Mode Mendalam, dan Action Checklist.";
+  "Kenali misi Ringkasnya dalam merangkum buku nonfiksi sains, sejarah, ekonomi, politik, dan psikologi ke Bahasa Indonesia yang mudah dipahami lengkap dengan Mode Kilat, Mode Mendalam, dan Konsep Kunci.";
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -26,18 +26,18 @@ const pageDescription =
           <span>Tentang Platform</span>
         </div>
         <h1 class="mt-5 text-3xl font-extrabold tracking-tight text-ink sm:text-5xl">
-          Membantu Pembelajar Indonesia{" "}
+          Membantu Pembaca Indonesia{" "}
           <span class="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent dark:from-emerald-400 dark:to-teal-400">
-            Menyerap & Mempraktikkan
+            Menyerap Pengetahuan Penting
           </span>{" "}
-          Ilmu Buku Terbaik Dunia.
+          dari Buku Terbaik Dunia.
         </h1>
         <p class="mt-5 text-base leading-relaxed text-ink-muted sm:text-lg">
-          Banyak orang ingin terus belajar dari buku-buku berkualitas, tetapi
-          terbentur waktu yang padat atau terjemahan yang kaku.{" "}
+          Banyak buku bagus di bidang sains, sejarah, ekonomi, politik, dan
+          psikologi terasa berat karena tebal atau bahasanya terlalu teknis.{" "}
           <strong class="font-semibold text-ink">Ringkasnya</strong> hadir
-          untuk menyajikan gagasan utama setiap buku dalam Bahasa Indonesia yang
-          mengalir, terstruktur, dan langsung bisa diterapkan.
+          untuk menyederhanakan gagasan utamanya ke dalam Bahasa Indonesia yang
+          mengalir, jernih, dan mudah diikuti pembaca umum.
         </p>
 
         <div class="mt-10 grid grid-cols-3 gap-4 border-t border-line/80 pt-8 text-center">
@@ -80,27 +80,27 @@ const pageDescription =
               <Zap className="h-5 w-5" />
             </div>
             <h3 class="mt-4 text-lg font-bold text-ink">
-              Mode Kilat & Mode Mendalam
+              Mode Kilat &amp; Mode Mendalam
             </h3>
             <p class="mt-2 text-sm leading-relaxed text-ink-muted">
               Pilih <strong>Mode Kilat (6–10 menit)</strong> saat ingin
               menangkap inti buku dengan cepat, atau beralih ke{" "}
               <strong>Mode Mendalam (20–30 menit)</strong> untuk memahami
-              contoh kasus dan konteks lengkapnya.
+              cerita, data, dan konteks lengkapnya.
             </p>
           </div>
 
           <div class="rounded-2xl border border-line bg-surface p-6 shadow-xs">
             <div class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent-strong">
-              <CheckCircle2 className="h-5 w-5" />
+              <Layers className="h-5 w-5" />
             </div>
             <h3 class="mt-4 text-lg font-bold text-ink">
-              Action Checklist Interaktif
+              Konsep Kunci Sederhana
             </h3>
             <p class="mt-2 text-sm leading-relaxed text-ink-muted">
-              Setiap ringkasan ditutup dengan daftar langkah praktis yang bisa
-              Anda centang langsung. Progres tersimpan otomatis di perangkat
-              Anda agar ilmu tidak berhenti di teori.
+              Setiap ringkasan ditutup dengan daftar Konsep Kunci dalam bahasa
+              sehari-hari yang jernih, agar gagasan utama buku cepat dipahami
+              dan mudah diingat.
             </p>
           </div>
 
@@ -109,12 +109,12 @@ const pageDescription =
               <Share2 className="h-5 w-5" />
             </div>
             <h3 class="mt-4 text-lg font-bold text-ink">
-              Kutipan & Bahasa Mengalir
+              Kutipan &amp; Bahasa Mengalir
             </h3>
             <p class="mt-2 text-sm leading-relaxed text-ink-muted">
               Ditulis ulang dengan bahasa yang natural untuk pembaca Indonesia,
               lengkap dengan kartu kutipan yang siap disimpan atau dibagikan
-              sebagai pengingat harian.
+              sebagai pengingat gagasan penting.
             </p>
           </div>
         </div>
@@ -128,8 +128,8 @@ const pageDescription =
             Temukan Ringkasan Buku Pertama Anda Hari Ini
           </h3>
           <p class="mx-auto mt-2 max-w-xl text-sm text-ink-muted">
-            Jelajahi seluruh koleksi buku atau pilih topik yang paling sesuai
-            dengan kebutuhan Anda saat ini.
+            Jelajahi seluruh koleksi buku atau pilih bidang pengetahuan yang
+            paling ingin Anda pahami saat ini.
           </p>
           <div class="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a

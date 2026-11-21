@@ -6,7 +6,7 @@ export const filosofiTeras: BookSummary = {
   originalTitle: "Filsafat Yunani-Romawi Kuno untuk Mental Tangguh Masa Kini",
   author: "Henry Manampiring",
   year: 2018,
-  category: "Psikologi & Mindset",
+  category: "Psikologi & Perilaku",
   readingTimeMinutes: 21,
   quickTimeMinutes: 7,
   rating: 4.9,
@@ -38,8 +38,8 @@ export const filosofiTeras: BookSummary = {
         "Kesalahan umum yang sering muncul saat pertama kali mendengar ajaran ini adalah menganggap orang Stoik itu dingin, tidak punya perasaan, atau mirip robot yang memendam emosi. Padahal, dalam bahasa Inggris huruf kecil 'stoic' memang sering diartikan menahan ekspresi emosi, tetapi Stoisisme sebagai filsafat justru mengajarkan kita mengakui emosi manusiawi secara sehat, lalu mengolahnya dengan nalar agar tidak berubah menjadi kemarahan atau kecemasan yang merugikan diri sendiri maupun orang di sekitar kita. Emosi tetap dirasakan sepenuhnya, hanya saja tidak dibiarkan mengambil alih kemudi hidup.",
         "Di Indonesia, kita sering menghadapi tekanan komunal seperti pertanyaan kapan menikah, perbandingan gaji antar-sepupu saat Lebaran, atau keharusan selalu menyenangkan semua orang di lingkungan kerja. Dengan menjadikan Stoisisme sebagai panduan hidup sehari-hari, kita diajak menggunakan akal sehat untuk memilih nilai hidup sendiri dengan tenang tanpa harus kehilangan rasa hormat kepada orang tua maupun kehangatan dalam pergaulan. Alih-alih tersinggung oleh komentar basa-basi kerabat, kita bisa tersenyum ramah sambil menyadari bahwa pilihan hidup kita adalah tanggung jawab kita sendiri, bukan panggung untuk memuaskan ekspektasi semua orang. Ketika kita berhenti mengejar validasi eksternal yang mustahil dipenuhi, pikiran menjadi jauh lebih ringan dan fokus kembali ke hal-hal yang benar-benar penting.",
       ],
-      practicalTip:
-        "Saat menghadapi hari yang berat, ingatkan diri sendiri bahwa tujuan utama bukan menghindari masalah, melainkan menjaga kejernihan pikiran, ketenangan hati, dan martabat diri di tengah masalah yang datang.",
+      keyNote:
+        "Stoisisme bukanlah ajakan bersikap dingin seperti robot, melainkan latihan mengolah emosi dengan akal sehat agar pikiran tetap jernih di tengah masalah.",
     },
     {
       number: 2,
@@ -53,8 +53,8 @@ export const filosofiTeras: BookSummary = {
         "Kesalahan yang kerap dilakukan banyak orang adalah mengira hasil akhir bisa dipastikan sepenuhnya asalkan kita bekerja lebih keras tanpa henti. Akibatnya, saat sudah melamar puluhan pekerjaan dan tetap ditolak, atau saat bisnis sepi meski sudah promosi habis-habisan, kita merasa hancur dan menyalahkan diri secara berlebihan. Padahal, kualitas CV, persiapan wawancara, dan pelayanan pelanggan ada di tangan kita, sedangkan keputusan HRD dan selera pasar bukan kuasa kita.",
         "Untuk menerapkannya di keseharian Indonesia, coba perhatikan rutinitas berangkat kerja di pagi hari atau saat menunggu pengumuman penting. Kemacetan panjang di jalan tol atau hujan deras di sore hari tidak akan berkurang satu meter pun walau kita mengumpat sepanjang jalan. Yang sepenuhnya ada di kendali kita adalah berangkat tiga puluh menit lebih awal, menyiapkan podcast atau daftar putar lagu favorit, dan menjaga emosi tetap stabil selama berada di perjalanan menuju kantor agar tiba dengan kepala dingin. Begitu pula saat menunggu kabar lamaran kerja atau persetujuan kredit: fokuslah menyiapkan rencana alternatif yang masih berada di tangan kita.",
       ],
-      practicalTip:
-        "Buat dua kolom di catatan harianmu setiap kali merasa stres: kolom 'Bisa Kukendalikan' dan 'Di Luar Kendaliku', lalu kerjakan hanya daftar di kolom pertama dan lepaskan sisanya.",
+      keyNote:
+        "Banyak kelelahan batin muncul karena kita memaksakan hal-hal di luar kuasa kita—seperti komentar orang lain atau kemacetan—alih-alih fokus pada usaha kita sendiri.",
     },
     {
       number: 3,
@@ -68,8 +68,8 @@ export const filosofiTeras: BookSummary = {
         "Kesalahan umum saat mempraktikkan teknik ini adalah mengira kita harus menekan emosi sampai menumpuk di dalam dada dan meledak suatu hari nanti. Teknik S-T-A-R sama sekali bukan menyuruh kita berpura-pura tidak sakit hati atau memendam dendam dalam diam, melainkan memberi ruang jeda agar akal sehat sempat turun tangan menenangkan badai di kepala sebelum jari atau mulut kita bertindak gegabah dan meninggalkan luka.",
         "Di tengah budaya grup WhatsApp keluarga, rapat kantor yang tegang, atau kolom komentar media sosial di Indonesia yang serba cepat memanas, jeda sepuluh detik bisa menjadi penyelamat hubungan bertahun-tahun. Sebelum membalas sindiran di grup atau mengirim surel bernada tinggi kepada rekan kerja, tarik napas perlahan, terapkan S-T-A-R dengan menanyakan fakta objektifnya, dan lihat betapa banyak pertengkaran sia-sia serta salah paham yang berhasil kamu hindari dengan elegan. Sering kali setelah sepuluh detik berlalu, kamu sadar masalahnya tidak sebesar yang tadi dibayangkan.",
       ],
-      practicalTip:
-        "Tahan jari selama minimal sepuluh detik atau tarik napas tiga kali sambil menerapkan S-T-A-R sebelum membalas pesan atau komentar apa pun yang memancing emosi.",
+      keyNote:
+        "Yang sering membuat kita terluka bukanlah kejadiannya sendiri, melainkan cerita dan prasangka yang langsung kita tambahkan di kepala sebelum sempat mengecek fakta.",
     },
     {
       number: 4,
@@ -83,8 +83,8 @@ export const filosofiTeras: BookSummary = {
         "Kesalahan terbesar yang sering menjebak kita adalah kebiasaan memutar ulang skenario 'andai saja' setelah sesuatu terlanjur terjadi. Menyesali mengapa dulu memilih jurusan kuliah tertentu, mengapa mempercayai rekan bisnis yang salah, atau mengapa terjebak macet hanya menguras energi masa kini tanpa bisa mengubah masa lalu sedikit pun. Energi itu jauh lebih berharga jika dipakai bertanya: apa langkah terbaik berikutnya yang bisa kuambil dari titik ini?",
         "Dalam konteks sehari-hari di Indonesia, misalnya ketika rencana liburan keluarga batal karena hujan badai, jadwal penerbangan ditunda berjam-jam, atau proyek kerja tertunda karena perubahan aturan mendadak, Amor Fati mengundang kita berhenti meratapi rencana yang hilang. Kita menerima kondisi baru itu sepenuhnya, lalu mencari cara kreatif menikmati waktu berkualitas bersama keluarga di rumah atau menyusun ulang strategi proyek dengan sumber daya yang ada di depan mata. Sikap ini membuat kita tetap tenang dan menjadi teladan ketangguhan bagi orang-orang di sekitar kita.",
       ],
-      practicalTip:
-        "Ketika rencana berantakan di luar dugaan, segera ganti pertanyaan 'Kenapa harus aku?' menjadi 'Apa yang bisa kupelajari atau kumanfaatkan dari situasi baru ini?'",
+      keyNote:
+        "Menerima kenyataan yang sudah telanjur terjadi bukanlah pasrah tanpa usaha, melainkan berhenti menyalahkan nasib agar energi bisa dipakai melangkah dari titik sekarang.",
     },
     {
       number: 5,
@@ -98,8 +98,8 @@ export const filosofiTeras: BookSummary = {
         "Konsep ini sering disalahpahami sebagai overthinking atau menarik energi negatif ke dalam hidup kita. Perbedaan keduanya sebenarnya sangat jelas: overthinking adalah memikirkan kemungkinan buruk secara berulang-ulang tanpa kendali dan tanpa solusi hingga membuat kita lumpuh cemas. Sebaliknya, Premeditatio Malorum dilakukan dengan sadar, berdurasi singkat, dan selalu ditutup dengan rencana mitigasi yang konkret serta menenangkan pikiran kita.",
         "Untuk menerapkannya secara praktis di Indonesia, misalnya sebelum meluncurkan usaha sampingan, mempresentasikan proposal ke klien besar, atau berangkat mudik Lebaran, sisihkan lima menit untuk memikirkan dua atau tiga hal yang bisa meleset. Jika modal awal belum kembali dalam enam bulan atau jalanan macet total sepuluh jam, apa langkah cadangannya? Begitu rencana cadangan sudah di tangan, pikiran justru terasa jauh lebih tenang dan siap melangkah menghadapi kemungkinan apa pun tanpa rasa panik yang melumpuhkan.",
       ],
-      practicalTip:
-        "Sebelum memulai proyek besar atau perjalanan jauh, luangkan lima menit membayangkan satu hal yang mungkin meleset dan siapkan rencana cadangan konkret yang bisa langsung dijalankan.",
+      keyNote:
+        "Membayangkan kemungkinan buruk sejenak dengan rencana cadangan bukan sikap pesimis—justru itu melatih kesiapan mental dan membuat kita lebih bersyukur atas hari ini.",
     },
     {
       number: 6,
@@ -113,8 +113,8 @@ export const filosofiTeras: BookSummary = {
         "Banyak orang keliru menganggap latihan perspektif kosmis ini membuat kita merasa tidak berarti atau bersikap masa bodoh terhadap tanggung jawab. Justru sebaliknya, menyadari bahwa kita hanyalah bagian kecil dari semesta yang luas membebaskan kita dari beban perfeksionisme yang menyesakkan dan rasa ingin selalu dianggap paling penting. Kesalahan presentasi hari ini tidak akan diingat orang seratus tahun lagi, jadi tidak layak merusak tidur malam kita.",
         "Di tengah budaya serba cepat dan notifikasi ponsel Indonesia yang nyaris tidak pernah berhenti berbunyi, melatih kehadiran penuh bisa dimulai dari hal sangat sederhana dan nyata. Saat makan bersama orang tua, mengantar anak sekolah, atau menikmati kopi pagi sebelum bekerja, letakkan ponsel di tempat yang tidak terlihat dan fokuslah pada rasa makanan serta percakapan yang sedang berlangsung dengan tulus tanpa terburu-buru. Lima belas menit kehadiran yang utuh jauh lebih bermakna daripada dua jam duduk bersama tetapi pikiran masing-masing sibuk menjelajahi layar gawai.",
       ],
-      practicalTip:
-        "Saat masalah terasa sangat berat, bayangkan dirimu lima tahun ke depan melihat kejadian hari ini—apakah hal ini masih akan terasa sepenting sekarang atau hanya jadi pelajaran kecil?",
+      keyNote:
+        "Penyesalan menarik pikiran ke masa lalu dan kecemasan melempar kita ke masa depan; melihat masalah dari jarak jauh membantu kita kembali hadir penuh di detik ini.",
     },
     {
       number: 7,
@@ -128,8 +128,8 @@ export const filosofiTeras: BookSummary = {
         "Kesalahan umum dalam menerapkan ajaran ini adalah mengira berbuat baik berarti membiarkan diri diinjak-injak atau terus mengalah tanpa batas. Padahal, kebajikan Keadilan dan Keberanian menuntut kita tetap tegas menegur perilaku yang salah atau menjaga jarak sehat dari orang yang merusak, tetapi melakukannya tanpa kebencian dan tanpa merendahkan martabat diri sendiri maupun orang lain di hadapan umum.",
         "Penerapannya sangat terasa dalam dinamika kerja dan keluarga besar di Indonesia yang sangat menjunjung tinggi hubungan antarmanusia. Saat ada rekan kerja yang melempar kesalahan di depan atasan atau kerabat yang gemar membanding-bandingkan hidup orang lain, kita tidak perlu ikut membalas dengan gosip atau makian. Kita cukup menyampaikan fakta dengan tenang, menetapkan batas yang jelas, dan tetap menjaga sopan santun yang bermartabat.",
       ],
-      practicalTip:
-        "Sebelum mengambil keputusan penting yang melibatkan orang lain, uji dengan empat pertanyaan sederhana: apakah tindakan ini bijak, berani, adil, dan terkendali?",
+      keyNote:
+        "Menjaga ketenangan batin bukan berarti acuh tak acuh terhadap sesama—manusia tetap dituntut bersikap bijak, berani, adil, dan mampu menahan diri dalam hidup bermasyarakat.",
     },
     {
       number: 8,
@@ -143,18 +143,36 @@ export const filosofiTeras: BookSummary = {
         "Marcus Aurelius menuliskan pengingat pribadi agar kita melakukan setiap tindakan dalam hidup seolah-olah itu adalah tindakan terakhir kita. Bayangkan betapa berbedanya cara kita berbicara kepada anak, pasangan, atau orang tua pagi ini jika kita sadar tidak ada jaminan seratus persen bahwa hari esok pasti datang. Kesabaran kita akan meluas dan keluhan kecil akan menguap dengan sendirinya digantikan kasih sayang yang tulus.",
         "Mulai hari ini, kita bisa menjadikan kesadaran akan keterbatasan waktu sebagai penggerak kebaikan yang hangat di kehidupan sehari-hari. Ungkapkan terima kasih secara tulus kepada orang-orang yang berjasa dalam hidupmu, selesaikan tugas bermakna yang terus kamu tunda berbulan-bulan, dan nikmati hari ini sepenuhnya tanpa terus-menerus menunggu akhir pekan atau masa pensiun yang belum tentu bisa kita rasakan. Hidup yang dijalani dengan kesadaran penuh akan waktu terasa jauh lebih kaya, jernih, dan penuh syukur.",
       ],
-      practicalTip:
-        "Hubungi satu orang terdekat hari ini hanya untuk menanyakan kabar atau mengucapkan terima kasih dengan tulus tanpa menunggu momen khusus atau hari raya.",
+      keyNote:
+        "Mengingat bahwa waktu hidup kita terbatas bukan untuk menakut-nakuti, melainkan agar kita berhenti menunda kebaikan dan pertengkaran kecil kehilangan bobotnya.",
     },
   ],
-  actionChecklist: [
-    "Identifikasi satu sumber stres terbesar minggu ini dan tuliskan pemisahan bagian yang bisa serta tidak bisa kamu kendalikan.",
-    "Praktikkan jeda S-T-A-R (Stop, Think & Assess, Respond) minimal sekali sehari saat menghadapi pemicu emosi di kantor atau rumah.",
-    "Tulis jurnal singkat setiap malam berisi tiga hal yang berjalan baik dan satu respons dirimu yang bisa diperbaiki esok hari.",
-    "Lakukan simulasi Premeditatio Malorum selama lima menit sebelum menghadapi situasi menegangkan agar mental lebih siap dan tenang.",
-    "Kurangi paparan akun media sosial atau grup percakapan yang memicu perbandingan sosial dan kemarahan tanpa manfaat nyata.",
-    "Latih kehadiran penuh selama makan bersama atau mengobrol dengan keluarga tanpa menyentuh maupun melirik ponsel sama sekali.",
-    "Terapkan empat kebajikan utama sebagai bahan pertimbangan saat mengambil keputusan sulit di pekerjaan atau hubungan pribadi.",
+  keyConcepts: [
+    {
+      title: "Dikotomi Kendali",
+      explanation:
+        "Membedakan hal yang sepenuhnya berada dalam kendali kita (sikap, pikiran, usaha) dari hal yang di luar kendali kita (cuaca, masa lalu, komentar orang lain).",
+    },
+    {
+      title: "Jeda Berpikir (Teknik S-T-A-R)",
+      explanation:
+        "Berhenti sejenak saat emosi terpicu untuk memeriksa fakta dengan akal sehat sebelum memilih tanggapan yang tenang dan tidak memicu penyesalan.",
+    },
+    {
+      title: "Mencintai Kenyataan (Amor Fati)",
+      explanation:
+        "Menerima kejadian yang tak bisa diubah dengan lapang dada lalu memanfaatkannya sebagai bahan bakar belajar dan bertumbuh.",
+    },
+    {
+      title: "Simulasi Skenario Buruk",
+      explanation:
+        "Mempersiapkan mental menghadapi kemungkinan meleset agar tidak gampang panik sekaligus menumbuhkan rasa syukur atas hal sederhana hari ini.",
+    },
+    {
+      title: "Empat Kebajikan & Batas Waktu",
+      explanation:
+        "Berpegang pada sikap bijak, berani, adil, dan pengendalian diri sambil mengingat bahwa waktu hidup yang terbatas terlalu berharga untuk drama remeh.",
+    },
   ],
   quotes: [
     "Manusia tidak terganggu oleh peristiwa itu sendiri, melainkan oleh persepsi mereka terhadap peristiwa tersebut.",

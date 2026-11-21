@@ -43,7 +43,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await expect(searchInput).toHaveValue("");
 
     const categoryBtn = page
-      .getByRole("button", { name: /^Kebiasaan & Produktivitas/i })
+      .getByRole("button", { name: /^Sejarah & Masyarakat/i })
       .first();
     await categoryBtn.click();
     await expect(categoryBtn).toHaveClass(/bg-emerald-600/);
@@ -108,7 +108,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     expect(errors).toEqual([]);
   });
 
-  test("reader (/buku/atomic-habits): mode baca, checklist, salin kutipan & tema bekerja", async ({
+  test("reader (/buku/sapiens): mode baca, konsep kunci, salin kutipan & tema bekerja", async ({
     page,
     context,
   }) => {
@@ -120,10 +120,10 @@ test.describe("Ringkasnya Smoke Tests", () => {
         // Fallback: BookReader punya execCommand fallback jika permission tidak didukung
       });
 
-    await page.goto("/buku/atomic-habits");
+    await page.goto("/buku/sapiens");
     await waitForAstroIslands(page);
     await expect(
-      page.getByRole("heading", { name: "Atomic Habits" })
+      page.getByRole("heading", { name: /Sapiens/i })
     ).toBeVisible();
 
     // Toggle Mode Mendalam vs Mode Kilat
@@ -134,18 +134,12 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await quickBtn.click();
     await expect(quickBtn).toHaveClass(/bg-amber-500/);
 
-    // Action Checklist tersimpan di localStorage
-    const firstCheckbox = page.locator('input[type="checkbox"]').first();
-    await expect(firstCheckbox).not.toBeChecked();
-    await firstCheckbox.check();
-    await expect(firstCheckbox).toBeChecked();
-    await expect(page.getByText(/1 dari \d+ Selesai/)).toBeVisible();
-
-    await page.reload();
-    await waitForAstroIslands(page);
+    // Bagian Konsep Kunci tampil menggantikan Action Checklist
     await expect(
-      page.locator('input[type="checkbox"]').first()
-    ).toBeChecked();
+      page.getByRole("heading", {
+        name: "Gagasan Utama yang Perlu Dibawa Pulang",
+      })
+    ).toBeVisible();
 
     // Salin kutipan
     const copyBtn = page
@@ -178,7 +172,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
   }) => {
     const errors = trackRuntimeErrors(page);
 
-    await page.goto("/buku/atomic-habits");
+    await page.goto("/buku/sapiens");
     await waitForAstroIslands(page);
 
     // 1. Reading Progress Bar
@@ -227,7 +221,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     const downloadPromise = page.waitForEvent("download");
     await dialog.getByRole("button", { name: "Unduh PNG" }).click();
     const download = await downloadPromise;
-    expect(download.suggestedFilename()).toBe("atomic-habits-kutipan.png");
+    expect(download.suggestedFilename()).toBe("sapiens-kutipan.png");
 
     await dialog
       .getByRole("button", { name: "Tutup modal kartu kutipan" })
@@ -249,7 +243,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await expect(savedFilterBtn).toBeVisible();
     await savedFilterBtn.click();
     await expect(
-      page.getByRole("heading", { name: "Atomic Habits" })
+      page.getByRole("heading", { name: /Sapiens/i })
     ).toBeVisible();
 
     expect(errors).toEqual([]);

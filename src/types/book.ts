@@ -1,17 +1,21 @@
 export type BookCategory =
-  | "Kebiasaan & Produktivitas"
-  | "Keuangan & Bisnis"
-  | "Psikologi & Mindset"
-  | "Kreativitas & Karier"
-  | "Sains & Alam Semesta"
-  | "Sejarah & Masyarakat";
+  | "Sains & Nalar Ilmiah"
+  | "Sejarah & Masyarakat"
+  | "Ekonomi & Politik"
+  | "Psikologi & Perilaku"
+  | "Organisasi & Budaya Kerja";
+
+export interface BookKeyConcept {
+  title: string;
+  explanation: string;
+}
 
 export interface BookTakeaway {
   number: number;
   title: string;
   quickSummary: string;
   deepContent: string[];
-  practicalTip: string;
+  keyNote: string;
 }
 
 export interface BookSummary {
@@ -32,20 +36,20 @@ export interface BookSummary {
   synopsis: string;
   whoIsItFor: string[];
   keyTakeaways: BookTakeaway[];
-  actionChecklist: string[];
+  keyConcepts: BookKeyConcept[];
   quotes: string[];
   conclusion: string;
 }
 
 /**
  * Metadata ringan buku untuk daftar katalog, preview modal, dan rekomendasi
- * agar konten panjang (`keyTakeaways`, `actionChecklist`, `quotes`, `conclusion`)
+ * agar konten panjang (`keyTakeaways`, `keyConcepts`, `quotes`, `conclusion`)
  * tidak ikut ter-serialize ke HTML halaman beranda/katalog.
  */
 export interface BookCatalogItem
   extends Omit<
     BookSummary,
-    "keyTakeaways" | "actionChecklist" | "quotes" | "conclusion"
+    "keyTakeaways" | "keyConcepts" | "quotes" | "conclusion"
   > {
   takeawaysCount: number;
 }

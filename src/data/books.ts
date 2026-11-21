@@ -14,24 +14,13 @@ import { whyWeSleep } from "./books/why-we-sleep";
 import { howToWinFriendsAndInfluencePeople } from "./books/how-to-win-friends-and-influence-people";
 import { nudge } from "./books/nudge";
 import { factfulness } from "./books/factfulness";
-import { digitalMinimalism } from "./books/digital-minimalism";
-import { theShallows } from "./books/the-shallows";
-import { mansSearchForMeaning } from "./books/mans-search-for-meaning";
-import { the7HabitsOfHighlyEffectivePeople } from "./books/the-7-habits-of-highly-effective-people";
-import { freakonomics } from "./books/freakonomics";
-import { thinkAgain } from "./books/think-again";
-import { theSimplePathToWealth } from "./books/the-simple-path-to-wealth";
-import { range } from "./books/range";
-import { theGrandDesign } from "./books/the-grand-design";
-import { everybodyLies } from "./books/everybody-lies";
 
 export const CATEGORIES: BookCategory[] = [
-  "Kebiasaan & Produktivitas",
-  "Keuangan & Bisnis",
-  "Psikologi & Mindset",
-  "Kreativitas & Karier",
-  "Sains & Alam Semesta",
+  "Sains & Nalar Ilmiah",
   "Sejarah & Masyarakat",
+  "Ekonomi & Politik",
+  "Psikologi & Perilaku",
+  "Organisasi & Budaya Kerja",
 ];
 
 const WORDS_PER_MINUTE = 200;
@@ -52,13 +41,13 @@ function withCalculatedReadingTimes(book: BookSummary): BookSummary {
   const quickTexts = [
     book.synopsis,
     ...book.whoIsItFor,
-    ...book.actionChecklist,
+    ...book.keyConcepts.flatMap((c) => [c.title, c.explanation]),
     ...book.quotes,
     book.conclusion,
     ...book.keyTakeaways.flatMap((t) => [
       t.title,
       t.quickSummary,
-      t.practicalTip,
+      t.keyNote,
     ]),
   ];
   const deepTexts = book.keyTakeaways.flatMap((t) => t.deepContent);
@@ -74,31 +63,21 @@ function withCalculatedReadingTimes(book: BookSummary): BookSummary {
 }
 
 export const BOOKS: BookSummary[] = [
-  atomicHabits,
-  psychologyOfMoney,
-  deepWork,
-  showYourWork,
-  essentialism,
   sapiens,
   thinkingFastAndSlow,
+  whyNationsFail,
   theSelfishGene,
   theDemonHauntedWorld,
   gunsGermsAndSteel,
-  whyNationsFail,
-  whyWeSleep,
-  howToWinFriendsAndInfluencePeople,
-  nudge,
   factfulness,
-  digitalMinimalism,
-  theShallows,
-  mansSearchForMeaning,
-  the7HabitsOfHighlyEffectivePeople,
-  freakonomics,
-  thinkAgain,
-  theSimplePathToWealth,
-  range,
-  theGrandDesign,
-  everybodyLies,
+  whyWeSleep,
+  nudge,
+  psychologyOfMoney,
+  deepWork,
+  essentialism,
+  atomicHabits,
+  howToWinFriendsAndInfluencePeople,
+  showYourWork,
 ].map(withCalculatedReadingTimes);
 
 /**
@@ -107,7 +86,7 @@ export const BOOKS: BookSummary[] = [
 export function toBookCatalogItem(book: BookSummary): BookCatalogItem {
   const {
     keyTakeaways: _keyTakeaways,
-    actionChecklist: _actionChecklist,
+    keyConcepts: _keyConcepts,
     quotes: _quotes,
     conclusion: _conclusion,
     ...catalogFields
