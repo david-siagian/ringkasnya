@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Check, Download, Share2, X } from "lucide-react";
 
 type CardThemeId = "emerald" | "slate" | "cream";
@@ -129,9 +130,11 @@ export default function QuoteCardModal({
   const [ratioId, setRatioId] = useState<CardRatioId>("square");
   const [downloaded, setDownloaded] = useState(false);
   const [canShareFile, setCanShareFile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    setMounted(true);
     setCanShareFile(
       typeof navigator !== "undefined" &&
         typeof navigator.share === "function" &&
@@ -145,7 +148,12 @@ export default function QuoteCardModal({
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
   }, [quote, onClose]);
 
   useEffect(() => {
@@ -262,7 +270,7 @@ export default function QuoteCardModal({
     ctx.fillText(brandLabel, width - padX - brandWidth, footerY + 20);
   }, [quote, bookTitle, bookAuthor, bookCategory, themeId, ratioId]);
 
-  if (!quote) return null;
+  if (!mounted || !quote) return null;
 
   const exportBlob = (): Promise<Blob | null> =>
     new Promise((resolve) => {
@@ -310,16 +318,16 @@ export default function QuoteCardModal({
     }
   };
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="quote-card-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-surface p-5 sm:p-6 shadow-2xl"
+        className="animate-fade-slide relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-line bg-surface p-5 sm:p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between gap-3">
@@ -424,6 +432,7 @@ export default function QuoteCardModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

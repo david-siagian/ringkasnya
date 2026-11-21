@@ -195,15 +195,24 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await expect(createCardBtn).toBeVisible();
 
     // Setelah scroll ke bagian kutipan, progres membaca harus > 0
-    const progressAfterScroll = Number(
-      await progressBar.getAttribute("aria-valuenow")
-    );
-    expect(progressAfterScroll).toBeGreaterThan(0);
+    await expect
+      .poll(async () => Number(await progressBar.getAttribute("aria-valuenow")))
+      .toBeGreaterThan(0);
 
     await createCardBtn.click();
 
     const dialog = page.getByRole("dialog", { name: "Buat Kartu Kutipan" });
     await expect(dialog).toBeVisible();
+
+    // Pastikan modal muncul di dalam viewport aktif (bukan di tengah dokumen akibat parent transform)
+    const dialogBox = await dialog.boundingBox();
+    const viewport = page.viewportSize();
+    expect(dialogBox).not.toBeNull();
+    expect(viewport).not.toBeNull();
+    expect(dialogBox!.y).toBeGreaterThanOrEqual(0);
+    expect(dialogBox!.y + dialogBox!.height).toBeLessThanOrEqual(
+      viewport!.height + 2
+    );
 
     const canvas = dialog.locator("canvas");
     await expect(canvas).toBeVisible();

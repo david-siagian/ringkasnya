@@ -67,4 +67,4 @@ Setiap kali diminta menambahkan **fitur baru**, mengubah **alur pengguna**, atau
 1. **Review Singkat (3 Role):** Maksimal 2 kalimat per *role* agar padat dan mudah dibaca cepat.
 2. **Dampak Retensi:** Nyatakan secara singkat apakah dampaknya **Positif**, **Perlu dijaga (risiko friksi)**, atau **Netral**.
 3. **Keputusan:** Nyatakan **Layak lanjut apa adanya**, **Lanjut dengan penyesuaian**, atau **Sebaiknya disederhanakan**, disertai alasan utama.
-4. **Konfirmasi:** Minta persetujuan eksplisit sebelum mulai menulis/mengubah kode.
+4. **Konfirmasi:** Jika keputusan adalah **Layak lanjut apa adanya**, langsung terapkan perubahan tanpa perlu meminta konfirmasi user terlebih dahulu. Untuk keputusan selain itu (**Lanjut dengan penyesuaian** atau **Sebaiknya disederhanakan**), minta persetujuan eksplisit sebelum mulai menulis/mengubah kode.
