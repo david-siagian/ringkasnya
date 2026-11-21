@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Menu,
   X,
@@ -7,10 +7,17 @@ import {
   Search,
   Moon,
   Sun,
-  LogIn,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
+import {
+  navigateWithTransition,
+  smoothScrollToElement,
+} from "@/components/SmoothNavigation";
 import { useTheme } from "@/hooks/useTheme";
+import {
+  CATALOG_SEARCH_FOCUS_PARAM,
+  CATALOG_SEARCH_INPUT_ID,
+} from "@/lib/search";
 
 const NAV_ITEMS = [
   { label: "Katalog Buku", href: "/katalog", icon: BookOpen },
@@ -19,6 +26,45 @@ const NAV_ITEMS = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { isDark, mounted, toggleTheme } = useTheme();
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Sinkronkan tinggi navbar aktual ke CSS var `--header-h` (dipakai toolbar sticky & scroll offset)
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const updateHeaderHeight = () => {
+      document.documentElement.style.setProperty(
+        "--header-h",
+        `${header.offsetHeight}px`
+      );
+    };
+
+    updateHeaderHeight();
+    const observer = new ResizeObserver(updateHeaderHeight);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+
+  /**
+   * Fokus ke kolom pencarian katalog bila ada di halaman ini (Beranda/Katalog);
+   * jika tidak (mis. halaman buku), buka Katalog dengan kolom pencarian langsung aktif.
+   */
+  const handleSearchClick = () => {
+    setIsOpen(false);
+    const input = document.getElementById(
+      CATALOG_SEARCH_INPUT_ID
+    ) as HTMLInputElement | null;
+
+    if (input) {
+      // Fokus di dalam gesture klik agar keyboard mobile ikut terbuka
+      input.focus({ preventScroll: true });
+      smoothScrollToElement("katalog", 500);
+      return;
+    }
+
+    navigateWithTransition(`/katalog?${CATALOG_SEARCH_FOCUS_PARAM}=1`);
+  };
 
   // Close menu on Escape key press, resize to desktop, & lock body scroll when drawer is open
   useEffect(() => {
@@ -58,20 +104,19 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-line/80 bg-surface/90 backdrop-blur-md">
+      <header
+        ref={headerRef}
+        id="site-header"
+        className="sticky top-0 z-50 border-b border-line/80 bg-surface/90 backdrop-blur-md"
+      >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
           {/* Kiri: Brand Logo */}
           <a href="/" className="flex items-center gap-2.5 group shrink-0">
             <BrandLogo className="h-11 w-11 transition-transform group-hover:scale-105" />
             <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="text-lg font-extrabold tracking-tight text-ink">
-                  Ringkasnya
-                </span>
-                <span className="rounded-full border border-accent-line bg-accent-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent-text">
-                  MVP
-                </span>
-              </div>
+              <span className="text-lg font-extrabold tracking-tight text-ink">
+                Ringkasnya
+              </span>
               <span className="text-[11px] text-ink-subtle hidden sm:inline">
                 Baca Intinya, Praktikkan Ilmunya
               </span>
@@ -98,11 +143,12 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Kanan: Pencarian, Mode Gelap/Terang, Masuk/Daftar (Desktop), & Menu Mobile */}
+          {/* Kanan: Pencarian, Mode Gelap/Terang, & Menu Mobile */}
           <div className="flex items-center gap-1.5 sm:gap-2">
             {/* Tombol Pencarian Judul Buku */}
             <button
               type="button"
+              onClick={handleSearchClick}
               aria-label="Cari judul buku"
               title="Cari judul buku"
               className={iconButtonClass}
@@ -125,18 +171,6 @@ export default function Navbar() {
                 <Moon className="h-4 w-4" />
               )}
             </button>
-
-            {/* Pemisah & Tombol Masuk/Daftar (Desktop) */}
-            <div className="hidden md:flex items-center gap-2 pl-1">
-              <span className="h-5 w-px bg-line" aria-hidden="true" />
-              <button
-                type="button"
-                className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 active:scale-95"
-              >
-                <LogIn className="h-4 w-4" />
-                <span>Masuk / Daftar</span>
-              </button>
-            </div>
 
             {/* Tombol Menu 3 Garis Horizontal (Mobile) */}
             <button
@@ -217,14 +251,7 @@ export default function Navbar() {
           })}
         </nav>
 
-        <div className="border-t border-line-subtle p-4 space-y-3">
-          <button
-            type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 active:scale-95"
-          >
-            <LogIn className="h-4 w-4" />
-            <span>Masuk / Daftar</span>
-          </button>
+        <div className="border-t border-line-subtle p-4">
           <p className="text-center text-[11px] text-ink-faint">
             Baca Intinya, Praktikkan Ilmunya
           </p>

@@ -1,6 +1,10 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import type { BookSummary, BookCategory } from "@/types/book";
 import { CATEGORIES } from "@/data/books";
+import {
+  CATALOG_SEARCH_FOCUS_PARAM,
+  CATALOG_SEARCH_INPUT_ID,
+} from "@/lib/search";
 import BookCard from "./BookCard";
 import BookPreviewModal from "./BookPreviewModal";
 import { smoothScrollToElement } from "./SmoothNavigation";
@@ -11,7 +15,6 @@ import {
   Clock,
   Layers,
   Search,
-  Star,
   X,
   Zap,
 } from "lucide-react";
@@ -54,10 +57,23 @@ export default function CatalogSection({
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [previewBook, setPreviewBook] = useState<BookSummary | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!isFull) return;
     const params = new URLSearchParams(window.location.search);
+
+    if (params.get(CATALOG_SEARCH_FOCUS_PARAM) === "1") {
+      searchInputRef.current?.focus();
+      params.delete(CATALOG_SEARCH_FOCUS_PARAM);
+      const nextSearch = params.toString();
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + (nextSearch ? `?${nextSearch}` : "")
+      );
+    }
+
+    if (!isFull) return;
     const pageParam = Number(params.get("page"));
     if (Number.isInteger(pageParam) && pageParam > 1) {
       setCurrentPage(pageParam);
@@ -168,6 +184,8 @@ export default function CatalogSection({
         <div className="relative w-full md:w-80">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
           <input
+            ref={searchInputRef}
+            id={CATALOG_SEARCH_INPUT_ID}
             type="text"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
@@ -270,10 +288,6 @@ export default function CatalogSection({
                         </span>
                         <span className="rounded-full bg-surface-subtle px-2.5 py-0.5 text-xs font-medium text-ink-muted">
                           {featuredBook.category}
-                        </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-warm-soft px-2.5 py-0.5 text-xs font-semibold text-warm-text">
-                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                          {featuredBook.rating}
                         </span>
                       </div>
 

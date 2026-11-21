@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import type { BookSummary } from "@/types/book";
-import { ArrowRight, BookOpen, Clock, Star, X, Zap } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, X, Zap } from "lucide-react";
 
 interface BookPreviewModalProps {
   book: BookSummary | null;
@@ -80,10 +80,6 @@ export default function BookPreviewModal({
               <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
                 <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
                   {book.category}
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-xs font-medium">
-                  <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
-                  {book.rating} / 5.0
                 </span>
               </div>
 

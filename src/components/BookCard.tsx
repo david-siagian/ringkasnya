@@ -1,5 +1,5 @@
 import type { BookSummary } from "@/types/book";
-import { ArrowRight, Clock, Layers, Star, Zap } from "lucide-react";
+import { ArrowRight, Clock, Layers, Zap } from "lucide-react";
 
 interface BookCardProps {
   book: BookSummary;
@@ -38,10 +38,6 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
           <div className="flex flex-wrap items-center justify-between gap-1.5">
             <span className="max-w-full truncate rounded-full bg-surface-subtle px-2 py-0.5 sm:px-2.5 text-[10px] sm:text-[11px] font-medium text-ink-muted">
               {book.category}
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-warm-soft px-2 py-0.5 text-[11px] sm:text-xs font-semibold text-warm-text">
-              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-              {book.rating}
             </span>
           </div>
 

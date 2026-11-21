@@ -2,6 +2,22 @@ import React, { useEffect, useState } from "react";
 
 const SCROLL_TARGET_KEY = "ringkasnya_scroll_target";
 const NAVBAR_OFFSET = 80;
+const NAVIGATE_EVENT = "ringkasnya:navigate";
+
+/**
+ * Navigasi terprogram (mis. dari tombol, bukan <a>) dengan transisi fade yang sama
+ * seperti klik link internal. Fallback ke navigasi biasa bila wrapper belum aktif.
+ */
+export function navigateWithTransition(href: string) {
+  const event = new CustomEvent<string>(NAVIGATE_EVENT, {
+    detail: href,
+    cancelable: true,
+  });
+  const notHandled = window.dispatchEvent(event);
+  if (notHandled) {
+    window.location.assign(href);
+  }
+}
 
 function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -34,12 +50,21 @@ export function smoothScrollToY(targetY: number, duration = 680) {
   window.requestAnimationFrame(step);
 }
 
+/**
+ * Offset scroll mengikuti `scroll-margin-top` elemen tujuan (mis. kompensasi navbar
+ * + toolbar reader), dengan fallback ke tinggi navbar default.
+ */
+function getScrollOffset(el: HTMLElement): number {
+  const margin = parseFloat(window.getComputedStyle(el).scrollMarginTop);
+  return Number.isFinite(margin) && margin > 0 ? margin : NAVBAR_OFFSET;
+}
+
 export function smoothScrollToElement(id: string, duration = 680) {
   const el = document.getElementById(id);
   if (!el) return false;
 
   const rect = el.getBoundingClientRect();
-  const targetY = Math.max(0, window.scrollY + rect.top - NAVBAR_OFFSET);
+  const targetY = Math.max(0, window.scrollY + rect.top - getScrollOffset(el));
   smoothScrollToY(targetY, duration);
   return true;
 }
@@ -84,8 +109,21 @@ export function PageTransitionWrapper({
   useEffect(() => {
     setIsLeaving(false);
     const handlePageShow = () => setIsLeaving(false);
+    const handleNavigate = (event: Event) => {
+      const href = (event as CustomEvent<string>).detail;
+      if (!href) return;
+      event.preventDefault();
+      setIsLeaving(true);
+      window.setTimeout(() => {
+        window.location.assign(href);
+      }, 190);
+    };
     window.addEventListener("pageshow", handlePageShow);
-    return () => window.removeEventListener("pageshow", handlePageShow);
+    window.addEventListener(NAVIGATE_EVENT, handleNavigate);
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener(NAVIGATE_EVENT, handleNavigate);
+    };
   }, []);
 
   useEffect(() => {
@@ -134,7 +172,6 @@ export function PageTransitionWrapper({
       const rawHref = anchor.getAttribute("href");
       if (
         !rawHref ||
-        rawHref.startsWith("#") ||
         rawHref.startsWith("mailto:") ||
         rawHref.startsWith("tel:")
       ) {

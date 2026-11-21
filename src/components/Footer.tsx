@@ -83,7 +83,7 @@ export default function Footer() {
 
         <div className="mt-10 border-t border-slate-800 dark:border-line pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 dark:text-ink-muted gap-2">
           <p>© {new Date().getFullYear()} Ringkasnya. Dibuat bertahap untuk pembelajar Indonesia.</p>
-          <p>Fase 1 (MVP) — Baca Intinya, Praktikkan Ilmunya</p>
+          <p>Baca Intinya, Praktikkan Ilmunya</p>
         </div>
       </div>
     </footer>

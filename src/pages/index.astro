@@ -9,6 +9,8 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
+
+const minQuickMinutes = Math.min(...BOOKS.map((b) => b.quickTimeMinutes));
 ---
 
 <BaseLayout>
@@ -19,7 +21,7 @@ import {
         <div class="mx-auto max-w-3xl text-center">
           <div class="inline-flex items-center gap-2 rounded-full border border-accent-line bg-accent-soft px-3.5 py-1.5 text-xs font-semibold text-accent-text shadow-sm">
             <Sparkles className="h-3.5 w-3.5 text-accent-strong" />
-            <span>Serap Ilmu Buku Best-Seller Dunia Mulai dari 5 Menit</span>
+            <span>Serap Ilmu Buku Best-Seller Dunia Mulai dari {minQuickMinutes} Menit</span>
           </div>
 
           <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl">
@@ -126,7 +128,7 @@ import {
             </h3>
             <p class="mt-2 text-sm leading-relaxed text-ink-muted">
               Sedang buru-buru? Aktifkan <strong>Mode Kilat (6–10 Menit)</strong>{" "}
-              untuk membaca intisari 1 kalimat per bab. Ingin menyelami contoh
+              untuk membaca intisari tiap bab. Ingin menyelami contoh
               dan konteks lengkap? Gunakan{" "}
               <strong>Mode Mendalam (20–30 Menit)</strong>.
             </p>

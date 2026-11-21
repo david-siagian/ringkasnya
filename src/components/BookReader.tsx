@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { BookSummary } from "@/types/book";
 import {
+  AlertCircle,
   ArrowLeft,
   BookOpen,
   Check,
@@ -11,7 +12,6 @@ import {
   ListChecks,
   Quote,
   Sparkles,
-  Star,
   Target,
   Type,
   Zap,
@@ -64,13 +64,72 @@ const FONT_SCALES = {
   },
 } as const;
 
+/** Offset scroll untuk tiap Poin Inti: tinggi navbar + toolbar reader (keduanya sticky). */
+const TAKEAWAY_SCROLL_MARGIN =
+  "calc(var(--header-h) + var(--reader-toolbar-h) + 16px)";
+
+/** Salin teks ke clipboard; fallback ke execCommand untuk browser/webview tanpa Clipboard API. */
+async function copyTextToClipboard(text: string): Promise<boolean> {
+  if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // lanjut ke fallback
+    }
+  }
+
+  try {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.top = "0";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    const copied = document.execCommand("copy");
+    document.body.removeChild(textarea);
+    return copied;
+  } catch {
+    return false;
+  }
+}
+
+type CopyFeedback = { index: number; status: "success" | "error" } | null;
+
 export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [readMode, setReadMode] = useState<"deep" | "quick">("deep");
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
-  const [copiedQuoteIdx, setCopiedQuoteIdx] = useState<number | null>(null);
+  const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
+  const copyTimerRef = useRef<number | undefined>(undefined);
+  const toolbarRef = useRef<HTMLDivElement>(null);
 
   const storageKey = `ringkasnya_checklist_${book.slug}`;
+
+  // Sinkronkan tinggi toolbar sticky (bisa 2 baris di mobile) ke CSS var `--reader-toolbar-h`
+  useEffect(() => {
+    const toolbar = toolbarRef.current;
+    if (!toolbar) return;
+
+    const root = document.documentElement;
+    const updateToolbarHeight = () => {
+      root.style.setProperty("--reader-toolbar-h", `${toolbar.offsetHeight}px`);
+    };
+
+    updateToolbarHeight();
+    const observer = new ResizeObserver(updateToolbarHeight);
+    observer.observe(toolbar);
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty("--reader-toolbar-h");
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => window.clearTimeout(copyTimerRef.current);
+  }, []);
 
   useEffect(() => {
     try {
@@ -102,11 +161,15 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const progressPercent =
     totalChecklist > 0 ? Math.round((completedCount / totalChecklist) * 100) : 0;
 
-  const handleCopyQuote = (quote: string, index: number) => {
+  const handleCopyQuote = async (quote: string, index: number) => {
     const textToCopy = `"${quote}" — ${book.title} (${book.author}) via Ringkasnya`;
-    navigator.clipboard.writeText(textToCopy);
-    setCopiedQuoteIdx(index);
-    setTimeout(() => setCopiedQuoteIdx(null), 2000);
+    const copied = await copyTextToClipboard(textToCopy);
+    setCopyFeedback({ index, status: copied ? "success" : "error" });
+    window.clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = window.setTimeout(
+      () => setCopyFeedback(null),
+      copied ? 2000 : 3500
+    );
   };
 
   const fs = FONT_SCALES[fontSize];
@@ -141,10 +204,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   {book.category}
                 </span>
                 <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
-                  <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
-                  {book.rating} / 5.0
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
                   <Clock className="h-3.5 w-3.5" />
                   {readMode === "quick"
                     ? `${book.quickTimeMinutes} menit baca (Mode Kilat)`
@@ -173,7 +232,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       </div>
 
       {/* Sticky Reader Toolbar (Mode Baca & Ukuran Huruf) */}
-      <div className="sticky top-[61px] z-40 border-b border-line bg-surface/95 shadow-sm backdrop-blur-md">
+      <div
+        ref={toolbarRef}
+        style={{ top: "var(--header-h)" }}
+        className="sticky z-40 border-b border-line bg-surface/95 shadow-sm backdrop-blur-md"
+      >
         <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           {/* Toggle Mode Kilat vs Mendalam */}
           <div className="flex items-center rounded-xl bg-surface-subtle p-1">
@@ -250,9 +313,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           <div className="mb-6 flex items-center gap-3 rounded-2xl border border-warm-line bg-warm-soft p-4 text-warm-heading">
             <Zap className="h-5 w-5 shrink-0 text-warm-text" />
             <p className={`${fs.subtext} font-medium`}>
-              <strong>Mode Kilat Aktif:</strong> Menampilkan intisari 1 kalimat
-              dan tips praktis dari setiap bab agar Anda bisa menangkap ide utama
-              buku ini dalam {book.quickTimeMinutes} menit.
+              <strong>Mode Kilat Aktif:</strong> Menampilkan intisari tiap bab
+              dan tips praktis agar Anda bisa menangkap ide utama buku ini dalam{" "}
+              {book.quickTimeMinutes} menit.
             </p>
           </div>
         )}
@@ -312,7 +375,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             <article
               key={takeaway.number}
               id={`poin-${takeaway.number}`}
-              className="scroll-mt-32 rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm transition-all"
+              style={{ scrollMarginTop: TAKEAWAY_SCROLL_MARGIN }}
+              className="rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm transition-all"
             >
               <div className="flex items-center gap-3">
                 <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-sm font-extrabold text-white">
@@ -330,7 +394,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               {/* Box Intisari Kilat */}
               <div className="mt-4 rounded-xl border-l-4 border-emerald-500 bg-accent-soft p-4">
                 <p className={`${fs.label} font-bold uppercase tracking-wider text-accent-text`}>
-                  ⚡ Intisari 1 Kalimat
+                  ⚡ Intisari Bab
                 </p>
                 <p className={`mt-1 ${fs.lead} font-semibold text-ink`}>
                   {takeaway.quickSummary}
@@ -428,7 +492,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               return (
                 <label
                   key={idx}
-                  onClick={() => toggleChecklist(idx)}
                   className={`flex cursor-pointer items-start gap-3.5 rounded-xl border p-4 transition-all ${
                     isChecked
                       ? "border-accent-line bg-accent-soft/70 text-ink-subtle line-through"
@@ -438,7 +501,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   <input
                     type="checkbox"
                     checked={isChecked}
-                    onChange={() => {}}
+                    onChange={() => toggleChecklist(idx)}
                     className="mt-1 h-4 w-4 rounded border-line-strong bg-surface text-emerald-600 focus:ring-emerald-500"
                   />
                   <span className={`${fs.lead} font-medium`}>
@@ -477,10 +540,19 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   onClick={() => handleCopyQuote(quote, idx)}
                   className="inline-flex shrink-0 items-center gap-1.5 self-end rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text sm:self-center"
                 >
-                  {copiedQuoteIdx === idx ? (
+                  {copyFeedback?.index === idx &&
+                  copyFeedback.status === "success" ? (
                     <>
                       <Check className="h-3.5 w-3.5 text-accent-strong" />
                       <span className="text-accent-text">Tersalin!</span>
+                    </>
+                  ) : copyFeedback?.index === idx &&
+                    copyFeedback.status === "error" ? (
+                    <>
+                      <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
+                      <span className="text-rose-600 dark:text-rose-400">
+                        Gagal menyalin
+                      </span>
                     </>
                   ) : (
                     <>

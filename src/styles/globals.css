@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 :root {
+  /* Tinggi elemen sticky (default SSR; diperbarui runtime via ResizeObserver) */
+  --header-h: 73px;
+  --reader-toolbar-h: 57px;
+
   --color-bg-page: 248 250 252;
   --color-bg-surface: 255 255 255;
   --color-bg-subtle: 241 245 249;
