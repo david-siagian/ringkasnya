@@ -3,22 +3,27 @@ import type { BookSummary } from "@/types/book";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import QuoteCardModal from "./QuoteCardModal";
 import {
-  AlertCircle,
+  smoothScrollToElement,
+  smoothScrollToY,
+} from "./SmoothNavigation";
+import {
+  ActionChecklistSection,
+  ConclusionSection,
+  FONT_SCALES,
+  IntroSection,
+  QuotesSection,
+  RelatedBooksSection,
+  TakeawayCard,
+  type CopyFeedback,
+} from "./BookReaderSections";
+import {
   ArrowLeft,
   ArrowRight,
   Bookmark,
   BookOpen,
-  Check,
-  CheckCircle2,
   Clock,
-  Copy,
-  ImageDown,
-  LayoutGrid,
-  Lightbulb,
-  ListChecks,
-  Quote,
-  Sparkles,
-  Target,
+  List,
+  RotateCcw,
   Type,
   Zap,
 } from "lucide-react";
@@ -27,45 +32,6 @@ interface BookReaderProps {
   book: BookSummary;
   relatedBooks: BookSummary[];
 }
-
-const FONT_SCALES = {
-  sm: {
-    micro: "text-[10px]",
-    label: "text-[11px]",
-    subtext: "text-[11px] sm:text-xs",
-    compact: "text-xs",
-    lead: "text-xs sm:text-sm",
-    body: "text-xs sm:text-sm leading-relaxed",
-    sectionHeading: "text-base",
-    conclusionHeading: "text-base sm:text-lg",
-    blockHeading: "text-lg",
-    takeawayTitle: "text-lg sm:text-xl",
-  },
-  base: {
-    micro: "text-[11px]",
-    label: "text-xs",
-    subtext: "text-xs sm:text-sm",
-    compact: "text-sm",
-    lead: "text-sm sm:text-base",
-    body: "text-sm sm:text-base leading-relaxed",
-    sectionHeading: "text-lg",
-    conclusionHeading: "text-lg sm:text-xl",
-    blockHeading: "text-xl",
-    takeawayTitle: "text-xl sm:text-2xl",
-  },
-  lg: {
-    micro: "text-xs",
-    label: "text-sm",
-    subtext: "text-sm sm:text-base",
-    compact: "text-base",
-    lead: "text-base sm:text-lg",
-    body: "text-base sm:text-lg leading-relaxed",
-    sectionHeading: "text-xl",
-    conclusionHeading: "text-xl sm:text-2xl",
-    blockHeading: "text-2xl",
-    takeawayTitle: "text-2xl sm:text-3xl",
-  },
-} as const;
 
 /** Offset scroll untuk tiap Poin Inti: tinggi navbar + toolbar reader (keduanya sticky). */
 const TAKEAWAY_SCROLL_MARGIN =
@@ -99,24 +65,40 @@ async function copyTextToClipboard(text: string): Promise<boolean> {
   }
 }
 
-type CopyFeedback = { index: number; status: "success" | "error" } | null;
-
 export default function BookReader({ book, relatedBooks }: BookReaderProps) {
-  const [readMode, setReadMode] = useState<"deep" | "quick">("quick");
+  const [readMode, setReadMode] = useState<"quick" | "deep">("quick");
+  const [deepStep, setDeepStep] = useState(0);
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
-  const [readingProgress, setReadingProgress] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [activeQuoteForCard, setActiveQuoteForCard] = useState<string | null>(
     null
   );
+
   const copyTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const readingAreaRef = useRef<HTMLDivElement>(null);
+  const pendingScrollTargetRef = useRef<string | null>(null);
+  const pendingScrollToReadingTopRef = useRef(false);
+
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const saved = isBookmarked(book.slug);
 
   const storageKey = `ringkasnya_checklist_${book.slug}`;
+  const totalTakeaways = book.keyTakeaways.length;
+  const finalStep = totalTakeaways + 1;
+  const clampedDeepStep = Math.max(0, Math.min(finalStep, deepStep));
+
+  const readingProgress =
+    readMode === "deep"
+      ? Math.round((clampedDeepStep / Math.max(1, finalStep)) * 100)
+      : scrollProgress;
+
+  // Reset step Mode Mendalam bila berpindah buku
+  useEffect(() => {
+    setDeepStep(0);
+  }, [book.slug]);
 
   // Sinkronkan tinggi toolbar sticky (bisa 2 baris di mobile) ke CSS var `--reader-toolbar-h`
   useEffect(() => {
@@ -141,8 +123,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     return () => window.clearTimeout(copyTimerRef.current);
   }, []);
 
-  // Hitung progres membaca berdasarkan posisi scroll pada area konten buku
+  // Hitung progres membaca berbasis scroll saat berada di Mode Kilat
   useEffect(() => {
+    if (readMode !== "quick") return;
+
     let rafId = 0;
 
     const calculateProgress = () => {
@@ -151,18 +135,19 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       if (!area) return;
 
       const rect = area.getBoundingClientRect();
-      const stickyBottom = toolbarRef.current?.getBoundingClientRect().bottom ?? 0;
+      const stickyBottom =
+        toolbarRef.current?.getBoundingClientRect().bottom ?? 0;
       const startY = window.scrollY + rect.top - stickyBottom;
       const endY = window.scrollY + rect.bottom - window.innerHeight;
 
       if (endY <= startY) {
-        setReadingProgress(window.scrollY >= startY ? 100 : 0);
+        setScrollProgress(window.scrollY >= startY ? 100 : 0);
         return;
       }
 
       const raw = ((window.scrollY - startY) / (endY - startY)) * 100;
       const clamped = Math.min(100, Math.max(0, Math.round(raw)));
-      setReadingProgress(clamped);
+      setScrollProgress(clamped);
     };
 
     const scheduleUpdate = () => {
@@ -181,11 +166,36 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     };
   }, [readMode, fontSize, book.slug]);
 
+  // Jalankan smooth scroll tertunda setelah perpindahan mode atau halaman bab
+  useEffect(() => {
+    if (readMode === "quick" && pendingScrollTargetRef.current) {
+      const targetId = pendingScrollTargetRef.current;
+      pendingScrollTargetRef.current = null;
+      const timer = window.setTimeout(() => {
+        smoothScrollToElement(targetId, 520);
+      }, 60);
+      return () => window.clearTimeout(timer);
+    }
+
+    if (pendingScrollToReadingTopRef.current) {
+      pendingScrollToReadingTopRef.current = false;
+      const area = readingAreaRef.current;
+      if (!area) return;
+      const stickyBottom =
+        toolbarRef.current?.getBoundingClientRect().bottom ?? 0;
+      const targetY = Math.max(
+        0,
+        window.scrollY + area.getBoundingClientRect().top - stickyBottom - 16
+      );
+      smoothScrollToY(targetY, 420);
+    }
+  }, [readMode, clampedDeepStep]);
+
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        setCheckedItems(JSON.parse(saved));
+      const savedChecklist = localStorage.getItem(storageKey);
+      if (savedChecklist) {
+        setCheckedItems(JSON.parse(savedChecklist));
       } else {
         setCheckedItems({});
       }
@@ -206,11 +216,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     });
   };
 
-  const completedCount = Object.values(checkedItems).filter(Boolean).length;
-  const totalChecklist = book.actionChecklist.length;
-  const progressPercent =
-    totalChecklist > 0 ? Math.round((completedCount / totalChecklist) * 100) : 0;
-
   const handleCopyQuote = async (quote: string, index: number) => {
     const textToCopy = `"${quote}" — ${book.title} (${book.author}) via Ringkasnya`;
     const copied = await copyTextToClipboard(textToCopy);
@@ -222,12 +227,55 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     );
   };
 
+  const goToDeepStep = (nextStep: number) => {
+    const target = Math.max(0, Math.min(finalStep, nextStep));
+    setDeepStep(target);
+    pendingScrollToReadingTopRef.current = true;
+  };
+
+  const activeTakeaway =
+    clampedDeepStep >= 1 && clampedDeepStep <= totalTakeaways
+      ? book.keyTakeaways[clampedDeepStep - 1]
+      : null;
+
+  const handleModeChange = (nextMode: "quick" | "deep") => {
+    if (nextMode === readMode) return;
+
+    if (nextMode === "quick") {
+      if (activeTakeaway) {
+        pendingScrollTargetRef.current = `poin-${activeTakeaway.number}`;
+      } else if (clampedDeepStep === finalStep) {
+        pendingScrollTargetRef.current = "kesimpulan-akhir";
+      }
+      setReadMode("quick");
+      return;
+    }
+
+    setDeepStep(0);
+    pendingScrollToReadingTopRef.current = true;
+    setReadMode("deep");
+  };
+
   const fs = FONT_SCALES[fontSize];
+
+  const prevLabel =
+    clampedDeepStep <= 1
+      ? "Pengantar"
+      : clampedDeepStep === finalStep && totalTakeaways > 0
+        ? `Poin Inti ${totalTakeaways}`
+        : `Poin Inti ${clampedDeepStep - 1}`;
+
+  const nextLabel =
+    clampedDeepStep < totalTakeaways
+      ? `Poin Inti ${clampedDeepStep + 1}`
+      : "Kesimpulan Akhir";
 
   return (
     <div className="min-h-screen bg-page pb-20">
       {/* Banner Header Buku */}
-      <div className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}>
+      <div
+        className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}
+      >
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
           <div className="flex items-center justify-between gap-3">
             <a
@@ -248,7 +296,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   : "bg-black/20 text-white/90 hover:bg-black/30"
               }`}
             >
-              <Bookmark className={`h-3.5 w-3.5 ${saved ? "fill-current" : ""}`} />
+              <Bookmark
+                className={`h-3.5 w-3.5 ${saved ? "fill-current" : ""}`}
+              />
               <span>{saved ? "Tersimpan" : "Simpan Buku"}</span>
             </button>
           </div>
@@ -306,23 +356,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         className="sticky z-40 border-b border-line bg-surface/95 shadow-sm backdrop-blur-md"
       >
         <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          {/* Toggle Mode Kilat vs Mendalam */}
+          {/* Toggle Mode Kilat (kiri, default) vs Mendalam (kanan) */}
           <div className="flex items-center rounded-xl bg-surface-subtle p-1">
             <button
               type="button"
-              onClick={() => setReadMode("deep")}
-              className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
-                readMode === "deep"
-                  ? "bg-surface text-ink shadow-sm"
-                  : "text-ink-muted hover:text-ink"
-              }`}
-            >
-              <BookOpen className="h-4 w-4 text-accent-strong" />
-              <span>Mendalam ({book.readingTimeMinutes} mnt)</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setReadMode("quick")}
+              onClick={() => handleModeChange("quick")}
+              aria-pressed={readMode === "quick"}
               className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
                 readMode === "quick"
                   ? "bg-amber-500 text-white shadow-sm"
@@ -331,6 +370,19 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             >
               <Zap className="h-4 w-4" />
               <span>Kilat ({book.quickTimeMinutes} mnt)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModeChange("deep")}
+              aria-pressed={readMode === "deep"}
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
+                readMode === "deep"
+                  ? "bg-surface text-ink shadow-sm"
+                  : "text-ink-muted hover:text-ink"
+              }`}
+            >
+              <BookOpen className="h-4 w-4 text-accent-strong" />
+              <span>Mendalam ({book.readingTimeMinutes} mnt)</span>
             </button>
           </div>
 
@@ -389,7 +441,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           className="h-[3px] w-full bg-surface-subtle"
         >
           <div
-            className={`h-full transition-[width] duration-150 ease-out ${
+            className={`h-full transition-[width] duration-200 ease-out ${
               readMode === "quick" ? "bg-amber-500" : "bg-accent-strong"
             }`}
             style={{ width: `${readingProgress}%` }}
@@ -400,345 +452,191 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       {/* Konten Utama Ringkasan */}
       <main className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
         <div ref={readingAreaRef}>
-        {/* Seksi Sinopsis & Untuk Siapa Buku Ini */}
-        <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm">
-          <h2 className={`${fs.sectionHeading} font-bold text-ink`}>
-            Sinopsis
-          </h2>
-          <p className={`mt-2.5 text-ink-secondary ${fs.body}`}>
-            {book.synopsis}
-          </p>
-
-          <div className="mt-6 rounded-xl border border-line-subtle bg-page p-5">
-            <h3 className={`flex items-center gap-2 ${fs.compact} font-bold text-ink`}>
-              <Target className="h-4 w-4 text-accent-strong" />
-              Buku Ini Sangat Cocok Untuk:
-            </h3>
-            <ul className="mt-3 space-y-2">
-              {book.whoIsItFor.map((target, idx) => (
-                <li
-                  key={idx}
-                  className={`flex items-start gap-2.5 ${fs.compact} text-ink-secondary`}
-                >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent-strong" />
-                  <span>{target}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Daftar Isi Cepat */}
-        <div className="mt-6 rounded-2xl border border-line bg-surface p-5 sm:p-6 shadow-sm">
-          <h2 className={`${fs.label} font-bold uppercase tracking-wider text-ink-subtle`}>
-            Daftar Poin Inti ({book.keyTakeaways.length} Bab Ringkas)
-          </h2>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            {book.keyTakeaways.map((item) => (
-              <a
-                key={item.number}
-                href={`#poin-${item.number}`}
-                className={`flex items-start gap-2.5 rounded-xl border border-line-subtle bg-page/70 px-3.5 py-2.5 ${fs.subtext} font-medium text-ink-secondary transition hover:border-accent-line hover:bg-accent-soft/70 hover:text-accent-text`}
-              >
-                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
-                  {item.number}
-                </span>
-                <span>{item.title}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Poin Inti Bab per Bab */}
-        <div className="mt-8 space-y-6">
-          {book.keyTakeaways.map((takeaway) => (
-            <article
-              key={takeaway.number}
-              id={`poin-${takeaway.number}`}
-              style={{ scrollMarginTop: TAKEAWAY_SCROLL_MARGIN }}
-              className="rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-sm font-extrabold text-white">
-                  {takeaway.number}
-                </span>
-                <span className={`${fs.label} font-bold uppercase tracking-wider text-accent-text`}>
-                  Poin Inti #{takeaway.number}
-                </span>
-              </div>
-
-              <h3 className={`mt-3 ${fs.takeawayTitle} font-extrabold text-ink`}>
-                {takeaway.title}
-              </h3>
-
-              {/* Box Intisari Kilat */}
-              <div className="mt-4 rounded-xl border-l-4 border-emerald-500 bg-accent-soft p-4">
-                <p className={`${fs.label} font-bold uppercase tracking-wider text-accent-text`}>
-                  ⚡ Intisari Bab
-                </p>
-                <p className={`mt-1 ${fs.lead} font-semibold text-ink`}>
-                  {takeaway.quickSummary}
-                </p>
-              </div>
-
-              {/* Penjelasan Mendalam (Hanya muncul di Mode Mendalam) */}
-              {readMode === "deep" && (
-                <div className={`animate-fade-slide mt-5 space-y-4 text-ink-secondary ${fs.body}`}>
-                  {takeaway.deepContent.map((paragraph, pIdx) => (
-                    <p key={pIdx}>{paragraph}</p>
-                  ))}
-                </div>
-              )}
-
-              {/* Tips Praktis */}
-              <div className="mt-5 flex items-start gap-3 rounded-xl border border-warm-line bg-warm-soft p-4">
-                <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-warm-text" />
-                <div>
-                  <span className={`${fs.label} font-bold uppercase tracking-wider text-warm-heading`}>
-                    Tips Praktis Langsung Coba:
-                  </span>
-                  <p className={`mt-0.5 ${fs.compact} text-ink-secondary`}>
-                    {takeaway.practicalTip}
-                  </p>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* Kesimpulan Akhir */}
-        <section className="mt-8 rounded-2xl border-2 border-accent-line border-l-[6px] border-l-emerald-600 dark:border-l-emerald-500 bg-gradient-to-br from-accent-tint/75 via-accent-soft/70 to-surface p-6 sm:p-8 shadow-md shadow-emerald-950/5">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
-                <Sparkles className="h-4 w-4" />
-              </span>
-              <div>
-                <span className={`block ${fs.micro} font-bold uppercase tracking-wider text-accent-text`}>
-                  Final Takeaway
-                </span>
-                <h2 className={`${fs.conclusionHeading} font-extrabold text-ink`}>
-                  Kesimpulan Akhir
-                </h2>
-              </div>
-            </div>
-          </div>
-          <div className={`mt-4 space-y-4 font-semibold text-ink ${fs.body}`}>
-            {book.conclusion
-              .split(/\n\s*\n/)
-              .map((paragraph) => paragraph.trim())
-              .filter(Boolean)
-              .map((paragraph, idx) => (
-                <p key={idx}>{paragraph}</p>
-              ))}
-          </div>
-        </section>
-
-        {/* Fitur Khas Ringkasnya: Action Checklist Interaktif */}
-        <section className="mt-8 rounded-2xl border-2 border-accent-line/70 bg-surface p-6 sm:p-8 shadow-sm">
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 text-accent-text">
-                <ListChecks className="h-5 w-5" />
-                <span className={`${fs.label} font-bold uppercase tracking-wider`}>
-                  Action Checklist Interaktif
-                </span>
-              </div>
-              <h2 className={`mt-1 ${fs.blockHeading} font-extrabold text-ink`}>
-                Jangan Hanya Dibaca—Mari Praktikkan!
-              </h2>
-              <p className={`mt-1 ${fs.subtext} text-ink-muted`}>
-                Centang langkah-langkah di bawah ini setelah Anda mempraktikkannya.
-                Progres Anda tersimpan otomatis di perangkat ini.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-end">
-              <span className="text-xs font-bold text-ink-secondary">
-                {completedCount} dari {totalChecklist} Selesai ({progressPercent}%)
-              </span>
-              <div className="mt-1.5 h-2.5 w-36 overflow-hidden rounded-full bg-surface-subtle">
-                <div
-                  className="h-full rounded-full bg-emerald-600 transition-all duration-300"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6 space-y-3">
-            {book.actionChecklist.map((action, idx) => {
-              const isChecked = !!checkedItems[idx];
-              return (
-                <label
-                  key={idx}
-                  className={`flex cursor-pointer items-start gap-3.5 rounded-xl border p-4 transition-all ${
-                    isChecked
-                      ? "border-accent-line bg-accent-soft/70 text-ink-subtle line-through"
-                      : "border-line bg-surface text-ink-secondary hover:border-accent-line hover:bg-page"
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={isChecked}
-                    onChange={() => toggleChecklist(idx)}
-                    className="mt-1 h-4 w-4 rounded border-line-strong bg-surface text-emerald-600 focus:ring-emerald-500"
-                  />
-                  <span className={`${fs.lead} font-medium`}>
-                    {action}
-                  </span>
-                </label>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Kutipan Berkesan (Shareable Quotes) */}
-        <section className="mt-8 rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm">
-          <div className="flex items-center gap-2 text-ink">
-            <Quote className="h-5 w-5 text-accent-strong" />
-            <h2 className={`${fs.blockHeading} font-extrabold`}>
-              Kutipan Berkesan ({book.quotes.length})
-            </h2>
-          </div>
-          <p className={`mt-1 ${fs.subtext} text-ink-subtle`}>
-            Klik tombol salin untuk membagikan kutipan favoritmu ke WhatsApp atau
-            media sosial.
-          </p>
-
-          <div className="mt-5 grid gap-4">
-            {book.quotes.map((quote, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col justify-between gap-4 rounded-xl border border-line-subtle bg-page p-5 sm:flex-row sm:items-center"
-              >
-                <blockquote className={`${fs.lead} font-semibold italic text-ink`}>
-                  &ldquo;{quote}&rdquo;
-                </blockquote>
-                <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:self-center">
-                  <button
-                    type="button"
-                    onClick={() => handleCopyQuote(quote, idx)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
-                  >
-                    {copyFeedback?.index === idx &&
-                    copyFeedback.status === "success" ? (
-                      <>
-                        <Check className="h-3.5 w-3.5 text-accent-strong" />
-                        <span className="text-accent-text">Tersalin!</span>
-                      </>
-                    ) : copyFeedback?.index === idx &&
-                      copyFeedback.status === "error" ? (
-                      <>
-                        <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
-                        <span className="text-rose-600 dark:text-rose-400">
-                          Gagal menyalin
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-3.5 w-3.5" />
-                        <span>Salin Kutipan</span>
-                      </>
-                    )}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setActiveQuoteForCard(quote)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
-                  >
-                    <ImageDown className="h-3.5 w-3.5" />
-                    <span>Buat Kartu</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-        </div>
-
-        {/* Rekomendasi Buku Lainnya & CTA Katalog */}
-        <section className="mt-12">
-          {relatedBooks.length > 0 && (
+          {readMode === "quick" ? (
+            /* MODE KILAT: Scroll Vertikal Penuh */
             <>
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h2 className="text-xl font-extrabold text-ink">
-                  Lanjutkan Membaca Buku Lainnya
-                </h2>
-                <a
-                  href="/katalog"
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-accent-text transition hover:text-accent-strong"
-                >
-                  <span>Lihat Semua Katalog</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </a>
-              </div>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                {relatedBooks.map((other) => (
-                  <a
-                    key={other.slug}
-                    href={`/buku/${other.slug}`}
-                    className="group flex items-start gap-4 rounded-2xl border border-line bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md sm:p-5"
-                  >
-                    <div className="relative aspect-[3/4] w-20 shrink-0 overflow-hidden rounded-xl shadow-sm ring-1 ring-line/70 sm:w-24">
-                      {other.coverImage ? (
-                        <img
-                          src={other.coverImage}
-                          alt={`Ilustrasi sampul buku ${other.title}`}
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div
-                          className={`flex h-full w-full items-center justify-center bg-slate-900 bg-gradient-to-br ${other.coverGradient} p-2 text-white`}
-                        >
-                          <BookOpen className="h-6 w-6 opacity-85" />
-                        </div>
-                      )}
-                    </div>
+              <IntroSection
+                book={book}
+                fs={fs}
+                mode="quick"
+                onSelectTakeaway={(num) => smoothScrollToElement(`poin-${num}`)}
+              />
 
-                    <div className="flex min-w-0 flex-1 flex-col justify-between self-stretch">
-                      <div>
-                        <span className="text-[11px] font-bold text-accent-strong">
-                          {other.category}
-                        </span>
-                        <h3 className="mt-1 line-clamp-2 text-base font-extrabold leading-snug text-ink group-hover:text-accent-strong sm:text-lg">
-                          {other.title}
-                        </h3>
-                        <p className="mt-0.5 truncate text-xs text-ink-subtle">
-                          {other.author} • {other.readingTimeMinutes} menit baca
-                        </p>
-                        <p className="mt-2 line-clamp-2 text-xs text-ink-muted">
-                          {other.tagline}
-                        </p>
-                      </div>
-                      <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-accent-text group-hover:text-accent-strong">
-                        <span>Baca Ringkasan</span>
-                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                      </span>
-                    </div>
-                  </a>
+              <div className="mt-8 space-y-6">
+                {book.keyTakeaways.map((takeaway) => (
+                  <TakeawayCard
+                    key={takeaway.number}
+                    takeaway={takeaway}
+                    fs={fs}
+                    showDeepContent={false}
+                    scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                  />
                 ))}
               </div>
-            </>
-          )}
 
-          <div
-            className={
-              relatedBooks.length > 0
-                ? "mt-6 flex justify-center"
-                : "flex justify-center"
-            }
-          >
-            <a
-              href="/katalog"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto"
-            >
-              <LayoutGrid className="h-4 w-4" />
-              <span>Jelajahi Katalog Buku</span>
-            </a>
-          </div>
-        </section>
+              <div className="mt-8">
+                <ConclusionSection
+                  conclusion={book.conclusion}
+                  fs={fs}
+                  scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                />
+              </div>
+
+              <ActionChecklistSection
+                actionChecklist={book.actionChecklist}
+                checkedItems={checkedItems}
+                onToggle={toggleChecklist}
+                fs={fs}
+              />
+
+              <QuotesSection
+                quotes={book.quotes}
+                copyFeedback={copyFeedback}
+                onCopyQuote={handleCopyQuote}
+                onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
+                fs={fs}
+              />
+            </>
+          ) : (
+            /* MODE MENDALAM: Alur Halaman Per Halaman (Pengantar -> Poin Inti 1..N -> Penutup) */
+            <div className="animate-fade-slide" key={`deep-step-${clampedDeepStep}`}>
+              {clampedDeepStep === 0 ? (
+                <IntroSection
+                  book={book}
+                  fs={fs}
+                  mode="deep"
+                  onSelectTakeaway={(num) => goToDeepStep(num)}
+                  onStartDeepReading={() => goToDeepStep(1)}
+                />
+              ) : (
+                <>
+                  {/* Bar Navigasi Atas Stepper Mode Mendalam */}
+                  <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
+                    <button
+                      type="button"
+                      onClick={() => goToDeepStep(0)}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
+                    >
+                      <List className="h-4 w-4" />
+                      <span>Daftar Poin</span>
+                    </button>
+
+                    <div className="flex items-center gap-2">
+                      <label htmlFor="deep-step-select" className="sr-only">
+                        Pilih halaman ringkasan
+                      </label>
+                      <select
+                        id="deep-step-select"
+                        value={clampedDeepStep}
+                        onChange={(event) =>
+                          goToDeepStep(Number(event.target.value))
+                        }
+                        className="max-w-[220px] sm:max-w-xs truncate rounded-lg border border-line bg-page px-2.5 py-1.5 text-xs font-semibold text-ink focus:border-accent-strong focus:outline-none"
+                      >
+                        <option value={0}>Pengantar</option>
+                        {book.keyTakeaways.map((item, idx) => (
+                          <option key={item.number} value={idx + 1}>
+                            Poin {item.number}/{totalTakeaways}: {item.title}
+                          </option>
+                        ))}
+                        <option value={finalStep}>
+                          Penutup: Kesimpulan &amp; Aksi
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Konten Halaman Aktif */}
+                  {activeTakeaway ? (
+                    <TakeawayCard
+                      takeaway={activeTakeaway}
+                      fs={fs}
+                      showDeepContent={true}
+                    />
+                  ) : (
+                    <>
+                      <ConclusionSection
+                        conclusion={book.conclusion}
+                        fs={fs}
+                      />
+                      <ActionChecklistSection
+                        actionChecklist={book.actionChecklist}
+                        checkedItems={checkedItems}
+                        onToggle={toggleChecklist}
+                        fs={fs}
+                      />
+                      <QuotesSection
+                        quotes={book.quotes}
+                        copyFeedback={copyFeedback}
+                        onCopyQuote={handleCopyQuote}
+                        onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
+                        fs={fs}
+                      />
+                    </>
+                  )}
+
+                  {/* Navigasi Panah Sebelumnya / Selanjutnya */}
+                  <nav
+                    aria-label="Navigasi halaman Mode Mendalam"
+                    className="mt-6 grid grid-cols-2 gap-3"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => goToDeepStep(clampedDeepStep - 1)}
+                      className="flex items-center gap-2.5 rounded-2xl border border-line bg-surface px-4 py-3.5 text-left shadow-sm transition hover:border-accent-line hover:bg-page active:scale-[0.99]"
+                    >
+                      <ArrowLeft className="h-4 w-4 shrink-0 text-ink-muted" />
+                      <div className="min-w-0">
+                        <span className="block text-[11px] font-medium text-ink-subtle">
+                          Sebelumnya
+                        </span>
+                        <span className="block truncate text-xs sm:text-sm font-bold text-ink">
+                          {prevLabel}
+                        </span>
+                      </div>
+                    </button>
+
+                    {clampedDeepStep < finalStep ? (
+                      <button
+                        type="button"
+                        onClick={() => goToDeepStep(clampedDeepStep + 1)}
+                        className="flex items-center justify-end gap-2.5 rounded-2xl bg-emerald-600 px-4 py-3.5 text-right text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.99]"
+                      >
+                        <div className="min-w-0">
+                          <span className="block text-[11px] font-medium text-emerald-100">
+                            Selanjutnya
+                          </span>
+                          <span className="block truncate text-xs sm:text-sm font-bold">
+                            {nextLabel}
+                          </span>
+                        </div>
+                        <ArrowRight className="h-4 w-4 shrink-0" />
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => goToDeepStep(0)}
+                        className="flex items-center justify-end gap-2.5 rounded-2xl border border-accent-line bg-accent-soft px-4 py-3.5 text-right text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.99]"
+                      >
+                        <div className="min-w-0">
+                          <span className="block text-[11px] font-medium opacity-80">
+                            Selesai Dibaca
+                          </span>
+                          <span className="block truncate text-xs sm:text-sm font-bold">
+                            Kembali ke Pengantar
+                          </span>
+                        </div>
+                        <RotateCcw className="h-4 w-4 shrink-0" />
+                      </button>
+                    )}
+                  </nav>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        <RelatedBooksSection relatedBooks={relatedBooks} />
       </main>
 
       <QuoteCardModal
