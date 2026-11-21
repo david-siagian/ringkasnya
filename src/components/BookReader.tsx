@@ -9,6 +9,7 @@ import {
 import {
   ActionChecklistSection,
   ConclusionSection,
+  DeepStepDropdown,
   FONT_SCALES,
   IntroSection,
   QuotesSection,
@@ -518,7 +519,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               ) : (
                 <>
                   {/* Bar Navigasi Atas Stepper Mode Mendalam */}
-                  <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
+                  <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
                     <button
                       type="button"
                       onClick={() => goToDeepStep(0)}
@@ -528,29 +529,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       <span>Daftar Poin</span>
                     </button>
 
-                    <div className="flex items-center gap-2">
-                      <label htmlFor="deep-step-select" className="sr-only">
-                        Pilih halaman ringkasan
-                      </label>
-                      <select
-                        id="deep-step-select"
-                        value={clampedDeepStep}
-                        onChange={(event) =>
-                          goToDeepStep(Number(event.target.value))
-                        }
-                        className="max-w-[220px] sm:max-w-xs truncate rounded-lg border border-line bg-page px-2.5 py-1.5 text-xs font-semibold text-ink focus:border-accent-strong focus:outline-none"
-                      >
-                        <option value={0}>Pengantar</option>
-                        {book.keyTakeaways.map((item, idx) => (
-                          <option key={item.number} value={idx + 1}>
-                            Poin {item.number}/{totalTakeaways}: {item.title}
-                          </option>
-                        ))}
-                        <option value={finalStep}>
-                          Penutup: Kesimpulan &amp; Aksi
-                        </option>
-                      </select>
-                    </div>
+                    <DeepStepDropdown
+                      currentStep={clampedDeepStep}
+                      keyTakeaways={book.keyTakeaways}
+                      finalStep={finalStep}
+                      onSelectStep={goToDeepStep}
+                    />
                   </div>
 
                   {/* Konten Halaman Aktif */}
