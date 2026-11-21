@@ -63,10 +63,10 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/buku/filosofi-teras"
+                  href="/buku/sapiens"
                   className="hover:text-emerald-400 transition-colors"
                 >
-                  Filosofi Teras — Henry Manampiring
+                  Sapiens — Yuval Noah Harari
                 </a>
               </li>
               <li>

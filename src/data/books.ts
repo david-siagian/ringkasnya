@@ -3,14 +3,25 @@ import { atomicHabits } from "./books/atomic-habits";
 import { psychologyOfMoney } from "./books/psychology-of-money";
 import { deepWork } from "./books/deep-work";
 import { showYourWork } from "./books/show-your-work";
-import { filosofiTeras } from "./books/filosofi-teras";
 import { essentialism } from "./books/essentialism";
+import { sapiens } from "./books/sapiens";
+import { thinkingFastAndSlow } from "./books/thinking-fast-and-slow";
+import { theSelfishGene } from "./books/the-selfish-gene";
+import { theDemonHauntedWorld } from "./books/the-demon-haunted-world";
+import { gunsGermsAndSteel } from "./books/guns-germs-and-steel";
+import { whyNationsFail } from "./books/why-nations-fail";
+import { whyWeSleep } from "./books/why-we-sleep";
+import { howToWinFriendsAndInfluencePeople } from "./books/how-to-win-friends-and-influence-people";
+import { nudge } from "./books/nudge";
+import { factfulness } from "./books/factfulness";
 
 export const CATEGORIES: BookCategory[] = [
   "Kebiasaan & Produktivitas",
   "Keuangan & Bisnis",
   "Psikologi & Mindset",
   "Kreativitas & Karier",
+  "Sains & Alam Semesta",
+  "Sejarah & Masyarakat",
 ];
 
 const WORDS_PER_MINUTE = 200;
@@ -57,8 +68,17 @@ export const BOOKS: BookSummary[] = [
   psychologyOfMoney,
   deepWork,
   showYourWork,
-  filosofiTeras,
   essentialism,
+  sapiens,
+  thinkingFastAndSlow,
+  theSelfishGene,
+  theDemonHauntedWorld,
+  gunsGermsAndSteel,
+  whyNationsFail,
+  whyWeSleep,
+  howToWinFriendsAndInfluencePeople,
+  nudge,
+  factfulness,
 ].map(withCalculatedReadingTimes);
 
 /**

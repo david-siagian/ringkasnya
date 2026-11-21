@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="360" y2="480" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="55%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <radialGradient id="candle" cx="50%" cy="46%" r="42%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.5"/>
+      <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="360" height="480" fill="url(#bg)"/>
+  <circle cx="72" cy="84" r="2" fill="#e2e8f0" fill-opacity="0.7"/>
+  <circle cx="290" cy="96" r="2.5" fill="#e2e8f0" fill-opacity="0.8"/>
+  <circle cx="110" cy="145" r="1.5" fill="#93c5fd" fill-opacity="0.7"/>
+  <circle cx="264" cy="170" r="2" fill="#93c5fd" fill-opacity="0.6"/>
+  <circle cx="180" cy="220" r="150" fill="url(#candle)"/>
+  <path d="M180 148 C196 175 204 196 198 214 C194 226 187 232 180 232 C173 232 166 226 162 214 C156 196 164 175 180 148 Z" fill="#f59e0b"/>
+  <path d="M180 172 C188 188 191 200 188 212 C186 220 183 224 180 224 C177 224 174 220 172 212 C169 200 172 188 180 172 Z" fill="#fef08a"/>
+  <rect x="160" y="236" width="40" height="132" rx="6" fill="#e2e8f0"/>
+  <rect x="142" y="368" width="76" height="14" rx="7" fill="#94a3b8"/>
+</svg>

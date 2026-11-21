@@ -2,7 +2,9 @@ export type BookCategory =
   | "Kebiasaan & Produktivitas"
   | "Keuangan & Bisnis"
   | "Psikologi & Mindset"
-  | "Kreativitas & Karier";
+  | "Kreativitas & Karier"
+  | "Sains & Alam Semesta"
+  | "Sejarah & Masyarakat";
 
 export interface BookTakeaway {
   number: number;

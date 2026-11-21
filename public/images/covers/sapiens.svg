@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="360" y2="480" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#451a03"/>
+      <stop offset="55%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%" r="45%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="360" height="480" fill="url(#bg)"/>
+  <circle cx="180" cy="200" r="150" fill="url(#glow)"/>
+  <circle cx="180" cy="200" r="118" stroke="#fde68a" stroke-opacity="0.2" stroke-width="2" stroke-dasharray="6 6"/>
+  <circle cx="180" cy="200" r="88" fill="#1c1917" fill-opacity="0.45" stroke="#f59e0b" stroke-opacity="0.5" stroke-width="2"/>
+  <path d="M105 245 Q180 185 255 245" stroke="#fcd34d" stroke-width="2.5" stroke-opacity="0.6" fill="none"/>
+  <path d="M180 128 C196 155 208 175 202 198 C197 216 188 225 180 225 C172 225 163 216 158 198 C152 175 164 155 180 128 Z" fill="#f59e0b"/>
+  <path d="M180 154 C190 170 194 185 190 200 C187 210 183 216 180 216 C177 216 173 210 170 200 C166 185 170 170 180 154 Z" fill="#fef3c7"/>
+  <path d="M110 340 L180 295 L250 340 L250 375 L110 375 Z" fill="#292524" fill-opacity="0.7"/>
+  <circle cx="135" cy="315" r="12" fill="#fcd34d" fill-opacity="0.85"/>
+  <circle cx="180" cy="300" r="14" fill="#fbbf24"/>
+  <circle cx="225" cy="315" r="12" fill="#fcd34d" fill-opacity="0.85"/>
+  <path d="M60 420 Q180 385 300 420" stroke="#fde68a" stroke-opacity="0.35" stroke-width="2" fill="none"/>
+</svg>
