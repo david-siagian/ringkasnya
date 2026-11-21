@@ -84,6 +84,39 @@ test.describe("Ringkasnya Smoke Tests", () => {
     expect(errors).toEqual([]);
   });
 
+  test("perpustakaan kurasi (/): kartu buku lain menampilkan +1 kolom dari katalog di desktop", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name === "mobile", "Khusus verifikasi proporsi desktop");
+    const errors = trackRuntimeErrors(page);
+
+    await page.goto("/");
+    await waitForAstroIslands(page);
+
+    const carousel = page.locator("#katalog .overflow-x-auto").first();
+    const firstCard = carousel.locator("> div").first();
+
+    const measureCardsPerRow = async () => {
+      const { containerWidth, cardWidth } = await Promise.all([
+        carousel.evaluate((el) => el.clientWidth),
+        firstCard.evaluate((el) => el.getBoundingClientRect().width),
+      ]).then(([containerWidth, cardWidth]) => ({ containerWidth, cardWidth }));
+      const gap = 20; // sm:gap-5
+      return Math.round((containerWidth + gap) / (cardWidth + gap));
+    };
+
+    await page.setViewportSize({ width: 768, height: 800 });
+    expect(await measureCardsPerRow()).toBe(4);
+
+    await page.setViewportSize({ width: 1024, height: 800 });
+    expect(await measureCardsPerRow()).toBe(5);
+
+    await page.setViewportSize({ width: 1280, height: 800 });
+    expect(await measureCardsPerRow()).toBe(6);
+
+    expect(errors).toEqual([]);
+  });
+
   test("reader (/buku/atomic-habits): mode baca, checklist, salin kutipan & tema bekerja", async ({
     page,
     context,
