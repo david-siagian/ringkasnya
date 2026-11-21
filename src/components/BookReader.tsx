@@ -258,17 +258,24 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   const fs = FONT_SCALES[fontSize];
 
-  const prevLabel =
-    clampedDeepStep <= 1
-      ? "Pengantar"
-      : clampedDeepStep === finalStep && totalTakeaways > 0
-        ? `Poin Inti ${totalTakeaways}`
-        : `Poin Inti ${clampedDeepStep - 1}`;
-
-  const nextLabel =
+  const prevTakeaway =
+    clampedDeepStep >= 2
+      ? book.keyTakeaways[clampedDeepStep - 2] ?? null
+      : null;
+  const nextTakeaway =
     clampedDeepStep < totalTakeaways
-      ? `Poin Inti ${clampedDeepStep + 1}`
-      : "Kesimpulan Akhir";
+      ? book.keyTakeaways[clampedDeepStep] ?? null
+      : null;
+
+  const prevLabel = prevTakeaway
+    ? `Poin Inti ${prevTakeaway.number}`
+    : "Pengantar";
+  const prevTitle = prevTakeaway?.title ?? null;
+
+  const nextLabel = nextTakeaway
+    ? `Poin Inti ${nextTakeaway.number}`
+    : "Kesimpulan Akhir";
+  const nextTitle = nextTakeaway?.title ?? null;
 
   return (
     <div className="min-h-screen bg-page pb-20">
@@ -583,28 +590,52 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     <button
                       type="button"
                       onClick={() => goToDeepStep(clampedDeepStep - 1)}
-                      aria-label={`Sebelumnya: ${prevLabel}`}
-                      className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-page active:scale-[0.98]"
+                      aria-label={
+                        prevTitle
+                          ? `Sebelumnya: ${prevLabel} — ${prevTitle}`
+                          : `Sebelumnya: ${prevLabel}`
+                      }
+                      className="inline-flex max-w-[48%] sm:max-w-xs items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-left text-xs font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-page active:scale-[0.98]"
                     >
                       <ArrowLeft className="h-4 w-4 shrink-0 text-ink-muted" />
-                      <span className="truncate">{prevLabel}</span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-[10px] font-medium leading-tight text-ink-subtle">
+                          {prevTitle ? `Sebelumnya • ${prevLabel}` : "Sebelumnya"}
+                        </span>
+                        <span className="block truncate text-xs font-semibold leading-snug text-ink">
+                          {prevTitle ?? prevLabel}
+                        </span>
+                      </span>
                     </button>
 
                     {clampedDeepStep < finalStep ? (
                       <button
                         type="button"
                         onClick={() => goToDeepStep(clampedDeepStep + 1)}
-                        aria-label={`Selanjutnya: ${nextLabel}`}
-                        className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
+                        aria-label={
+                          nextTitle
+                            ? `Selanjutnya: ${nextLabel} — ${nextTitle}`
+                            : `Selanjutnya: ${nextLabel}`
+                        }
+                        className="inline-flex max-w-[48%] sm:max-w-xs items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-right text-xs font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
                       >
-                        <span className="truncate">{nextLabel}</span>
+                        <span className="min-w-0">
+                          <span className="block truncate text-[10px] font-medium leading-tight text-emerald-100">
+                            {nextTitle
+                              ? `Selanjutnya • ${nextLabel}`
+                              : "Selanjutnya"}
+                          </span>
+                          <span className="block truncate text-xs font-semibold leading-snug">
+                            {nextTitle ?? nextLabel}
+                          </span>
+                        </span>
                         <ArrowRight className="h-4 w-4 shrink-0" />
                       </button>
                     ) : (
                       <button
                         type="button"
                         onClick={() => goToDeepStep(0)}
-                        className="inline-flex items-center gap-2 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.98]"
+                        className="inline-flex max-w-[48%] sm:max-w-xs items-center gap-2 rounded-xl border border-accent-line bg-accent-soft px-3 py-2 text-xs font-semibold text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.98]"
                       >
                         <span className="truncate">Kembali ke Pengantar</span>
                         <RotateCcw className="h-4 w-4 shrink-0" />
