@@ -378,7 +378,7 @@ export default function CatalogSection({
         <div className="mt-10 flex justify-center">
           <a
             href="/katalog"
-            className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-bold text-white shadow-md shadow-emerald-500/25 transition-all duration-200 hover:bg-emerald-600 active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition-all duration-200 hover:bg-emerald-700 active:scale-[0.98]"
           >
             <span>Lihat Semua Buku</span>
             <ArrowRight className="h-4 w-4" />
