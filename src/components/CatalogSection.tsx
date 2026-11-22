@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import type { BookCatalogItem, BookCategory } from "@/types/book";
-import { CATEGORIES } from "@/data/books";
+import { CATEGORIES } from "@/lib/book-constants";
 import {
   CATALOG_SEARCH_FOCUS_PARAM,
   CATALOG_SEARCH_INPUT_ID,

@@ -10,7 +10,7 @@ Direktori ini menyimpan file migrasi SQL berurutan (mis. `0001_initial_schema.sq
   ```
 - **Preview (`dev`):**
   ```bash
-  npx wrangler d1 migrations apply ringkasnya-db-preview --remote
+  npx wrangler d1 migrations apply ringkasnya-db --remote --preview
   ```
 - **Production (`main`):**
   ```bash

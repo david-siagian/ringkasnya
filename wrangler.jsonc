@@ -16,6 +16,7 @@
       "binding": "DB",
       "database_name": "ringkasnya-db",
       "database_id": "97f9180f-c75c-434b-aefb-94bdba512726",
+      "preview_database_id": "1bd684d1-0202-47a5-bb8e-3b46855888e5",
       "migrations_dir": "migrations"
     }
   ],

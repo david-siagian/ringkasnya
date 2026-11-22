@@ -1,7 +1,15 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { BOOK_CATALOG } from "@/data/books";
+import {
+  getBookCatalog,
+  PUBLIC_PAGE_CACHE_CONTROL,
+} from "@/lib/books-repository";
 import CatalogSection from "@/components/CatalogSection";
+
+export const prerender = false;
+
+const bookCatalog = await getBookCatalog(Astro.locals.runtime?.env?.DB);
+Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
 
 const pageTitle = "Katalog Buku Lengkap — Ringkasnya";
 const pageDescription =
@@ -12,7 +20,7 @@ const pageDescription =
   <div class="min-h-screen bg-page">
     <CatalogSection
       client:load
-      books={BOOK_CATALOG}
+      books={bookCatalog}
       mode="full"
       itemsPerPage={20}
     />

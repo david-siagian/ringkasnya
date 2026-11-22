@@ -1,22 +1,28 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { BOOKS, BOOK_CATALOG, getBookBySlug } from "@/data/books";
+import {
+  getBookBySlug,
+  getBookCatalog,
+  PUBLIC_PAGE_CACHE_CONTROL,
+} from "@/lib/books-repository";
 import BookReader from "@/components/BookReader";
 
-export function getStaticPaths() {
-  return BOOKS.map((book) => ({
-    params: { slug: book.slug },
-  }));
-}
+export const prerender = false;
 
+const db = Astro.locals.runtime?.env?.DB;
 const { slug } = Astro.params;
-const book = slug ? getBookBySlug(slug) : undefined;
+const [book, bookCatalog] = await Promise.all([
+  slug ? getBookBySlug(db, slug) : Promise.resolve(null),
+  getBookCatalog(db),
+]);
 
 if (!book) {
   return Astro.redirect("/404");
 }
 
-const relatedBooks = BOOK_CATALOG.filter((b) => b.slug !== book.slug);
+Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
+
+const relatedBooks = bookCatalog.filter((b) => b.slug !== book.slug);
 const pageTitle = `Ringkasan Buku ${book.title} (${book.author}) — Ringkasnya`;
 const pageDescription = `${book.tagline} Baca ringkasan ${book.title} dalam ${book.quickTimeMinutes}-${book.readingTimeMinutes} menit lengkap dengan Action Checklist.`;
 ---

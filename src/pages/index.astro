@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { BOOK_CATALOG } from "@/data/books";
+import {
+  getBookCatalog,
+  PUBLIC_PAGE_CACHE_CONTROL,
+} from "@/lib/books-repository";
 import CatalogSection from "@/components/CatalogSection";
 import {
   ArrowRight,
@@ -10,7 +13,15 @@ import {
   Zap,
 } from "lucide-react";
 
-const minQuickMinutes = Math.min(...BOOK_CATALOG.map((b) => b.quickTimeMinutes));
+export const prerender = false;
+
+const bookCatalog = await getBookCatalog(Astro.locals.runtime?.env?.DB);
+const minQuickMinutes =
+  bookCatalog.length > 0
+    ? Math.min(...bookCatalog.map((b) => b.quickTimeMinutes))
+    : 5;
+
+Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
 ---
 
 <BaseLayout>
@@ -103,7 +114,7 @@ const minQuickMinutes = Math.min(...BOOK_CATALOG.map((b) => b.quickTimeMinutes))
 
     {/* Katalog Buku Interaktif */}
     <div data-reveal>
-      <CatalogSection client:load books={BOOK_CATALOG} />
+      <CatalogSection client:load books={bookCatalog} />
     </div>
 
     {/* Seksi Metode Membaca */}

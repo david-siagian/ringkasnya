@@ -16,9 +16,34 @@ Mengaktifkan binding yang sudah disiapkan di `wrangler.jsonc`:
 
 ---
 
-## 2. Autentikasi & Pembayaran (Fase 3 Inti)
+## 1B. Migrasi Konten Buku ke Cloudflare D1 (Tahap Berikutnya)
 
-- **Login & Manajemen Akun**: Sistem masuk pembaca (mis. OAuth / Magic Link) beserta sinkronisasi progres baca & bookmark lintas perangkat.
+Memindahkan seluruh **58 buku** dari file TypeScript statis (`src/data/books/*.ts`) ke Cloudflare D1 sekaligus memangkas ukuran bundle JS client (`CatalogSection` saat ini ~1,43 MB karena mengimpor `CATEGORIES` dari file yang membundel seluruh buku).
+
+### A. Desain Skema 2 Tabel (Vertical Partitioning)
+1. **Tabel `books`** *(metadata katalog ringan — untuk `/`, `/katalog`, `/topik`, `/tentang`, dan `relatedBooks`)*:
+   - `slug TEXT PRIMARY KEY`, `title`, `original_title`, `author`, `year`, `category`, `reading_time_minutes`, `quick_time_minutes`, `rating`, `goodreads_ratings`, `editorial_tier` (`1|2|3`), `cover_gradient`, `cover_accent`, `cover_image`, `badge_text`, `tagline`, `synopsis`, `who_is_it_for_json`, `takeaways_count`, `is_published` (default `1`), `is_premium` (default `0`), `created_at`, `updated_at`.
+   - Index: `idx_books_catalog_order (is_published, editorial_tier ASC, goodreads_ratings DESC, rating DESC, title ASC)` dan `idx_books_category (is_published, category)`.
+2. **Tabel `book_contents`** *(payload baca lengkap — hanya di-JOIN pada `/buku/[slug]`)*:
+   - `book_slug TEXT PRIMARY KEY REFERENCES books(slug) ON DELETE CASCADE`, `key_takeaways_json`, `key_concepts_json`, `quotes_json`, `conclusion`, `updated_at`.
+
+### B. Langkah Implementasi
+1. **Migrasi Skema**: Buat `migrations/0001_create_books_tables.sql` dan terapkan ke lokal (`--local`), preview (`ringkasnya-db-preview`), dan production (`ringkasnya-db`).
+2. **Seeder Idempoten (58 Buku)**: Buat script generator SQL (`INSERT ... ON CONFLICT DO UPDATE`) dari data 58 buku saat ini lengkap dengan kalkulasi `withCalculatedReadingTimes` dan `effectiveEditorialTier`, serta script `db:seed:local`, `db:seed:preview`, dan `db:seed:prod`.
+3. **Pisahkan Konstanta & Repository D1**:
+   - Pindahkan `CATEGORIES` ke `src/lib/book-constants.ts` dan perbarui `CatalogSection.tsx` agar bundle client menyusut drastis.
+   - Buat `src/lib/books-repository.ts` (`getBookCatalog`, `getBookBySlug`, `getPublishedBookCount`) dengan *prepared statements* dan mapping aman ke tipe `BookCatalogItem` & `BookSummary`.
+4. **Konversi 5 Halaman ke SSR D1 + Edge Caching**:
+   - Ubah `index.astro`, `katalog.astro`, `topik.astro`, `tentang.astro`, dan `buku/[slug].astro` menjadi `export const prerender = false` dengan pembacaan dari `Astro.locals.runtime.env.DB` dan header `Cache-Control: public, s-maxage=300, stale-while-revalidate=3600`.
+5. **Verifikasi & Pembersihan**:
+   - Cek jumlah data (`58` buku), `npx tsc --noEmit`, `npm run build` (pastikan ukuran chunk `CatalogSection` turun drastis), `npx wrangler deploy --dry-run`, dan uji halaman di Preview `dev` sebelum membersihkan `src/data/books/`.
+
+---
+
+## 2. Autentikasi, Admin CMS & Pembayaran (Fase 3 Inti)
+
+- **Login & Manajemen Akun**: Sistem masuk pembaca (mis. OAuth Google) beserta sinkronisasi progres baca & bookmark lintas perangkat.
+- **Admin CMS (`/admin`)**: Dashboard khusus admin (terlindungi autentikasi & role `admin` server-side) untuk menambah, mengedit konten ringkasan, mengubah status `is_published` (draft/publish), menandai `is_premium`, serta otomatis menghitung ulang durasi baca (`quick_time_minutes` & `reading_time_minutes`) langsung ke Cloudflare D1 tanpa perlu deploy ulang.
 - **Payment Gateway**: Integrasi pembayaran untuk paket akses penuh/keanggotaan.
 
 ---

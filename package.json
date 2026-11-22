@@ -10,6 +10,13 @@
     "cf:preview": "wrangler dev",
     "cf:deploy": "wrangler deploy",
     "cf:typegen": "wrangler types",
+    "db:migrate:local": "wrangler d1 migrations apply ringkasnya-db --local",
+    "db:migrate:preview": "wrangler d1 migrations apply ringkasnya-db --remote --preview",
+    "db:migrate:prod": "wrangler d1 migrations apply ringkasnya-db --remote",
+    "db:seed:generate": "node scripts/generate-books-seed.mjs",
+    "db:seed:local": "wrangler d1 execute ringkasnya-db --local --file=scripts/seed-books.sql",
+    "db:seed:preview": "wrangler d1 execute ringkasnya-db --remote --preview --file=scripts/seed-books.sql",
+    "db:seed:prod": "wrangler d1 execute ringkasnya-db --remote --file=scripts/seed-books.sql",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test"
   },

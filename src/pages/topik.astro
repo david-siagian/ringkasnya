@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { BOOKS, CATEGORIES } from "@/data/books";
+import { CATEGORIES } from "@/lib/book-constants";
+import {
+  getBookCatalog,
+  PUBLIC_PAGE_CACHE_CONTROL,
+} from "@/lib/books-repository";
 import type { BookCategory } from "@/types/book";
 import {
   Activity,
@@ -91,8 +95,13 @@ const TOPIC_DETAILS: Record<
   },
 };
 
+export const prerender = false;
+
+const bookCatalog = await getBookCatalog(Astro.locals.runtime?.env?.DB);
+Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
+
 const topicCards = CATEGORIES.map((category) => {
-  const books = BOOKS.filter((book) => book.category === category);
+  const books = bookCatalog.filter((book) => book.category === category);
   return {
     category,
     books,
