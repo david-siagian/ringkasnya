@@ -92,6 +92,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const readingAreaRef = useRef<HTMLDivElement>(null);
   const pendingScrollTargetRef = useRef<string | null>(null);
   const pendingScrollToReadingTopRef = useRef(false);
+  const pendingQuickStepRef = useRef<number | null>(null);
+  const pendingQuickStepTimerRef = useRef<number | undefined>(undefined);
   const wasAtCompletionEndRef = useRef(false);
 
   const { isBookmarked, toggleBookmark } = useBookmarks();
@@ -120,6 +122,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setDeepStep(0);
     setIsConceptsModalOpen(false);
     setIsQuotesModalOpen(false);
+    pendingQuickStepRef.current = null;
+    window.clearTimeout(pendingQuickStepTimerRef.current);
     wasAtCompletionEndRef.current = false;
   }, [book.slug]);
 
@@ -162,7 +166,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   }, []);
 
   useEffect(() => {
-    return () => window.clearTimeout(copyTimerRef.current);
+    return () => {
+      window.clearTimeout(copyTimerRef.current);
+      window.clearTimeout(pendingQuickStepTimerRef.current);
+    };
   }, []);
 
   // Hitung progres membaca berbasis scroll saat berada di Mode Kilat
@@ -244,10 +251,54 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     );
   };
 
+  const setPendingQuickStep = (step: number | null) => {
+    window.clearTimeout(pendingQuickStepTimerRef.current);
+    pendingQuickStepRef.current = step;
+    if (step !== null) {
+      pendingQuickStepTimerRef.current = window.setTimeout(() => {
+        pendingQuickStepRef.current = null;
+      }, 750);
+    }
+  };
+
+  const detectActiveQuickStep = (): number => {
+    if (pendingQuickStepRef.current !== null) {
+      return pendingQuickStepRef.current;
+    }
+
+    const stickyBottom = toolbarRef.current?.getBoundingClientRect().bottom ?? 0;
+    const anchorY =
+      stickyBottom + Math.min(120, Math.max(64, window.innerHeight * 0.16));
+
+    let detectedStep = 0;
+    book.keyTakeaways.forEach((takeaway, idx) => {
+      const el = document.getElementById(`poin-${takeaway.number}`);
+      if (el && el.getBoundingClientRect().top <= anchorY) {
+        detectedStep = idx + 1;
+      }
+    });
+
+    const conclusionEl = document.getElementById("kesimpulan-akhir");
+    if (
+      (conclusionEl && conclusionEl.getBoundingClientRect().top <= anchorY) ||
+      scrollProgress >= 95
+    ) {
+      detectedStep = finalStep;
+    }
+
+    return detectedStep;
+  };
+
   const goToDeepStep = (nextStep: number) => {
     const target = Math.max(0, Math.min(finalStep, nextStep));
     setDeepStep(target);
     pendingScrollToReadingTopRef.current = true;
+  };
+
+  const handleReadTakeawayDeep = (step: number) => {
+    setPendingQuickStep(null);
+    goToDeepStep(step);
+    setReadMode("deep");
   };
 
   const activeTakeaway =
@@ -261,14 +312,20 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     if (nextMode === "quick") {
       if (activeTakeaway) {
         pendingScrollTargetRef.current = `poin-${activeTakeaway.number}`;
+        setPendingQuickStep(clampedDeepStep);
       } else if (clampedDeepStep === finalStep) {
         pendingScrollTargetRef.current = "kesimpulan-akhir";
+        setPendingQuickStep(finalStep);
+      } else {
+        setPendingQuickStep(0);
       }
       setReadMode("quick");
       return;
     }
 
-    setDeepStep(0);
+    const targetStep = detectActiveQuickStep();
+    setPendingQuickStep(null);
+    setDeepStep(targetStep);
     pendingScrollToReadingTopRef.current = true;
     setReadMode("deep");
   };
@@ -523,17 +580,24 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 book={book}
                 fs={fs}
                 mode="quick"
-                onSelectTakeaway={(num) => smoothScrollToElement(`poin-${num}`)}
+                onSelectTakeaway={(num) => {
+                  const idx = book.keyTakeaways.findIndex(
+                    (t) => t.number === num
+                  );
+                  if (idx >= 0) setPendingQuickStep(idx + 1);
+                  smoothScrollToElement(`poin-${num}`);
+                }}
               />
 
               <div className="mt-8 space-y-6">
-                {book.keyTakeaways.map((takeaway) => (
+                {book.keyTakeaways.map((takeaway, idx) => (
                   <TakeawayCard
                     key={takeaway.number}
                     takeaway={takeaway}
                     fs={fs}
                     showDeepContent={false}
                     scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                    onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
                   />
                 ))}
               </div>

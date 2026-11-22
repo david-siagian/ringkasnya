@@ -192,6 +192,7 @@ interface TakeawayCardProps {
   fs: FontScale;
   showDeepContent: boolean;
   scrollMarginTop?: string;
+  onReadDeep?: () => void;
 }
 
 /** Kartu satu Poin Inti (mendukung Mode Kilat maupun Mode Mendalam). */
@@ -200,6 +201,7 @@ export function TakeawayCard({
   fs,
   showDeepContent,
   scrollMarginTop,
+  onReadDeep,
 }: TakeawayCardProps) {
   return (
     <article
@@ -259,6 +261,20 @@ export function TakeawayCard({
           </p>
         </div>
       </div>
+
+      {!showDeepContent && onReadDeep && (
+        <div className="mt-4 flex justify-end border-t border-line-subtle pt-3.5">
+          <button
+            type="button"
+            onClick={onReadDeep}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-accent-line/70 bg-accent-soft/60 px-3.5 py-2 text-xs font-semibold text-accent-text transition hover:bg-accent-soft active:scale-[0.98]"
+          >
+            <BookOpen className="h-3.5 w-3.5" />
+            <span>Baca penjelasan mendalam</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
     </article>
   );
 }
