@@ -24,6 +24,16 @@ import { theSimplePathToWealth } from "./books/the-simple-path-to-wealth";
 import { range } from "./books/range";
 import { theGrandDesign } from "./books/the-grand-design";
 import { everybodyLies } from "./books/everybody-lies";
+import { whatEvolutionIs } from "./books/what-evolution-is";
+import { origins } from "./books/origins";
+import { barkingUpTheWrongTree } from "./books/barking-up-the-wrong-tree";
+import { whyIsSexFun } from "./books/why-is-sex-fun";
+import { theOriginOfHumankind } from "./books/the-origin-of-humankind";
+import { theJoyOfScience } from "./books/the-joy-of-science";
+import { shadowsOfForgottenAncestors } from "./books/shadows-of-forgotten-ancestors";
+import { outlive } from "./books/outlive";
+import { enlightenmentNow } from "./books/enlightenment-now";
+import { quiet } from "./books/quiet";
 
 export const CATEGORIES: BookCategory[] = [
   "Sains & Nalar Ilmiah",
@@ -99,6 +109,16 @@ export const BOOKS: BookSummary[] = [
   range,
   theGrandDesign,
   everybodyLies,
+  whatEvolutionIs,
+  origins,
+  barkingUpTheWrongTree,
+  whyIsSexFun,
+  theOriginOfHumankind,
+  theJoyOfScience,
+  shadowsOfForgottenAncestors,
+  outlive,
+  enlightenmentNow,
+  quiet,
 ].map(withCalculatedReadingTimes);
 
 /**

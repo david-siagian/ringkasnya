@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#030712" />
+      <stop offset="50%" stop-color="#1E1B4B" />
+      <stop offset="100%" stop-color="#312E81" />
+    </linearGradient>
+    <radialGradient id="galaxyGlow" cx="50%" cy="54%" r="44%">
+      <stop offset="0%" stop-color="#FDE047" stop-opacity="0.45" />
+      <stop offset="38%" stop-color="#818CF8" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="#1E1B4B" stop-opacity="0" />
+    </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#020617" flood-opacity="0.7" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <circle cx="300" cy="465" r="260" fill="url(#galaxyGlow)" />
+
+  <!-- Starfield -->
+  <g fill="#E0E7FF">
+    <circle cx="95" cy="240" r="2" opacity="0.7" />
+    <circle cx="510" cy="270" r="2.5" opacity="0.8" />
+    <circle cx="130" cy="580" r="2" opacity="0.6" />
+    <circle cx="485" cy="560" r="2" opacity="0.75" />
+    <circle cx="215" cy="310" r="1.5" opacity="0.65" />
+    <circle cx="410" cy="330" r="1.5" opacity="0.65" />
+    <circle cx="155" cy="435" r="2" opacity="0.55" />
+    <circle cx="450" cy="425" r="2" opacity="0.55" />
+  </g>
+
+  <!-- Cosmic Spiral Galaxy & Rings -->
+  <g transform="translate(300, 465)" fill="none">
+    <ellipse cx="0" cy="0" rx="195" ry="72" transform="rotate(-18)" stroke="#A5B4FC" stroke-width="2" opacity="0.4" />
+    <ellipse cx="0" cy="0" rx="145" ry="52" transform="rotate(-18)" stroke="#C7D2FE" stroke-width="2.5" opacity="0.55" />
+    <ellipse cx="0" cy="0" rx="95" ry="34" transform="rotate(-18)" stroke="#FDE68A" stroke-width="2.5" opacity="0.75" />
+    <circle cx="0" cy="0" r="142" stroke="#6366F1" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.35" />
+    <circle cx="0" cy="0" r="24" fill="#FEF08A" />
+    <circle cx="0" cy="0" r="42" fill="#FDE047" opacity="0.25" />
+  </g>
+
+  <!-- Title & Authors -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="96" fill="#C7D2FE" font-size="18" font-weight="700" letter-spacing="4">FOURTEEN BILLION YEARS OF COSMIC EVOLUTION</text>
+    <text x="300" y="180" fill="#FFFFFF" font-size="92" font-weight="900" letter-spacing="6">ORIGINS</text>
+    <line x1="185" y1="204" x2="415" y2="204" stroke="#818CF8" stroke-width="2.5" opacity="0.75" />
+    <text x="300" y="704" fill="#FEF08A" font-size="22" font-weight="800" letter-spacing="4">NEIL DEGRASSE TYSON</text>
+    <text x="300" y="736" fill="#C7D2FE" font-size="18" font-weight="700" letter-spacing="3">&amp; DONALD GOLDSMITH</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
+</svg>
