@@ -12,7 +12,6 @@
 /dist/
 /.astro/
 /.wrangler/
-/scripts/seed-books.sql
 
 # legacy next.js / vercel
 /.next/
