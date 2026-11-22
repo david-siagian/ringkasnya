@@ -11,15 +11,25 @@
   "observability": {
     "enabled": true
   },
-  "previews": {}
-  // Siap diaktifkan untuk Fase 3 (Login Auth & Payment Gateway):
-  // "d1_databases": [
-  //   {
-  //     "binding": "DB",
-  //     "database_name": "ringkasnya-db",
-  //     "database_id": "<D1_DATABASE_ID>"
-  //   }
-  // ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ringkasnya-db",
+      "database_id": "97f9180f-c75c-434b-aefb-94bdba512726",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "previews": {
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "ringkasnya-db-preview",
+        "database_id": "1bd684d1-0202-47a5-bb8e-3b46855888e5",
+        "migrations_dir": "migrations"
+      }
+    ]
+  }
+  // Siap diaktifkan untuk Fase 3 (Session & Rate Limiting):
   // "kv_namespaces": [
   //   {
   //     "binding": "SESSION_KV",

@@ -7,8 +7,11 @@ Dokumen ini menyimpan rencana pengembangan **Fase 3** untuk `ringkasnya.com`, me
 ## 1. Infrastruktur Backend (Cloudflare D1 & KV)
 
 Mengaktifkan binding yang sudah disiapkan di `wrangler.jsonc`:
-- **Cloudflare D1 (`DB` / `ringkasnya-db`)**: Penyimpanan data relasional persisten (pengguna, langganan, dan interaksi pembaca).
-- **Cloudflare KV (`SESSION_KV`)**: Penyimpanan sesi autentikasi dan *rate-limiting* ringan di edge.
+- **Cloudflare D1 (`DB`) — Aktif (D1 Murni, Region APAC)**:
+  - Production (`main`): `ringkasnya-db`
+  - Preview (`dev`): `ringkasnya-db-preview` (terisolasi di blok `previews` agar pengujian tidak memengaruhi data production)
+  - Migrasi SQL: folder `migrations/` dengan verifikasi koneksi aman (`SELECT 1`) di `/api/health`.
+- **Cloudflare KV (`SESSION_KV`) — Menunggu Fase Auth**: Penyimpanan sesi autentikasi dan *rate-limiting* ringan di edge.
 - **API Routes (`src/pages/api/`)**: Endpoint SSR di Cloudflare Workers untuk menangani autentikasi, webhook pembayaran, dan fitur komunitas.
 
 ---

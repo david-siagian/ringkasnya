@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "cf:preview": "wrangler dev",
     "cf:deploy": "wrangler deploy",
+    "cf:typegen": "wrangler types",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test"
   },
