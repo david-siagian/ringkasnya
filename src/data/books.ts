@@ -44,6 +44,16 @@ import { predictablyIrrational } from "./books/predictably-irrational";
 import { influence } from "./books/influence";
 import { mindset } from "./books/mindset";
 import { grit } from "./books/grit";
+import { outliers } from "./books/outliers";
+import { neverSplitTheDifference } from "./books/never-split-the-difference";
+import { theSubtleArtOfNotGivingAFck } from "./books/the-subtle-art-of-not-giving-a-fck";
+import { meditations } from "./books/meditations";
+import { ikigai } from "./books/ikigai";
+import { gettingThingsDone } from "./books/getting-things-done";
+import { makeTime } from "./books/make-time";
+import { theAlmanackOfNavalRavikant } from "./books/the-almanack-of-naval-ravikant";
+import { richDadPoorDad } from "./books/rich-dad-poor-dad";
+import { theRichestManInBabylon } from "./books/the-richest-man-in-babylon";
 
 export const CATEGORIES: BookCategory[] = [
   "Sains & Nalar Ilmiah",
@@ -141,6 +151,16 @@ export const BOOKS: BookSummary[] = [
   influence,
   mindset,
   grit,
+  outliers,
+  neverSplitTheDifference,
+  theSubtleArtOfNotGivingAFck,
+  meditations,
+  ikigai,
+  gettingThingsDone,
+  makeTime,
+  theAlmanackOfNavalRavikant,
+  richDadPoorDad,
+  theRichestManInBabylon,
 ].map(withCalculatedReadingTimes);
 
 /**
