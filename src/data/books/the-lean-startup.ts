@@ -5,7 +5,7 @@ export const theLeanStartup: BookSummary = {
   title: "The Lean Startup",
   author: "Eric Ries",
   year: 2011,
-  category: "Keuangan & Bisnis",
+  category: "Organisasi & Bisnis",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.7,

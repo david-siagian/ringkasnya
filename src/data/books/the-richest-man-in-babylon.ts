@@ -6,7 +6,7 @@ export const theRichestManInBabylon: BookSummary = {
   originalTitle: "Orang Terkaya di Babilonia",
   author: "George S. Clason",
   year: 1926,
-  category: "Keuangan & Bisnis",
+  category: "Ekonomi & Keuangan",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,

@@ -8,6 +8,7 @@ import {
   BookOpen,
   Briefcase,
   Brain,
+  Building2,
   Compass,
   Globe,
   Landmark,
@@ -18,7 +19,7 @@ import {
 
 const pageTitle = "Topik Pilihan — Ringkasnya";
 const pageDescription =
-  "Jelajahi ringkasan buku berdasarkan bidang pengetahuan: Sains & Nalar Ilmiah, Sejarah & Masyarakat, Ekonomi & Politik, Psikologi & Perilaku, Organisasi & Budaya Kerja, Produktivitas & Pengembangan Diri, Filsafat & Kebijaksanaan, serta Keuangan & Bisnis.";
+  "Jelajahi ringkasan buku berdasarkan bidang pengetahuan: Sains & Nalar Ilmiah, Sejarah & Masyarakat, Ekonomi & Keuangan, Politik & Negara, Psikologi & Perilaku, Organisasi & Bisnis, Karier & Budaya Kerja, Produktivitas & Pengembangan Diri, serta Filsafat & Kebijaksanaan.";
 
 const TOPIC_DETAILS: Record<
   BookCategory,
@@ -39,9 +40,15 @@ const TOPIC_DETAILS: Record<
     accentClass:
       "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-800/60 dark:bg-rose-950/60 dark:text-rose-300",
   },
-  "Ekonomi & Politik": {
+  "Ekonomi & Keuangan": {
     description:
-      "Pahami cara insentif, pasar, kebijakan publik, dan aturan main negara menentukan kemakmuran maupun ketimpangan.",
+      "Pahami prinsip pengelolaan kekayaan, alokasi aset, kekuatan bunga berbunga, serta cara kerja pasar dan insentif finansial.",
+    accentClass:
+      "border-teal-200 bg-teal-50 text-teal-700 dark:border-teal-800/60 dark:bg-teal-950/60 dark:text-teal-300",
+  },
+  "Politik & Negara": {
+    description:
+      "Pelajari tata kelola kekuasaan, institusi publik, demokrasi, kebebasan, dan faktor di balik kemakmuran serta kemunduran bangsa.",
     accentClass:
       "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800/60 dark:bg-amber-950/60 dark:text-amber-300",
   },
@@ -51,9 +58,15 @@ const TOPIC_DETAILS: Record<
     accentClass:
       "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-800/60 dark:bg-sky-950/60 dark:text-sky-300",
   },
-  "Organisasi & Budaya Kerja": {
+  "Organisasi & Bisnis": {
     description:
-      "Pelajari bagaimana tim dan individu bekerja fokus, mengelola prioritas, dan membangun budaya kerja yang sehat.",
+      "Pelajari strategi membangun perusahaan unggul, inovasi model bisnis, kepemimpinan visioner, dan validasi ide produk.",
+    accentClass:
+      "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800/60 dark:bg-blue-950/60 dark:text-blue-300",
+  },
+  "Karier & Budaya Kerja": {
+    description:
+      "Pelajari seni bekerja fokus, negosiasi strategis, kolaborasi tim, dan navigasi pertumbuhan karier profesional.",
     accentClass:
       "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300",
   },
@@ -68,12 +81,6 @@ const TOPIC_DETAILS: Record<
       "Renungkan cara hidup tenang, filosofi Stoa, pencarian makna, dan kebijaksanaan praktis menghadapi ketidakpastian hidup.",
     accentClass:
       "border-indigo-200 bg-indigo-50 text-indigo-700 dark:border-indigo-800/60 dark:bg-indigo-950/60 dark:text-indigo-300",
-  },
-  "Keuangan & Bisnis": {
-    description:
-      "Pelajari prinsip membangun kekayaan jangka panjang, strategi perusahaan unggul, dan cara berpikir investor maupun pendiri usaha.",
-    accentClass:
-      "border-teal-200 bg-teal-50 text-teal-700 dark:border-teal-800/60 dark:bg-teal-950/60 dark:text-teal-300",
   },
 };
 
@@ -122,13 +129,19 @@ const topicCards = CATEGORIES.map((category) => {
                     {topic.category === "Sejarah & Masyarakat" && (
                       <Globe className="h-3.5 w-3.5" />
                     )}
-                    {topic.category === "Ekonomi & Politik" && (
+                    {topic.category === "Ekonomi & Keuangan" && (
+                      <TrendingUp className="h-3.5 w-3.5" />
+                    )}
+                    {topic.category === "Politik & Negara" && (
                       <Landmark className="h-3.5 w-3.5" />
                     )}
                     {topic.category === "Psikologi & Perilaku" && (
                       <Brain className="h-3.5 w-3.5" />
                     )}
-                    {topic.category === "Organisasi & Budaya Kerja" && (
+                    {topic.category === "Organisasi & Bisnis" && (
+                      <Building2 className="h-3.5 w-3.5" />
+                    )}
+                    {topic.category === "Karier & Budaya Kerja" && (
                       <Briefcase className="h-3.5 w-3.5" />
                     )}
                     {topic.category === "Produktivitas & Pengembangan Diri" && (
@@ -136,9 +149,6 @@ const topicCards = CATEGORIES.map((category) => {
                     )}
                     {topic.category === "Filsafat & Kebijaksanaan" && (
                       <Sun className="h-3.5 w-3.5" />
-                    )}
-                    {topic.category === "Keuangan & Bisnis" && (
-                      <TrendingUp className="h-3.5 w-3.5" />
                     )}
                     <span>{topic.books.length} Buku</span>
                   </span>

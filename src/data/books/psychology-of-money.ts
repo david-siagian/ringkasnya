@@ -6,7 +6,7 @@ export const psychologyOfMoney: BookSummary = {
   originalTitle: "Timeless Lessons on Wealth, Greed, and Happiness",
   author: "Morgan Housel",
   year: 2020,
-  category: "Ekonomi & Politik",
+  category: "Ekonomi & Keuangan",
   readingTimeMinutes: 18,
   quickTimeMinutes: 7,
   rating: 4.9,

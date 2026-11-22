@@ -6,7 +6,7 @@ export const theAlmanackOfNavalRavikant: BookSummary = {
   originalTitle: "Almanak Naval Ravikant: Panduan Kekayaan dan Kebahagiaan",
   author: "Eric Jorgenson",
   year: 2020,
-  category: "Keuangan & Bisnis",
+  category: "Ekonomi & Keuangan",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.9,

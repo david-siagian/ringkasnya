@@ -6,7 +6,7 @@ export const freakonomics: BookSummary = {
   originalTitle: "A Rogue Economist Explores the Hidden Side of Everything",
   author: "Steven D. Levitt & Stephen J. Dubner",
   year: 2005,
-  category: "Ekonomi & Politik",
+  category: "Ekonomi & Keuangan",
   readingTimeMinutes: 16,
   quickTimeMinutes: 5,
   rating: 4.8,

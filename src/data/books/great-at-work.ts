@@ -6,7 +6,7 @@ export const greatAtWork: BookSummary = {
   originalTitle: "Hebat di Tempat Kerja: Bekerja Lebih Cerdas, Bukan Lebih Lama",
   author: "Morten T. Hansen",
   year: 2018,
-  category: "Organisasi & Budaya Kerja",
+  category: "Karier & Budaya Kerja",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.7,

@@ -6,7 +6,7 @@ export const the7HabitsOfHighlyEffectivePeople: BookSummary = {
   originalTitle: "7 Kebiasaan Manusia yang Sangat Efektif",
   author: "Stephen R. Covey",
   year: 1989,
-  category: "Organisasi & Budaya Kerja",
+  category: "Karier & Budaya Kerja",
   readingTimeMinutes: 17,
   quickTimeMinutes: 6,
   rating: 4.9,

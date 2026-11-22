@@ -6,7 +6,7 @@ export const neverSplitTheDifference: BookSummary = {
   originalTitle: "Jangan Pernah Membagi Selisih: Seni Negosiasi Berisiko Tinggi",
   author: "Chris Voss",
   year: 2016,
-  category: "Organisasi & Budaya Kerja",
+  category: "Karier & Budaya Kerja",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.9,

@@ -1,12 +1,13 @@
 export type BookCategory =
   | "Sains & Nalar Ilmiah"
   | "Sejarah & Masyarakat"
-  | "Ekonomi & Politik"
+  | "Ekonomi & Keuangan"
+  | "Politik & Negara"
   | "Psikologi & Perilaku"
-  | "Organisasi & Budaya Kerja"
+  | "Organisasi & Bisnis"
+  | "Karier & Budaya Kerja"
   | "Produktivitas & Pengembangan Diri"
-  | "Filsafat & Kebijaksanaan"
-  | "Keuangan & Bisnis";
+  | "Filsafat & Kebijaksanaan";
 
 export interface BookKeyConcept {
   title: string;

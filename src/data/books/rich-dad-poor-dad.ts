@@ -6,7 +6,7 @@ export const richDadPoorDad: BookSummary = {
   originalTitle: "Ayah Kaya, Ayah Miskin",
   author: "Robert T. Kiyosaki",
   year: 1997,
-  category: "Keuangan & Bisnis",
+  category: "Ekonomi & Keuangan",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.7,

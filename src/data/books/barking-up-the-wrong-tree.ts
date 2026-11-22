@@ -6,7 +6,7 @@ export const barkingUpTheWrongTree: BookSummary = {
   originalTitle: "Sains Mengejutkan di Balik Kesuksesan Nyata",
   author: "Eric Barker",
   year: 2017,
-  category: "Psikologi & Perilaku",
+  category: "Karier & Budaya Kerja",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.7,

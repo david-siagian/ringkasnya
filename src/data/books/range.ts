@@ -6,7 +6,7 @@ export const range: BookSummary = {
   originalTitle: "Why Generalists Triumph in a Specialized World",
   author: "David Epstein",
   year: 2019,
-  category: "Organisasi & Budaya Kerja",
+  category: "Karier & Budaya Kerja",
   readingTimeMinutes: 17,
   quickTimeMinutes: 6,
   rating: 4.8,

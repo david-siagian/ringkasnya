@@ -6,7 +6,7 @@ export const theSimplePathToWealth: BookSummary = {
   originalTitle: "Your Road Map to Financial Independence and a Rich, Free Life",
   author: "JL Collins",
   year: 2016,
-  category: "Ekonomi & Politik",
+  category: "Ekonomi & Keuangan",
   readingTimeMinutes: 16,
   quickTimeMinutes: 5,
   rating: 4.9,

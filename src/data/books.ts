@@ -61,12 +61,13 @@ import { stealLikeAnArtist } from "./books/steal-like-an-artist";
 export const CATEGORIES: BookCategory[] = [
   "Sains & Nalar Ilmiah",
   "Sejarah & Masyarakat",
-  "Ekonomi & Politik",
+  "Ekonomi & Keuangan",
+  "Politik & Negara",
   "Psikologi & Perilaku",
-  "Organisasi & Budaya Kerja",
+  "Organisasi & Bisnis",
+  "Karier & Budaya Kerja",
   "Produktivitas & Pengembangan Diri",
   "Filsafat & Kebijaksanaan",
-  "Keuangan & Bisnis",
 ];
 
 const WORDS_PER_MINUTE = 200;

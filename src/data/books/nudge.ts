@@ -6,7 +6,7 @@ export const nudge: BookSummary = {
   originalTitle: "Improving Decisions About Health, Wealth, and Happiness",
   author: "Richard H. Thaler & Cass R. Sunstein",
   year: 2008,
-  category: "Ekonomi & Politik",
+  category: "Ekonomi & Keuangan",
   readingTimeMinutes: 17,
   quickTimeMinutes: 5,
   rating: 4.8,

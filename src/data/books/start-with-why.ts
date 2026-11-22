@@ -5,7 +5,7 @@ export const startWithWhy: BookSummary = {
   title: "Start with Why",
   author: "Simon Sinek",
   year: 2009,
-  category: "Organisasi & Budaya Kerja",
+  category: "Organisasi & Bisnis",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.7,

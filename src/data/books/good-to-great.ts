@@ -6,7 +6,7 @@ export const goodToGreat: BookSummary = {
   originalTitle: "Dari Baik Menjadi Luar Biasa",
   author: "Jim Collins",
   year: 2001,
-  category: "Keuangan & Bisnis",
+  category: "Organisasi & Bisnis",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,
