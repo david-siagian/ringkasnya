@@ -277,7 +277,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     expect(errors).toEqual([]);
   });
 
-  test("beranda (/): animasi scroll-reveal muncul saat scroll ke Perpustakaan Kurasi & Mengapa ringkasnya.com", async ({
+  test("beranda (/): animasi scroll-reveal muncul saat scroll ke Perpustakaan Kurasi & Mengapa Ringkasnya", async ({
     page,
   }) => {
     const errors = trackRuntimeErrors(page);
@@ -309,7 +309,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     const data = await response.json();
     expect(data).toMatchObject({
       status: "ok",
-      service: "ringkasnya.com",
+      service: "Ringkasnya",
     });
   });
 });

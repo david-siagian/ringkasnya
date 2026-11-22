@@ -6,7 +6,7 @@ export const GET: APIRoute = async () => {
   return new Response(
     JSON.stringify({
       status: "ok",
-      service: "ringkasnya.com",
+      service: "Ringkasnya",
       runtime: "cloudflare-workers",
       timestamp: new Date().toISOString(),
     }),

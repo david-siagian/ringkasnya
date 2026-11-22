@@ -133,7 +133,7 @@ export default function Navbar() {
             <BrandLogo className="h-11 w-11 transition-transform group-hover:scale-105" />
             <div className="flex flex-col">
               <span className="text-lg font-extrabold tracking-tight text-ink">
-                ringkasnya<span className="text-emerald-600 dark:text-emerald-400 font-bold">.com</span>
+                Ringkasnya
               </span>
               <span className="text-[11px] text-ink-subtle hidden sm:inline">
                 Baca Intinya, Praktikkan Ilmunya
@@ -241,7 +241,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <BrandLogo className="h-8 w-8" />
             <span className="text-base font-extrabold tracking-tight text-ink">
-              ringkasnya<span className="text-emerald-600 dark:text-emerald-400 font-bold">.com</span>
+              Ringkasnya
             </span>
           </div>
           <button
