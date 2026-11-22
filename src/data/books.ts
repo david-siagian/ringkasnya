@@ -71,8 +71,8 @@ export const CATEGORIES: BookCategory[] = [
   "Filsafat & Kebijaksanaan",
   "Ekonomi & Keuangan",
   "Organisasi & Bisnis",
-  "Kesehatan & Medis",
   "Karier & Budaya Kerja",
+  "Kesehatan & Medis",
   "Produktivitas & Pengembangan Diri",
 ];
 
