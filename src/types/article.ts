@@ -1,6 +1,54 @@
 import type { BookCategory } from "@/types/book";
 
-export type ArticleFormat = "bedah-istilah";
+export type ArticleFormat =
+  | "bedah-istilah"
+  | "lintas-buku"
+  | "sains-aktual"
+  | "kisah-eksperimen";
+
+export interface ArticleFormatMeta {
+  id: ArticleFormat;
+  /** Label ringkas maksimal 2 kata untuk pill navigasi. */
+  label: string;
+  /** Penjelasan singkat yang tampil pada empty state saat rubrik belum terisi. */
+  comingSoonDescription: string;
+}
+
+export const ARTICLE_FORMATS: readonly ArticleFormatMeta[] = [
+  {
+    id: "bedah-istilah",
+    label: "Bedah Istilah",
+    comingSoonDescription:
+      "Artikel singkat yang membedah prinsip ilmiah, efek psikologis, dan istilah penting dari buku-buku Ringkasnya.",
+  },
+  {
+    id: "lintas-buku",
+    label: "Lintas Buku",
+    comingSoonDescription:
+      "Sintesis gagasan yang mempertemukan dan membandingkan sudut pandang dari beberapa buku sekaligus untuk satu tema besar.",
+  },
+  {
+    id: "sains-aktual",
+    label: "Sains Aktual",
+    comingSoonDescription:
+      "Membaca fenomena sehari-hari dan isu terkini lewat kacamata sains, ekonomi perilaku, dan riset ilmiah.",
+  },
+  {
+    id: "kisah-eksperimen",
+    label: "Kisah Eksperimen",
+    comingSoonDescription:
+      "Cerita di balik eksperimen legendaris dan pemikir klasik yang mengubah cara manusia memahami dunia.",
+  },
+] as const;
+
+export interface ArticleFeedItem {
+  slug: string;
+  title: string;
+  subtitle: string;
+  format: ArticleFormat;
+  readingTimeMinutes: number;
+  coverImage?: string;
+}
 
 export interface ArticleHighlightBox {
   label: string;
