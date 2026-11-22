@@ -54,6 +54,9 @@ import { makeTime } from "./books/make-time";
 import { theAlmanackOfNavalRavikant } from "./books/the-almanack-of-naval-ravikant";
 import { richDadPoorDad } from "./books/rich-dad-poor-dad";
 import { theRichestManInBabylon } from "./books/the-richest-man-in-babylon";
+import { theLeanStartup } from "./books/the-lean-startup";
+import { startWithWhy } from "./books/start-with-why";
+import { stealLikeAnArtist } from "./books/steal-like-an-artist";
 
 export const CATEGORIES: BookCategory[] = [
   "Sains & Nalar Ilmiah",
@@ -161,6 +164,9 @@ export const BOOKS: BookSummary[] = [
   theAlmanackOfNavalRavikant,
   richDadPoorDad,
   theRichestManInBabylon,
+  theLeanStartup,
+  startWithWhy,
+  stealLikeAnArtist,
 ].map(withCalculatedReadingTimes);
 
 /**
