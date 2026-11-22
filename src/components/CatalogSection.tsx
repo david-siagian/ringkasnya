@@ -27,7 +27,8 @@ interface CatalogSectionProps {
   itemsPerPage?: number;
 }
 
-const DEFAULT_PREVIEW_BOOKS_LIMIT = 6;
+const PREVIEW_GRID_ROWS = 3;
+const DEFAULT_PREVIEW_COLS = 4;
 const DEFAULT_ITEMS_PER_PAGE = 20;
 
 function getPageNumbers(currentPage: number, totalPages: number): (number | "ellipsis")[] {
@@ -61,7 +62,9 @@ export default function CatalogSection({
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [previewBook, setPreviewBook] = useState<BookCatalogItem | null>(null);
+  const [previewCols, setPreviewCols] = useState(DEFAULT_PREVIEW_COLS);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const previewGridRef = useRef<HTMLDivElement>(null);
   const { bookmarkedCount, isBookmarked } = useBookmarks();
 
   useEffect(() => {
@@ -113,6 +116,36 @@ export default function CatalogSection({
     });
   }, [books, selectedCategory, searchQuery, isBookmarked]);
 
+  const hasPreviewOtherBooks = !isFull && filteredBooks.length > 1;
+
+  useEffect(() => {
+    if (isFull) return;
+    const gridEl = previewGridRef.current;
+    if (!gridEl) return;
+
+    const updateCols = () => {
+      const tracks = getComputedStyle(gridEl)
+        .gridTemplateColumns.trim()
+        .split(/\s+/)
+        .filter((track) => track && track !== "none");
+      const cols = tracks.length;
+      if (cols >= 1) {
+        setPreviewCols((prev) => (prev === cols ? prev : cols));
+      }
+    };
+
+    updateCols();
+
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver(updateCols);
+      observer.observe(gridEl);
+      return () => observer.disconnect();
+    }
+
+    window.addEventListener("resize", updateCols);
+    return () => window.removeEventListener("resize", updateCols);
+  }, [isFull, hasPreviewOtherBooks]);
+
   const totalPages = isFull
     ? Math.max(1, Math.ceil(filteredBooks.length / itemsPerPage))
     : 1;
@@ -120,11 +153,11 @@ export default function CatalogSection({
 
   const displayedBooks = useMemo(() => {
     if (!isFull) {
-      return filteredBooks.slice(0, 1 + DEFAULT_PREVIEW_BOOKS_LIMIT);
+      return filteredBooks.slice(0, 1 + previewCols * PREVIEW_GRID_ROWS);
     }
     const startIndex = (safePage - 1) * itemsPerPage;
     return filteredBooks.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredBooks, isFull, safePage, itemsPerPage]);
+  }, [filteredBooks, isFull, previewCols, safePage, itemsPerPage]);
 
   const syncCatalogUrl = (
     page: number,
@@ -233,52 +266,54 @@ export default function CatalogSection({
       </div>
 
       {/* Filter Kategori */}
-      <div className="mt-6 flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          onClick={() => handleCategoryChange("Semua")}
-          className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
-            selectedCategory === "Semua"
-              ? "bg-ink text-surface shadow-sm"
-              : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
-          }`}
-        >
-          Semua ({books.length})
-        </button>
-        <button
-          type="button"
-          onClick={() => handleCategoryChange("Tersimpan")}
-          className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
-            selectedCategory === "Tersimpan"
-              ? "bg-emerald-600 text-white shadow-sm"
-              : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
-          }`}
-        >
-          <Bookmark
-            className={`h-3.5 w-3.5 ${
-              selectedCategory === "Tersimpan" ? "fill-current" : ""
+      {isFull && (
+        <div className="mt-6 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => handleCategoryChange("Semua")}
+            className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
+              selectedCategory === "Semua"
+                ? "bg-ink text-surface shadow-sm"
+                : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
             }`}
-          />
-          Tersimpan ({bookmarkedCount})
-        </button>
-        {CATEGORIES.map((category) => {
-          const count = books.filter((b) => b.category === category).length;
-          return (
-            <button
-              key={category}
-              type="button"
-              onClick={() => handleCategoryChange(category)}
-              className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
-                selectedCategory === category
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
+          >
+            Semua ({books.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => handleCategoryChange("Tersimpan")}
+            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
+              selectedCategory === "Tersimpan"
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
+            }`}
+          >
+            <Bookmark
+              className={`h-3.5 w-3.5 ${
+                selectedCategory === "Tersimpan" ? "fill-current" : ""
               }`}
-            >
-              {category} ({count})
-            </button>
-          );
-        })}
-      </div>
+            />
+            Tersimpan ({bookmarkedCount})
+          </button>
+          {CATEGORIES.map((category) => {
+            const count = books.filter((b) => b.category === category).length;
+            return (
+              <button
+                key={category}
+                type="button"
+                onClick={() => handleCategoryChange(category)}
+                className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
+                  selectedCategory === category
+                    ? "bg-emerald-600 text-white shadow-sm"
+                    : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
+                }`}
+              >
+                {category} ({count})
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Daftar Buku */}
       {displayedBooks.length > 0 ? (
@@ -376,7 +411,10 @@ export default function CatalogSection({
                 <p className="mb-3 text-xs font-bold uppercase tracking-wider text-ink-subtle">
                   Jelajahi Buku Lainnya
                 </p>
-                <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+                <div
+                  ref={previewGridRef}
+                  className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
+                >
                   {displayedBooks.slice(1).map((book) => (
                     <BookCard
                       key={book.slug}
@@ -407,7 +445,9 @@ export default function CatalogSection({
                   selectedCategory !== "Tersimpan" &&
                   !searchQuery.trim()
                 ? "Ringkasan buku untuk kategori ini sedang disiapkan dan akan segera hadir."
-                : "Coba gunakan kata kunci lain atau pilih kategori \"Semua\"."}
+                : isFull
+                  ? 'Coba gunakan kata kunci lain atau pilih kategori "Semua".'
+                  : "Coba gunakan kata kunci lain."}
           </p>
           <button
             type="button"

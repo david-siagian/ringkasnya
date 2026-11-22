@@ -18,7 +18,7 @@ async function waitForAstroIslands(page: Page) {
 }
 
 test.describe("Ringkasnya Smoke Tests", () => {
-  test("beranda: tanpa error, pencarian & filter kategori berfungsi", async ({
+  test("beranda: tanpa error & pencarian berfungsi tanpa filter kategori", async ({
     page,
   }) => {
     const errors = trackRuntimeErrors(page);
@@ -26,6 +26,10 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await page.goto("/");
     await waitForAstroIslands(page);
     await expect(page).toHaveTitle(/Ringkasnya/i);
+
+    await expect(
+      page.getByRole("button", { name: /^Sejarah & Peradaban/i })
+    ).toHaveCount(0);
 
     const searchBtn = page.getByRole("button", { name: "Cari judul buku" });
     await searchBtn.click();
@@ -42,12 +46,6 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await page.getByRole("button", { name: "Hapus pencarian" }).click();
     await expect(searchInput).toHaveValue("");
 
-    const categoryBtn = page
-      .getByRole("button", { name: /^Sejarah & Peradaban/i })
-      .first();
-    await categoryBtn.click();
-    await expect(categoryBtn).toHaveClass(/bg-emerald-600/);
-
     expect(errors).toEqual([]);
   });
 
@@ -61,6 +59,13 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await expect(
       page.getByRole("heading", { name: "Daftar Semua Buku" })
     ).toBeVisible();
+
+    const categoryBtn = page
+      .getByRole("button", { name: /^Sejarah & Peradaban/i })
+      .first();
+    await categoryBtn.click();
+    await expect(categoryBtn).toHaveClass(/bg-emerald-600/);
+    await page.getByRole("button", { name: /^Semua/i }).first().click();
 
     const grid = page.locator("#katalog .grid").first();
     const getColCount = () =>
@@ -84,7 +89,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     expect(errors).toEqual([]);
   });
 
-  test("perpustakaan kurasi (/): kartu buku lain menggunakan grid vertikal maksimal 6 buku", async ({
+  test("perpustakaan kurasi (/): kartu buku lain responsif nx3 sesuai jumlah kolom", async ({
     page,
   }, testInfo) => {
     const errors = trackRuntimeErrors(page);
@@ -94,15 +99,28 @@ test.describe("Ringkasnya Smoke Tests", () => {
 
     const grid = page.locator("#katalog .grid").first();
     await expect(grid).toBeVisible();
-    const cardCount = await grid.locator("> a").count();
-    expect(cardCount).toBeGreaterThan(0);
-    expect(cardCount).toBeLessThanOrEqual(6);
-
-    if (testInfo.project.name === "mobile") {
-      const cols = await grid.evaluate(
+    const getColCount = () =>
+      grid.evaluate(
         (el) => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length
       );
-      expect(cols).toBe(2);
+
+    if (testInfo.project.name === "mobile") {
+      expect(await getColCount()).toBe(2);
+      await expect
+        .poll(() => grid.locator("> a").count())
+        .toBe(6);
+    } else {
+      await page.setViewportSize({ width: 768, height: 800 });
+      expect(await getColCount()).toBe(3);
+      await expect
+        .poll(() => grid.locator("> a").count())
+        .toBe(9);
+
+      await page.setViewportSize({ width: 1024, height: 800 });
+      expect(await getColCount()).toBe(4);
+      await expect
+        .poll(() => grid.locator("> a").count())
+        .toBe(12);
     }
 
     expect(errors).toEqual([]);
