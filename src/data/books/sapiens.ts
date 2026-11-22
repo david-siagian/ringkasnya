@@ -6,7 +6,7 @@ export const sapiens: BookSummary = {
   originalTitle: "Riwayat Singkat Umat Manusia",
   author: "Yuval Noah Harari",
   year: 2011,
-  category: "Sejarah & Masyarakat",
+  category: "Sejarah & Peradaban",
   readingTimeMinutes: 17,
   quickTimeMinutes: 5,
   rating: 4.9,

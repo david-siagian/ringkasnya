@@ -19,7 +19,7 @@ import {
 
 const pageTitle = "Topik Pilihan — Ringkasnya";
 const pageDescription =
-  "Jelajahi ringkasan buku berdasarkan bidang pengetahuan: Sains & Nalar Ilmiah, Sejarah & Masyarakat, Ekonomi & Keuangan, Politik & Negara, Psikologi & Perilaku, Organisasi & Bisnis, Karier & Budaya Kerja, Produktivitas & Pengembangan Diri, serta Filsafat & Kebijaksanaan.";
+  "Jelajahi ringkasan buku berdasarkan bidang pengetahuan: Sains & Nalar Ilmiah, Sejarah & Peradaban, Ekonomi & Keuangan, Psikologi & Perilaku, Organisasi & Bisnis, Karier & Budaya Kerja, Produktivitas & Pengembangan Diri, serta Filsafat & Kebijaksanaan.";
 
 const TOPIC_DETAILS: Record<
   BookCategory,
@@ -34,9 +34,9 @@ const TOPIC_DETAILS: Record<
     accentClass:
       "border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-800/60 dark:bg-cyan-950/60 dark:text-cyan-300",
   },
-  "Sejarah & Masyarakat": {
+  "Sejarah & Peradaban": {
     description:
-      "Telusuri perjalanan peradaban manusia, geografi, dinamika sosial, dan pola besar yang membentuk dunia modern.",
+      "Telusuri perjalanan peradaban manusia, geografi, evolusi institusi, dan pola besar yang membentuk sejarah dunia.",
     accentClass:
       "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-800/60 dark:bg-rose-950/60 dark:text-rose-300",
   },
@@ -45,12 +45,6 @@ const TOPIC_DETAILS: Record<
       "Pahami prinsip pengelolaan kekayaan, alokasi aset, kekuatan bunga berbunga, serta cara kerja pasar dan insentif finansial.",
     accentClass:
       "border-teal-200 bg-teal-50 text-teal-700 dark:border-teal-800/60 dark:bg-teal-950/60 dark:text-teal-300",
-  },
-  "Politik & Negara": {
-    description:
-      "Pelajari tata kelola kekuasaan, institusi publik, demokrasi, kebebasan, dan faktor di balik kemakmuran serta kemunduran bangsa.",
-    accentClass:
-      "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800/60 dark:bg-amber-950/60 dark:text-amber-300",
   },
   "Psikologi & Perilaku": {
     description:
@@ -126,14 +120,11 @@ const topicCards = CATEGORIES.map((category) => {
                     {topic.category === "Sains & Nalar Ilmiah" && (
                       <Atom className="h-3.5 w-3.5" />
                     )}
-                    {topic.category === "Sejarah & Masyarakat" && (
+                    {topic.category === "Sejarah & Peradaban" && (
                       <Globe className="h-3.5 w-3.5" />
                     )}
                     {topic.category === "Ekonomi & Keuangan" && (
                       <TrendingUp className="h-3.5 w-3.5" />
-                    )}
-                    {topic.category === "Politik & Negara" && (
-                      <Landmark className="h-3.5 w-3.5" />
                     )}
                     {topic.category === "Psikologi & Perilaku" && (
                       <Brain className="h-3.5 w-3.5" />

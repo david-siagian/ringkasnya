@@ -6,7 +6,7 @@ export const whyNationsFail: BookSummary = {
   originalTitle: "Mengapa Negara Gagal: Asal Mula Kekuasaan, Kemakmuran, dan Kemiskinan",
   author: "Daron Acemoglu & James A. Robinson",
   year: 2012,
-  category: "Politik & Negara",
+  category: "Sejarah & Peradaban",
   readingTimeMinutes: 16,
   quickTimeMinutes: 5,
   rating: 4.8,

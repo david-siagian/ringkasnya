@@ -6,7 +6,7 @@ export const gunsGermsAndSteel: BookSummary = {
   originalTitle: "Bedil, Kuman, dan Baja",
   author: "Jared Diamond",
   year: 1997,
-  category: "Sejarah & Masyarakat",
+  category: "Sejarah & Peradaban",
   readingTimeMinutes: 16,
   quickTimeMinutes: 5,
   rating: 4.8,

@@ -1,8 +1,7 @@
 export type BookCategory =
   | "Sains & Nalar Ilmiah"
-  | "Sejarah & Masyarakat"
+  | "Sejarah & Peradaban"
   | "Ekonomi & Keuangan"
-  | "Politik & Negara"
   | "Psikologi & Perilaku"
   | "Organisasi & Bisnis"
   | "Karier & Budaya Kerja"

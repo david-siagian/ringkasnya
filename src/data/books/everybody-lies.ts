@@ -6,7 +6,7 @@ export const everybodyLies: BookSummary = {
   originalTitle: "Big Data, New Data, and What the Internet Reveals About Who We Really Are",
   author: "Seth Stephens-Davidowitz",
   year: 2017,
-  category: "Sejarah & Masyarakat",
+  category: "Psikologi & Perilaku",
   readingTimeMinutes: 17,
   quickTimeMinutes: 6,
   rating: 4.7,

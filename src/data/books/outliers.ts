@@ -6,7 +6,7 @@ export const outliers: BookSummary = {
   originalTitle: "Para Pengecualian: Kisah Tersembunyi di Balik Kesuksesan",
   author: "Malcolm Gladwell",
   year: 2008,
-  category: "Sejarah & Masyarakat",
+  category: "Karier & Budaya Kerja",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,

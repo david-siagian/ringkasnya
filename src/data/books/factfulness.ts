@@ -6,7 +6,7 @@ export const factfulness: BookSummary = {
   originalTitle: "Ten Reasons We're Wrong About the World – and Why Things Are Better Than You Think",
   author: "Hans Rosling, Ola Rosling & Anna Rosling Rönnlund",
   year: 2018,
-  category: "Sejarah & Masyarakat",
+  category: "Sains & Nalar Ilmiah",
   readingTimeMinutes: 17,
   quickTimeMinutes: 5,
   rating: 4.9,

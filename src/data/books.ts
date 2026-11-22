@@ -60,9 +60,8 @@ import { stealLikeAnArtist } from "./books/steal-like-an-artist";
 
 export const CATEGORIES: BookCategory[] = [
   "Sains & Nalar Ilmiah",
-  "Sejarah & Masyarakat",
+  "Sejarah & Peradaban",
   "Ekonomi & Keuangan",
-  "Politik & Negara",
   "Psikologi & Perilaku",
   "Organisasi & Bisnis",
   "Karier & Budaya Kerja",

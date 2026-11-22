@@ -43,7 +43,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await expect(searchInput).toHaveValue("");
 
     const categoryBtn = page
-      .getByRole("button", { name: /^Sejarah & Masyarakat/i })
+      .getByRole("button", { name: /^Sejarah & Peradaban/i })
       .first();
     await categoryBtn.click();
     await expect(categoryBtn).toHaveClass(/bg-emerald-600/);
