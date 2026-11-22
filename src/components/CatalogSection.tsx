@@ -12,6 +12,7 @@ import { useBookmarks } from "@/hooks/useBookmarks";
 import {
   ArrowRight,
   Bookmark,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -27,8 +28,8 @@ interface CatalogSectionProps {
   itemsPerPage?: number;
 }
 
-const PREVIEW_GRID_ROWS = 3;
-const DEFAULT_PREVIEW_COLS = 4;
+const MAX_PREVIEW_OTHER_BOOKS = 6;
+const DEFAULT_PREVIEW_COLS = 5;
 const DEFAULT_ITEMS_PER_PAGE = 20;
 
 function getPageNumbers(currentPage: number, totalPages: number): (number | "ellipsis")[] {
@@ -154,7 +155,11 @@ export default function CatalogSection({
 
   const displayedBooks = useMemo(() => {
     if (!isFull) {
-      return filteredBooks.slice(0, 1 + previewCols * PREVIEW_GRID_ROWS);
+      const previewOtherCount = Math.max(
+        previewCols,
+        Math.floor(MAX_PREVIEW_OTHER_BOOKS / previewCols) * previewCols
+      );
+      return filteredBooks.slice(0, 1 + previewOtherCount);
     }
     const startIndex = (safePage - 1) * itemsPerPage;
     return filteredBooks.slice(startIndex, startIndex + itemsPerPage);
@@ -270,22 +275,50 @@ export default function CatalogSection({
 
       {/* Filter Kategori */}
       {isFull && (
-        <div className="mt-6 flex flex-wrap items-center gap-2">
+        <div className="mt-6 flex flex-wrap items-center gap-2.5">
+          <div className="relative min-w-0 flex-1 sm:flex-initial sm:min-w-[260px]">
+            <select
+              aria-label="Filter kategori"
+              value={selectedCategory === "Tersimpan" ? "" : selectedCategory}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value) {
+                  handleCategoryChange(value as BookCategory | "Semua");
+                }
+              }}
+              className={`w-full appearance-none rounded-xl border bg-surface py-2.5 pl-3.5 pr-10 text-xs sm:text-sm font-semibold transition-all focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                selectedCategory !== "Tersimpan"
+                  ? "border-line-strong text-ink"
+                  : "border-line text-ink-muted"
+              }`}
+            >
+              {selectedCategory === "Tersimpan" && (
+                <option value="" disabled>
+                  Pilih Kategori...
+                </option>
+              )}
+              <option value="Semua">Semua Kategori ({books.length})</option>
+              {CATEGORIES.map((category) => {
+                const count = books.filter((b) => b.category === category).length;
+                return (
+                  <option key={category} value={category}>
+                    {category} ({count})
+                  </option>
+                );
+              })}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
+          </div>
+
           <button
             type="button"
-            onClick={() => handleCategoryChange("Semua")}
-            className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
-              selectedCategory === "Semua"
-                ? "bg-ink text-surface shadow-sm"
-                : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
-            }`}
-          >
-            Semua ({books.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => handleCategoryChange("Tersimpan")}
-            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
+            onClick={() =>
+              handleCategoryChange(
+                selectedCategory === "Tersimpan" ? "Semua" : "Tersimpan"
+              )
+            }
+            aria-pressed={selectedCategory === "Tersimpan"}
+            className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
               selectedCategory === "Tersimpan"
                 ? "bg-emerald-600 text-white shadow-sm"
                 : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
@@ -298,23 +331,6 @@ export default function CatalogSection({
             />
             Tersimpan ({bookmarkedCount})
           </button>
-          {CATEGORIES.map((category) => {
-            const count = books.filter((b) => b.category === category).length;
-            return (
-              <button
-                key={category}
-                type="button"
-                onClick={() => handleCategoryChange(category)}
-                className={`rounded-full px-4 py-2 text-xs sm:text-sm font-semibold transition-all ${
-                  selectedCategory === category
-                    ? "bg-emerald-600 text-white shadow-sm"
-                    : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
-                }`}
-              >
-                {category} ({count})
-              </button>
-            );
-          })}
         </div>
       )}
 
@@ -416,13 +432,14 @@ export default function CatalogSection({
                 </p>
                 <div
                   ref={previewGridRef}
-                  className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
+                  className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
                 >
                   {displayedBooks.slice(1).map((book) => (
                     <BookCard
                       key={book.slug}
                       book={book}
                       onSelect={setPreviewBook}
+                      compact
                     />
                   ))}
                 </div>

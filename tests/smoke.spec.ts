@@ -65,12 +65,11 @@ test.describe("Ringkasnya Smoke Tests", () => {
       page.getByRole("heading", { name: "Daftar Semua Buku" })
     ).toBeVisible();
 
-    const categoryBtn = page
-      .getByRole("button", { name: /^Sejarah & Peradaban/i })
-      .first();
-    await categoryBtn.click();
-    await expect(categoryBtn).toHaveClass(/bg-emerald-600/);
-    await page.getByRole("button", { name: /^Semua/i }).first().click();
+    const categorySelect = page.getByLabel("Filter kategori");
+    await categorySelect.selectOption("Sejarah & Peradaban");
+    await expect(categorySelect).toHaveValue("Sejarah & Peradaban");
+    await categorySelect.selectOption("Semua");
+    await expect(categorySelect).toHaveValue("Semua");
 
     const grid = page.locator("#katalog .grid").first();
     const getColCount = () =>
@@ -94,7 +93,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     expect(errors).toEqual([]);
   });
 
-  test("perpustakaan kurasi (/): kartu buku lain responsif nx3 sesuai jumlah kolom", async ({
+  test("perpustakaan kurasi (/): kartu buku lain responsif maksimal 6 tanpa baris menggantung", async ({
     page,
   }, testInfo) => {
     const errors = trackRuntimeErrors(page);
@@ -119,13 +118,19 @@ test.describe("Ringkasnya Smoke Tests", () => {
       expect(await getColCount()).toBe(3);
       await expect
         .poll(() => grid.locator("> a").count())
-        .toBe(9);
+        .toBe(6);
 
       await page.setViewportSize({ width: 1024, height: 800 });
       expect(await getColCount()).toBe(4);
       await expect
         .poll(() => grid.locator("> a").count())
-        .toBe(12);
+        .toBe(4);
+
+      await page.setViewportSize({ width: 1280, height: 800 });
+      expect(await getColCount()).toBe(5);
+      await expect
+        .poll(() => grid.locator("> a").count())
+        .toBe(5);
     }
 
     expect(errors).toEqual([]);

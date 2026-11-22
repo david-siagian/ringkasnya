@@ -6,9 +6,14 @@ import { ArrowRight, Bookmark, CheckCircle2, Clock, Layers, Zap } from "lucide-r
 interface BookCardProps {
   book: BookCatalogItem;
   onSelect?: (book: BookCatalogItem) => void;
+  compact?: boolean;
 }
 
-export default function BookCard({ book, onSelect }: BookCardProps) {
+export default function BookCard({
+  book,
+  onSelect,
+  compact = false,
+}: BookCardProps) {
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const { isCompleted } = useCompletedBooks();
   const saved = isBookmarked(book.slug);
@@ -27,7 +32,7 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
     >
       {/* Sampul Buku Saja (Tanpa Background Warna) */}
       {book.coverImage && (
-        <div className="p-3 sm:p-4 pb-0">
+        <div className={compact ? "p-2.5 sm:p-3 pb-0" : "p-3 sm:p-4 pb-0"}>
           <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl shadow-sm ring-1 ring-line/70">
             <img
               src={book.coverImage}
@@ -66,7 +71,11 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
       )}
 
       {/* Konten Kartu */}
-      <div className="flex flex-1 flex-col justify-between p-3.5 sm:p-5">
+      <div
+        className={`flex flex-1 flex-col justify-between ${
+          compact ? "p-3 sm:p-4" : "p-3.5 sm:p-5"
+        }`}
+      >
         <div>
           <div className="flex flex-wrap items-center justify-between gap-1.5">
             <span className="max-w-full truncate rounded-full bg-surface-subtle px-2 py-0.5 sm:px-2.5 text-[10px] sm:text-[11px] font-medium text-ink-muted">
@@ -77,7 +86,11 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
           <p className="mt-2.5 truncate text-[10px] sm:text-[11px] font-semibold uppercase tracking-widest text-ink-subtle">
             {book.author}
           </p>
-          <h3 className="mt-0.5 line-clamp-2 text-sm sm:text-lg font-extrabold leading-snug tracking-tight text-ink group-hover:text-accent-text">
+          <h3
+            className={`mt-0.5 line-clamp-2 font-extrabold leading-snug tracking-tight text-ink group-hover:text-accent-text ${
+              compact ? "text-sm sm:text-base" : "text-sm sm:text-lg"
+            }`}
+          >
             {book.title}
           </h3>
 
@@ -105,7 +118,11 @@ export default function BookCard({ book, onSelect }: BookCardProps) {
           </div>
         </div>
 
-        <div className="mt-4 sm:mt-5 flex items-center justify-between border-t border-line-subtle pt-3 text-[11px] sm:text-xs font-semibold text-accent-text group-hover:text-accent-strong">
+        <div
+          className={`flex items-center justify-between border-t border-line-subtle text-[11px] sm:text-xs font-semibold text-accent-text group-hover:text-accent-strong ${
+            compact ? "mt-3 pt-2.5" : "mt-4 sm:mt-5 pt-3"
+          }`}
+        >
           <span>Baca Ringkasan</span>
           <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:translate-x-1" />
         </div>
