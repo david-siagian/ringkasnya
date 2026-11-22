@@ -12,11 +12,13 @@ import {
   Globe,
   Landmark,
   Sparkles,
+  Sun,
+  TrendingUp,
 } from "lucide-react";
 
 const pageTitle = "Topik Pilihan — Ringkasnya";
 const pageDescription =
-  "Jelajahi ringkasan buku berdasarkan bidang pengetahuan: Sains & Nalar Ilmiah, Sejarah & Masyarakat, Ekonomi & Politik, Psikologi & Perilaku, Organisasi & Budaya Kerja, serta Produktivitas & Pengembangan Diri.";
+  "Jelajahi ringkasan buku berdasarkan bidang pengetahuan: Sains & Nalar Ilmiah, Sejarah & Masyarakat, Ekonomi & Politik, Psikologi & Perilaku, Organisasi & Budaya Kerja, Produktivitas & Pengembangan Diri, Filsafat & Kebijaksanaan, serta Keuangan & Bisnis.";
 
 const TOPIC_DETAILS: Record<
   BookCategory,
@@ -60,6 +62,18 @@ const TOPIC_DETAILS: Record<
       "Bangun kebiasaan baik, fokus mendalam, pengelolaan prioritas, dan cara berkarya secara konsisten dalam keseharian.",
     accentClass:
       "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-800/60 dark:bg-violet-950/60 dark:text-violet-300",
+  },
+  "Filsafat & Kebijaksanaan": {
+    description:
+      "Renungkan cara hidup tenang, filosofi Stoa, pencarian makna, dan kebijaksanaan praktis menghadapi ketidakpastian hidup.",
+    accentClass:
+      "border-indigo-200 bg-indigo-50 text-indigo-700 dark:border-indigo-800/60 dark:bg-indigo-950/60 dark:text-indigo-300",
+  },
+  "Keuangan & Bisnis": {
+    description:
+      "Pelajari prinsip membangun kekayaan jangka panjang, strategi perusahaan unggul, dan cara berpikir investor maupun pendiri usaha.",
+    accentClass:
+      "border-teal-200 bg-teal-50 text-teal-700 dark:border-teal-800/60 dark:bg-teal-950/60 dark:text-teal-300",
   },
 };
 
@@ -119,6 +133,12 @@ const topicCards = CATEGORIES.map((category) => {
                     )}
                     {topic.category === "Produktivitas & Pengembangan Diri" && (
                       <Sparkles className="h-3.5 w-3.5" />
+                    )}
+                    {topic.category === "Filsafat & Kebijaksanaan" && (
+                      <Sun className="h-3.5 w-3.5" />
+                    )}
+                    {topic.category === "Keuangan & Bisnis" && (
+                      <TrendingUp className="h-3.5 w-3.5" />
                     )}
                     <span>{topic.books.length} Buku</span>
                   </span>

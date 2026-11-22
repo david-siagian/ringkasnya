@@ -4,7 +4,9 @@ export type BookCategory =
   | "Ekonomi & Politik"
   | "Psikologi & Perilaku"
   | "Organisasi & Budaya Kerja"
-  | "Produktivitas & Pengembangan Diri";
+  | "Produktivitas & Pengembangan Diri"
+  | "Filsafat & Kebijaksanaan"
+  | "Keuangan & Bisnis";
 
 export interface BookKeyConcept {
   title: string;

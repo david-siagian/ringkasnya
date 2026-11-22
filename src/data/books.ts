@@ -34,6 +34,16 @@ import { shadowsOfForgottenAncestors } from "./books/shadows-of-forgotten-ancest
 import { outlive } from "./books/outlive";
 import { enlightenmentNow } from "./books/enlightenment-now";
 import { quiet } from "./books/quiet";
+import { aGuideToTheGoodLife } from "./books/a-guide-to-the-good-life";
+import { greatAtWork } from "./books/great-at-work";
+import { goodToGreat } from "./books/good-to-great";
+import { hiddenPotential } from "./books/hidden-potential";
+import { theDeathOfExpertise } from "./books/the-death-of-expertise";
+import { aBriefHistoryOfTime } from "./books/a-brief-history-of-time";
+import { predictablyIrrational } from "./books/predictably-irrational";
+import { influence } from "./books/influence";
+import { mindset } from "./books/mindset";
+import { grit } from "./books/grit";
 
 export const CATEGORIES: BookCategory[] = [
   "Sains & Nalar Ilmiah",
@@ -42,6 +52,8 @@ export const CATEGORIES: BookCategory[] = [
   "Psikologi & Perilaku",
   "Organisasi & Budaya Kerja",
   "Produktivitas & Pengembangan Diri",
+  "Filsafat & Kebijaksanaan",
+  "Keuangan & Bisnis",
 ];
 
 const WORDS_PER_MINUTE = 200;
@@ -119,6 +131,16 @@ export const BOOKS: BookSummary[] = [
   outlive,
   enlightenmentNow,
   quiet,
+  aGuideToTheGoodLife,
+  greatAtWork,
+  goodToGreat,
+  hiddenPotential,
+  theDeathOfExpertise,
+  aBriefHistoryOfTime,
+  predictablyIrrational,
+  influence,
+  mindset,
+  grit,
 ].map(withCalculatedReadingTimes);
 
 /**
