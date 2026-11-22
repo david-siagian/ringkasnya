@@ -16,7 +16,7 @@ if (!book) {
   return Astro.redirect("/404");
 }
 
-const relatedBooks = BOOK_CATALOG.filter((b) => b.slug !== book.slug).slice(0, 2);
+const relatedBooks = BOOK_CATALOG.filter((b) => b.slug !== book.slug);
 const pageTitle = `Ringkasan Buku ${book.title} (${book.author}) — Ringkasnya`;
 const pageDescription = `${book.tagline} Baca ringkasan ${book.title} dalam ${book.quickTimeMinutes}-${book.readingTimeMinutes} menit lengkap dengan Action Checklist.`;
 ---

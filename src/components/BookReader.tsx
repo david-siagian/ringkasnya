@@ -98,6 +98,13 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const { isCompleted, markCompleted, unmarkCompleted } = useCompletedBooks();
   const saved = isBookmarked(book.slug);
   const completed = isCompleted(book.slug);
+  const unreadCandidates = relatedBooks.filter(
+    (other) => other.slug !== book.slug && !isCompleted(other.slug)
+  );
+  const recommendedBooks = [
+    ...unreadCandidates.filter((other) => other.category === book.category),
+    ...unreadCandidates.filter((other) => other.category !== book.category),
+  ].slice(0, 2);
 
   const totalTakeaways = book.keyTakeaways.length;
   const finalStep = totalTakeaways + 1;
@@ -678,7 +685,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         </div>
 
         {(readMode === "quick" || clampedDeepStep === finalStep) && (
-          <RelatedBooksSection relatedBooks={relatedBooks} />
+          <RelatedBooksSection relatedBooks={recommendedBooks} />
         )}
       </main>
 
