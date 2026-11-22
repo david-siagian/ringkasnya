@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-slate-800 bg-slate-900 text-slate-300 dark:border-line dark:bg-[#050506] dark:text-ink-secondary">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div>
             <a href="/" className="flex items-center gap-2.5 group">
               <BrandLogo className="h-10 w-10 transition-transform group-hover:scale-105" />

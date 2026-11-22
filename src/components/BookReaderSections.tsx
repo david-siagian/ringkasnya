@@ -128,7 +128,7 @@ export function IntroSection({
           )}
         </div>
 
-        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
           {book.keyTakeaways.map((item, idx) =>
             mode === "deep" && onSelectTakeaway ? (
               <button
@@ -339,7 +339,7 @@ export function KeyConceptsSection({
         </p>
       </div>
 
-      <div className="mt-6 grid gap-3.5 sm:grid-cols-2">
+      <div className="mt-6 grid grid-cols-1 gap-3.5 sm:grid-cols-2">
         {keyConcepts.map((concept, idx) => (
           <div
             key={idx}
@@ -394,7 +394,7 @@ export function QuotesSection({
         media sosial.
       </p>
 
-      <div className="mt-5 grid gap-4">
+      <div className="mt-5 grid grid-cols-1 gap-4">
         {quotes.map((quote, idx) => (
           <div
             key={idx}
@@ -469,12 +469,12 @@ export function RelatedBooksSection({
               <ArrowRight className="h-3.5 w-3.5" />
             </a>
           </div>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {relatedBooks.map((other) => (
               <a
                 key={other.slug}
                 href={`/buku/${other.slug}`}
-                className="group flex items-start gap-4 rounded-2xl border border-line bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md sm:p-5"
+                className="group flex min-w-0 items-start gap-4 rounded-2xl border border-line bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md sm:p-5"
               >
                 <div className="relative aspect-[3/4] w-20 shrink-0 overflow-hidden rounded-xl shadow-sm ring-1 ring-line/70 sm:w-24">
                   {other.coverImage ? (

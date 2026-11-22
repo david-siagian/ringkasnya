@@ -83,12 +83,12 @@ const topicCards = CATEGORIES.map((category) => {
         </p>
       </div>
 
-      <div class="mt-12 grid gap-6 md:grid-cols-2">
+      <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
         {
           topicCards.map((topic) => (
             <a
               href={`/katalog?kategori=${encodeURIComponent(topic.category)}`}
-              class="group flex flex-col justify-between rounded-2xl border border-line bg-surface p-6 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md"
+              class="group flex min-w-0 flex-col justify-between rounded-2xl border border-line bg-surface p-6 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md"
             >
               <div>
                 <div class="flex items-center justify-between gap-3">
@@ -133,7 +133,7 @@ const topicCards = CATEGORIES.map((category) => {
                   </p>
                   <ul class="mt-2 space-y-1.5">
                     {topic.books.slice(0, 3).map((book) => (
-                      <li class="flex items-center gap-2 text-sm text-ink-secondary">
+                      <li class="flex min-w-0 items-center gap-2 text-sm text-ink-secondary">
                         <BookOpen className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
                         <span class="truncate">
                           <strong class="font-semibold text-ink">
