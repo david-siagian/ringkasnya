@@ -10,6 +10,7 @@ export const theSelfishGene: BookSummary = {
   readingTimeMinutes: 17,
   quickTimeMinutes: 6,
   rating: 4.8,
+  goodreadsRatings: 210000,
   coverGradient: "from-teal-950 via-teal-900 to-emerald-900",
   coverAccent: "bg-teal-100 text-teal-900 dark:bg-teal-950/70 dark:text-teal-300",
   coverImage: "/images/covers/the-selfish-gene.svg",

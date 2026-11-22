@@ -10,6 +10,7 @@ export const mansSearchForMeaning: BookSummary = {
   readingTimeMinutes: 17,
   quickTimeMinutes: 6,
   rating: 4.9,
+  goodreadsRatings: 800000,
   coverGradient: "from-slate-950 via-slate-900 to-indigo-950",
   coverAccent: "bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300",
   coverImage: "/images/covers/mans-search-for-meaning.svg",

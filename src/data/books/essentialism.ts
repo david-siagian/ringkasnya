@@ -10,6 +10,7 @@ export const essentialism: BookSummary = {
   readingTimeMinutes: 18,
   quickTimeMinutes: 7,
   rating: 4.8,
+  goodreadsRatings: 210000,
   coverGradient: "from-stone-950 via-stone-900 to-neutral-800",
   coverAccent: "bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-slate-200",
   coverImage: "/images/covers/essentialism.svg",

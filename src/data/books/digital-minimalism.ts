@@ -10,6 +10,7 @@ export const digitalMinimalism: BookSummary = {
   readingTimeMinutes: 17,
   quickTimeMinutes: 6,
   rating: 4.8,
+  goodreadsRatings: 125000,
   coverGradient: "from-emerald-950 via-emerald-900 to-teal-900",
   coverAccent: "bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300",
   coverImage: "/images/covers/digital-minimalism.svg",

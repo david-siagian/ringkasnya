@@ -10,6 +10,7 @@ export const aGuideToTheGoodLife: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,
+  goodreadsRatings: 38000,
   coverGradient: "from-stone-950 via-teal-950 to-amber-950",
   coverAccent: "bg-teal-100 text-teal-900 dark:bg-teal-950/70 dark:text-teal-300",
   coverImage: "/images/covers/a-guide-to-the-good-life.svg",

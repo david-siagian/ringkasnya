@@ -10,6 +10,7 @@ export const outliers: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,
+  goodreadsRatings: 790000,
   coverGradient: "from-slate-950 via-cyan-950 to-emerald-950",
   coverAccent: "bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300",
   coverImage: "/images/covers/outliers.svg",

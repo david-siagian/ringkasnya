@@ -10,6 +10,7 @@ export const theRichestManInBabylon: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,
+  goodreadsRatings: 255000,
   coverGradient: "from-amber-950 via-stone-900 to-blue-950",
   coverAccent: "bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300",
   coverImage: "/images/covers/the-richest-man-in-babylon.svg",

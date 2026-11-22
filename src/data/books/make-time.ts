@@ -10,6 +10,7 @@ export const makeTime: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.7,
+  goodreadsRatings: 70000,
   coverGradient: "from-indigo-950 via-slate-900 to-amber-950",
   coverAccent: "bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300",
   coverImage: "/images/covers/make-time.svg",

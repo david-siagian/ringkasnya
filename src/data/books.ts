@@ -60,14 +60,31 @@ import { stealLikeAnArtist } from "./books/steal-like-an-artist";
 
 export const CATEGORIES: BookCategory[] = [
   "Sains & Nalar Ilmiah",
-  "Sejarah & Peradaban",
-  "Ekonomi & Keuangan",
   "Psikologi & Perilaku",
+  "Sejarah & Peradaban",
+  "Filsafat & Kebijaksanaan",
+  "Ekonomi & Keuangan",
   "Organisasi & Bisnis",
   "Karier & Budaya Kerja",
   "Produktivitas & Pengembangan Diri",
-  "Filsafat & Kebijaksanaan",
 ];
+
+export const SECONDARY_CATALOG_CATEGORIES: ReadonlySet<BookCategory> = new Set([
+  "Organisasi & Bisnis",
+  "Karier & Budaya Kerja",
+  "Produktivitas & Pengembangan Diri",
+]);
+
+function compareBooksForCatalog(a: BookSummary, b: BookSummary): number {
+  const tierA = SECONDARY_CATALOG_CATEGORIES.has(a.category) ? 1 : 0;
+  const tierB = SECONDARY_CATALOG_CATEGORIES.has(b.category) ? 1 : 0;
+  if (tierA !== tierB) return tierA - tierB;
+  if (b.goodreadsRatings !== a.goodreadsRatings) {
+    return b.goodreadsRatings - a.goodreadsRatings;
+  }
+  if (b.rating !== a.rating) return b.rating - a.rating;
+  return a.title.localeCompare(b.title);
+}
 
 const WORDS_PER_MINUTE = 200;
 
@@ -167,7 +184,7 @@ export const BOOKS: BookSummary[] = [
   theLeanStartup,
   startWithWhy,
   stealLikeAnArtist,
-].map(withCalculatedReadingTimes);
+].map(withCalculatedReadingTimes).sort(compareBooksForCatalog);
 
 /**
  * Memproyeksikan data buku penuh menjadi metadata katalog ringan.

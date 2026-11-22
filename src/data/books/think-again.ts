@@ -10,6 +10,7 @@ export const thinkAgain: BookSummary = {
   readingTimeMinutes: 16,
   quickTimeMinutes: 5,
   rating: 4.8,
+  goodreadsRatings: 195000,
   coverGradient: "from-indigo-950 via-indigo-900 to-violet-900",
   coverAccent: "bg-indigo-100 text-indigo-900 dark:bg-indigo-950/70 dark:text-indigo-300",
   coverImage: "/images/covers/think-again.svg",

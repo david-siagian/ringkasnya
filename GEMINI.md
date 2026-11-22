@@ -15,6 +15,10 @@
   - **Mode Mendalam (15–20 Menit)**: ~2.950–4.050 kata untuk gabungan Mode Kilat + `deepContent` (sekitar **2.000–2.600 kata** khusus pada `deepContent` di seluruh `keyTakeaways`) sehingga `readingTimeMinutes` berada di kisaran **15–20 menit** (~2,5x–3x lebih dalam dari Mode Kilat).
   - Selaraskan juga properti statis `quickTimeMinutes` dan `readingTimeMinutes` di dalam `src/data/books/<slug>.ts` agar sesuai dengan hasil estimasi di atas.
 - **Format Sinopsis**: Bagian `synopsis` pada setiap buku cukup ditulis **1 paragraf ringkas (4–7 baris)** saja. Jika pemangkasan sinopsis mengurangi total kata, kompensasikan penambahan teks pada `deepContent`, `quickSummary`, atau `conclusion` agar estimasi durasi baca tetap berada dalam rentang standar.
+- **Urutan Katalog, Kategori & Popularitas Goodreads**:
+  - Setiap penambahan buku baru di `src/data/books/<slug>.ts` **wajib** menyertakan properti `goodreadsRatings` (angka perkiraan jumlah *ratings* buku di Goodreads) agar pengurutan otomatis di `src/data/books.ts` (`compareBooksForCatalog`) selalu akurat.
+  - Urutan `CATEGORIES` dipertahankan sesuai arah kurasi nonfiksi ilmiah: (1) `Sains & Nalar Ilmiah`, (2) `Psikologi & Perilaku`, (3) `Sejarah & Peradaban`, (4) `Filsafat & Kebijaksanaan`, (5) `Ekonomi & Keuangan`, (6) `Organisasi & Bisnis`, (7) `Karier & Budaya Kerja`, (8) `Produktivitas & Pengembangan Diri`.
+  - Di tab **Semua** dan **Perpustakaan Kurasi**, buku di luar kategori `Organisasi & Bisnis`, `Karier & Budaya Kerja`, dan `Produktivitas & Pengembangan Diri` selalu diprioritaskan di atas (tier 1), lalu diikuti 3 kategori tersebut di bawah (tier 2); di dalam tiap tier dan tiap tab kategori, buku selalu diurutkan dari `goodreadsRatings` tertinggi.
 
 ## Operasional CLI (Windows)
 - Jalankan `npm run build`, `git push`, `npx wrangler`, `cf`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.

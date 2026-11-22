@@ -10,6 +10,7 @@ export const everybodyLies: BookSummary = {
   readingTimeMinutes: 17,
   quickTimeMinutes: 6,
   rating: 4.7,
+  goodreadsRatings: 55000,
   coverGradient: "from-red-950 via-red-900 to-rose-950",
   coverAccent: "bg-rose-100 text-rose-900 dark:bg-rose-950/70 dark:text-rose-300",
   coverImage: "/images/covers/everybody-lies.svg",

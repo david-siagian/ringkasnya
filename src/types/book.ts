@@ -1,12 +1,12 @@
 export type BookCategory =
   | "Sains & Nalar Ilmiah"
-  | "Sejarah & Peradaban"
-  | "Ekonomi & Keuangan"
   | "Psikologi & Perilaku"
+  | "Sejarah & Peradaban"
+  | "Filsafat & Kebijaksanaan"
+  | "Ekonomi & Keuangan"
   | "Organisasi & Bisnis"
   | "Karier & Budaya Kerja"
-  | "Produktivitas & Pengembangan Diri"
-  | "Filsafat & Kebijaksanaan";
+  | "Produktivitas & Pengembangan Diri";
 
 export interface BookKeyConcept {
   title: string;
@@ -31,6 +31,7 @@ export interface BookSummary {
   readingTimeMinutes: number;
   quickTimeMinutes: number;
   rating: number;
+  goodreadsRatings: number;
   coverGradient: string;
   coverAccent: string;
   coverImage?: string;

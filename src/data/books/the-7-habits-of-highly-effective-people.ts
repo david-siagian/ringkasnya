@@ -10,6 +10,7 @@ export const the7HabitsOfHighlyEffectivePeople: BookSummary = {
   readingTimeMinutes: 17,
   quickTimeMinutes: 6,
   rating: 4.9,
+  goodreadsRatings: 830000,
   coverGradient: "from-orange-950 via-red-950 to-amber-900",
   coverAccent: "bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300",
   coverImage: "/images/covers/the-7-habits-of-highly-effective-people.svg",

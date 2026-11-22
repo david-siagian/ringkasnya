@@ -9,6 +9,7 @@ export const stealLikeAnArtist: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.6,
+  goodreadsRatings: 295000,
   coverGradient: "from-zinc-950 via-neutral-900 to-stone-950",
   coverAccent: "text-amber-300",
   coverImage: "/images/covers/steal-like-an-artist.svg",

@@ -10,6 +10,7 @@ export const hiddenPotential: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,
+  goodreadsRatings: 80000,
   coverGradient: "from-indigo-950 via-violet-950 to-slate-950",
   coverAccent: "bg-indigo-100 text-indigo-900 dark:bg-indigo-950/70 dark:text-indigo-300",
   coverImage: "/images/covers/hidden-potential.svg",

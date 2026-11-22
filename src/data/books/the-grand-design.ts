@@ -10,6 +10,7 @@ export const theGrandDesign: BookSummary = {
   readingTimeMinutes: 16,
   quickTimeMinutes: 6,
   rating: 4.7,
+  goodreadsRatings: 65000,
   coverGradient: "from-slate-950 via-slate-900 to-indigo-950",
   coverAccent: "bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300",
   coverImage: "/images/covers/the-grand-design.svg",

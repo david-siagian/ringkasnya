@@ -10,6 +10,7 @@ export const theDeathOfExpertise: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.6,
+  goodreadsRatings: 21000,
   coverGradient: "from-zinc-950 via-neutral-900 to-red-950",
   coverAccent: "bg-red-100 text-red-900 dark:bg-red-950/70 dark:text-red-300",
   coverImage: "/images/covers/the-death-of-expertise.svg",

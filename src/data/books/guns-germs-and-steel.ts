@@ -10,6 +10,7 @@ export const gunsGermsAndSteel: BookSummary = {
   readingTimeMinutes: 16,
   quickTimeMinutes: 5,
   rating: 4.8,
+  goodreadsRatings: 440000,
   coverGradient: "from-stone-950 via-stone-900 to-zinc-800",
   coverAccent: "bg-stone-200 text-stone-900 dark:bg-stone-800 dark:text-stone-200",
   coverImage: "/images/covers/guns-germs-and-steel.svg",

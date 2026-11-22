@@ -10,6 +10,7 @@ export const enlightenmentNow: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,
+  goodreadsRatings: 38000,
   coverGradient: "from-slate-950 via-blue-950 to-amber-950",
   coverAccent: "bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300",
   coverImage: "/images/covers/enlightenment-now.svg",

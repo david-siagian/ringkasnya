@@ -10,6 +10,7 @@ export const predictablyIrrational: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.7,
+  goodreadsRatings: 150000,
   coverGradient: "from-slate-950 via-rose-950 to-amber-950",
   coverAccent: "bg-rose-100 text-rose-900 dark:bg-rose-950/70 dark:text-rose-300",
   coverImage: "/images/covers/predictably-irrational.svg",

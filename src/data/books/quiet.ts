@@ -10,6 +10,7 @@ export const quiet: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,
+  goodreadsRatings: 450000,
   coverGradient: "from-slate-950 via-slate-900 to-indigo-950",
   coverAccent: "bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-200",
   coverImage: "/images/covers/quiet.svg",

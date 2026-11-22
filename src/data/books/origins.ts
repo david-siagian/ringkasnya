@@ -10,6 +10,7 @@ export const origins: BookSummary = {
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,
+  goodreadsRatings: 18000,
   coverGradient: "from-slate-950 via-indigo-950 to-indigo-900",
   coverAccent: "bg-indigo-100 text-indigo-900 dark:bg-indigo-950/70 dark:text-indigo-300",
   coverImage: "/images/covers/origins.svg",
