@@ -21,6 +21,7 @@ export const CATEGORIES: BookCategory[] = [
   "Ekonomi & Politik",
   "Psikologi & Perilaku",
   "Organisasi & Budaya Kerja",
+  "Produktivitas & Pengembangan Diri",
 ];
 
 const WORDS_PER_MINUTE = 200;

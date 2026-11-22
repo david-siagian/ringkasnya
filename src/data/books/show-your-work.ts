@@ -6,7 +6,7 @@ export const showYourWork: BookSummary = {
   originalTitle: "10 Ways to Share Your Creativity and Get Discovered",
   author: "Austin Kleon",
   year: 2014,
-  category: "Organisasi & Budaya Kerja",
+  category: "Produktivitas & Pengembangan Diri",
   readingTimeMinutes: 18,
   quickTimeMinutes: 6,
   rating: 4.8,

@@ -6,7 +6,7 @@ export const essentialism: BookSummary = {
   originalTitle: "The Disciplined Pursuit of Less",
   author: "Greg McKeown",
   year: 2014,
-  category: "Organisasi & Budaya Kerja",
+  category: "Produktivitas & Pengembangan Diri",
   readingTimeMinutes: 18,
   quickTimeMinutes: 7,
   rating: 4.8,

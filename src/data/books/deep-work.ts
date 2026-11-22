@@ -6,7 +6,7 @@ export const deepWork: BookSummary = {
   originalTitle: "Rules for Focused Success in a Distracted World",
   author: "Cal Newport",
   year: 2016,
-  category: "Organisasi & Budaya Kerja",
+  category: "Produktivitas & Pengembangan Diri",
   readingTimeMinutes: 18,
   quickTimeMinutes: 7,
   rating: 4.8,

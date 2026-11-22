@@ -3,7 +3,8 @@ export type BookCategory =
   | "Sejarah & Masyarakat"
   | "Ekonomi & Politik"
   | "Psikologi & Perilaku"
-  | "Organisasi & Budaya Kerja";
+  | "Organisasi & Budaya Kerja"
+  | "Produktivitas & Pengembangan Diri";
 
 export interface BookKeyConcept {
   title: string;

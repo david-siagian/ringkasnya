@@ -6,7 +6,7 @@ export const atomicHabits: BookSummary = {
   originalTitle: "An Easy & Proven Way to Build Good Habits & Break Bad Ones",
   author: "James Clear",
   year: 2018,
-  category: "Psikologi & Perilaku",
+  category: "Produktivitas & Pengembangan Diri",
   readingTimeMinutes: 18,
   quickTimeMinutes: 6,
   rating: 4.9,

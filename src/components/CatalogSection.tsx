@@ -394,12 +394,20 @@ export default function CatalogSection({
           <p className="text-base font-semibold text-ink">
             {selectedCategory === "Tersimpan" && bookmarkedCount === 0
               ? "Belum ada buku yang disimpan"
-              : "Buku yang kamu cari belum ditemukan"}
+              : selectedCategory !== "Semua" &&
+                  selectedCategory !== "Tersimpan" &&
+                  !searchQuery.trim()
+                ? `Belum ada buku di kategori ${selectedCategory}`
+                : "Buku yang kamu cari belum ditemukan"}
           </p>
           <p className="mt-1 text-sm text-ink-subtle">
             {selectedCategory === "Tersimpan" && bookmarkedCount === 0
               ? "Klik ikon bookmark pada kartu buku untuk menyimpannya di sini."
-              : "Coba gunakan kata kunci lain atau pilih kategori \"Semua\"."}
+              : selectedCategory !== "Semua" &&
+                  selectedCategory !== "Tersimpan" &&
+                  !searchQuery.trim()
+                ? "Ringkasan buku untuk kategori ini sedang disiapkan dan akan segera hadir."
+                : "Coba gunakan kata kunci lain atau pilih kategori \"Semua\"."}
           </p>
           <button
             type="button"
@@ -409,7 +417,11 @@ export default function CatalogSection({
             }}
             className="mt-4 inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
           >
-            Reset Pencarian
+            {selectedCategory !== "Semua" &&
+            selectedCategory !== "Tersimpan" &&
+            !searchQuery.trim()
+              ? "Lihat Semua Buku"
+              : "Reset Pencarian"}
           </button>
         </div>
       )}
