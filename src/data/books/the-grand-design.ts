@@ -6,7 +6,7 @@ export const theGrandDesign: BookSummary = {
   originalTitle: "Rancangan Agung: Jawaban Baru Atas Pertanyaan Terbesar Kehidupan",
   author: "Stephen Hawking & Leonard Mlodinow",
   year: 2010,
-  category: "Sains & Nalar Ilmiah",
+  category: "Sains & Alam Semesta",
   readingTimeMinutes: 16,
   quickTimeMinutes: 6,
   rating: 4.7,

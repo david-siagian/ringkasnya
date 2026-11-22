@@ -6,7 +6,7 @@ export const whyWeSleep: BookSummary = {
   originalTitle: "Mengapa Kita Tidur: Menguak Kekuatan Tidur dan Mimpi",
   author: "Matthew Walker",
   year: 2017,
-  category: "Sains & Nalar Ilmiah",
+  category: "Kesehatan & Medis",
   readingTimeMinutes: 16,
   quickTimeMinutes: 5,
   rating: 4.8,

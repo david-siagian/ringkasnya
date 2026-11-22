@@ -6,7 +6,7 @@ export const whyIsSexFun: BookSummary = {
   originalTitle: "Mengapa Seks Menyenangkan? Evolusi Seksualitas Manusia",
   author: "Jared Diamond",
   year: 1997,
-  category: "Sains & Nalar Ilmiah",
+  category: "Sains & Alam Semesta",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.6,

@@ -6,7 +6,7 @@ export const shadowsOfForgottenAncestors: BookSummary = {
   originalTitle: "Bayangan Leluhur yang Terlupakan",
   author: "Carl Sagan & Ann Druyan",
   year: 1992,
-  category: "Sains & Nalar Ilmiah",
+  category: "Sains & Alam Semesta",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,

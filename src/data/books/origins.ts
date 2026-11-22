@@ -6,7 +6,7 @@ export const origins: BookSummary = {
   originalTitle: "Asal-Usul: Empat Belas Miliar Tahun Evolusi Kosmik",
   author: "Neil deGrasse Tyson & Donald Goldsmith",
   year: 2004,
-  category: "Sains & Nalar Ilmiah",
+  category: "Sains & Alam Semesta",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,

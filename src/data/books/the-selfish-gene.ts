@@ -6,7 +6,7 @@ export const theSelfishGene: BookSummary = {
   originalTitle: "Gen yang Egois",
   author: "Richard Dawkins",
   year: 1976,
-  category: "Sains & Nalar Ilmiah",
+  category: "Sains & Alam Semesta",
   readingTimeMinutes: 17,
   quickTimeMinutes: 6,
   rating: 4.8,

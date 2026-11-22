@@ -6,7 +6,7 @@ export const whatEvolutionIs: BookSummary = {
   originalTitle: "Apa Itu Evolusi?",
   author: "Ernst Mayr",
   year: 2001,
-  category: "Sains & Nalar Ilmiah",
+  category: "Sains & Alam Semesta",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,

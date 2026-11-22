@@ -59,7 +59,9 @@ import { startWithWhy } from "./books/start-with-why";
 import { stealLikeAnArtist } from "./books/steal-like-an-artist";
 
 export const CATEGORIES: BookCategory[] = [
-  "Sains & Nalar Ilmiah",
+  "Sains & Alam Semesta",
+  "Nalar & Berpikir Kritis",
+  "Kesehatan & Medis",
   "Psikologi & Perilaku",
   "Sejarah & Peradaban",
   "Filsafat & Kebijaksanaan",

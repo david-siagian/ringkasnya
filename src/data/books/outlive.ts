@@ -6,7 +6,7 @@ export const outlive: BookSummary = {
   originalTitle: "Ilmu dan Seni Hidup Panjang Umur yang Berkualitas",
   author: "Peter Attia & Bill Gifford",
   year: 2023,
-  category: "Sains & Nalar Ilmiah",
+  category: "Kesehatan & Medis",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.9,

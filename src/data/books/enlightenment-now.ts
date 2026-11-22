@@ -6,7 +6,7 @@ export const enlightenmentNow: BookSummary = {
   originalTitle: "Pencerahan Kini: Pembelaan bagi Nalar, Sains, dan Kemajuan",
   author: "Steven Pinker",
   year: 2018,
-  category: "Sains & Nalar Ilmiah",
+  category: "Nalar & Berpikir Kritis",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.8,

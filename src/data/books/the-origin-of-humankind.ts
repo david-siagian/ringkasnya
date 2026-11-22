@@ -6,7 +6,7 @@ export const theOriginOfHumankind: BookSummary = {
   originalTitle: "Asal-Usul Umat Manusia",
   author: "Richard Leakey",
   year: 1994,
-  category: "Sains & Nalar Ilmiah",
+  category: "Sains & Alam Semesta",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.7,

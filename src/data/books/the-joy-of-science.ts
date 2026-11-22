@@ -6,7 +6,7 @@ export const theJoyOfScience: BookSummary = {
   originalTitle: "Kegembiraan Berpikir Ilmiah",
   author: "Jim Al-Khalili",
   year: 2022,
-  category: "Sains & Nalar Ilmiah",
+  category: "Nalar & Berpikir Kritis",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.7,

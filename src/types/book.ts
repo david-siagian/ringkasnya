@@ -1,5 +1,7 @@
 export type BookCategory =
-  | "Sains & Nalar Ilmiah"
+  | "Sains & Alam Semesta"
+  | "Nalar & Berpikir Kritis"
+  | "Kesehatan & Medis"
   | "Psikologi & Perilaku"
   | "Sejarah & Peradaban"
   | "Filsafat & Kebijaksanaan"

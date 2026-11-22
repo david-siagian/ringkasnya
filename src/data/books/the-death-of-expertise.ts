@@ -6,7 +6,7 @@ export const theDeathOfExpertise: BookSummary = {
   originalTitle: "Matinya Kepakaran: Kampanye Melawan Pengetahuan Teruji",
   author: "Tom Nichols",
   year: 2017,
-  category: "Sains & Nalar Ilmiah",
+  category: "Nalar & Berpikir Kritis",
   readingTimeMinutes: 15,
   quickTimeMinutes: 5,
   rating: 4.6,

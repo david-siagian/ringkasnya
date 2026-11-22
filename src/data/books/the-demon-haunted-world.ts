@@ -6,7 +6,7 @@ export const theDemonHauntedWorld: BookSummary = {
   originalTitle: "Science as a Candle in the Dark",
   author: "Carl Sagan",
   year: 1995,
-  category: "Sains & Nalar Ilmiah",
+  category: "Nalar & Berpikir Kritis",
   readingTimeMinutes: 16,
   quickTimeMinutes: 6,
   rating: 4.9,
