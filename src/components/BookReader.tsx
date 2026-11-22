@@ -227,7 +227,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   }, [readMode, clampedDeepStep]);
 
   const handleCopyQuote = async (quote: string, index: number) => {
-    const textToCopy = `"${quote}" — ${book.title} (${book.author}) via Ringkasnya`;
+    const textToCopy = `"${quote}" — ${book.title} (${book.author}) via ringkasnya.com`;
     const copied = await copyTextToClipboard(textToCopy);
     setCopyFeedback({ index, status: copied ? "success" : "error" });
     window.clearTimeout(copyTimerRef.current);

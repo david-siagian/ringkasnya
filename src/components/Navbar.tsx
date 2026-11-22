@@ -65,8 +65,8 @@ export default function Navbar() {
   }, []);
 
   /**
-   * Fokus ke kolom pencarian katalog bila ada di halaman ini (Beranda/Katalog);
-   * jika tidak (mis. halaman buku), buka Katalog dengan kolom pencarian langsung aktif.
+   * Fokus ke kolom pencarian katalog bila ada di halaman ini (Katalog);
+   * jika tidak (mis. Beranda atau halaman buku), buka Katalog dengan kolom pencarian langsung aktif.
    */
   const handleSearchClick = () => {
     setIsOpen(false);
@@ -133,7 +133,7 @@ export default function Navbar() {
             <BrandLogo className="h-11 w-11 transition-transform group-hover:scale-105" />
             <div className="flex flex-col">
               <span className="text-lg font-extrabold tracking-tight text-ink">
-                Ringkasnya
+                ringkasnya<span className="text-emerald-600 dark:text-emerald-400 font-bold">.com</span>
               </span>
               <span className="text-[11px] text-ink-subtle hidden sm:inline">
                 Baca Intinya, Praktikkan Ilmunya
@@ -241,7 +241,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <BrandLogo className="h-8 w-8" />
             <span className="text-base font-extrabold tracking-tight text-ink">
-              Ringkasnya
+              ringkasnya<span className="text-emerald-600 dark:text-emerald-400 font-bold">.com</span>
             </span>
           </div>
           <button

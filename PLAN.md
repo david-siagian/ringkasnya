@@ -1,42 +1,49 @@
-# Rencana Implementasi: Pivot Ringkasnya ke Nonfiksi Pengetahuan & Konsep Kunci
+# Implementation Plan: Penyesuaian Nama Proyek & Tipografi `ringkasnya.com`
 
-Rencana final ini mengikuti arahan editorial terbaru:
-- **Positioning**: Ringkasan buku nonfiksi berbasis pengetahuan (sains, ekonomi, politik, psikologi, sejarah, masyarakat, perilaku, organisasi, budaya kerja) dengan **bahasa Indonesia yang tetap luwes, jernih, dan ramah pembaca awam** (menghindari jargon akademis yang berat).
-- **Tanpa Pertanyaan Kritis & Tanpa Action Checklist**: Pembaca cukup memperoleh pengetahuan inti lewat **Konsep Kunci** (`keyConcepts`) di akhir buku dan **Hal yang Perlu Diingat** (`keyNote`) di setiap bab.
-- **Buku Sorotan Utama**: **Sapiens** menggantikan *Atomic Habits* pada CTA Beranda dan urutan sorotan Footer; buku *self-help* populer tetap dipertahankan di katalog dengan format **Konsep Kunci**, namun tidak di-*highlight*.
+Mengubah nama aplikasi dan proyek dari `Ringkasnya` / `ringkasnya.id` menjadi `ringkasnya.com` dengan tipografi modern yang serasi di seluruh komponen aplikasi.
+
+## 1. Feature & Bugfix Review Board
+
+### I. Role Aktif
+1. **Product & UX Reviewer (Human-Centric & Tren)**: Tipografi domain lowercase `ringkasnya` dengan penekanan aksen dot-domain `.com` (`text-emerald-600 dark:text-emerald-400 font-bold`) menciptakan visual lockup yang seimbang, modern, dan tidak monoton.
+2. **QA & Edge-Case Skeptic (Keandalan & Akar Masalah)**: Penyesuaian nama harus konsisten dari metadata HTML, OpenGraph/title, header desktop & mobile, footer, kartu kutipan canvas, hingga health endpoint & skrip tes smoke.
+3. **Growth & Retention Strategist (Kondisional: Branding)**: Domain `.com` memperkuat persepsi kredibilitas platform dan mempermudah pembaca mengingat tautan saat kutipan dibagikan ke media sosial.
+
+### II. Keputusan
+**Layak lanjut apa adanya**. Perubahan langsung diimplementasikan ke branch kerja `chore/rebrand-ringkasnya-com`.
 
 ---
 
-## Rincian Perubahan
+## 2. Rincian Perubahan
 
-1. **Model Data (`src/types/book.ts` & `src/data/books.ts`)**
-   - `BookCategory`:
-     - `"Sains & Nalar Ilmiah"`
-     - `"Sejarah & Masyarakat"`
-     - `"Ekonomi & Politik"`
-     - `"Psikologi & Perilaku"`
-     - `"Organisasi & Budaya Kerja"`
-   - `BookTakeaway`: Mengganti `practicalTip: string` menjadi `keyNote: string` (*Hal yang Perlu Diingat*).
-   - `BookSummary`: Mengganti `actionChecklist: string[]` menjadi `keyConcepts: { title: string; explanation: string }[]` (*Konsep Kunci*).
-   - `withCalculatedReadingTimes`: Menghitung jumlah kata dari `keyNote` dan `keyConcepts` (`title` + `explanation`) agar durasi **Mode Kilat (5–7 menit)** dan **Mode Mendalam (15–20 menit)** tetap akurat.
+### A. Tipografi & Identitas Brand (`Navbar.tsx` & `Footer.tsx`)
+- **Navbar (Desktop & Mobile Drawer)**:
+  Mengubah teks judul brand dari `Ringkasnya` menjadi:
+  `ringkasnya`<span class="text-emerald-600 dark:text-emerald-400 font-bold">.com</span>
+  dengan `tracking-tight font-extrabold`.
+- **Footer**:
+  Mengubah teks judul brand menjadi:
+  `ringkasnya`<span class="text-emerald-400 font-bold">.com</span>
+  dan teks copyright menjadi `© {new Date().getFullYear()} ringkasnya.com`.
 
-2. **Komponen Reader (`BookReader.tsx`, `BookReaderSections.tsx`, `BookReaderModals.tsx`)**
-   - **`TakeawayCard`**: Mengubah kotak *"Tips Praktis Langsung Coba:"* menjadi **"Hal yang Perlu Diingat:"**.
-   - **`KeyConceptsSection`** *(menggantikan `ActionChecklistSection`)*: Menampilkan daftar kartu **Konsep Kunci** (`title` + `explanation`) yang rapi, kontras, dan mudah dipindai tanpa checkbox maupun pertanyaan terbuka.
-   - **`QuickKeyConceptsModal`** *(menggantikan `QuickChecklistModal`)*: Modal ringkas untuk membuka ulang daftar **Konsep Kunci** saat buku berstatus *Selesai Dibaca* (`Konsep Kunci (N)`), serta membersihkan logika `localStorage` checklist lama.
+### B. Kartu Kutipan & Generator Canvas (`QuoteCardModal.tsx` & `BookReader.tsx`)
+- Update `brandLabel` di canvas ekspor kartu kutipan menjadi `ringkasnya.com`.
+- Update teks kutipan yang disalin di reader (`via ringkasnya.com`).
 
-3. **Halaman & Positioning Global**
-   - `src/layouts/BaseLayout.astro`: Memperbarui default title & meta description.
-   - `src/pages/index.astro`:
-     - Tagline hero: *"Baca Intinya, Pahami Dunianya."*
-     - Pilar kedua: **"2. Konsep Kunci Mudah Dipahami"** (menggantikan *Action Checklist Interaktif*).
-     - Tombol CTA: **"Coba Baca: Sapiens"** (`/buku/sapiens`).
-   - `src/pages/topik.astro`: Memperbarui `TOPIC_DETAILS` dan ikon ke 5 kategori baru.
-   - `src/pages/katalog.astro`, `src/pages/tentang.astro`, `src/components/Footer.tsx`: Menyelaraskan deskripsi ke pengetahuan nonfiksi, **Konsep Kunci**, dan sorotan **Sapiens**.
+### C. Halaman & Layout (`BaseLayout.astro`, `index.astro`, `tentang.astro`, `buku/[slug].astro`, dll.)
+- Update default title: `ringkasnya.com — Baca Intinya, Pahami Dunianya`.
+- Update judul halaman katalog, topik, 404, dan halaman buku menjadi `... — ringkasnya.com`.
+- Update teks di beranda ("Mengapa ringkasnya.com?") dan halaman tentang ("Tentang ringkasnya.com", "Cara Kerja ringkasnya.com").
 
-4. **Migrasi Seluruh Data Buku (`src/data/books/*.ts` — 21 file)**
-   - Memigrasikan kategori, `practicalTip` -> `keyNote`, dan `actionChecklist` -> `keyConcepts` pada seluruh 21 file buku di `src/data/books/` dengan gaya bahasa yang mengalir dan mudah dipahami pembaca awam.
+### D. Konfigurasi Proyek & API
+- `package.json`: `"name": "ringkasnya-com"`.
+- `src/pages/api/health.ts`: `service: "ringkasnya.com"`.
+- `tests/smoke.spec.ts`: update verifikasi service name.
+- `.agents/skills/release-pipeline/SKILL.md`: selaraskan referensi domain.
 
-5. **Pengujian & Verifikasi**
-   - Memperbarui `tests/smoke.spec.ts` (kategori baru, `/buku/sapiens`, verifikasi `KeyConceptsSection` & `QuickKeyConceptsModal`, tanpa checklist).
-   - Menjalankan `npx tsc --noEmit` dan `npm run build` (plus verifikasi smoke test jika diperlukan), lalu commit, push ke branch kerja, dan merge ke `dev`.
+---
+
+## 3. Rencana Verifikasi
+1. `npx tsc --noEmit` untuk memastikan tidak ada kesalahan tipe TypeScript.
+2. `npm run build` (BypassSandbox: true) untuk memastikan seluruh halaman Astro ter-build sempurna.
+3. Review hasil diff git sebelum commit.

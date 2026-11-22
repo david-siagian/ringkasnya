@@ -1,13 +1,13 @@
 ---
 name: release-pipeline
 description: >-
-  Use this skill whenever a new feature, bug fix, or requirement in ringkasnya.id
+  Use this skill whenever a new feature, bug fix, or requirement in ringkasnya.com
   is ready to be verified, committed, pushed to GitHub, and deployed to Cloudflare
   (including TypeScript checks, Astro/Cloudflare production build, Playwright UI
   verification, and post-deploy smoke checks).
 ---
 
-# Release & Verification Pipeline (`ringkasnya.id`)
+# Release & Verification Pipeline (`ringkasnya.com`)
 
 Jalankan langkah-langkah berikut secara berurutan di `E:\MyApp\ringkasnya`. Pada Windows, jalankan `npm run build`, `git push`, `npx wrangler`, dan `gh` dengan `BypassSandbox: true`.
 

@@ -246,7 +246,7 @@ export default function QuoteCardModal({
       ctx.fillText(line, padX, textStartY + idx * lineHeight);
     });
 
-    // 7. Footer: Judul buku, penulis, & branding ringkasnya.id
+    // 7. Footer: Judul buku, penulis, & branding ringkasnya.com
     const footerY = height - 154;
     ctx.strokeStyle = theme.border;
     ctx.lineWidth = 2;
@@ -265,7 +265,7 @@ export default function QuoteCardModal({
 
     ctx.fillStyle = theme.brandText;
     ctx.font = '700 26px "Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
-    const brandLabel = "ringkasnya.id";
+    const brandLabel = "ringkasnya.com";
     const brandWidth = ctx.measureText(brandLabel).width;
     ctx.fillText(brandLabel, width - padX - brandWidth, footerY + 20);
   }, [quote, bookTitle, bookAuthor, bookCategory, themeId, ratioId]);

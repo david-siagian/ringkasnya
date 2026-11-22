@@ -18,7 +18,7 @@ async function waitForAstroIslands(page: Page) {
 }
 
 test.describe("Ringkasnya Smoke Tests", () => {
-  test("beranda: tanpa error & pencarian berfungsi tanpa filter kategori", async ({
+  test("beranda: tanpa error, tanpa filter/kotak pencarian, & tombol cari mengarahkan ke /katalog", async ({
     page,
   }) => {
     const errors = trackRuntimeErrors(page);
@@ -31,12 +31,17 @@ test.describe("Ringkasnya Smoke Tests", () => {
       page.getByRole("button", { name: /^Sejarah & Peradaban/i })
     ).toHaveCount(0);
 
-    const searchBtn = page.getByRole("button", { name: "Cari judul buku" });
-    await searchBtn.click();
-
     const searchInput = page.getByPlaceholder(
       "Cari judul buku, penulis, topik..."
     );
+    await expect(searchInput).toHaveCount(0);
+
+    const searchBtn = page.getByRole("button", { name: "Cari judul buku" });
+    await searchBtn.click();
+
+    await expect(page).toHaveURL(/\/katalog/);
+    await waitForAstroIslands(page);
+
     await expect(searchInput).toBeVisible();
     await searchInput.fill("Deep Work");
     await expect(
@@ -267,7 +272,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     expect(errors).toEqual([]);
   });
 
-  test("beranda (/): animasi scroll-reveal muncul saat scroll ke Perpustakaan Kurasi & Mengapa Ringkasnya", async ({
+  test("beranda (/): animasi scroll-reveal muncul saat scroll ke Perpustakaan Kurasi & Mengapa ringkasnya.com", async ({
     page,
   }) => {
     const errors = trackRuntimeErrors(page);
@@ -299,7 +304,7 @@ test.describe("Ringkasnya Smoke Tests", () => {
     const data = await response.json();
     expect(data).toMatchObject({
       status: "ok",
-      service: "Ringkasnya",
+      service: "ringkasnya.com",
     });
   });
 });

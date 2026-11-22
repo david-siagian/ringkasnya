@@ -68,6 +68,8 @@ export default function CatalogSection({
   const { bookmarkedCount, isBookmarked } = useBookmarks();
 
   useEffect(() => {
+    if (!isFull) return;
+
     const params = new URLSearchParams(window.location.search);
 
     if (params.get(CATALOG_SEARCH_FOCUS_PARAM) === "1") {
@@ -81,7 +83,6 @@ export default function CatalogSection({
       );
     }
 
-    if (!isFull) return;
     const categoryParam = params.get("kategori");
     if (
       categoryParam &&
@@ -241,28 +242,30 @@ export default function CatalogSection({
         </div>
 
         {/* Kolom Pencarian */}
-        <div className="relative w-full md:w-80">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
-          <input
-            ref={searchInputRef}
-            id={CATALOG_SEARCH_INPUT_ID}
-            type="text"
-            value={searchQuery}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="Cari judul buku, penulis, topik..."
-            className="w-full rounded-xl border border-line bg-surface py-2.5 pl-10 pr-9 text-sm text-ink placeholder:text-ink-faint focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => handleSearchChange("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink-muted"
-              aria-label="Hapus pencarian"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
+        {isFull && (
+          <div className="relative w-full md:w-80">
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
+            <input
+              ref={searchInputRef}
+              id={CATALOG_SEARCH_INPUT_ID}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder="Cari judul buku, penulis, topik..."
+              className="w-full rounded-xl border border-line bg-surface py-2.5 pl-10 pr-9 text-sm text-ink placeholder:text-ink-faint focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => handleSearchChange("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink-muted"
+                aria-label="Hapus pencarian"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Filter Kategori */}
