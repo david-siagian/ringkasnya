@@ -2,11 +2,64 @@ import type { Config } from "tailwindcss";
 
 const withAlpha = (cssVar: string) => `rgb(var(${cssVar}) / <alpha-value>)`;
 
+/**
+ * Daftar palet warna dinamis untuk `coverGradient` dan `coverAccent` buku
+ * yang kini dimuat saat runtime dari Cloudflare D1 sehingga tetap di-generate oleh Tailwind.
+ */
+const BOOK_COVER_COLORS = [
+  "slate",
+  "gray",
+  "zinc",
+  "neutral",
+  "stone",
+  "red",
+  "orange",
+  "amber",
+  "yellow",
+  "lime",
+  "green",
+  "emerald",
+  "teal",
+  "cyan",
+  "sky",
+  "blue",
+  "indigo",
+  "violet",
+  "purple",
+  "fuchsia",
+  "pink",
+  "rose",
+] as const;
+
+const BOOK_COVER_SAFELIST = BOOK_COVER_COLORS.flatMap((color) => [
+  // coverGradient (nuansa gelap 800-950)
+  `from-${color}-800`,
+  `from-${color}-900`,
+  `from-${color}-950`,
+  `via-${color}-800`,
+  `via-${color}-900`,
+  `via-${color}-950`,
+  `to-${color}-800`,
+  `to-${color}-900`,
+  `to-${color}-950`,
+  // coverAccent (badge kartu buku: mode terang & gelap)
+  `bg-${color}-100`,
+  `bg-${color}-200`,
+  `text-${color}-300`,
+  `text-${color}-900`,
+  `dark:bg-${color}-800`,
+  `dark:bg-${color}-900`,
+  `dark:bg-${color}-950/70`,
+  `dark:text-${color}-200`,
+  `dark:text-${color}-300`,
+]);
+
 export default {
   darkMode: "class",
   content: [
     "./src/**/*.{astro,html,js,ts,jsx,tsx,mdx}",
   ],
+  safelist: BOOK_COVER_SAFELIST,
   theme: {
     extend: {
       colors: {
