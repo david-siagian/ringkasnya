@@ -7,12 +7,12 @@ import {
 } from "@/lib/search";
 import BookCard from "./BookCard";
 import BookPreviewModal from "./BookPreviewModal";
+import CategoryDropdown, { type CategoryOption } from "./CategoryDropdown";
 import { smoothScrollToElement } from "./SmoothNavigation";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import {
   ArrowRight,
   Bookmark,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -98,6 +98,21 @@ export default function CatalogSection({
       setCurrentPage(pageParam);
     }
   }, [isFull]);
+
+  const categoryOptions = useMemo<CategoryOption[]>(() => {
+    const counts = new Map<BookCategory, number>();
+    for (const book of books) {
+      counts.set(book.category, (counts.get(book.category) ?? 0) + 1);
+    }
+    return [
+      { value: "Semua", label: "Semua Kategori", count: books.length },
+      ...CATEGORIES.map((category) => ({
+        value: category,
+        label: category,
+        count: counts.get(category) ?? 0,
+      })),
+    ];
+  }, [books]);
 
   const filteredBooks = useMemo(() => {
     return books.filter((book) => {
@@ -276,39 +291,11 @@ export default function CatalogSection({
       {/* Filter Kategori */}
       {isFull && (
         <div className="mt-6 flex flex-wrap items-center gap-2.5">
-          <div className="relative min-w-0 flex-1 sm:flex-initial sm:min-w-[260px]">
-            <select
-              aria-label="Filter kategori"
-              value={selectedCategory === "Tersimpan" ? "" : selectedCategory}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value) {
-                  handleCategoryChange(value as BookCategory | "Semua");
-                }
-              }}
-              className={`w-full appearance-none rounded-xl border bg-surface py-2.5 pl-3.5 pr-10 text-xs sm:text-sm font-semibold transition-all focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
-                selectedCategory !== "Tersimpan"
-                  ? "border-line-strong text-ink"
-                  : "border-line text-ink-muted"
-              }`}
-            >
-              {selectedCategory === "Tersimpan" && (
-                <option value="" disabled>
-                  Pilih Kategori...
-                </option>
-              )}
-              <option value="Semua">Semua Kategori ({books.length})</option>
-              {CATEGORIES.map((category) => {
-                const count = books.filter((b) => b.category === category).length;
-                return (
-                  <option key={category} value={category}>
-                    {category} ({count})
-                  </option>
-                );
-              })}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
-          </div>
+          <CategoryDropdown
+            options={categoryOptions}
+            selectedValue={selectedCategory}
+            onSelect={handleCategoryChange}
+          />
 
           <button
             type="button"

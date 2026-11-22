@@ -65,11 +65,13 @@ test.describe("Ringkasnya Smoke Tests", () => {
       page.getByRole("heading", { name: "Daftar Semua Buku" })
     ).toBeVisible();
 
-    const categorySelect = page.getByLabel("Filter kategori");
-    await categorySelect.selectOption("Sejarah & Peradaban");
-    await expect(categorySelect).toHaveValue("Sejarah & Peradaban");
-    await categorySelect.selectOption("Semua");
-    await expect(categorySelect).toHaveValue("Semua");
+    const categoryTrigger = page.getByRole("button", { name: "Filter kategori" });
+    await categoryTrigger.click();
+    await page.getByRole("option", { name: /Sejarah & Peradaban/i }).click();
+    await expect(categoryTrigger).toContainText("Sejarah & Peradaban");
+    await categoryTrigger.click();
+    await page.getByRole("option", { name: /Semua Kategori/i }).click();
+    await expect(categoryTrigger).toContainText("Semua Kategori");
 
     const grid = page.locator("#katalog .grid").first();
     const getColCount = () =>
