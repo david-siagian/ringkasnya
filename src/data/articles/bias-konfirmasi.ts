@@ -9,11 +9,12 @@ export const biasKonfirmasi: Article = {
   aliases: ["Bias Konfirmasi", "Confirmation Bias"],
   format: "bedah-istilah",
   category: "Nalar & Berpikir Kritis",
-  readingTimeMinutes: 6,
+  readingTimeMinutes: 4,
   shortDefinition:
     "Kecenderungan alami otak manusia untuk mencari, menafsirkan, dan mengingat informasi yang mendukung keyakinan yang sudah ada, sambil mengabaikan atau meremehkan bukti yang bertentangan dengannya.",
   originLabel: "Peter Wason (1960)",
   coverGradient: "from-slate-950 via-indigo-950 to-slate-900",
+  coverImage: "/images/articles/bias-konfirmasi.svg",
   accentBadge: "Bedah Istilah",
   publishedAt: "2026-11-22",
   relatedBookSlugs: [
@@ -23,51 +24,39 @@ export const biasKonfirmasi: Article = {
     "think-again",
   ],
   leadParagraph:
-    "Bayangkan Anda sedang tertarik membeli sebuah merek ponsel atau mobil tertentu. Saat membuka internet untuk \"riset objektif\", judul ulasan mana yang lebih dulu Anda klik: yang memuji kelebihannya, atau yang membongkar kekurangannya? Tanpa sadar, manusia hampir selalu bertindak bukan seperti ilmuwan yang menguji hipotesis, melainkan seperti pengacara yang mengumpulkan bukti demi membela kesimpulan yang sudah diputuskan di awal.",
+    "Saat Anda sudah naksir satu merek ponsel lalu membuka internet untuk \"riset objektif\", ulasan mana yang lebih dulu Anda klik: yang memuji kelebihannya atau yang membongkar kekurangannya? Tanpa sadar, manusia lebih sering bertindak seperti pengacara yang membela kesimpulan awal daripada ilmuwan yang menguji fakta.",
   sections: [
     {
       heading: "Eksperimen Deret Angka Peter Wason (1960)",
       paragraphs: [
-        "Fenomena ini sebenarnya sudah dicatat sejak zaman filsuf Francis Bacon pada abad ke-17, tetapi istilah Bias Konfirmasi (Confirmation Bias) secara ilmiah diperkenalkan dan diuji oleh psikolog kognitif asal Inggris, Peter Wason, pada tahun 1960.",
-        "Wason merancang eksperimen yang tampak sangat sederhana. Ia memberi peserta tiga angka: 2, 4, 6. Ia menjelaskan bahwa ketiga angka itu mengikuti aturan rahasia tertentu, dan tugas peserta adalah menebak aturan tersebut. Sebelum menebak, peserta boleh mengajukan deret tiga angka lain sebanyak mungkin untuk diuji apakah cocok dengan aturan rahasia itu.",
-        "Hampir semua peserta langsung mengira aturannya adalah \"bilangan genap yang bertambah dua\". Lalu deret apa yang mereka ajukan untuk menguji? Kebanyakan mengajukan 8-10-12, 14-16-18, atau 20-22-24. Setiap kali Wason menjawab \"ya, cocok\", mereka makin yakin lalu langsung menyimpulkan tebakannya benar—dan ternyata salah! Aturan sebenarnya jauh lebih sederhana: \"tiga angka apa saja yang nilainya meningkat\", sehingga 1-2-3 atau 5-19-100 pun cocok.",
-        "Pelajaran dari eksperimen Wason sangat tajam: hampir tidak ada peserta yang mencoba menguji deret yang berpotensi menyangkal tebakannya sendiri (misalnya 1-3-5 atau 2-5-9). Otak kita secara bawaan lebih suka mencari tanda \"ya\" daripada mencari tanda \"tidak\".",
+        "Istilah Bias Konfirmasi diperkenalkan psikolog Inggris Peter Wason pada 1960 lewat eksperimen sederhana. Ia memberi peserta deret angka 2, 4, 6 yang mengikuti aturan rahasia, lalu mengizinkan peserta mengajukan deret lain sebanyak mungkin sebelum menebak aturannya.",
+        "Hampir semua peserta menduga aturannya adalah \"bilangan genap bertambah dua\" dan hanya menguji deret seperti 8-10-12 atau 14-16-18. Begitu dijawab cocok, mereka langsung yakin—dan ternyata salah! Aturan sebenarnya cukup \"tiga angka apa saja yang nilainya meningkat\" (seperti 1-2-3 atau 5-19-100). Hampir tak ada peserta yang mencoba menguji deret yang berpotensi menyangkal tebakannya sendiri.",
       ],
       highlightBox: {
         label: "Pola Kerja Otak",
-        text: "Ketika sebuah informasi cocok dengan keyakinan kita, otak bertanya: \"Bolehkah saya memercayai ini?\" Namun ketika informasi bertentangan dengan keyakinan kita, otak langsung beralih ke mode defensif dan bertanya: \"Haruskah saya memercayai ini?\"",
+        text: "Saat informasi cocok dengan keyakinan kita, otak bertanya: \"Bolehkah saya memercayai ini?\" Saat bertentangan, otak langsung defensif dan bertanya: \"Haruskah saya memercayai ini?\"",
       },
     },
     {
-      heading: "Mengapa Orang Cerdas Tidak Kebal dari Bias Ini?",
+      heading: "Mengapa Orang Cerdas Tidak Kebal?",
       paragraphs: [
-        "Banyak orang mengira Bias Konfirmasi hanya menjangkiti orang yang kurang berpendidikan atau malas membaca. Riset psikologi justru menunjukkan hal sebaliknya: orang yang berwawasan luas dan pandai berargumen sering kali lebih mahir merangkai alasan logis untuk mempertahankan keyakinannya yang keliru.",
-        "Fisikawan Jim Al-Khalili dalam The Joy of Science menjelaskan bahwa metode ilmiah modern sebenarnya diciptakan bukan karena para ilmuwan lebih suci daripada manusia biasa, melainkan justru karena ilmuwan sadar betapa mudahnya otak manusia menipu dirinya sendiri. Itulah mengapa sains mewajibkan tinjauan sejawat (peer review), eksperimen ulang, dan uji buta ganda—semuanya adalah pagar pengaman untuk menahan Bias Konfirmasi.",
-        "Di era media sosial, bias alami ini diperkuat berlipat ganda oleh algoritma. Setiap kali Anda menyukai atau menonton satu sudut pandang tentang politik, kesehatan, atau keuangan, sistem akan menyodorkan puluhan konten serupa. Lama-kelamaan, kita merasa \"semua orang berpikiran sama seperti saya\", padahal kita hanya sedang duduk di dalam ruang gema buatan sendiri.",
+        "Riset psikologi menunjukkan kecerdasan tinggi tidak otomatis membebaskan kita dari Bias Konfirmasi—bahkan orang yang pandai berargumen sering lebih mahir merangkai alasan logis untuk mempertahankan kekeliruannya. Itulah mengapa sains mewajibkan tinjauan sejawat dan uji buta ganda sebagai pagar pengaman dari tipuan otak sendiri.",
+        "Di media sosial, bias ini diperkuat algoritma. Setiap kali kita menyukai satu sudut pandang, sistem menyodorkan puluhan konten serupa hingga kita duduk di dalam ruang gema buatan sendiri. Dalam investasi, wawancara kerja, hingga pesan viral di grup keluarga, Bias Konfirmasi membuat satu cerita yang cocok terasa jauh lebih meyakinkan daripada ratusan data pembanding.",
+        "Fenomena yang menarik pun sering terjadi di ruang diskusi publik: dua orang yang membaca artikel atau data statistik yang persis sama justru kerap keluar dengan keyakinan awal yang makin kuat. Masing-masing hanya memungut kalimat yang menguntungkan posisinya dan melabeli bagian yang bertentangan sebagai tidak lengkap atau berat sebelah.",
+        "Hal serupa kerap muncul di ruang kerja saat menilai orang lain: begitu seorang manajer memiliki kesan pertama negatif terhadap satu anggota tim, ia cenderung lebih mudah mengingat kesalahan kecil orang itu dan menganggap keberhasilannya sekadar kebetulan, padahal kesan pertama tersebut belum tentu mencerminkan kinerja sebenarnya.",
       ],
     },
     {
-      heading: "Dampak Nyata di Dunia Kerja, Investasi, dan Keseharian",
+      heading: "Cara Praktis Melatih Kejernihan Berpikir",
       paragraphs: [
-        "Dalam dunia investasi, Bias Konfirmasi sering membuat investor yang terlanjur jatuh cinta pada satu saham hanya membaca berita positif perusahaan tersebut dan mengabaikan laporan keuangan yang mulai memburuk. Di kantor, seorang manajer yang sejak awal kurang menyukai satu anggota tim akan lebih mudah mengingat kesalahan kecil orang itu, sambil menganggap keberhasilannya sekadar kebetulan.",
-        "Hal yang sama terjadi dalam keputusan kesehatan maupun informasi viral di grup percakapan keluarga. Begitu seseorang percaya bahwa suatu ramuan tertentu ampuh menyembuhkan segala penyakit, ia akan mengingat satu testimoni yang cocok dan mengabaikan ratusan kasus lain yang tidak berhasil. Bias Konfirmasi membuat cerita anekdot terasa jauh lebih meyakinkan daripada data statistik berskala besar.",
-        "Di ruang berita dan perdebatan publik, bias ini juga memicu fenomena yang menarik: dua orang yang membaca artikel atau data statistik yang persis sama sering kali justru keluar dengan keyakinan awal yang makin kuat—bukan makin dekat. Masing-masing hanya memungut kalimat yang menguntungkan posisinya dan melabeli bagian yang bertentangan sebagai 'tidak lengkap' atau 'berat sebelah'.",
-        "Bahkan dalam proses wawancara kerja yang tampak profesional, Bias Konfirmasi kerap bekerja sejak menit pertama. Jika pewawancara langsung terkesan oleh penampilan atau almamater kandidat di lima menit awal, sisa sesi wawancara sering berubah menjadi ajang mencari pembenaran atas kesan pertama tersebut—mengajukan pertanyaan yang ramah dan memaklumi jawaban kurang tepat—padahal kesan pertama itu belum tentu mencerminkan kinerja sebenarnya.",
-      ],
-    },
-    {
-      heading: "Tiga Cara Praktis Melatih Diri Keluar dari Ruang Gema",
-      paragraphs: [
-        "Kita tidak bisa menghapus Bias Konfirmasi sepenuhnya karena ia tertanam dalam cara otak menghemat energi. Namun kita bisa membangun kebiasaan sederhana agar tidak mudah disetir olehnya saat mengambil keputusan penting.",
-        "Pertama, sebelum memutuskan sesuatu yang besar—mulai dari membeli aset, merekrut karyawan, hingga menyebarkan berita—tanyakan secara sadar: \"Bukti apa yang bisa membuat saya mengubah pikiran?\" Jika kita tidak bisa menyebut satu pun bukti yang sanggup mengubah pandangan kita, berarti kita sedang berpegang pada dogma, bukan nalar.",
-        "Kedua, latih kebiasaan mencari argumen terbaik dari pihak yang berbeda pendapat (bukan versi paling konyolnya untuk diejek). Dalam filsafat berpikir kritis, kebiasaan ini disebut prinsip kemurahan hati intelektual: mencoba memahami versi paling masuk akal dari pandangan lawan sebelum menilainya.",
-        "Ketiga, seperti yang disarankan Adam Grant dalam Think Again, bangun lingkaran kecil teman atau rekan kerja yang cukup peduli dan jujur untuk mengkritik gagasan kita secara sehat—karena cermin terbaik untuk titik buta kita sering kali adalah sudut pandang orang lain yang berani bertanya. Anda juga bisa sesekali menuliskan prediksi pribadi sebelum suatu peristiwa terjadi, lalu mencocokkannya beberapa bulan kemudian agar ingatan kita tidak diam-diam menulis ulang sejarah seolah-olah kita selalu benar sejak awal.",
+        "Kita tidak bisa menghapus Bias Konfirmasi sepenuhnya karena ia tertanam dalam cara otak menghemat energi, tetapi kita bisa membangun kebiasaan sederhana agar tidak mudah disetir olehnya. Sebelum mengambil keputusan penting—membeli aset, merekrut tim, atau membagikan berita—ajukan satu pertanyaan jujur: \"Bukti apa yang bisa membuat saya mengubah pikiran?\" Jika kita tidak bisa menyebut satu pun, mungkin kita sedang mempertahankan ego, bukan kebenaran.",
+        "Biasakan juga mencari argumen terbaik dari pihak yang berbeda pendapat (bukan versi paling konyolnya untuk diejek), serta bangun lingkaran kecil rekan yang cukup jujur untuk mengkritik gagasan kita secara sehat. Sesekali menuliskan prediksi pribadi lalu mengeceknya beberapa bulan kemudian juga membantu ingatan kita tetap jujur pada fakta.",
       ],
     },
   ],
   keyTakeaways: [
-    "Bias Konfirmasi membuat kita secara alami mencari bukti yang membenarkan keyakinan awal dan menuntut standar bukti jauh lebih ketat terhadap hal yang tidak kita setujui.",
-    "Kecerdasan tinggi tidak otomatis membebaskan seseorang dari bias ini; tanpa disiplin verifikasi, kecerdasan justru bisa dipakai untuk membenarkan kekeliruan.",
-    "Cara paling ampuh melawannya adalah secara aktif mencari bukti penyangkal dan bertanya: 'Fakta apa yang akan membuat saya bersedia mengubah pendapat?'",
+    "Bias Konfirmasi membuat otak mencari bukti pembenar dan menerapkan standar bukti jauh lebih ketat pada informasi yang tidak kita sukai.",
+    "Orang cerdas tetap rentan terhadap bias ini bila tidak melatih disiplin verifikasi terhadap keyakinannya sendiri.",
+    "Cara paling ampuh melawannya adalah secara aktif mencari bukti penyangkal sebelum mengambil keputusan besar.",
   ],
 };

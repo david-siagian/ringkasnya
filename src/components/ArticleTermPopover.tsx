@@ -79,9 +79,6 @@ export function ArticleTermPopover({
             >
               {term.term}
             </h2>
-            <p className="mt-0.5 text-xs font-medium text-ink-subtle">
-              {term.originLabel} • {term.category}
-            </p>
           </div>
 
           <button

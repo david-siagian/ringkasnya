@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-ak" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1c1917"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+    <linearGradient id="gold-ak" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="24" fill="url(#bg-ak)"/>
+  <circle cx="120" cy="120" r="88" stroke="#f59e0b" stroke-opacity="0.14" stroke-width="2" stroke-dasharray="6 6"/>
+  <!-- 6 syarat pilar: 5 utuh menyala, 1 retak/kosong -->
+  <g transform="translate(36, 152)">
+    <rect x="0" y="-58" width="20" height="58" rx="6" fill="url(#gold-ak)"/>
+    <rect x="29" y="-58" width="20" height="58" rx="6" fill="url(#gold-ak)"/>
+    <rect x="58" y="-58" width="20" height="58" rx="6" fill="url(#gold-ak)"/>
+    <rect x="87" y="-58" width="20" height="58" rx="6" fill="url(#gold-ak)"/>
+    <rect x="116" y="-58" width="20" height="58" rx="6" fill="url(#gold-ak)"/>
+    <!-- 1 syarat gagal/terputus -->
+    <rect x="145" y="-58" width="20" height="58" rx="6" fill="#78350f" fill-opacity="0.45" stroke="#f87171" stroke-width="2" stroke-dasharray="5 4"/>
+    <path d="M150 -34 L160 -24 M160 -34 L150 -24" stroke="#fca5a5" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <!-- Balok atas yang miring karena 1 pilar tidak terpenuhi -->
+  <g transform="rotate(7 120 82)">
+    <rect x="34" y="70" width="172" height="14" rx="7" fill="#fef3c7"/>
+    <circle cx="120" cy="56" r="10" fill="#34d399"/>
+  </g>
+  <!-- Garis dasar -->
+  <rect x="30" y="160" width="180" height="6" rx="3" fill="#a8a29e" fill-opacity="0.35"/>
+</svg>

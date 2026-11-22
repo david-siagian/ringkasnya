@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-dk" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+    <linearGradient id="curve-dk" x1="28" y1="0" x2="212" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="48%" stop-color="#fb7185"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="fill-dk" x1="120" y1="54" x2="120" y2="188" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="24" fill="url(#bg-dk)"/>
+  <!-- Grid koordinat halus -->
+  <path d="M36 52 V186 H208" stroke="#94a3b8" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/>
+  <path d="M36 142 H208 M36 98 H208" stroke="#94a3b8" stroke-opacity="0.12" stroke-width="1.5" stroke-dasharray="4 5"/>
+  <!-- Area bawah kurva -->
+  <path d="M40 184 C54 180 62 66 80 66 C98 66 106 162 128 162 C154 162 176 112 204 96 L204 184 Z" fill="url(#fill-dk)"/>
+  <!-- Kurva Dunning-Kruger -->
+  <path d="M40 184 C54 180 62 66 80 66 C98 66 106 162 128 162 C154 162 176 112 204 96" stroke="url(#curve-dk)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <!-- Titik Puncak Keyakinan Awal -->
+  <circle cx="80" cy="66" r="8" fill="#fbbf24" stroke="#0f172a" stroke-width="3"/>
+  <!-- Titik Lembah Kesadaran -->
+  <circle cx="128" cy="162" r="6" fill="#fb7185" stroke="#0f172a" stroke-width="2.5"/>
+  <!-- Titik Pemahaman Matang -->
+  <circle cx="202" cy="97" r="7" fill="#34d399" stroke="#0f172a" stroke-width="2.5"/>
+</svg>

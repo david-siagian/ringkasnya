@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-ah" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#3b0764"/>
+    </linearGradient>
+    <linearGradient id="loop-ah" x1="40" y1="120" x2="200" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="50%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="24" fill="url(#bg-ah)"/>
+  <!-- Lintasan treadmill/infinity loop -->
+  <rect x="40" y="138" width="160" height="36" rx="18" stroke="url(#loop-ah)" stroke-width="6" fill="#1e1b4b" fill-opacity="0.5"/>
+  <circle cx="62" cy="156" r="8" fill="#a78bfa" fill-opacity="0.5"/>
+  <circle cx="120" cy="156" r="8" fill="#c084fc" fill-opacity="0.5"/>
+  <circle cx="178" cy="156" r="8" fill="#34d399" fill-opacity="0.5"/>
+  <!-- Garis gerak berputar -->
+  <path d="M84 156 H104 M136 156 H156" stroke="#e9d5ff" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/>
+  <!-- Figur/bola yang terus mengejar bintang di depan -->
+  <circle cx="88" cy="108" r="18" fill="#c084fc"/>
+  <path d="M112 104 H146" stroke="#e9d5ff" stroke-opacity="0.55" stroke-width="3" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <!-- Bintang target yang selalu berjarak sama -->
+  <polygon points="170,76 176,94 195,94 180,105 186,123 170,112 154,123 160,105 145,94 164,94" fill="#fbbf24"/>
+</svg>

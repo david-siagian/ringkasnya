@@ -9,11 +9,12 @@ export const efekJangkar: Article = {
   aliases: ["Efek Jangkar", "Anchoring Effect", "Anchoring"],
   format: "bedah-istilah",
   category: "Psikologi & Perilaku",
-  readingTimeMinutes: 6,
+  readingTimeMinutes: 3,
   shortDefinition:
     "Bias kognitif ketika manusia terlalu bergantung pada informasi atau angka pertama yang ia dengar (sang 'jangkar') sebagai patokan saat memperkirakan nilai, bernegosiasi, atau mengambil keputusan—meski angka awal itu acak atau tidak relevan.",
   originLabel: "Amos Tversky & Daniel Kahneman (1974)",
   coverGradient: "from-slate-950 via-sky-950 to-slate-900",
+  coverImage: "/images/articles/efek-jangkar.svg",
   accentBadge: "Bedah Istilah",
   publishedAt: "2026-11-22",
   relatedBookSlugs: [
@@ -23,49 +24,38 @@ export const efekJangkar: Article = {
     "never-split-the-difference",
   ],
   leadParagraph:
-    "Mengapa label harga bertuliskan \"Rp499.000 (dicoret dari Rp1.200.000)\" terasa jauh lebih menggoda daripada barang yang sama yang langsung ditulis \"Rp499.000\"? Padahal uang yang keluar dari dompet Anda persis sama. Jawabannya terletak pada salah satu penemuan paling berpengaruh dalam psikologi modern: Efek Jangkar.",
+    "Mengapa label \"Rp499.000 (dicoret dari Rp1.200.000)\" terasa jauh lebih menggoda dibanding barang yang sama yang langsung ditulis \"Rp499.000\"? Padahal uang yang keluar dari dompet persis sama. Jawabannya ada pada salah satu penemuan paling berpengaruh dalam psikologi modern: Efek Jangkar.",
   sections: [
     {
-      heading: "Eksperimen Roda Keberuntungan Kahneman dan Tversky",
+      heading: "Eksperimen Roda Keberuntungan (1974)",
       paragraphs: [
-        "Pada tahun 1974, dua psikolog peraih pengaruh besar dalam ekonomi perilaku, Amos Tversky dan Daniel Kahneman, melakukan eksperimen sederhana yang mengguncang asumsi bahwa manusia selalu berpikir rasional. Mereka memutar sebuah roda keberuntungan (mirip roda undian) di depan para mahasiswa. Tanpa diketahui peserta, roda itu sudah dimodifikasi agar hanya berhenti di dua angka: 10 atau 65.",
-        "Setelah melihat angka yang keluar dari putaran roda acak tersebut, peserta diberi dua pertanyaan: \"Apakah persentase negara Afrika di PBB lebih tinggi atau lebih rendah dari angka roda tadi?\" lalu \"Menurut Anda, berapa persentase tepatnya?\"",
-        "Secara logika, angka dari roda undian yang jelas-jelas acak seharusnya diabaikan sepenuhnya. Namun hasilnya mengejutkan: peserta yang rodanya berhenti di angka 10 rata-rata menebak 25%, sedangkan peserta yang rodanya berhenti di angka 65 rata-rata menebak 45%! Bahkan angka acak yang sama sekali tidak ada hubungannya dengan geografi pun berhasil menarik perkiraan otak manusia seperti jangkar kapal yang menahan lambung agar tak bergerak jauh.",
+        "Pada 1974, psikolog Amos Tversky dan Daniel Kahneman memutar roda keberuntungan yang diam-diam dimodifikasi agar hanya berhenti di angka 10 atau 65 di depan mahasiswa. Setelah itu, peserta diminta menebak persentase negara Afrika di PBB.",
+        "Secara logika, angka roda undian yang acak harusnya diabaikan. Namun peserta yang melihat angka 10 rata-rata menebak 25%, sedangkan yang melihat angka 65 rata-rata menebak 45%! Bahkan angka yang jelas-jelas tak relevan pun berhasil menarik perkiraan otak seperti jangkar kapal.",
       ],
       highlightBox: {
         label: "Mengapa Otak Terjebak?",
-        text: "Dalam Thinking, Fast and Slow, Kahneman menjelaskan dua mekanisme di balik Efek Jangkar: Sistem 1 secara otomatis membayangkan skenario yang membuat angka awal tampak masuk akal, sementara Sistem 2 terlalu malas untuk menyesuaikan perkiraan cukup jauh dari titik awalnya.",
+        text: "Sistem 1 secara otomatis membayangkan skenario yang membuat angka pertama tampak masuk akal, lalu Sistem 2 terlalu malas menyesuaikan perkiraan cukup jauh dari titik awalnya.",
       },
     },
     {
-      heading: "Dari Meja Hakim hingga Negosiasi Gaji",
+      heading: "Dari Meja Hakim hingga Harga Coret",
       paragraphs: [
-        "Efek Jangkar bukan sekadar trik laboratorium pada mahasiswa; ia terbukti memengaruhi para profesional berpengalaman sekalipun. Dalam sebuah studi terkenal di Jerman, para hakim berpengalaman diminta membaca berkas kasus pencurian yang identik. Sebelum menentukan lama hukuman penjara, mereka diminta melempar sepasang dadu yang diam-diam sudah direkayasa agar hanya keluar angka 3 atau 9.",
-        "Hasilnya mencengangkan: para hakim yang melempar angka 9 rata-rata menjatuhkan hukuman 8 bulan penjara, sedangkan hakim yang melempar angka 3 rata-rata hanya menjatuhkan 5 bulan penjara—untuk kasus yang persis sama! Efek ini bekerja di bawah alam sadar, sehingga hampir semua orang yang terpengaruh akan bersumpah bahwa keputusannya murni objektif.",
-        "Di dunia kerja dan bisnis, Efek Jangkar hadir di setiap meja negosiasi. Ketika Anda melamar pekerjaan dan perusahaan menyebut kisaran gaji awal lebih dulu, angka itu langsung menjadi pusat gravitasi seluruh percakapan. Begitu pula saat menjual rumah atau mobil bekas: harga pembuka yang dipasang penjual diam-diam memengaruhi seberapa tinggi calon pembeli berani menawar.",
+        "Studi di Jerman menunjukkan hakim berpengalaman pun terpengaruh: untuk berkas kasus pencurian yang identik, hakim yang sebelumnya melempar dadu rekayasa bernilai 9 menjatuhkan vonis rata-rata 8 bulan, sementara yang melempar angka 3 hanya menjatuhkan 5 bulan. Efek ini bekerja di bawah alam sadar, sehingga hampir semua orang yang terpengaruh tetap merasa keputusannya murni objektif.",
+        "Di keseharian, Efek Jangkar hadir di mana-mana: satu menu super mahal di daftar restoran agar menu lain terasa terjangkau, harga coret saat festival diskon, paket \"Pro Tahunan\" di aplikasi langganan, pilihan nominal bawaan di laman donasi daring, hingga investor yang enggan melepas saham merugi hanya karena terpaku pada harga beli awalnya.",
+        "Di meja negosiasi kerja maupun jual-beli properti, angka pembuka yang disebut pertama kali langsung menjadi pusat gravitasi seluruh percakapan. Bahkan tulisan sederhana di rak supermarket seperti \"Maksimal 4 kaleng per pelanggan\" terbukti membuat pembeli mengambil lebih banyak dibanding tanpa batas, karena angka 4 diam-diam menjadi jangkar di kepala mereka.",
       ],
     },
     {
-      heading: "Jejak Efek Jangkar di Belanja Sehari-hari",
+      heading: "Cara Melindungi Diri dari Jangkar Menyesatkan",
       paragraphs: [
-        "Industri ritel, restoran, dan aplikasi langganan digital memahami Efek Jangkar dengan sangat baik. Anda pasti sering melihat menu restoran yang menyelipkan satu hidangan super mahal di bagian atas daftar—sering kali bukan agar hidangan itu laku terjual, melainkan agar hidangan lain di bawahnya mendadak terasa \"terjangkau\".",
-        "Di lokapasar daring, harga coret selama festival diskon bekerja dengan cara yang sama. Begitu mata kita melihat angka Rp1.200.000 terlebih dahulu, otak menyimpannya sebagai nilai \"wajar\", sehingga angka Rp499.000 langsung memicu perasaan untung besar. Bahkan batas pembelian seperti \"Maksimal 4 kaleng per pelanggan\" di supermarket terbukti membuat orang membeli lebih banyak dibandingkan tanpa tulisan batas, karena angka 4 diam-diam menjadi jangkar jumlah belanja.",
-        "Contoh lain yang sering kita temui adalah halaman pilihan paket langganan aplikasi atau layanan internet. Penyedia layanan biasanya meletakkan paket \"Enterprise\" atau \"Pro Tahunan\" yang mahal di samping paket menengah agar paket menengah tampak seperti pilihan paling rasional. Bahkan di laman donasi daring, pilihan nominal bawaan seperti Rp50.000, Rp150.000, atau Rp500.000 secara halus mengarahkan rata-rata sumbangan menjadi jauh lebih tinggi dibandingkan kotak isian kosong.",
-        "Di dunia investasi pun Efek Jangkar sering menjebak investor ritel. Banyak orang enggan menjual saham yang fundamentalnya sudah memburuk hanya karena mereka terpaku pada 'harga beli awal' atau 'harga tertinggi tahun lalu' sebagai jangkar di kepala. Padahal pasar tidak peduli berapa harga yang pernah kita bayar kemarin; nilai sebuah aset hanya ditentukan oleh prospek masa depannya, bukan oleh angka masa lalu yang terlanjur melekat di ingatan kita.",
-      ],
-    },
-    {
-      heading: "Cara Melindungi Diri dari Jangkar yang Menyesatkan",
-      paragraphs: [
-        "Kahneman mengingatkan bahwa sekadar tahu tentang Efek Jangkar tidak otomatis membuat kita kebal, tetapi kita bisa memakai strategi penangkal yang konkret. Pertama, sebelum masuk ke negosiasi harga, gaji, atau pembelian barang mahal, tentukan angka patokan Anda sendiri secara tertulis berdasarkan riset pasar sebelum mendengar penawaran pihak lawan.",
-        "Kedua, jika seseorang melempar angka jangkar yang sangat ekstrem dan tidak masuk akal dalam negosiasi, jangan langsung menawar sedikit di bawah atau di atas angka tersebut—karena itu berarti Anda tetap bermain di wilayah jangkar mereka. Hentikan sejenak, nyatakan dengan sopan bahwa angka tersebut jauh dari acuan pasar, lalu mulai ulang percakapan dari data pembanding yang objektif.",
-        "Ketiga, saat berbelanja promo, biasakan menutup mata dari harga coret dan ajukan satu pertanyaan sederhana: \"Tanpa melihat diskonnya, apakah barang ini memang sepadan dengan uang yang saya keluarkan hari ini?\" Dalam keputusan besar seperti membeli properti atau menyetujui proyek kerja, memberi jeda satu hari untuk membandingkan tiga referensi independen sangat efektif melepaskan tarikan angka pertama yang terlanjur menempel di kepala.",
+        "Kahneman mengingatkan bahwa sekadar tahu tentang Efek Jangkar tidak otomatis membuat kita kebal, tetapi kita bisa memakai strategi penangkal yang konkret. Sebelum masuk negosiasi gaji atau membeli barang mahal, tentukan angka patokan Anda sendiri secara tertulis berdasarkan riset pasar sebelum mendengar penawaran pihak lawan. Jika lawan melempar angka pembuka yang ekstrem, jangan langsung menawar di dekat angka itu—mulai ulang percakapan dari data pembanding objektif.",
+        "Saat berbelanja promo, tutup mata dari harga coret dan tanyakan: \"Tanpa melihat diskonnya, apakah barang ini memang sepadan dengan uang yang saya keluarkan hari ini?\" Untuk keputusan besar seperti membeli properti atau menyetujui proyek kerja, memberi jeda satu hari untuk membandingkan tiga referensi independen sangat efektif melepaskan tarikan angka pertama di kepala agar penilaian kita kembali jernih dan proporsional.",
       ],
     },
   ],
   keyTakeaways: [
-    "Efek Jangkar membuat angka pertama yang kita dengar—bahkan jika acak atau tidak relevan—diam-diam menjadi titik patokan penilaian kita selanjutnya.",
-    "Bias ini memengaruhi semua orang, dari pembeli ritel hingga hakim dan negosiator berpengalaman, karena otak cenderung berhenti menyesuaikan terlalu cepat.",
-    "Cara terbaik melawannya adalah menyiapkan acuan nilai objektif sendiri sebelum bernegosiasi dan mengabaikan harga coret atau angka pembuka yang ekstrem.",
+    "Angka pertama yang kita dengar—meski acak atau tak relevan—diam-diam menjadi patokan penilaian kita selanjutnya.",
+    "Efek Jangkar memengaruhi semua orang, dari pembeli ritel hingga hakim dan negosiator berpengalaman.",
+    "Siapkan acuan nilai objektif sendiri sebelum bernegosiasi dan abaikan harga coret saat mengambil keputusan finansial.",
   ],
 };

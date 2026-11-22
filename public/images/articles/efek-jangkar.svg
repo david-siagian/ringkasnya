@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-ej" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#0c4a6e"/>
+    </linearGradient>
+    <linearGradient id="anchor-ej" x1="120" y1="54" x2="120" y2="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="24" fill="url(#bg-ej)"/>
+  <!-- Gelombang angka/skala samar -->
+  <path d="M30 88 Q75 74 120 88 T210 88" stroke="#38bdf8" stroke-opacity="0.2" stroke-width="2" fill="none"/>
+  <path d="M30 156 Q75 142 120 156 T210 156" stroke="#38bdf8" stroke-opacity="0.16" stroke-width="2" fill="none"/>
+  <!-- Ikon Jangkar Geometris -->
+  <circle cx="120" cy="66" r="14" stroke="url(#anchor-ej)" stroke-width="6"/>
+  <path d="M120 80 V182" stroke="url(#anchor-ej)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M84 108 H156" stroke="url(#anchor-ej)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M68 142 C68 172 94 186 120 186 C146 186 172 172 172 142" stroke="url(#anchor-ej)" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <!-- Ujung panah jangkar -->
+  <path d="M58 150 L68 136 L79 149" stroke="#7dd3fc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M161 149 L172 136 L182 150" stroke="#7dd3fc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Titik aksen emas di puncak jangkar -->
+  <circle cx="120" cy="66" r="4" fill="#fbbf24"/>
+</svg>

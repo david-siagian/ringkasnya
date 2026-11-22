@@ -27,6 +27,7 @@ export interface Article {
   shortDefinition: string;
   originLabel: string;
   coverGradient: string;
+  coverImage?: string;
   accentBadge: string;
   publishedAt: string;
   relatedBookSlugs: string[];

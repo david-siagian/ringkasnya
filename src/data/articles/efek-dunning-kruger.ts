@@ -9,11 +9,12 @@ export const efekDunningKruger: Article = {
   aliases: ["Efek Dunning-Kruger", "Dunning-Kruger", "Dunning-Kruger effect"],
   format: "bedah-istilah",
   category: "Nalar & Berpikir Kritis",
-  readingTimeMinutes: 6,
+  readingTimeMinutes: 4,
   shortDefinition:
     "Bias kognitif ketika seseorang dengan kemampuan atau pengetahuan rendah pada suatu bidang justru melebih-lebihkan kemampuannya sendiri, karena ia belum memiliki cukup ilmu untuk menyadari batas ketidaktahuannya.",
   originLabel: "David Dunning & Justin Kruger (1999)",
   coverGradient: "from-slate-950 via-amber-950 to-stone-900",
+  coverImage: "/images/articles/efek-dunning-kruger.svg",
   accentBadge: "Bedah Istilah",
   publishedAt: "2026-11-22",
   relatedBookSlugs: [
@@ -22,49 +23,39 @@ export const efekDunningKruger: Article = {
     "the-joy-of-science",
   ],
   leadParagraph:
-    "Pada tahun 1995 di Pittsburgh, Amerika Serikat, seorang pria bernama McArthur Wheeler merampok dua bank di siang bolong tanpa memakai topeng. Ia bahkan tersenyum ke arah kamera pengawas. Ketika polisi menangkapnya malam itu juga, Wheeler tampak benar-benar terkejut dan berseru, \"Tapi saya sudah mengolesi wajah dengan air perasan lemon!\" Ia yakin karena air lemon bisa dipakai sebagai tinta tak terlihat di atas kertas, maka wajahnya juga akan tak terlihat di kamera.",
+    "Pada 1995 di Pittsburgh, seorang pria bernama McArthur Wheeler merampok dua bank di siang bolong tanpa topeng sambil tersenyum ke kamera pengawas. Saat ditangkap malam itu juga, ia benar-benar terkejut karena yakin olesan air perasan lemon di wajahnya akan membuatnya tak terlihat di kamera—seperti tinta rahasia di atas kertas.",
   sections: [
     {
-      heading: "Beban Ganda Ketidaktahuan: Riset Asli Tahun 1999",
+      heading: "Beban Ganda Ketidaktahuan (Riset 1999)",
       paragraphs: [
-        "Kisah nyata yang ganjil itu menarik perhatian psikolog sosial David Dunning dan mahasiswa doktoralnya, Justin Kruger, di Universitas Cornell. Mereka tidak sekadar menertawakan Wheeler; mereka bertanya secara ilmiah: bagaimana mungkin seseorang bisa keliru sebegitu parah, namun tetap merasa sangat percaya diri? Hasil penelitian mereka yang terbit pada 1999 kemudian dikenal luas sebagai Efek Dunning-Kruger.",
-        "Dalam eksperimennya, Dunning dan Kruger menguji mahasiswa pada tiga bidang yang berbeda: pemahaman tata bahasa, penalaran logika, dan penilaian humor. Setelah tes selesai, setiap peserta diminta menebak seberapa baik skor mereka dibandingkan peserta lain. Hasilnya mencengangkan sekaligus konsisten: kelompok dengan skor paling rendah (25% terbawah) rata-rata mengira kemampuan mereka berada di atas rata-rata—sekitar persentil ke-62!",
-        "Mengapa ini terjadi? Dunning dan Kruger menyebutnya sebagai \"beban ganda\" (dual burden). Keterampilan yang dibutuhkan untuk mengerjakan suatu tugas dengan benar ternyata adalah keterampilan yang sama yang dibutuhkan untuk menilai apakah pekerjaan kita sudah benar atau keliru. Jika seseorang belum menguasai dasar tata bahasa atau logika, ia otomatis tidak punya alat ukur di kepalanya untuk mendeteksi kesalahannya sendiri.",
+        "Kisah nyata itu memicu psikolog Universitas Cornell, David Dunning dan Justin Kruger, meneliti pada 1999 bagaimana seseorang bisa keliru parah namun tetap sangat percaya diri. Mereka menguji mahasiswa dalam tata bahasa, logika, dan penilaian humor, lalu meminta peserta menebak peringkat skornya sendiri.",
+        "Hasilnya konsisten: kelompok dengan skor terbawah (25% paling rendah) rata-rata mengira kemampuan mereka berada di atas rata-rata—sekitar persentil ke-62. Dunning dan Kruger menyebut penyebabnya sebagai \"beban ganda\": keterampilan yang dibutuhkan untuk mengerjakan tugas dengan benar adalah keterampilan yang sama yang dibutuhkan untuk menyadari kesalahan sendiri.",
       ],
       highlightBox: {
         label: "Salah Kaprah Populer",
-        text: "Efek Dunning-Kruger bukan berarti \"orang bodoh lebih percaya diri daripada ahli\". Dalam data aslinya, para ahli tetap menilai diri mereka lebih tinggi daripada pemula—hanya saja pemula melebih-lebihkan skornya jauh di atas kenyataan, sementara ahli sering sedikit meremehkan keunggulannya karena mengira soal yang mudah bagi mereka juga mudah bagi orang lain.",
+        text: "Efek Dunning-Kruger bukan berarti orang bodoh lebih percaya diri daripada ahli. Dalam data aslinya, para ahli tetap menilai diri mereka lebih tinggi—hanya saja pemula melebih-lebihkan skornya jauh di atas kenyataan, sementara ahli cenderung sedikit meremehkan keunggulannya.",
       },
     },
     {
-      heading: "Mengapa Efek Ini Makin Terasa di Era Internet?",
+      heading: "Mengapa Makin Terasa di Era Internet?",
       paragraphs: [
-        "Dahulu, ketidaktahuan kita lebih cepat berhadapan dengan kenyataan karena kita harus membaca buku tebal atau berdiskusi dengan guru dan praktisi untuk memahami suatu topik. Kini, mesin pencari dan video berdurasi satu menit menciptakan apa yang disebut Tom Nichols dalam The Death of Expertise sebagai ilusi pengetahuan cepat.",
-        "Bayangkan seseorang yang baru menonton tiga video pendek tentang investasi saham, nutrisi diet, atau ekonomi makro. Dalam hitungan menit, ia mengenal beberapa istilah keren dan langsung merasa paham gambaran besarnya. Karena ia belum pernah mendalami ribuan variabel, pengecualian, dan data pembanding di bidang tersebut, masalah yang sebenarnya rumit tampak sangat sederhana di matanya.",
-        "Sebaliknya, seorang dokter, ekonom, atau peneliti yang sudah belajar belasan tahun justru sering terdengar lebih berhati-hati. Mereka kerap menggunakan kalimat seperti \"tergantung konteksnya\", \"berdasarkan data sejauh ini\", atau \"masih ada faktor lain yang belum pasti\". Di mata publik yang terbiasa mendengar jawaban instan, kehati-hatian ahli malah kadang disalahartikan sebagai keraguan, padahal itu tanda pemahaman yang mendalam.",
-        "Fenomena ini juga kerap muncul di ruang rapat kantor maupun diskusi publik sehari-hari. Seseorang yang baru membaca ringkasan satu halaman tentang sebuah proyek lintas divisi bisa langsung mengusulkan solusi yang terdengar tegas dan sederhana—\"tinggal ganti sistemnya saja minggu depan!\"—sementara tim teknis yang memahami kerumitan migrasi data dan risikonya justru tampak lebih tenang dan penuh pertimbangan. Dalam budaya yang menyamakan suara lantang dengan kompetensi, Efek Dunning-Kruger diam-diam sering memenangkan panggung.",
+        "Video berdurasi satu menit dan mesin pencari menciptakan ilusi pengetahuan cepat. Seseorang yang baru menonton tiga klip pendek tentang investasi, nutrisi, atau ekonomi makro langsung merasa paham gambaran besarnya—karena ia belum melihat ribuan variabel dan pengecualian di balik topik tersebut.",
+        "Sebaliknya, dokter atau peneliti yang belajar belasan tahun justru terdengar lebih berhati-hati dengan kalimat seperti \"tergantung konteksnya\" atau \"berdasarkan data sejauh ini\". Di ruang rapat maupun media sosial, suara yang paling lantang dan sederhana sering tampak lebih meyakinkan daripada kehati-hatian seorang ahli.",
+        "Bayangkan rapat proyek lintas divisi di kantor: orang yang baru membaca ringkasan satu halaman bisa dengan ringan menyarankan \"tinggal ganti sistemnya minggu depan\", sementara tim teknis yang paham kerumitan migrasi data dan risikonya justru tampak lebih tenang serta penuh pertimbangan. Tanpa disadari, kesederhanaan palsu sering terasa lebih menggoda daripada kenyataan yang bernuansa.",
       ],
     },
     {
-      heading: "Bukan Tentang 'Orang Lain', Melainkan Cermin untuk Diri Kita",
+      heading: "Cermin untuk Diri Kita Sendiri",
       paragraphs: [
-        "Jebakan terbesar saat mempelajari Efek Dunning-Kruger adalah memakainya sebagai senjata untuk mengejek orang lain di media sosial. Padahal, Dunning sendiri berkali-kali menegaskan bahwa efek ini bukan ciri orang bodoh—melainkan kondisi universal yang dialami semua manusia, termasuk orang paling cerdas sekalipun, setiap kali mereka melangkah ke bidang di luar keahliannya.",
-        "Seorang insinyur perangkat lunak yang brilian bisa sangat rentan terkena Efek Dunning-Kruger saat baru pertama kali belajar parenting, kesehatan gizi, atau hukum perdata. Seorang pebisnis sukses bisa terlalu yakin saat mengomentari kebijakan moneter atau riset iklim. Begitu kita keluar dari wilayah kompetensi kita, titik buta itu langsung aktif tanpa kita sadari.",
-        "Menariknya, dalam lanjutan riset Dunning dan Kruger, ketika peserta yang skornya rendah diberi pelatihan singkat tentang logika, terjadi perubahan yang mengejutkan: bukan hanya kemampuan mereka meningkat, kesadaran mereka akan kesalahan masa lalu pun ikut terbuka. Dengan kata lain, obat paling manjur bagi rasa terlalu percaya diri yang keliru justru adalah belajar lebih dalam.",
-      ],
-    },
-    {
-      heading: "Cara Praktis Menjaga Diri dari Puncak Keyakinan Palsu",
-      paragraphs: [
-        "Adam Grant dalam Think Again menawarkan sikap penyeimbang yang sehat bernama kerendahan hati yang percaya diri: kita percaya pada kapasitas diri untuk terus belajar, namun tetap sadar bahwa pengetahuan kita saat ini selalu belum lengkap. Ada tiga kebiasaan sederhana untuk melatihnya setiap hari.",
-        "Pertama, uji pemahaman dengan mencoba menjelaskan topik tersebut secara runtut tanpa melihat catatan—sering kali celah logika baru terlihat saat kita harus menuliskannya dengan jelas. Kedua, biasakan mencari kritik dari orang yang benar-benar berpengalaman di bidang tersebut, bukan hanya mencari persetujuan dari orang yang sependapat. Ketiga, pisahkan antara pendapat dan identitas diri: mengakui \"ternyata saya keliru kemarin\" bukan tanda kelemahan, melainkan bukti bahwa cara berpikir kita hari ini lebih matang daripada kemarin.",
-        "Sebagai pengingat kecil setiap kali kita merasa sangat yakin terhadap topik baru, ajukan pertanyaan sederhana pada diri sendiri: \"Apa saja yang belum saya ketahui tentang bidang ini?\" Sering kali, satu detik jeda untuk bertanya seperti itu sudah cukup untuk menurunkan ego dan membuka ruang belajar yang sesungguhnya.",
+        "Dunning menegaskan bahwa efek ini bukan ciri orang bodoh, melainkan jebakan universal yang dialami semua orang setiap kali melangkah ke luar bidang keahliannya. Insinyur hebat pun bisa terlalu yakin saat baru belajar gizi atau hukum, dan pebisnis sukses bisa terlalu percaya diri saat mengomentari kebijakan moneter.",
+        "Menariknya, ketika peserta berskor rendah diberi pelatihan logika singkat, kemampuan sekaligus kesadaran mereka atas kesalahan masa lalu ikut meningkat. Artinya, obat paling manjur bagi rasa terlalu percaya diri yang keliru justru adalah belajar lebih dalam.",
+        "Cara paling sehat menjaga diri adalah memisahkan pendapat dari ego, menguji pemahaman dengan menjelaskannya secara runtut tanpa catatan, serta membiasakan bertanya pada diri sendiri: \"Apa saja yang belum saya ketahui tentang topik ini?\" sebelum mengambil kesimpulan tegas.",
       ],
     },
   ],
   keyTakeaways: [
-    "Efek Dunning-Kruger terjadi karena keterampilan untuk bekerja dengan benar adalah keterampilan yang sama untuk menyadari kesalahan sendiri.",
-    "Bias ini bukan milik 'orang bodoh', melainkan jebakan alami setiap manusia ketika baru menyentuh bidang di luar keahlian utamanya.",
-    "Cara terbaik melawannya adalah melatih kerendahan hati intelektual: uji pemahaman secara aktif, dengarkan umpan balik ahli, dan rawat kebiasaan memperbarui pendapat saat ada bukti lebih kuat.",
+    "Efek Dunning-Kruger terjadi karena keterampilan untuk bekerja dengan benar sama dengan keterampilan untuk mendeteksi kesalahan sendiri.",
+    "Bias ini bukan milik 'orang bodoh', melainkan titik buta alami siapa saja ketika baru menyentuh bidang di luar keahliannya.",
+    "Melatih kerendahan hati intelektual dan mendengarkan umpan balik praktisi adalah cara paling efektif menjaga penilaian tetap akurat.",
   ],
 };
