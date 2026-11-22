@@ -11,6 +11,7 @@ export const range: BookSummary = {
   quickTimeMinutes: 6,
   rating: 4.8,
   goodreadsRatings: 105000,
+  editorialTier: 3,
   coverGradient: "from-purple-950 via-purple-900 to-indigo-900",
   coverAccent: "bg-purple-100 text-purple-900 dark:bg-purple-950/70 dark:text-purple-300",
   coverImage: "/images/covers/range.svg",

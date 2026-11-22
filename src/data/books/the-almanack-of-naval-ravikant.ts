@@ -11,6 +11,7 @@ export const theAlmanackOfNavalRavikant: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.9,
   goodreadsRatings: 140000,
+  editorialTier: 2,
   coverGradient: "from-zinc-950 via-slate-900 to-amber-950",
   coverAccent: "bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300",
   coverImage: "/images/covers/the-almanack-of-naval-ravikant.svg",

@@ -11,6 +11,7 @@ export const barkingUpTheWrongTree: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.7,
   goodreadsRatings: 48000,
+  editorialTier: 3,
   coverGradient: "from-rose-950 via-red-950 to-amber-950",
   coverAccent: "bg-rose-100 text-rose-900 dark:bg-rose-950/70 dark:text-rose-300",
   coverImage: "/images/covers/barking-up-the-wrong-tree.svg",

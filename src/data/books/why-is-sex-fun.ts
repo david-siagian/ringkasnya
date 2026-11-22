@@ -11,6 +11,7 @@ export const whyIsSexFun: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.6,
   goodreadsRatings: 11000,
+  editorialTier: 1,
   coverGradient: "from-violet-950 via-purple-900 to-pink-950",
   coverAccent: "bg-purple-100 text-purple-900 dark:bg-purple-950/70 dark:text-purple-300",
   coverImage: "/images/covers/why-is-sex-fun.svg",

@@ -11,6 +11,7 @@ export const outlive: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.9,
   goodreadsRatings: 145000,
+  editorialTier: 1,
   coverGradient: "from-emerald-950 via-teal-950 to-slate-900",
   coverAccent: "bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300",
   coverImage: "/images/covers/outlive.svg",

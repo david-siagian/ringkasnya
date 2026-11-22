@@ -11,6 +11,7 @@ export const richDadPoorDad: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.7,
   goodreadsRatings: 720000,
+  editorialTier: 2,
   coverGradient: "from-purple-950 via-indigo-950 to-amber-950",
   coverAccent: "bg-purple-100 text-purple-900 dark:bg-purple-950/70 dark:text-purple-300",
   coverImage: "/images/covers/rich-dad-poor-dad.svg",

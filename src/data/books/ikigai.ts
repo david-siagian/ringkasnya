@@ -11,6 +11,7 @@ export const ikigai: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.7,
   goodreadsRatings: 410000,
+  editorialTier: 2,
   coverGradient: "from-slate-950 via-teal-950 to-indigo-950",
   coverAccent: "bg-teal-100 text-teal-900 dark:bg-teal-950/70 dark:text-teal-300",
   coverImage: "/images/covers/ikigai.svg",

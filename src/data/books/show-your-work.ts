@@ -11,6 +11,7 @@ export const showYourWork: BookSummary = {
   quickTimeMinutes: 6,
   rating: 4.8,
   goodreadsRatings: 120000,
+  editorialTier: 3,
   coverGradient: "from-purple-950 via-fuchsia-900 to-rose-800",
   coverAccent: "bg-rose-100 text-rose-900 dark:bg-rose-950/70 dark:text-rose-300",
   coverImage: "/images/covers/show-your-work.svg",

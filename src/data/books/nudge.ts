@@ -11,6 +11,7 @@ export const nudge: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.8,
   goodreadsRatings: 95000,
+  editorialTier: 1,
   coverGradient: "from-sky-950 via-sky-900 to-cyan-900",
   coverAccent: "bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300",
   coverImage: "/images/covers/nudge.svg",

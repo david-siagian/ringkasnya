@@ -11,6 +11,7 @@ export const gettingThingsDone: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.7,
   goodreadsRatings: 185000,
+  editorialTier: 3,
   coverGradient: "from-slate-950 via-sky-950 to-emerald-950",
   coverAccent: "bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300",
   coverImage: "/images/covers/getting-things-done.svg",

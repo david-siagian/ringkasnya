@@ -11,6 +11,7 @@ export const whyNationsFail: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.8,
   goodreadsRatings: 75000,
+  editorialTier: 1,
   coverGradient: "from-rose-950 via-rose-900 to-red-900",
   coverAccent: "bg-rose-100 text-rose-900 dark:bg-rose-950/70 dark:text-rose-300",
   coverImage: "/images/covers/why-nations-fail.svg",

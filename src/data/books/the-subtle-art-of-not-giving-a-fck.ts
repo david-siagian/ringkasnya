@@ -11,6 +11,7 @@ export const theSubtleArtOfNotGivingAFck: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.7,
   goodreadsRatings: 1200000,
+  editorialTier: 2,
   coverGradient: "from-orange-950 via-amber-900 to-stone-950",
   coverAccent: "bg-orange-100 text-orange-900 dark:bg-orange-950/70 dark:text-orange-300",
   coverImage: "/images/covers/the-subtle-art-of-not-giving-a-fck.svg",

@@ -11,6 +11,7 @@ export const theJoyOfScience: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.7,
   goodreadsRatings: 6500,
+  editorialTier: 1,
   coverGradient: "from-sky-950 via-cyan-950 to-slate-900",
   coverAccent: "bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300",
   coverImage: "/images/covers/the-joy-of-science.svg",

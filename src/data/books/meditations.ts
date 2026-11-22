@@ -11,6 +11,7 @@ export const meditations: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.9,
   goodreadsRatings: 280000,
+  editorialTier: 1,
   coverGradient: "from-stone-950 via-neutral-900 to-amber-950",
   coverAccent: "bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300",
   coverImage: "/images/covers/meditations.svg",

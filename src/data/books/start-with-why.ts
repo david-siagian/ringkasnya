@@ -10,6 +10,7 @@ export const startWithWhy: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.7,
   goodreadsRatings: 265000,
+  editorialTier: 3,
   coverGradient: "from-stone-950 via-amber-950 to-stone-900",
   coverAccent: "text-amber-300",
   coverImage: "/images/covers/start-with-why.svg",

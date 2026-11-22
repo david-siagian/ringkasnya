@@ -11,6 +11,7 @@ export const greatAtWork: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.7,
   goodreadsRatings: 14000,
+  editorialTier: 3,
   coverGradient: "from-slate-950 via-blue-950 to-indigo-900",
   coverAccent: "bg-blue-100 text-blue-900 dark:bg-blue-950/70 dark:text-blue-300",
   coverImage: "/images/covers/great-at-work.svg",

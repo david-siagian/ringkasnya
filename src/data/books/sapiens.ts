@@ -11,6 +11,7 @@ export const sapiens: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.9,
   goodreadsRatings: 1100000,
+  editorialTier: 1,
   coverGradient: "from-amber-950 via-amber-900 to-orange-800",
   coverAccent: "bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300",
   coverImage: "/images/covers/sapiens.svg",

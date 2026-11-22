@@ -10,6 +10,7 @@ export const theLeanStartup: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.7,
   goodreadsRatings: 360000,
+  editorialTier: 3,
   coverGradient: "from-blue-950 via-blue-900 to-slate-950",
   coverAccent: "text-sky-300",
   coverImage: "/images/covers/the-lean-startup.svg",

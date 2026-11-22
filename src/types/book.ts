@@ -10,6 +10,8 @@ export type BookCategory =
   | "Karier & Budaya Kerja"
   | "Produktivitas & Pengembangan Diri";
 
+export type BookEditorialTier = 1 | 2 | 3;
+
 export interface BookKeyConcept {
   title: string;
   explanation: string;
@@ -34,6 +36,7 @@ export interface BookSummary {
   quickTimeMinutes: number;
   rating: number;
   goodreadsRatings: number;
+  editorialTier: BookEditorialTier;
   coverGradient: string;
   coverAccent: string;
   coverImage?: string;

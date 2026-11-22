@@ -11,6 +11,7 @@ export const grit: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.8,
   goodreadsRatings: 220000,
+  editorialTier: 1,
   coverGradient: "from-stone-950 via-amber-950 to-slate-900",
   coverAccent: "bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300",
   coverImage: "/images/covers/grit.svg",

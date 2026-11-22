@@ -11,6 +11,7 @@ export const whyWeSleep: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.8,
   goodreadsRatings: 250000,
+  editorialTier: 1,
   coverGradient: "from-indigo-950 via-purple-950 to-violet-900",
   coverAccent: "bg-violet-100 text-violet-900 dark:bg-violet-950/70 dark:text-violet-300",
   coverImage: "/images/covers/why-we-sleep.svg",

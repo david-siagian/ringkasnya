@@ -11,6 +11,7 @@ export const theShallows: BookSummary = {
   quickTimeMinutes: 6,
   rating: 4.7,
   goodreadsRatings: 36000,
+  editorialTier: 1,
   coverGradient: "from-slate-950 via-slate-900 to-sky-950",
   coverAccent: "bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300",
   coverImage: "/images/covers/the-shallows.svg",

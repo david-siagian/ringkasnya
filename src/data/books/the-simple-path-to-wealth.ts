@@ -11,6 +11,7 @@ export const theSimplePathToWealth: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.9,
   goodreadsRatings: 85000,
+  editorialTier: 2,
   coverGradient: "from-emerald-950 via-emerald-900 to-green-900",
   coverAccent: "bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300",
   coverImage: "/images/covers/the-simple-path-to-wealth.svg",

@@ -11,6 +11,7 @@ export const whatEvolutionIs: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.8,
   goodreadsRatings: 6000,
+  editorialTier: 1,
   coverGradient: "from-teal-950 via-teal-900 to-slate-900",
   coverAccent: "bg-teal-100 text-teal-900 dark:bg-teal-950/70 dark:text-teal-300",
   coverImage: "/images/covers/what-evolution-is.svg",

@@ -11,6 +11,7 @@ export const factfulness: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.9,
   goodreadsRatings: 300000,
+  editorialTier: 1,
   coverGradient: "from-cyan-950 via-cyan-900 to-teal-900",
   coverAccent: "bg-cyan-100 text-cyan-900 dark:bg-cyan-950/70 dark:text-cyan-300",
   coverImage: "/images/covers/factfulness.svg",

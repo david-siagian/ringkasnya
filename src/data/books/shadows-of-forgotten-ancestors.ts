@@ -11,6 +11,7 @@ export const shadowsOfForgottenAncestors: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.8,
   goodreadsRatings: 15000,
+  editorialTier: 1,
   coverGradient: "from-slate-950 via-indigo-950 to-blue-950",
   coverAccent: "bg-blue-100 text-blue-900 dark:bg-blue-950/70 dark:text-blue-300",
   coverImage: "/images/covers/shadows-of-forgotten-ancestors.svg",

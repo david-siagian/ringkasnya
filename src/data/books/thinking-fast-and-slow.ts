@@ -11,6 +11,7 @@ export const thinkingFastAndSlow: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.9,
   goodreadsRatings: 560000,
+  editorialTier: 1,
   coverGradient: "from-indigo-950 via-indigo-900 to-blue-900",
   coverAccent: "bg-indigo-100 text-indigo-900 dark:bg-indigo-950/70 dark:text-indigo-300",
   coverImage: "/images/covers/thinking-fast-and-slow.svg",

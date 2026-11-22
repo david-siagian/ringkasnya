@@ -11,6 +11,7 @@ export const mindset: BookSummary = {
   quickTimeMinutes: 5,
   rating: 4.8,
   goodreadsRatings: 260000,
+  editorialTier: 1,
   coverGradient: "from-sky-950 via-blue-950 to-teal-950",
   coverAccent: "bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300",
   coverImage: "/images/covers/mindset.svg",

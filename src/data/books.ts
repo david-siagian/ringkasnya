@@ -1,4 +1,9 @@
-import type { BookSummary, BookCatalogItem, BookCategory } from "@/types/book";
+import type {
+  BookSummary,
+  BookCatalogItem,
+  BookCategory,
+  BookEditorialTier,
+} from "@/types/book";
 import { atomicHabits } from "./books/atomic-habits";
 import { psychologyOfMoney } from "./books/psychology-of-money";
 import { deepWork } from "./books/deep-work";
@@ -77,9 +82,16 @@ export const SECONDARY_CATALOG_CATEGORIES: ReadonlySet<BookCategory> = new Set([
   "Produktivitas & Pengembangan Diri",
 ]);
 
+function getEffectiveEditorialTier(book: BookSummary): BookEditorialTier {
+  if (SECONDARY_CATALOG_CATEGORIES.has(book.category)) {
+    return 3;
+  }
+  return book.editorialTier;
+}
+
 function compareBooksForCatalog(a: BookSummary, b: BookSummary): number {
-  const tierA = SECONDARY_CATALOG_CATEGORIES.has(a.category) ? 1 : 0;
-  const tierB = SECONDARY_CATALOG_CATEGORIES.has(b.category) ? 1 : 0;
+  const tierA = getEffectiveEditorialTier(a);
+  const tierB = getEffectiveEditorialTier(b);
   if (tierA !== tierB) return tierA - tierB;
   if (b.goodreadsRatings !== a.goodreadsRatings) {
     return b.goodreadsRatings - a.goodreadsRatings;
