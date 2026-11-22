@@ -66,12 +66,12 @@ import { stealLikeAnArtist } from "./books/steal-like-an-artist";
 export const CATEGORIES: BookCategory[] = [
   "Sains & Alam Semesta",
   "Nalar & Berpikir Kritis",
-  "Kesehatan & Medis",
   "Psikologi & Perilaku",
   "Sejarah & Peradaban",
   "Filsafat & Kebijaksanaan",
   "Ekonomi & Keuangan",
   "Organisasi & Bisnis",
+  "Kesehatan & Medis",
   "Karier & Budaya Kerja",
   "Produktivitas & Pengembangan Diri",
 ];

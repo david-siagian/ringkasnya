@@ -1,12 +1,12 @@
 export type BookCategory =
   | "Sains & Alam Semesta"
   | "Nalar & Berpikir Kritis"
-  | "Kesehatan & Medis"
   | "Psikologi & Perilaku"
   | "Sejarah & Peradaban"
   | "Filsafat & Kebijaksanaan"
   | "Ekonomi & Keuangan"
   | "Organisasi & Bisnis"
+  | "Kesehatan & Medis"
   | "Karier & Budaya Kerja"
   | "Produktivitas & Pengembangan Diri";
 
