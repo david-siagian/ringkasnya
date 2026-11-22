@@ -10,6 +10,7 @@ import {
   Home,
   Compass,
   Info,
+  FileText,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import {
@@ -25,9 +26,17 @@ import {
 const NAV_ITEMS = [
   { label: "Beranda", href: "/", icon: Home },
   { label: "Katalog Buku", href: "/katalog", icon: BookOpen },
+  { label: "Artikel", href: "/artikel", icon: FileText },
   { label: "Topik", href: "/topik", icon: Compass },
   { label: "Tentang", href: "/tentang", icon: Info },
 ] as const;
+
+function isNavItemActive(currentPath: string, href: string): boolean {
+  if (!currentPath) return false;
+  const target = normalizePath(href);
+  if (target === "/") return currentPath === "/";
+  return currentPath === target || currentPath.startsWith(`${target}/`);
+}
 
 function normalizePath(path: string): string {
   if (path.length > 1 && path.endsWith("/")) {
@@ -148,9 +157,7 @@ export default function Navbar() {
           >
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon;
-              const isActive =
-                currentPath !== "" &&
-                normalizePath(item.href) === currentPath;
+              const isActive = isNavItemActive(currentPath, item.href);
               return (
                 <a
                   key={item.label}
@@ -260,9 +267,7 @@ export default function Navbar() {
           </p>
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
-            const isActive =
-              currentPath !== "" &&
-              normalizePath(item.href) === currentPath;
+            const isActive = isNavItemActive(currentPath, item.href);
             return (
               <div key={item.label} onClick={handleLinkClick}>
                 <a

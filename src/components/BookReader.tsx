@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import type { BookCatalogItem, BookSummary } from "@/types/book";
+import type { ArticleTermEntry } from "@/types/article";
+import { ARTICLE_TERMS } from "@/data/article-terms";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
 import QuoteCardModal from "./QuoteCardModal";
+import { ArticleTermPopover } from "./ArticleTermPopover";
 import {
   QuickKeyConceptsModal,
   QuickQuotesModal,
@@ -86,6 +89,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   );
   const [isConceptsModalOpen, setIsConceptsModalOpen] = useState(false);
   const [isQuotesModalOpen, setIsQuotesModalOpen] = useState(false);
+  const [activeArticleTerm, setActiveArticleTerm] =
+    useState<ArticleTermEntry | null>(null);
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
@@ -122,6 +127,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setDeepStep(0);
     setIsConceptsModalOpen(false);
     setIsQuotesModalOpen(false);
+    setActiveArticleTerm(null);
     pendingQuickStepRef.current = null;
     window.clearTimeout(pendingQuickStepTimerRef.current);
     wasAtCompletionEndRef.current = false;
@@ -580,6 +586,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 book={book}
                 fs={fs}
                 mode="quick"
+                articleTerms={ARTICLE_TERMS}
+                onSelectArticleTerm={setActiveArticleTerm}
                 onSelectTakeaway={(num) => {
                   const idx = book.keyTakeaways.findIndex(
                     (t) => t.number === num
@@ -598,6 +606,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     showDeepContent={false}
                     scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
                     onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
+                    articleTerms={ARTICLE_TERMS}
+                    onSelectArticleTerm={setActiveArticleTerm}
                   />
                 ))}
               </div>
@@ -607,12 +617,16 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   conclusion={book.conclusion}
                   fs={fs}
                   scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                  articleTerms={ARTICLE_TERMS}
+                  onSelectArticleTerm={setActiveArticleTerm}
                 />
               </div>
 
               <KeyConceptsSection
                 keyConcepts={book.keyConcepts}
                 fs={fs}
+                articleTerms={ARTICLE_TERMS}
+                onSelectArticleTerm={setActiveArticleTerm}
               />
 
               <QuotesSection
@@ -631,6 +645,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   book={book}
                   fs={fs}
                   mode="deep"
+                  articleTerms={ARTICLE_TERMS}
+                  onSelectArticleTerm={setActiveArticleTerm}
                   onSelectTakeaway={(num) => goToDeepStep(num)}
                   onStartDeepReading={() => goToDeepStep(1)}
                 />
@@ -661,16 +677,22 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       takeaway={activeTakeaway}
                       fs={fs}
                       showDeepContent={true}
+                      articleTerms={ARTICLE_TERMS}
+                      onSelectArticleTerm={setActiveArticleTerm}
                     />
                   ) : (
                     <>
                       <ConclusionSection
                         conclusion={book.conclusion}
                         fs={fs}
+                        articleTerms={ARTICLE_TERMS}
+                        onSelectArticleTerm={setActiveArticleTerm}
                       />
                       <KeyConceptsSection
                         keyConcepts={book.keyConcepts}
                         fs={fs}
+                        articleTerms={ARTICLE_TERMS}
+                        onSelectArticleTerm={setActiveArticleTerm}
                       />
                       <QuotesSection
                         quotes={book.quotes}
@@ -777,6 +799,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         bookCategory={book.category}
         bookSlug={book.slug}
         onClose={() => setActiveQuoteForCard(null)}
+      />
+
+      <ArticleTermPopover
+        term={activeArticleTerm}
+        bookSlug={book.slug}
+        onClose={() => setActiveArticleTerm(null)}
       />
     </div>
   );

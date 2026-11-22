@@ -77,3 +77,29 @@ Fitur interaksi agar pembaca dapat menuliskan tanggapan atau gagasan terhadap su
    - *Opsi A (Ringan)*: Nama tampilan / opsional anonim + Turnstile (tanpa wajib login).
    - *Opsi B (Terintegrasi Auth)*: Wajib login menggunakan akun Fase 3.
 3. **Struktur Interaksi**: 1 tingkat (*flat*) + tombol apresiasi (*"Bermanfaat"*) vs mendukung *reply/thread*.
+
+---
+
+## 4. Fitur Artikel & Roadmap Pengembangan Konten Editorial
+
+Fitur **Artikel** menyajikan bacaan singkat **5–7 menit** (~1.000–1.400 kata) di luar ringkasan buku yang terhubung langsung ke teks ringkasan melalui *inline highlight* + pratinjau cepat (*Opsi A: popover/drawer* dengan definisi 2–3 kalimat dan tautan *"Baca Artikel Lengkap"*).
+
+### A. Gelombang 1 (MVP — Aktif)
+Fokus pada **Bedah Istilah Ilmiah** yang ikonik dan muncul di ringkasan buku katalog:
+1. **Prinsip Anna Karenina** (*Guns, Germs, and Steel*)
+2. **Efek Dunning-Kruger** (*The Death of Expertise*, *Think Again*, *The Joy of Science*)
+3. **Destruksi Kreatif** (*Why Nations Fail*, *The Lean Startup*)
+4. **Bias Konfirmasi** (*The Joy of Science*, *The Death of Expertise*, *Thinking, Fast and Slow*)
+5. **Efek Jangkar** (*Thinking, Fast and Slow*, *Predictably Irrational*, *Influence*)
+6. **Adaptasi Hedonis** (*A Guide to the Good Life*, *The Psychology of Money*, *Sapiens*)
+
+### B. Kriteria Kurasi Istilah untuk Gelombang Berikutnya
+- **Hanya istilah ilmiah yang khas & punya sejarah/nama unik**: utamakan pola penamaan seperti *"Efek ..."*, *"Prinsip ..."*, *"Teori ..."*, *"Hipotesis ..."*, *"Bias ..."*, *"Hukum ..."*, atau *"Paradoks ..."*.
+- **Hindari istilah umum atau frasa majemuk panjang**: jangan masukkan konsep terlalu luas/umum meskipun ilmiah (mis. *Korelasi vs Kausalitas*, *Neuroplastisitas*, *Seleksi Kerabat*, *Healthspan vs Lifespan*, *Meme sebagai Replikator Budaya*), dan ringkas frasa gabungan menjadi istilah tunggal yang tajam (mis. **Efek Default**, **Ritme Sirkadian**, **Efek Kepemilikan**, **Prinsip Ketidakpastian Heisenberg**, **Hipotesis Nenek**, **Efek Halo**).
+
+### C. Backlog Format Artikel Masa Depan (Disimpan untuk Tahap Lanjutan)
+Selain **Bedah Istilah**, rubrik Artikel ke depannya dapat diperluas ke format editorial berikut:
+1. **Sintesis Lintas Buku (*Cross-Book Essay*)**: Membandingkan atau merangkai argumen dari 2–3 buku di katalog (mis. *Guns, Germs, and Steel* vs *Why Nations Fail* tentang penyebab kemajuan bangsa).
+2. **Kacamata Sains untuk Fenomena Aktual (*Real-World Lens*)**: Membedah fenomena sehari-hari atau isu di Indonesia menggunakan kerangka sains & psikologi dari buku-buku Ringkasnya.
+3. **Peta Belajar / Panduan Membaca (*Reading Roadmap*)**: Urutan bacaan terkurasi untuk pembaca baru yang ingin mendalami satu tema besar (mis. jalur belajar evolusi & sejarah manusia).
+4. **Kisah di Balik Eksperimen & Pemikir Klasik**: Cerita naratif di balik eksperimen terkenal atau kolaborasi ilmuwan besar yang sering dirujuk lintas buku (mis. Kahneman & Tversky).

@@ -1,0 +1,297 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { ARTICLES, getArticleBySlug } from "@/data/articles";
+import {
+  getBookCatalog,
+  PUBLIC_PAGE_CACHE_CONTROL,
+} from "@/lib/books-repository";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  CheckCircle2,
+  Clock,
+  Lightbulb,
+  Sparkles,
+} from "lucide-react";
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const article = slug ? getArticleBySlug(slug) : undefined;
+
+if (!article) {
+  return Astro.redirect("/404");
+}
+
+const bookCatalog = await getBookCatalog(Astro.locals.runtime?.env?.DB);
+Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
+
+const fromBookSlug = Astro.url.searchParams.get("from");
+const originBook = fromBookSlug
+  ? bookCatalog.find((book) => book.slug === fromBookSlug)
+  : undefined;
+
+const relatedBooks = article.relatedBookSlugs
+  .map((bookSlug) => bookCatalog.find((book) => book.slug === bookSlug))
+  .filter((book): book is (typeof bookCatalog)[number] => Boolean(book));
+
+const otherArticles = ARTICLES.filter((other) => other.slug !== article.slug).slice(
+  0,
+  3
+);
+
+const pageTitle = `${article.title} — Artikel Ringkasnya`;
+const pageDescription = `${article.shortDefinition} Baca penjelasan lengkapnya dalam ${article.readingTimeMinutes} menit di Ringkasnya.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <div class="min-h-screen bg-page pb-20">
+    <!-- Banner Header Artikel -->
+    <header
+      class={`bg-slate-900 bg-gradient-to-br ${article.coverGradient} text-white`}
+    >
+      <div class="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          {
+            originBook ? (
+              <a
+                href={`/buku/${originBook.slug}`}
+                class="inline-flex items-center gap-1.5 rounded-full bg-black/25 px-3.5 py-1.5 text-xs font-semibold text-white/95 backdrop-blur-sm transition hover:bg-black/40"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                <span>Kembali ke {originBook.title}</span>
+              </a>
+            ) : (
+              <a
+                href="/artikel"
+                class="inline-flex items-center gap-1.5 rounded-full bg-black/25 px-3.5 py-1.5 text-xs font-semibold text-white/95 backdrop-blur-sm transition hover:bg-black/40"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                <span>Semua Artikel</span>
+              </a>
+            )
+          }
+
+          {
+            originBook && (
+              <a
+                href="/artikel"
+                class="inline-flex items-center gap-1 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white/90 transition hover:bg-white/20"
+              >
+                <span>Lihat Semua Artikel</span>
+              </a>
+            )
+          }
+        </div>
+
+        <div class="mt-6 flex flex-wrap items-center gap-2">
+          <span
+            class="inline-flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-xs font-bold backdrop-blur-sm"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-emerald-300" />
+            <span>{article.accentBadge}</span>
+          </span>
+          <span
+            class="rounded-full bg-black/25 px-3 py-1 text-xs font-semibold text-white/90"
+          >
+            {article.category}
+          </span>
+          <span
+            class="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium text-white/90"
+          >
+            <Clock className="h-3.5 w-3.5" />
+            <span>{article.readingTimeMinutes} menit baca</span>
+          </span>
+        </div>
+
+        <h1
+          class="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl"
+        >
+          {article.title}
+        </h1>
+        <p class="mt-3 text-base leading-relaxed text-white/90 sm:text-lg">
+          {article.subtitle}
+        </p>
+        <p class="mt-4 text-xs font-semibold uppercase tracking-wider text-white/75">
+          Asal-usul: {article.originLabel}
+        </p>
+      </div>
+    </header>
+
+    <!-- Isi Artikel -->
+    <main class="mx-auto max-w-3xl px-4 pt-8 sm:px-6 sm:pt-10">
+      <article
+        class="rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-9"
+      >
+        <!-- Paragraf Pembuka -->
+        <p
+          class="border-l-4 border-emerald-500 pl-4 text-base font-medium leading-relaxed text-ink sm:text-lg"
+        >
+          {article.leadParagraph}
+        </p>
+
+        <!-- Bagian-bagian Utama -->
+        <div class="mt-8 space-y-8">
+          {
+            article.sections.map((section) => (
+              <section>
+                <h2 class="text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
+                  {section.heading}
+                </h2>
+                <div class="mt-3.5 space-y-4 text-sm leading-relaxed text-ink-secondary sm:text-base">
+                  {section.paragraphs.map((paragraph) => (
+                    <p>{paragraph}</p>
+                  ))}
+                </div>
+
+                {section.highlightBox && (
+                  <div class="mt-5 flex items-start gap-3 rounded-xl border border-warm-line bg-warm-soft p-4 sm:p-5">
+                    <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-warm-text" />
+                    <div>
+                      <span class="text-xs font-bold uppercase tracking-wider text-warm-heading">
+                        {section.highlightBox.label}
+                      </span>
+                      <p class="mt-1 text-sm leading-relaxed text-ink-secondary">
+                        {section.highlightBox.text}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </section>
+            ))
+          }
+        </div>
+
+        <!-- Intisari Cepat -->
+        <section
+          class="mt-10 rounded-2xl border border-accent-line bg-accent-soft/75 p-5 sm:p-6"
+        >
+          <div class="inline-flex items-center gap-2 text-accent-text">
+            <Sparkles className="h-4 w-4 text-accent-strong" />
+            <span class="text-xs font-bold uppercase tracking-wider">
+              Intisari Cepat
+            </span>
+          </div>
+          <ul class="mt-3 space-y-2.5">
+            {
+              article.keyTakeaways.map((point) => (
+                <li class="flex items-start gap-2.5 text-sm leading-relaxed text-ink">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent-strong" />
+                  <span>{point}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </article>
+
+      <!-- Buku Terkait di Ringkasnya -->
+      {
+        relatedBooks.length > 0 && (
+          <section class="mt-10">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h2 class="text-xl font-extrabold text-ink">
+                Dibahas di Ringkasan Buku Ini
+              </h2>
+              <a
+                href="/katalog"
+                class="inline-flex items-center gap-1 text-xs font-semibold text-accent-text transition hover:text-accent-strong"
+              >
+                <span>Lihat Katalog</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </a>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {relatedBooks.map((book) => (
+                <a
+                  href={`/buku/${book.slug}`}
+                  class="group flex min-w-0 items-start gap-4 rounded-2xl border border-line bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md"
+                >
+                  <div class="relative aspect-[3/4] w-16 shrink-0 overflow-hidden rounded-xl shadow-sm ring-1 ring-line/70 sm:w-20">
+                    {book.coverImage ? (
+                      <img
+                        src={book.coverImage}
+                        alt={`Ilustrasi sampul buku ${book.title}`}
+                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div
+                        class={`flex h-full w-full items-center justify-center bg-slate-900 bg-gradient-to-br ${book.coverGradient} p-2 text-white`}
+                      >
+                        <BookOpen className="h-5 w-5 opacity-85" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div class="flex min-w-0 flex-1 flex-col justify-between self-stretch">
+                    <div>
+                      <span class="text-[11px] font-bold text-accent-strong">
+                        {book.category}
+                      </span>
+                      <h3 class="mt-0.5 line-clamp-2 text-sm font-extrabold leading-snug text-ink group-hover:text-accent-strong sm:text-base">
+                        {book.title}
+                      </h3>
+                      <p class="mt-0.5 truncate text-xs text-ink-subtle">
+                        {book.author} • {book.quickTimeMinutes}–
+                        {book.readingTimeMinutes} mnt
+                      </p>
+                    </div>
+                    <span class="mt-2.5 inline-flex items-center gap-1 text-xs font-semibold text-accent-text group-hover:text-accent-strong">
+                      <span>Baca Ringkasan</span>
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <!-- Artikel Lainnya -->
+      {
+        otherArticles.length > 0 && (
+          <section class="mt-10">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h2 class="text-xl font-extrabold text-ink">Artikel Lainnya</h2>
+              <a
+                href="/artikel"
+                class="inline-flex items-center gap-1 text-xs font-semibold text-accent-text transition hover:text-accent-strong"
+              >
+                <span>Semua Artikel</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </a>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {otherArticles.map((other) => (
+                <a
+                  href={`/artikel/${other.slug}`}
+                  class="group flex flex-col justify-between rounded-2xl border border-line bg-surface p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md"
+                >
+                  <div>
+                    <span class="text-[11px] font-bold text-accent-strong">
+                      {other.category}
+                    </span>
+                    <h3 class="mt-1 text-base font-extrabold leading-snug text-ink group-hover:text-accent-strong">
+                      {other.title}
+                    </h3>
+                    <p class="mt-1.5 line-clamp-2 text-xs leading-relaxed text-ink-muted">
+                      {other.subtitle}
+                    </p>
+                  </div>
+                  <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-ink-subtle">
+                    <Clock className="h-3.5 w-3.5" />
+                    <span>{other.readingTimeMinutes} menit baca</span>
+                  </span>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </main>
+  </div>
+</BaseLayout>

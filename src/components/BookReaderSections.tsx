@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { BookCatalogItem, BookSummary } from "@/types/book";
+import type { ArticleTermEntry } from "@/types/article";
+import { RichBookText } from "./RichBookText";
 import {
   AlertCircle,
   ArrowRight,
@@ -65,6 +67,8 @@ interface IntroSectionProps {
   mode: "quick" | "deep";
   onSelectTakeaway?: (takeawayNumber: number) => void;
   onStartDeepReading?: () => void;
+  articleTerms?: readonly ArticleTermEntry[];
+  onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
 
 /** Bagian pengantar reader: Sinopsis ringkas, akordeon target pembaca, dan Daftar Poin Inti. */
@@ -74,15 +78,23 @@ export function IntroSection({
   mode,
   onSelectTakeaway,
   onStartDeepReading,
+  articleTerms = [],
+  onSelectArticleTerm,
 }: IntroSectionProps) {
   const firstTakeaway = book.keyTakeaways[0];
+  const synopsisMatched = new Set<string>();
 
   return (
     <>
       <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8 shadow-sm">
         <h2 className={`${fs.sectionHeading} font-bold text-ink`}>Sinopsis</h2>
         <p className={`mt-2.5 text-ink-secondary ${fs.body}`}>
-          {book.synopsis}
+          <RichBookText
+            text={book.synopsis}
+            terms={articleTerms}
+            onSelectTerm={onSelectArticleTerm}
+            matchedSlugs={synopsisMatched}
+          />
         </p>
 
         {book.whoIsItFor.length > 0 && (
@@ -193,6 +205,8 @@ interface TakeawayCardProps {
   showDeepContent: boolean;
   scrollMarginTop?: string;
   onReadDeep?: () => void;
+  articleTerms?: readonly ArticleTermEntry[];
+  onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
 
 /** Kartu satu Poin Inti (mendukung Mode Kilat maupun Mode Mendalam). */
@@ -202,7 +216,11 @@ export function TakeawayCard({
   showDeepContent,
   scrollMarginTop,
   onReadDeep,
+  articleTerms = [],
+  onSelectArticleTerm,
 }: TakeawayCardProps) {
+  const cardMatched = new Set<string>();
+
   return (
     <article
       id={`poin-${takeaway.number}`}
@@ -232,7 +250,12 @@ export function TakeawayCard({
           ⚡ Intisari Bab
         </p>
         <p className={`mt-1 ${fs.lead} font-semibold text-ink`}>
-          {takeaway.quickSummary}
+          <RichBookText
+            text={takeaway.quickSummary}
+            terms={articleTerms}
+            onSelectTerm={onSelectArticleTerm}
+            matchedSlugs={cardMatched}
+          />
         </p>
       </div>
 
@@ -242,7 +265,14 @@ export function TakeawayCard({
           className={`animate-fade-slide mt-5 space-y-4 text-ink-secondary ${fs.body}`}
         >
           {takeaway.deepContent.map((paragraph, pIdx) => (
-            <p key={pIdx}>{paragraph}</p>
+            <p key={pIdx}>
+              <RichBookText
+                text={paragraph}
+                terms={articleTerms}
+                onSelectTerm={onSelectArticleTerm}
+                matchedSlugs={cardMatched}
+              />
+            </p>
           ))}
         </div>
       )}
@@ -257,7 +287,12 @@ export function TakeawayCard({
             Hal yang Perlu Diingat:
           </span>
           <p className={`mt-0.5 ${fs.compact} text-ink-secondary`}>
-            {takeaway.keyNote}
+            <RichBookText
+              text={takeaway.keyNote}
+              terms={articleTerms}
+              onSelectTerm={onSelectArticleTerm}
+              matchedSlugs={cardMatched}
+            />
           </p>
         </div>
       </div>
@@ -283,6 +318,8 @@ interface ConclusionSectionProps {
   conclusion: string;
   fs: FontScale;
   scrollMarginTop?: string;
+  articleTerms?: readonly ArticleTermEntry[];
+  onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
 
 /** Bagian Kesimpulan Akhir buku. */
@@ -290,7 +327,11 @@ export function ConclusionSection({
   conclusion,
   fs,
   scrollMarginTop,
+  articleTerms = [],
+  onSelectArticleTerm,
 }: ConclusionSectionProps) {
+  const conclusionMatched = new Set<string>();
+
   return (
     <section
       id="kesimpulan-akhir"
@@ -320,7 +361,14 @@ export function ConclusionSection({
           .map((paragraph) => paragraph.trim())
           .filter(Boolean)
           .map((paragraph, idx) => (
-            <p key={idx}>{paragraph}</p>
+            <p key={idx}>
+              <RichBookText
+                text={paragraph}
+                terms={articleTerms}
+                onSelectTerm={onSelectArticleTerm}
+                matchedSlugs={conclusionMatched}
+              />
+            </p>
           ))}
       </div>
     </section>
@@ -330,13 +378,19 @@ export function ConclusionSection({
 interface KeyConceptsSectionProps {
   keyConcepts: BookSummary["keyConcepts"];
   fs: FontScale;
+  articleTerms?: readonly ArticleTermEntry[];
+  onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
 
 /** Daftar kartu Konsep Kunci sebagai rangkuman gagasan utama buku. */
 export function KeyConceptsSection({
   keyConcepts,
   fs,
+  articleTerms = [],
+  onSelectArticleTerm,
 }: KeyConceptsSectionProps) {
+  const conceptsMatched = new Set<string>();
+
   return (
     <section className="mt-8 rounded-2xl border-2 border-accent-line/70 bg-surface p-6 sm:p-8 shadow-sm">
       <div>
@@ -367,10 +421,20 @@ export function KeyConceptsSection({
               </span>
               <div className="min-w-0">
                 <h3 className={`${fs.lead} font-extrabold text-ink`}>
-                  {concept.title}
+                  <RichBookText
+                    text={concept.title}
+                    terms={articleTerms}
+                    onSelectTerm={onSelectArticleTerm}
+                    matchedSlugs={conceptsMatched}
+                  />
                 </h3>
                 <p className={`mt-1.5 ${fs.compact} leading-relaxed text-ink-secondary`}>
-                  {concept.explanation}
+                  <RichBookText
+                    text={concept.explanation}
+                    terms={articleTerms}
+                    onSelectTerm={onSelectArticleTerm}
+                    matchedSlugs={conceptsMatched}
+                  />
                 </p>
               </div>
             </div>
