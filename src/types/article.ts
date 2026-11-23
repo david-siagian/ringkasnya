@@ -46,8 +46,12 @@ export interface ArticleFeedItem {
   title: string;
   subtitle: string;
   format: ArticleFormat;
+  category: BookCategory;
   readingTimeMinutes: number;
   coverImage?: string;
+  coverGradient: string;
+  accentBadge: string;
+  originLabel: string;
 }
 
 export interface ArticleHighlightBox {
