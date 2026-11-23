@@ -21,13 +21,16 @@
     - Target Mendalam (menit) = `clamp(round(12 + halaman / 60), 15, 22)`
   - Selaraskan kolom `quick_time_minutes`, `reading_time_minutes`, dan `takeaways_count` di tabel `books` agar sesuai dengan hasil estimasi di atas.
 - **Format Sinopsis**: Bagian `synopsis` pada setiap buku cukup ditulis **1 paragraf ringkas (4–7 baris)** saja. Jika pemangkasan sinopsis mengurangi total kata, kompensasikan penambahan teks pada `deepContent`, `quickSummary`, atau `conclusion` agar estimasi durasi baca tetap berada dalam rentang standar.
+- **Format Judul & Subjudul Buku (`title` & `original_title`)**:
+  - Kolom `title` di tabel `books` **cukup berisi judul utama buku saja** tanpa subjudul setelah tanda titik dua (`:`) — misalnya `Quiet` (bukan `Quiet: The Power of Introverts in a World That Can't Stop Talking`) atau `Sapiens` (bukan `Sapiens: A Brief History of Humankind`), agar tampilan kartu di katalog tetap bersih dan mudah dipindai.
+  - Kolom `original_title` (tagline/subjudul yang tampil di bawah judul pada `BookPreviewModal` dan `BookReader`) **wajib ditulis dalam Bahasa Indonesia**, **tidak boleh mengulang judul buku** di depannya (tanpa pola `"Judul: ..."`), dan tidak boleh kosong/`NULL` — misalnya `Kekuatan Orang Introver di Dunia yang Tak Berhenti Bicara`.
 - **Urutan Katalog, Kategori & Popularitas Goodreads**:
   - Setiap penambahan buku baru di tabel `books` **wajib** menyertakan kolom `goodreads_ratings` (angka perkiraan jumlah *ratings* buku di Goodreads) dan `editorial_tier` (`1` = berbasis sains, riset, sejarah ilmiah, atau klasik intelektual; `2` = nonfiksi populer, finansial praktis, atau refleksi populer; `3` = kategori `Organisasi & Bisnis`, `Karier & Budaya Kerja`, dan `Produktivitas & Pengembangan Diri`) agar pengurutan query di `src/lib/books-repository.ts` selalu akurat.
   - Urutan `CATEGORIES` dipertahankan di `src/lib/book-constants.ts`: (1) `Sains & Alam Semesta`, (2) `Teknologi & Masa Depan`, (3) `Nalar & Berpikir Kritis`, (4) `Psikologi & Perilaku`, (5) `Sejarah & Peradaban`, (6) `Filsafat & Kebijaksanaan`, (7) `Ekonomi & Keuangan`, (8) `Organisasi & Bisnis`, (9) `Karier & Budaya Kerja`, (10) `Tubuh & Kesehatan`, (11) `Produktivitas & Pengembangan Diri`.
   - Query katalog di `src/lib/books-repository.ts` mengurutkan berdasarkan `editorial_tier` (`1` → `2` → `3`) terlebih dahulu, lalu berdasarkan `goodreads_ratings` tertinggi di dalam masing-masing tier, sehingga **Perpustakaan Kurasi** dan bagian atas tab **Semua** selalu menonjolkan buku nonfiksi ilmiah/berbasis riset.
 
 ## Operasional CLI (Windows)
-- Jalankan `npm run build`, `git push`, `npx wrangler`, `cf`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.
+- Jalankan `git push`, `npx wrangler`, `cf`, dan `gh` dengan `BypassSandbox: true` untuk menghindari `EPERM`/hang pada sandbox Windows.
 - Jalankan `git add`, `git commit`, dan `git push` sebagai pemanggilan perintah yang **terpisah** (jangan digabung dalam satu baris perintah), agar approval prefix-matching tetap bekerja tanpa perlu meminta izin ulang untuk setiap commit message yang unik.
 - Jalankan perintah `git` (`git add`, `git commit`, `git push`, `git checkout`, `git merge`, `git pull`) **langsung tanpa flag `-C <path>`** (karena *working directory* command sudah berada di root workspace), dan gunakan `git push` langsung untuk branch yang sudah memiliki *upstream* (atau `git push -u origin <nama-branch>` untuk branch baru) agar *prefix-matching* "Always Allow" pada `git push` cukup disetujui sekali.
 - When interacting with Cloudflare, use the `cf` CLI unless the project has a Wrangler configuration file.
@@ -37,23 +40,20 @@
 - **Branch `dev` sebagai Integrasi & Preview**: Semua perubahan fitur/bugfix digabungkan terlebih dahulu ke branch `dev`.
 - **Alur Kerja Fitur / Bugfix / Lainnya**:
   1. Pastikan berada di branch `dev` terbaru (`git checkout dev`, lalu `git pull origin dev`), kemudian buat branch baru dari `dev` (misalnya `feat/<nama-fitur>`, `fix/<nama-bug>`, `docs/<topik>`, `chore/<topik>`).
-  2. Kerjakan perubahan pada branch baru tersebut dan pastikan verifikasi (`npx tsc --noEmit` dan `npm run build`) lulus.
+  2. Kerjakan perubahan pada branch baru tersebut (tidak perlu menjalankan `npm run build` maupun `npx test` secara lokal; untuk *refactor* besar yang menyentuh banyak file/tipe data, jalankan `npm run typecheck` sebelum push agar terhindar dari bolak-balik memperbaiki error di CI).
   3. Commit dan push perubahan ke branch baru tersebut (`git push -u origin <nama-branch>`).
-  4. Merge branch tersebut ke `dev` (`git checkout dev`, `git merge <nama-branch>`, `git push origin dev`).
+  4. Merge branch tersebut ke `dev` (`git checkout dev`, `git merge <nama-branch>`, `git push origin dev`), lalu pantau status workflow GitHub Actions (`.github/workflows/deploy.yml`) menggunakan `gh run list` / `gh run watch` untuk memastikan seluruh step (TypeScript Check, Build Project, dan Apply D1 Migrations) berjalan sukses.
 
 ## Deployment & Rilis
-- **Auto-Deploy Cloudflare Aktif**:
-  - **Preview (`dev`)**: Push/merge ke branch `dev` memicu build & deploy Preview di Cloudflare Workers (`npx wrangler preview`).
-  - **Production (`main`)**: Push/merge ke branch `main` (khusus rilis) memicu build & deploy Production di Cloudflare Workers (`npx wrangler deploy`).
-  - Tidak perlu menjalankan `npx wrangler deploy` secara manual setelah `git push` (cukup pastikan `npx tsc --noEmit` dan `npm run build` lulus secara lokal sebelum commit/push).
-- **Auto-Push Setelah Selesai Fitur/Bug**: Setiap kali selesai mengerjakan fitur atau perbaikan bug dan verifikasi (`npx tsc --noEmit` / `npm run build`) lulus, langsung lakukan `git commit` dan `git push` ke branch kerja (yang ditarik dari `dev`), lalu merge ke `dev` dan push `dev`, kecuali user meminta untuk tidak di-push terlebih dahulu.
+- **Auto-Deploy Cloudflare & GitHub Actions Aktif**:
+  - **Preview (`dev`)**: Push/merge ke branch `dev` memicu workflow GitHub Actions (`CI & D1 Migrations`: typecheck, build, dan migrasi D1 preview) serta build & deploy Preview di Cloudflare Workers.
+  - **Production (`main`)**: Push/merge ke branch `main` (khusus rilis) memicu workflow GitHub Actions (`CI & D1 Migrations`: typecheck, build, dan migrasi D1 production) serta build & deploy Production di Cloudflare Workers.
+  - Tidak perlu menjalankan `npx wrangler deploy`, `npm run build`, maupun `npx test` secara manual setelah `git push`; cukup pantau eksekusi GitHub Actions hingga seluruh step dinyatakan sukses.
+- **Auto-Push Setelah Selesai Fitur/Bug**: Setiap kali selesai mengerjakan fitur atau perbaikan bug, langsung lakukan `git commit` dan `git push` ke branch kerja (yang ditarik dari `dev`), lalu merge ke `dev` dan push `dev`, kemudian pantau hasil GitHub Actions hingga sukses, kecuali user meminta untuk tidak di-push terlebih dahulu.
 
-## Pengujian & Verifikasi (Playwright)
-- **Lingkup Uji**: Gunakan **Playwright smoke test** (`npm run test:e2e`, mengacu ke `tests/smoke.spec.ts`) yang ringan dan terfokus pada alur UI utama (desktop & mobile).
-- **Kapan Dijalankan**:
-  - **Pengerjaan harian & merge ke `dev`**: Tidak perlu dijalankan; cukup `npx tsc --noEmit` dan `npm run build` agar proses deploy preview tetap cepat.
-  - **On-demand / Pra-rilis**: Hanya dijalankan jika diminta secara eksplisit oleh user atau khusus sebelum rilis ke `main`.
-- **Skenario Minimal yang Diverifikasi**:
+## Pengujian & Verifikasi
+- **GitHub Actions sebagai Gerbang Utama**: Tidak perlu menjalankan `npm run build` ataupun `npx test` / `npm run test:e2e` secara lokal saat pengerjaan harian (cukup `npm run typecheck` opsional bila melakukan *refactor* besar lintas file/tipe data). Setelah push ke `dev` atau `main`, pantau workflow GitHub Actions (`gh run list` / `gh run watch`) untuk memastikan seluruh step berhasil.
+- **Playwright Smoke Test (On-Demand)**: Uji browser (`npm run test:e2e`, mengacu ke `tests/smoke.spec.ts`) hanya dijalankan jika diminta secara eksplisit oleh user, dengan skenario minimal:
   - **Beranda (`/`)**: Zero `console.error` / `pageerror`, pencarian & filter kategori berfungsi, serta navigasi/smooth scroll ke katalog berjalan normal.
   - **Halaman Reader (`/buku/<slug>`, mis. `/buku/sapiens`)**: Toggle **Mode Kilat vs Mode Mendalam** berfungsi, bagian **Konsep Kunci** tampil normal, tombol salin kutipan & tema (`useTheme`) bekerja, serta endpoint `/api/health` merespons normal.
 
