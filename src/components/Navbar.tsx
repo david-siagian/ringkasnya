@@ -7,49 +7,19 @@ import {
   Moon,
   Sun,
   Home,
-  Compass,
   Info,
   FileText,
-  ChevronDown,
-  Atom,
-  Cpu,
-  Lightbulb,
-  Brain,
-  Globe,
-  TrendingUp,
-  Building2,
-  Briefcase,
-  Activity,
-  Sparkles,
-  type LucideIcon,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { useTheme } from "@/hooks/useTheme";
 import UserMenu from "@/components/auth/UserMenu";
-import { CATEGORIES } from "@/lib/book-constants";
-import type { BookCategory } from "@/types/book";
 
 const NAV_ITEMS = [
   { label: "Beranda", href: "/", icon: Home },
   { label: "Katalog Buku", href: "/katalog", icon: BookOpen },
   { label: "Artikel", href: "/artikel", icon: FileText },
-  { label: "Topik", href: "/topik", icon: Compass },
   { label: "Tentang", href: "/tentang", icon: Info },
 ] as const;
-
-const CATEGORY_ICONS: Record<BookCategory, LucideIcon> = {
-  "Sains & Alam Semesta": Atom,
-  "Teknologi & Masa Depan": Cpu,
-  "Nalar & Berpikir Kritis": Lightbulb,
-  "Psikologi & Perilaku": Brain,
-  "Sejarah & Peradaban": Globe,
-  "Filsafat & Kebijaksanaan": Sun,
-  "Ekonomi & Keuangan": TrendingUp,
-  "Organisasi & Bisnis": Building2,
-  "Karier & Budaya Kerja": Briefcase,
-  "Tubuh & Kesehatan": Activity,
-  "Produktivitas & Pengembangan Diri": Sparkles,
-};
 
 function isNavItemActive(currentPath: string, href: string): boolean {
   if (!currentPath) return false;
@@ -67,57 +37,13 @@ function normalizePath(path: string): string {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isTopicsOpen, setIsTopicsOpen] = useState(false);
-  const [isMobileTopicsOpen, setIsMobileTopicsOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState<string>("");
-  const [currentCategory, setCurrentCategory] = useState<string | null>(null);
   const { isDark, mounted, toggleTheme } = useTheme();
   const headerRef = useRef<HTMLElement>(null);
-  const topicsContainerRef = useRef<HTMLDivElement>(null);
-  const topicsButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const pathname = normalizePath(window.location.pathname);
-    setCurrentPath(pathname);
-    const params = new URLSearchParams(window.location.search);
-    setCurrentCategory(params.get("kategori"));
+    setCurrentPath(normalizePath(window.location.pathname));
   }, []);
-
-  // Close desktop topics popover on outside click, Escape key, or resize to mobile
-  useEffect(() => {
-    if (!isTopicsOpen) return;
-
-    function handlePointerDown(event: PointerEvent) {
-      if (
-        topicsContainerRef.current &&
-        !topicsContainerRef.current.contains(event.target as Node)
-      ) {
-        setIsTopicsOpen(false);
-      }
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setIsTopicsOpen(false);
-        topicsButtonRef.current?.focus();
-      }
-    }
-
-    function handleResize() {
-      if (window.innerWidth < 768) {
-        setIsTopicsOpen(false);
-      }
-    }
-
-    document.addEventListener("pointerdown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("resize", handleResize);
-    return () => {
-      document.removeEventListener("pointerdown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [isTopicsOpen]);
 
   // Sinkronkan tinggi navbar aktual ke CSS var `--header-h` (dipakai toolbar sticky & scroll offset)
   useEffect(() => {
@@ -201,90 +127,6 @@ export default function Navbar() {
           >
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon;
-              if (item.href === "/topik") {
-                const isTopicRoute =
-                  isNavItemActive(currentPath, "/topik") ||
-                  (currentPath === "/katalog" &&
-                    Boolean(currentCategory) &&
-                    CATEGORIES.includes(currentCategory as BookCategory));
-                const isHighlighted = isTopicsOpen || isTopicRoute;
-                return (
-                  <div
-                    key={item.label}
-                    ref={topicsContainerRef}
-                    className="relative"
-                  >
-                    <button
-                      ref={topicsButtonRef}
-                      type="button"
-                      onClick={() => setIsTopicsOpen((prev) => !prev)}
-                      aria-expanded={isTopicsOpen}
-                      aria-controls="navbar-topics-popover"
-                      aria-haspopup="true"
-                      className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors ${
-                        isHighlighted
-                          ? "bg-accent-soft text-accent-text"
-                          : "text-ink-secondary hover:bg-accent-soft hover:text-accent-text"
-                      }`}
-                    >
-                      <Icon className="h-4 w-4 text-accent-strong" />
-                      <span>{item.label}</span>
-                      <ChevronDown
-                        className={`h-3.5 w-3.5 text-ink-subtle transition-transform duration-200 ${
-                          isTopicsOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-
-                    {isTopicsOpen && (
-                      <div
-                        id="navbar-topics-popover"
-                        role="region"
-                        aria-label="Daftar Topik Buku"
-                        className="absolute left-1/2 top-full z-50 mt-2.5 w-[500px] max-w-[calc(100vw-2rem)] -translate-x-1/2 rounded-2xl border border-line bg-surface p-3 shadow-xl ring-1 ring-black/5 dark:ring-white/5"
-                      >
-                        <p className="px-2.5 pb-2 text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
-                          Jelajahi Berdasarkan Topik
-                        </p>
-                        <div className="grid grid-cols-2 gap-1">
-                          {CATEGORIES.map((category) => {
-                            const CategoryIcon = CATEGORY_ICONS[category];
-                            const isSelectedCategory =
-                              currentPath === "/katalog" &&
-                              currentCategory === category;
-                            return (
-                              <a
-                                key={category}
-                                href={`/katalog?kategori=${encodeURIComponent(category)}`}
-                                onClick={() => setIsTopicsOpen(false)}
-                                className={`flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-semibold transition-colors ${
-                                  isSelectedCategory
-                                    ? "bg-accent-soft text-accent-text"
-                                    : "text-ink-secondary hover:bg-accent-soft hover:text-accent-text"
-                                }`}
-                              >
-                                <CategoryIcon className="h-4 w-4 shrink-0 text-accent-strong" />
-                                <span className="truncate">{category}</span>
-                              </a>
-                            );
-                          })}
-                        </div>
-                        <div className="mt-2 border-t border-line-subtle pt-2">
-                          <a
-                            href="/topik"
-                            onClick={() => setIsTopicsOpen(false)}
-                            className="flex items-center justify-between rounded-xl px-2.5 py-2 text-xs font-semibold text-accent-text transition-colors hover:bg-accent-soft"
-                          >
-                            <span>Lihat ringkasan semua topik</span>
-                            <ArrowRight className="h-3.5 w-3.5" />
-                          </a>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
               const isActive = isNavItemActive(currentPath, item.href);
               return (
                 <a
@@ -387,76 +229,6 @@ export default function Navbar() {
           </p>
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
-            if (item.href === "/topik") {
-              const isTopicRoute =
-                isNavItemActive(currentPath, "/topik") ||
-                (currentPath === "/katalog" &&
-                  Boolean(currentCategory) &&
-                  CATEGORIES.includes(currentCategory as BookCategory));
-              return (
-                <div key={item.label} className="flex flex-col">
-                  <button
-                    type="button"
-                    onClick={() => setIsMobileTopicsOpen((prev) => !prev)}
-                    aria-expanded={isMobileTopicsOpen}
-                    aria-controls="mobile-topics-accordion"
-                    className={`flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-sm font-semibold transition-colors ${
-                      isTopicRoute || isMobileTopicsOpen
-                        ? "bg-accent-soft text-accent-text"
-                        : "text-ink-secondary hover:bg-accent-soft hover:text-accent-text"
-                    }`}
-                  >
-                    <span className="flex items-center gap-3">
-                      <Icon className="h-4 w-4 text-accent-strong" />
-                      <span>{item.label}</span>
-                    </span>
-                    <ChevronDown
-                      className={`h-4 w-4 text-ink-faint transition-transform duration-200 ${
-                        isMobileTopicsOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {isMobileTopicsOpen && (
-                    <div
-                      id="mobile-topics-accordion"
-                      className="mt-1 ml-4 flex flex-col gap-0.5 border-l border-line pl-3"
-                    >
-                      {CATEGORIES.map((category) => {
-                        const CategoryIcon = CATEGORY_ICONS[category];
-                        const isSelectedCategory =
-                          currentPath === "/katalog" &&
-                          currentCategory === category;
-                        return (
-                          <a
-                            key={category}
-                            href={`/katalog?kategori=${encodeURIComponent(category)}`}
-                            onClick={handleLinkClick}
-                            className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-semibold transition-colors ${
-                              isSelectedCategory
-                                ? "bg-accent-soft text-accent-text"
-                                : "text-ink-secondary hover:bg-accent-soft hover:text-accent-text"
-                            }`}
-                          >
-                            <CategoryIcon className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-                            <span className="truncate">{category}</span>
-                          </a>
-                        );
-                      })}
-                      <a
-                        href="/topik"
-                        onClick={handleLinkClick}
-                        className="mt-1 flex items-center justify-between rounded-lg px-2.5 py-2 text-xs font-semibold text-accent-text transition-colors hover:bg-accent-soft"
-                      >
-                        <span>Lihat semua topik</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </a>
-                    </div>
-                  )}
-                </div>
-              );
-            }
-
             const isActive = isNavItemActive(currentPath, item.href);
             return (
               <div key={item.label} onClick={handleLinkClick}>
