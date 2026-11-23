@@ -1,0 +1,59 @@
+name: Cloudflare Deploy
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  deploy:
+    name: Build & Deploy to Cloudflare
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: TypeScript Check
+        run: npm run typecheck
+
+      - name: Build Project
+        run: npm run build
+
+      # Jalankan migrasi D1 untuk branch dev (preview database)
+      - name: Apply D1 Migrations (Preview)
+        if: github.ref == 'refs/heads/dev'
+        run: npx wrangler d1 migrations apply ringkasnya-db --remote --preview
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TOKEN_CLOUDFLARE }}
+
+      # Deploy Preview Worker saat push ke dev
+      - name: Deploy to Cloudflare Workers (Preview)
+        if: github.ref == 'refs/heads/dev'
+        run: npx wrangler deploy --env preview
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TOKEN_CLOUDFLARE }}
+
+      # Jalankan migrasi D1 untuk branch main (production database)
+      - name: Apply D1 Migrations (Production)
+        if: github.ref == 'refs/heads/main'
+        run: npx wrangler d1 migrations apply ringkasnya-db --remote
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TOKEN_CLOUDFLARE }}
+
+      # Deploy Production Worker saat push ke main
+      - name: Deploy to Cloudflare Workers (Production)
+        if: github.ref == 'refs/heads/main'
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TOKEN_CLOUDFLARE }}
