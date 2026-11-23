@@ -253,7 +253,7 @@ export default function CatalogSection({
             </h1>
           ) : (
             <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
-              Pilih Buku, Serap Intisarinya
+              Mulai dari Buku-Buku Pilihan
             </h2>
           )}
           <p className="mt-1.5 text-sm text-ink-muted">
