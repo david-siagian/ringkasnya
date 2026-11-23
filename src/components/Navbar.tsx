@@ -189,7 +189,7 @@ export default function Navbar() {
                 Ringkasnya
               </span>
               <span className="text-[11px] text-ink-subtle hidden sm:inline">
-                Baca Intinya, Praktikkan Ilmunya
+                Baca Intinya, Pahami Dunianya
               </span>
             </div>
           </a>
@@ -486,7 +486,7 @@ export default function Navbar() {
 
         <div className="border-t border-line-subtle p-4">
           <p className="text-center text-[11px] text-ink-faint">
-            Baca Intinya, Praktikkan Ilmunya
+            Baca Intinya, Pahami Dunianya
           </p>
         </div>
       </aside>
