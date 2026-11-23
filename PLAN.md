@@ -90,32 +90,16 @@ Selain **Bedah Istilah**, rubrik Artikel ke depannya dapat diperluas ke format e
 
 ## 5. Ekspansi Katalog 100 Buku & Pembaruan Kategori (Bertahap 10 Buku/Batch)
 
+> **Daftar Lengkap 100 Buku**: Lihat [`BOOKS.md`](./BOOKS.md) untuk daftar lengkap **58 buku awal**, **20 buku yang sudah digenerate (Batch 1–2)**, serta **22 buku yang belum digenerate (Batch 3–5)** beserta target skala poin inti & durasi baca masing-masing.
+
 - **Pembaruan Kategori (`0002_update_categories_tubuh_kesehatan.sql`)**:
   - Menambahkan kategori baru **`Teknologi & Masa Depan`**.
   - Mengubah nama kategori **`Kesehatan & Medis`** → **`Tubuh & Kesehatan`**.
-- **Batch 1 (`0003_add_books_batch_1.sql`) — Selesai (Total: 68/100 Buku)**:
-  1. *Hello World* — Hannah Fry (`Teknologi & Masa Depan`)
-  2. *Life 3.0* — Max Tegmark (`Teknologi & Masa Depan`)
-  3. *Cosmos* — Carl Sagan (`Sains & Alam Semesta`)
-  4. *Pale Blue Dot* — Carl Sagan (`Sains & Alam Semesta`)
-  5. *The Swerve* — Stephen Greenblatt (`Sejarah & Peradaban`)
-  6. *Nexus* — Yuval Noah Harari (`Teknologi & Masa Depan`)
-  7. *Co-Intelligence* — Ethan Mollick (`Teknologi & Masa Depan`)
-  8. *Chip War* — Chris Miller (`Teknologi & Masa Depan`)
-  9. *The Gene* — Siddhartha Mukherjee (`Tubuh & Kesehatan`)
-  10. *Tiny Habits* — BJ Fogg (`Produktivitas & Pengembangan Diri`)
-- **Batch 2 (`0006_add_books_batch_2.sql`) — Selesai (Total: 78/100 Buku)**:
-  1. *Astrophysics for People in a Hurry* — Neil deGrasse Tyson (`Sains & Alam Semesta`)
-  2. *The Order of Time* — Carlo Rovelli (`Sains & Alam Semesta`)
-  3. *Breath* — James Nestor (`Tubuh & Kesehatan`)
-  4. *Justice* — Michael J. Sandel (`Filsafat & Kebijaksanaan`)
-  5. *The Sixth Extinction* — Elizabeth Kolbert (`Sains & Alam Semesta`)
-  6. *The Coming Wave* — Mustafa Suleyman (`Teknologi & Masa Depan`)
-  7. *Algorithms to Live By* — Brian Christian & Tom Griffiths (`Teknologi & Masa Depan`)
-  8. *Humankind* — Rutger Bregman (`Sejarah & Peradaban`)
-  9. *The Information* — James Gleick (`Teknologi & Masa Depan`)
-  10. *The Innovators* — Walter Isaacson (`Teknologi & Masa Depan`)
-- **Sisa Roadmap**: 22 buku lagi (Batch 3–4 @ 10 buku/batch + Batch 5 @ 2 buku) menuju 100 buku.
+- **Progres Saat Ini (`78 / 100 Buku`)**:
+  - **Buku Awal (Eksisting)**: 58 buku (lihat [`BOOKS.md`](./BOOKS.md#bagian-a-58-buku-sebelumnya-sudah-ada-di-d1)).
+  - **Batch 1 (`0003_add_books_batch_1.sql` & `0005_rescale_books_batch_1.sql`)**: 10 buku selesai (`59–68`).
+  - **Batch 2 (`0006_add_books_batch_2.sql`)**: 10 buku selesai (`69–78`).
+  - **Fase Selanjutnya (`Batch 3–5`)**: 22 buku tersisa (`79–100`, detail di [`BOOKS.md`](./BOOKS.md#bagian-c-22-buku-yang-belum-digenerate-fase-selanjutnya)).
 
 
 ---
