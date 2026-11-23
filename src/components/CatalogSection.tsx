@@ -256,9 +256,11 @@ export default function CatalogSection({
               Mulai dari Buku-Buku Pilihan
             </h2>
           )}
-          <p className="mt-1.5 text-sm text-ink-muted">
-            Dirangkum dengan metode poin inti &amp; konsep kunci dalam Bahasa Indonesia yang mudah dipahami.
-          </p>
+          {isFull && (
+            <p className="mt-1.5 text-sm text-ink-muted">
+              Dirangkum dengan metode poin inti &amp; konsep kunci dalam Bahasa Indonesia yang mudah dipahami.
+            </p>
+          )}
         </div>
 
         {/* Kolom Pencarian */}
