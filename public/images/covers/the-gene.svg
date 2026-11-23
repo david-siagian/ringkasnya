@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="55%" stop-color="#881337" />
+      <stop offset="100%" stop-color="#4C0519" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="54%" r="44%">
+      <stop offset="0%" stop-color="#FDA4AF" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#881337" stop-opacity="0" />
+    </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#020617" flood-opacity="0.7" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <circle cx="300" cy="485" r="240" fill="url(#glow)" />
+
+  <!-- DNA Double Helix -->
+  <g transform="translate(300, 485)" fill="none">
+    <path d="M-55 -140 C55 -95, 55 -45, -55 0 C55 45, 55 95, -55 140" stroke="#FDA4AF" stroke-width="5" stroke-linecap="round" />
+    <path d="M55 -140 C-55 -95, -55 -45, 55 0 C-55 45, -55 95, 55 140" stroke="#FDE047" stroke-width="5" stroke-linecap="round" />
+    <line x1="-38" y1="-105" x2="38" y2="-105" stroke="#FFE4E6" stroke-width="2.5" opacity="0.6" />
+    <line x1="-38" y1="-35" x2="38" y2="-35" stroke="#FFE4E6" stroke-width="2.5" opacity="0.6" />
+    <line x1="-38" y1="35" x2="38" y2="35" stroke="#FFE4E6" stroke-width="2.5" opacity="0.6" />
+    <line x1="-38" y1="105" x2="38" y2="105" stroke="#FFE4E6" stroke-width="2.5" opacity="0.6" />
+  </g>
+
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="96" fill="#FECDD3" font-size="19" font-weight="800" letter-spacing="4.5">SIDDHARTHA MUKHERJEE</text>
+    <text x="300" y="160" fill="#FFFFFF" font-size="36" font-weight="800" letter-spacing="6">THE</text>
+    <text x="300" y="242" fill="#FDE047" font-size="92" font-weight="900" letter-spacing="10">GENE</text>
+    <line x1="175" y1="268" x2="425" y2="268" stroke="#FDA4AF" stroke-width="2" opacity="0.7" />
+    <text x="300" y="726" fill="#FFE4E6" font-size="18" font-weight="700" letter-spacing="3.5">SEJARAH INTIM KODE KEHIDUPAN</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
+</svg>

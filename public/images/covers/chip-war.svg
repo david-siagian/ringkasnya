@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#18181B" />
+      <stop offset="55%" stop-color="#7F1D1D" />
+      <stop offset="100%" stop-color="#09090B" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="54%" r="44%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#18181B" stop-opacity="0" />
+    </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#09090B" flood-opacity="0.7" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <circle cx="300" cy="485" r="240" fill="url(#glow)" />
+
+  <!-- Silicon Microchip & Circuit Traces -->
+  <g transform="translate(300, 485)" fill="none">
+    <rect x="-85" y="-85" width="170" height="170" rx="14" stroke="#FBBF24" stroke-width="3.5" fill="#18181B" fill-opacity="0.65" />
+    <rect x="-48" y="-48" width="96" height="96" rx="8" stroke="#FCA5A5" stroke-width="2" />
+    <rect x="-18" y="-18" width="36" height="36" fill="#F59E0B" />
+    <!-- Pins -->
+    <g stroke="#FDE68A" stroke-width="3">
+      <line x1="-50" y1="-85" x2="-50" y2="-135" />
+      <line x1="0" y1="-85" x2="0" y2="-135" />
+      <line x1="50" y1="-85" x2="50" y2="-135" />
+      <line x1="-50" y1="85" x2="-50" y2="135" />
+      <line x1="0" y1="85" x2="0" y2="135" />
+      <line x1="50" y1="85" x2="50" y2="135" />
+      <line x1="-85" y1="-50" x2="-135" y2="-50" />
+      <line x1="-85" y1="0" x2="-135" y2="0" />
+      <line x1="-85" y1="50" x2="-135" y2="50" />
+      <line x1="85" y1="-50" x2="135" y2="-50" />
+      <line x1="85" y1="0" x2="135" y2="0" />
+      <line x1="85" y1="50" x2="135" y2="50" />
+    </g>
+  </g>
+
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="96" fill="#FCA5A5" font-size="22" font-weight="800" letter-spacing="6">CHRIS MILLER</text>
+    <text x="300" y="180" fill="#FFFFFF" font-size="88" font-weight="900" letter-spacing="10">CHIP</text>
+    <text x="300" y="256" fill="#FBBF24" font-size="84" font-weight="900" letter-spacing="10">WAR</text>
+    <line x1="175" y1="280" x2="425" y2="280" stroke="#FBBF24" stroke-width="2" opacity="0.7" />
+    <text x="300" y="726" fill="#FEE2E2" font-size="18" font-weight="700" letter-spacing="3.5">PEREBUTAN TEKNOLOGI PALING KRITIS</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
+</svg>

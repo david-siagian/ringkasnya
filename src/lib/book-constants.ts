@@ -7,6 +7,7 @@ import type {
 
 export const CATEGORIES: BookCategory[] = [
   "Sains & Alam Semesta",
+  "Teknologi & Masa Depan",
   "Nalar & Berpikir Kritis",
   "Psikologi & Perilaku",
   "Sejarah & Peradaban",
@@ -14,7 +15,7 @@ export const CATEGORIES: BookCategory[] = [
   "Ekonomi & Keuangan",
   "Organisasi & Bisnis",
   "Karier & Budaya Kerja",
-  "Kesehatan & Medis",
+  "Tubuh & Kesehatan",
   "Produktivitas & Pengembangan Diri",
 ];
 

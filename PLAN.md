@@ -85,3 +85,24 @@ Selain **Bedah Istilah**, rubrik Artikel ke depannya dapat diperluas ke format e
 2. **Kacamata Sains untuk Fenomena Aktual (*Real-World Lens*)**: Membedah fenomena sehari-hari atau isu di Indonesia menggunakan kerangka sains & psikologi dari buku-buku Ringkasnya.
 3. **Peta Belajar / Panduan Membaca (*Reading Roadmap*)**: Urutan bacaan terkurasi untuk pembaca baru yang ingin mendalami satu tema besar (mis. jalur belajar evolusi & sejarah manusia).
 4. **Kisah di Balik Eksperimen & Pemikir Klasik**: Cerita naratif di balik eksperimen terkenal atau kolaborasi ilmuwan besar yang sering dirujuk lintas buku (mis. Kahneman & Tversky).
+
+---
+
+## 5. Ekspansi Katalog 100 Buku & Pembaruan Kategori (Bertahap 10 Buku/Batch)
+
+- **Pembaruan Kategori (`0002_update_categories_tubuh_kesehatan.sql`)**:
+  - Menambahkan kategori baru **`Teknologi & Masa Depan`**.
+  - Mengubah nama kategori **`Kesehatan & Medis`** → **`Tubuh & Kesehatan`**.
+- **Batch 1 (`0003_add_books_batch_1.sql`) — Selesai (Total: 68/100 Buku)**:
+  1. *Hello World* — Hannah Fry (`Teknologi & Masa Depan`)
+  2. *Life 3.0* — Max Tegmark (`Teknologi & Masa Depan`)
+  3. *Cosmos* — Carl Sagan (`Sains & Alam Semesta`)
+  4. *Pale Blue Dot* — Carl Sagan (`Sains & Alam Semesta`)
+  5. *The Swerve* — Stephen Greenblatt (`Sejarah & Peradaban`)
+  6. *Nexus* — Yuval Noah Harari (`Teknologi & Masa Depan`)
+  7. *Co-Intelligence* — Ethan Mollick (`Teknologi & Masa Depan`)
+  8. *Chip War* — Chris Miller (`Teknologi & Masa Depan`)
+  9. *The Gene* — Siddhartha Mukherjee (`Tubuh & Kesehatan`)
+  10. *Tiny Habits* — BJ Fogg (`Produktivitas & Pengembangan Diri`)
+- **Sisa Roadmap**: 32 buku lagi (Batch 2–4 @ ~10 buku/batch + Batch 5 @ 2 buku) menuju 100 buku.
+

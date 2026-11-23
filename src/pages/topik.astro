@@ -15,6 +15,7 @@ import {
   Brain,
   Building2,
   Compass,
+  Cpu,
   Globe,
   Lightbulb,
   Sparkles,
@@ -24,7 +25,7 @@ import {
 
 const pageTitle = "Topik Pilihan — Ringkasnya";
 const pageDescription =
-  "Jelajahi ringkasan buku berdasarkan bidang pengetahuan: Sains & Alam Semesta, Nalar & Berpikir Kritis, Psikologi & Perilaku, Sejarah & Peradaban, Filsafat & Kebijaksanaan, Ekonomi & Keuangan, Organisasi & Bisnis, Karier & Budaya Kerja, Kesehatan & Medis, serta Produktivitas & Pengembangan Diri.";
+  "Jelajahi ringkasan buku berdasarkan bidang pengetahuan: Sains & Alam Semesta, Teknologi & Masa Depan, Nalar & Berpikir Kritis, Psikologi & Perilaku, Sejarah & Peradaban, Filsafat & Kebijaksanaan, Ekonomi & Keuangan, Organisasi & Bisnis, Karier & Budaya Kerja, Tubuh & Kesehatan, serta Produktivitas & Pengembangan Diri.";
 
 const TOPIC_DETAILS: Record<
   BookCategory,
@@ -39,13 +40,19 @@ const TOPIC_DETAILS: Record<
     accentClass:
       "border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-800/60 dark:bg-cyan-950/60 dark:text-cyan-300",
   },
+  "Teknologi & Masa Depan": {
+    description:
+      "Telusuri kecerdasan buatan, algoritma, sejarah komputasi, semikonduktor, dan dampak teknologi terhadap masa depan manusia.",
+    accentClass:
+      "border-purple-200 bg-purple-50 text-purple-700 dark:border-purple-800/60 dark:bg-purple-950/60 dark:text-purple-300",
+  },
   "Nalar & Berpikir Kritis": {
     description:
       "Asah cara berpikir objektif, logika ilmiah, literasi data, dan ketahanan terhadap misinformasi serta pseudosains.",
     accentClass:
       "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800/60 dark:bg-amber-950/60 dark:text-amber-300",
   },
-  "Kesehatan & Medis": {
+  "Tubuh & Kesehatan": {
     description:
       "Pelajari sains kedokteran preventif, rahasia tidur, optimalisasi fungsi tubuh, dan panduan hidup sehat berumur panjang.",
     accentClass:
@@ -142,10 +149,13 @@ const topicCards = CATEGORIES.map((category) => {
                     {topic.category === "Sains & Alam Semesta" && (
                       <Atom className="h-3.5 w-3.5" />
                     )}
+                    {topic.category === "Teknologi & Masa Depan" && (
+                      <Cpu className="h-3.5 w-3.5" />
+                    )}
                     {topic.category === "Nalar & Berpikir Kritis" && (
                       <Lightbulb className="h-3.5 w-3.5" />
                     )}
-                    {topic.category === "Kesehatan & Medis" && (
+                    {topic.category === "Tubuh & Kesehatan" && (
                       <Activity className="h-3.5 w-3.5" />
                     )}
                     {topic.category === "Psikologi & Perilaku" && (

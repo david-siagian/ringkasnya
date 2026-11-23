@@ -1,5 +1,6 @@
 export type BookCategory =
   | "Sains & Alam Semesta"
+  | "Teknologi & Masa Depan"
   | "Nalar & Berpikir Kritis"
   | "Psikologi & Perilaku"
   | "Sejarah & Peradaban"
@@ -7,7 +8,7 @@ export type BookCategory =
   | "Ekonomi & Keuangan"
   | "Organisasi & Bisnis"
   | "Karier & Budaya Kerja"
-  | "Kesehatan & Medis"
+  | "Tubuh & Kesehatan"
   | "Produktivitas & Pengembangan Diri";
 
 export type BookEditorialTier = 1 | 2 | 3;
