@@ -130,9 +130,9 @@ export default function RegisterForm({
       {errorMessage && (
         <div
           role="alert"
-          className="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700"
+          className="flex items-start gap-2.5 rounded-xl border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/50 px-3.5 py-3 text-sm text-red-700 dark:text-red-300"
         >
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
           <span>{errorMessage}</span>
         </div>
       )}
@@ -143,10 +143,10 @@ export default function RegisterForm({
             type="button"
             onClick={handleGoogleSignUp}
             disabled={isGoogleLoading || isLoading}
-            className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-xs transition-all hover:bg-slate-50 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-semibold text-ink-secondary shadow-xs transition-all hover:bg-page hover:border-line-strong hover:text-ink focus:outline-none focus:ring-2 focus:ring-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isGoogleLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-slate-500" />
+              <Loader2 className="h-4 w-4 animate-spin text-ink-subtle" />
             ) : (
               <GoogleIcon />
             )}
@@ -155,10 +155,10 @@ export default function RegisterForm({
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-slate-200" />
+              <span className="w-full border-t border-line" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-3 font-medium text-slate-400">
+              <span className="bg-surface px-3 font-medium text-ink-subtle">
                 atau dengan email
               </span>
             </div>
@@ -170,12 +170,12 @@ export default function RegisterForm({
         <div>
           <label
             htmlFor="register-name"
-            className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+            className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted"
           >
             Nama Lengkap
           </label>
           <div className="relative">
-            <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
             <input
               id="register-name"
               name="name"
@@ -185,7 +185,7 @@ export default function RegisterForm({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Contoh: Budi Santoso"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-3.5 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full rounded-xl border border-line bg-page/70 py-2.5 pl-10 pr-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             />
           </div>
         </div>
@@ -193,12 +193,12 @@ export default function RegisterForm({
         <div>
           <label
             htmlFor="register-email"
-            className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+            className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted"
           >
             Email
           </label>
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
             <input
               id="register-email"
               name="email"
@@ -208,7 +208,7 @@ export default function RegisterForm({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nama@email.com"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-3.5 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full rounded-xl border border-line bg-page/70 py-2.5 pl-10 pr-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             />
           </div>
         </div>
@@ -216,12 +216,12 @@ export default function RegisterForm({
         <div>
           <label
             htmlFor="register-password"
-            className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+            className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted"
           >
             Kata Sandi
           </label>
           <div className="relative">
-            <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
             <input
               id="register-password"
               name="password"
@@ -232,13 +232,13 @@ export default function RegisterForm({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Minimal 8 karakter"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-10 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full rounded-xl border border-line bg-page/70 py-2.5 pl-10 pr-10 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-subtle hover:text-ink-secondary"
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -248,12 +248,12 @@ export default function RegisterForm({
         <div>
           <label
             htmlFor="register-confirm-password"
-            className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+            className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted"
           >
             Konfirmasi Kata Sandi
           </label>
           <div className="relative">
-            <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
             <input
               id="register-confirm-password"
               name="confirmPassword"
@@ -264,7 +264,7 @@ export default function RegisterForm({
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Ulangi kata sandi"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-3.5 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full rounded-xl border border-line bg-page/70 py-2.5 pl-10 pr-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             />
           </div>
         </div>
@@ -288,11 +288,11 @@ export default function RegisterForm({
         </button>
       </form>
 
-      <p className="text-center text-sm text-slate-600">
+      <p className="text-center text-sm text-ink-muted">
         Sudah punya akun?{" "}
         <a
           href={`/masuk${redirectTo ? `?redirect=${encodeURIComponent(safeRedirect)}` : ""}`}
-          className="font-semibold text-emerald-700 hover:text-emerald-800 hover:underline"
+          className="font-semibold text-accent-text hover:underline"
         >
           Masuk sekarang
         </a>
