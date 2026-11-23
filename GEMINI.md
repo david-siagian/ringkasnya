@@ -10,15 +10,15 @@
 
 ## Standar Konten & Durasi Baca
 - **Arah Kurasi & Gaya Bahasa**: Fokuskan katalog utama pada ringkasan buku nonfiksi berbasis pengetahuan (sains, ekonomi, politik, psikologi, sejarah, masyarakat, perilaku, organisasi, budaya kerja) dan hindari menonjolkan *self-help* populer yang minim landasan ilmiah. Tulis seluruh ringkasan, `keyNote`, dan `keyConcepts` dalam Bahasa Indonesia yang luwes, jernih, dan mudah dipahami pembaca awam—seminimal mungkin memakai jargon akademis yang berat.
-- **Standar Wajib Setiap Penambahan/Pembaruan Buku (Skala Berbasis Tebal Halaman)**: Setiap kali menambahkan buku baru atau memperbarui konten buku di Cloudflare D1 (tabel `books` & `book_contents`), jumlah poin inti (`keyTakeaways`) dan jumlah kata wajib disesuaikan dengan **tebal halaman buku asli** agar hasil perhitungan `withCalculatedReadingTimes` (`WORDS_PER_MINUTE = 200` di `src/lib/book-constants.ts`) memenuhi skala berikut:
-  - **Tipis / Ringkas (< 220 halaman)**: **5 poin inti** · Mode Kilat **4–5 menit** (~750–1.050 kata) · Mode Mendalam **12–14 menit** (~2.300–2.850 kata).
-  - **Sedang / Standar (220–380 halaman)**: **6 poin inti** · Mode Kilat **5–6 menit** (~950–1.250 kata) · Mode Mendalam **15–18 menit** (~2.950–3.650 kata).
-  - **Tebal (381–520 halaman)**: **7–8 poin inti** · Mode Kilat **6–7 menit** (~1.150–1.450 kata) · Mode Mendalam **18–22 menit** (~3.550–4.450 kata).
-  - **Sangat Tebal / Epik (> 520 halaman)**: **8–9 poin inti** · Mode Kilat **7–8 menit** (~1.350–1.650 kata) · Mode Mendalam **22–26 menit** (~4.350–5.250 kata).
+- **Standar Wajib Setiap Penambahan/Pembaruan Buku (Skala Berbasis Tebal Halaman)**: Setiap kali menambahkan buku baru atau memperbarui konten buku di Cloudflare D1 (tabel `books` & `book_contents`), jumlah poin inti (`keyTakeaways`) dan jumlah kata wajib disesuaikan dengan **tebal halaman buku asli** agar hasil perhitungan `withCalculatedReadingTimes` (`WORDS_PER_MINUTE = 200` di `src/lib/book-constants.ts`) memenuhi skala **Mode Kilat 4–8 menit** dan **Mode Mendalam 15–22 menit** berikut:
+  - **Tipis / Ringkas (< 220 halaman)**: **5 poin inti** · Mode Kilat **4–5 menit** (~750–1.050 kata) · Mode Mendalam **15 menit** (~2.900–3.099 kata).
+  - **Sedang / Standar (220–380 halaman)**: **6 poin inti** · Mode Kilat **5–6 menit** (~950–1.250 kata) · Mode Mendalam **15–17 menit** (~2.950–3.450 kata).
+  - **Tebal (381–520 halaman)**: **7–8 poin inti** · Mode Kilat **6–7 menit** (~1.150–1.450 kata) · Mode Mendalam **18–20 menit** (~3.550–4.050 kata).
+  - **Sangat Tebal / Epik (> 520 halaman)**: **8–9 poin inti** · Mode Kilat **7–8 menit** (~1.350–1.650 kata) · Mode Mendalam **20–22 menit** (~3.950–4.450 kata).
   - **Rumus Acuan Cepat** (dari `halaman`):
     - Poin Inti = `clamp(round(4 + halaman / 120), 5, 9)`
     - Target Kilat (menit) = `clamp(round(3.5 + halaman / 130), 4, 8)`
-    - Target Mendalam (menit) = `clamp(round(9 + halaman / 40), 12, 26)`
+    - Target Mendalam (menit) = `clamp(round(12 + halaman / 60), 15, 22)`
   - Selaraskan kolom `quick_time_minutes`, `reading_time_minutes`, dan `takeaways_count` di tabel `books` agar sesuai dengan hasil estimasi di atas.
 - **Format Sinopsis**: Bagian `synopsis` pada setiap buku cukup ditulis **1 paragraf ringkas (4–7 baris)** saja. Jika pemangkasan sinopsis mengurangi total kata, kompensasikan penambahan teks pada `deepContent`, `quickSummary`, atau `conclusion` agar estimasi durasi baca tetap berada dalam rentang standar.
 - **Urutan Katalog, Kategori & Popularitas Goodreads**:
