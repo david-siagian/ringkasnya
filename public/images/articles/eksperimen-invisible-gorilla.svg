@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-ig" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <radialGradient id="spotlight-ig" cx="120" cy="115" r="75" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#090d16" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="240" height="240" rx="24" fill="url(#bg-ig)"/>
+  
+  <!-- Lingkaran Sorot Fokus Basket / Atensi -->
+  <circle cx="120" cy="115" r="75" fill="url(#spotlight-ig)"/>
+  <circle cx="120" cy="115" r="75" stroke="#f59e0b" stroke-opacity="0.25" stroke-dasharray="4 4" stroke-width="1.5"/>
+
+  <!-- Bola Basket yang Diperhatikan (Fokus Utama) -->
+  <circle cx="68" cy="88" r="14" fill="#f97316"/>
+  <path d="M54 88 H82 M68 74 V102 M58 78 Q68 88 58 98 M78 78 Q68 88 78 98" stroke="#7c2d12" stroke-width="1.2" stroke-linecap="round"/>
+  
+  <!-- Jalur Operan Bola (Lintasan Panah Kuning) -->
+  <path d="M84 94 C110 108 135 72 165 82" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="3 3" fill="none"/>
+  <circle cx="172" cy="85" r="12" fill="#f97316" fill-opacity="0.75"/>
+
+  <!-- Siluet Gorila di Tengah (Transparan / Melewati Sorotan) -->
+  <g fill="#94a3b8" fill-opacity="0.65">
+    <!-- Kepala gorila -->
+    <path d="M120 72 C111 72 104 78 104 88 C104 93 107 97 111 99 C111 103 115 106 120 106 C125 106 129 103 129 99 C133 97 136 93 136 88 C136 78 129 72 120 72 Z"/>
+    <!-- Telinga -->
+    <circle cx="102" cy="85" r="4"/>
+    <circle cx="138" cy="85" r="4"/>
+    <!-- Alis & Mata minimalis -->
+    <ellipse cx="116" cy="86" rx="2" ry="1.5" fill="#e2e8f0"/>
+    <ellipse cx="124" cy="86" rx="2" ry="1.5" fill="#e2e8f0"/>
+    <!-- Badan kekar & Dada -->
+    <path d="M102 104 C92 110 82 122 84 145 C86 158 96 168 108 168 L132 168 C144 168 154 158 156 145 C158 122 148 110 138 104 Z"/>
+    <!-- Garis Dada Gorila Memukul Dada -->
+    <path d="M112 120 C112 126 116 130 120 130 C124 130 128 126 128 120" stroke="#cbd5e1" stroke-width="1.5" fill="none"/>
+    <path d="M96 130 Q106 134 110 144" stroke="#cbd5e1" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M144 130 Q134 134 130 144" stroke="#cbd5e1" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Simbol Mata Pengamat Terfokus di Bawah -->
+  <path d="M96 195 C108 185 132 185 144 195 C132 205 108 205 96 195 Z" stroke="#38bdf8" stroke-width="2.5" fill="#0f172a"/>
+  <circle cx="120" cy="195" r="5" fill="#38bdf8"/>
+  <circle cx="122" cy="193" r="1.5" fill="#ffffff"/>
+</svg>

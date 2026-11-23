@@ -5,6 +5,7 @@ import { destruksiKreatif } from "./articles/destruksi-kreatif";
 import { biasKonfirmasi } from "./articles/bias-konfirmasi";
 import { efekJangkar } from "./articles/efek-jangkar";
 import { adaptasiHedonis } from "./articles/adaptasi-hedonis";
+import { eksperimenInvisibleGorilla } from "./articles/eksperimen-invisible-gorilla";
 
 const WORDS_PER_MINUTE = 200;
 
@@ -45,6 +46,7 @@ const RAW_ARTICLES: Article[] = [
   biasKonfirmasi,
   efekJangkar,
   adaptasiHedonis,
+  eksperimenInvisibleGorilla,
 ];
 
 export const ARTICLES: Article[] = RAW_ARTICLES.map(withCalculatedReadingTime);

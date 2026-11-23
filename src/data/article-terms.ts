@@ -65,4 +65,19 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
       "Kecenderungan manusia untuk cepat kembali ke tingkat kebahagiaan dasarnya setelah mengalami peristiwa positif maupun negatif yang besar—seperti berlari di atas treadmill yang membuat kita terus mengejar hal baru namun tetap berada di tempat yang sama.",
     originLabel: "Philip Brickman & Donald Campbell (1971)",
   },
+  {
+    slug: "eksperimen-invisible-gorilla",
+    term: "Kebutaan Tanpa Atensi",
+    aliases: [
+      "Invisible Gorilla",
+      "Inattentional Blindness",
+      "Kebutaan Tanpa Atensi",
+      "Eksperimen Gorila",
+    ],
+    category: "Nalar & Berpikir Kritis",
+    readingTimeMinutes: 5,
+    shortDefinition:
+      "Fenomena psikologi kognitif ketika seseorang gagal menyadari stimulus visual yang sangat jelas dan tak terduga tepat di hadapannya, semata-mata karena kapasitas perhatiannya sedang tersedot penuh pada tugas mental lain.",
+    originLabel: "Christopher Chabris & Daniel Simons (1999)",
+  },
 ];
