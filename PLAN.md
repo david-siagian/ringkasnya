@@ -104,7 +104,18 @@ Selain **Bedah Istilah**, rubrik Artikel ke depannya dapat diperluas ke format e
   8. *Chip War* — Chris Miller (`Teknologi & Masa Depan`)
   9. *The Gene* — Siddhartha Mukherjee (`Tubuh & Kesehatan`)
   10. *Tiny Habits* — BJ Fogg (`Produktivitas & Pengembangan Diri`)
-- **Sisa Roadmap**: 32 buku lagi (Batch 2–4 @ ~10 buku/batch + Batch 5 @ 2 buku) menuju 100 buku.
+- **Batch 2 (`0006_add_books_batch_2.sql`) — Selesai (Total: 78/100 Buku)**:
+  1. *Astrophysics for People in a Hurry* — Neil deGrasse Tyson (`Sains & Alam Semesta`)
+  2. *The Order of Time* — Carlo Rovelli (`Sains & Alam Semesta`)
+  3. *Breath* — James Nestor (`Tubuh & Kesehatan`)
+  4. *Justice* — Michael J. Sandel (`Filsafat & Kebijaksanaan`)
+  5. *The Sixth Extinction* — Elizabeth Kolbert (`Sains & Alam Semesta`)
+  6. *The Coming Wave* — Mustafa Suleyman (`Teknologi & Masa Depan`)
+  7. *Algorithms to Live By* — Brian Christian & Tom Griffiths (`Teknologi & Masa Depan`)
+  8. *Humankind* — Rutger Bregman (`Sejarah & Peradaban`)
+  9. *The Information* — James Gleick (`Teknologi & Masa Depan`)
+  10. *The Innovators* — Walter Isaacson (`Teknologi & Masa Depan`)
+- **Sisa Roadmap**: 22 buku lagi (Batch 3–4 @ 10 buku/batch + Batch 5 @ 2 buku) menuju 100 buku.
 
 
 ---
