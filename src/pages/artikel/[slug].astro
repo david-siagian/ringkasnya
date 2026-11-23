@@ -16,6 +16,7 @@ import {
   Clock,
   Lightbulb,
   Sparkles,
+  Zap,
 } from "lucide-react";
 
 export const prerender = false;
@@ -193,9 +194,9 @@ const pageDescription = `${article.shortDefinition} Baca penjelasan lengkapnya d
                 {relatedBooks.map((book) => (
                   <a
                     href={`/buku/${book.slug}`}
-                    class="group flex min-w-0 items-center gap-4 rounded-lg border border-line/70 bg-page/50 p-3 transition-colors hover:border-accent-line hover:bg-surface"
+                    class="group flex min-w-0 items-center gap-3 rounded-lg border border-line/70 bg-page/50 p-2.5 transition-colors hover:border-accent-line hover:bg-surface"
                   >
-                    <div class="relative aspect-[3/4] w-16 shrink-0 sm:w-20 overflow-hidden rounded-md ring-1 ring-line/70">
+                    <div class="relative aspect-[3/4] w-12 shrink-0 sm:w-14 overflow-hidden rounded-md ring-1 ring-line/70">
                       {book.coverImage ? (
                         <img
                           src={book.coverImage}
@@ -212,11 +213,21 @@ const pageDescription = `${article.shortDefinition} Baca penjelasan lengkapnya d
                       )}
                     </div>
                     <div class="min-w-0 flex-1">
-                      <h3 class="line-clamp-2 text-sm font-bold leading-snug text-ink group-hover:text-accent-strong sm:text-base">
+                      <h3 class="line-clamp-2 text-sm font-bold leading-snug text-ink group-hover:text-accent-strong">
                         {book.title}
                       </h3>
-                      <p class="mt-1 line-clamp-2 text-xs text-ink-subtle sm:text-sm">
-                        {book.author}
+                      <p class="mt-0.5 line-clamp-1 text-xs text-ink-subtle">
+                        {book.author} · {book.year}
+                      </p>
+                      <p class="mt-1 flex flex-wrap items-center gap-x-2.5 text-[11px] text-ink-subtle">
+                        <span class="inline-flex items-center gap-1">
+                          <Zap className="h-3 w-3 text-ink-faint" />
+                          Kilat {book.quickTimeMinutes} mnt
+                        </span>
+                        <span class="inline-flex items-center gap-1">
+                          <Clock className="h-3 w-3 text-ink-faint" />
+                          Mendalam {book.readingTimeMinutes} mnt
+                        </span>
                       </p>
                     </div>
                     <ArrowRight className="h-3.5 w-3.5 shrink-0 text-ink-faint transition-transform group-hover:translate-x-0.5" />
@@ -245,14 +256,14 @@ const pageDescription = `${article.shortDefinition} Baca penjelasan lengkapnya d
               </a>
             </div>
 
-            <div class="mt-3.5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div class="mt-3.5 grid grid-cols-1 gap-3.5 md:grid-cols-2 sm:gap-4">
               {otherArticles.map((other) => (
                 <a
                   href={`/artikel/${other.slug}`}
-                  class="group relative flex items-start gap-3 rounded-xl border border-line/80 bg-surface p-3.5 transition-colors duration-150 hover:border-accent-line hover:bg-surface-subtle/40"
+                  class="group flex items-start gap-3.5 rounded-xl border border-line/85 bg-surface p-3.5 transition-colors duration-150 hover:border-accent-line hover:bg-surface-subtle/40 sm:gap-4 sm:p-4"
                 >
                   {other.coverImage && (
-                    <div class="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-slate-950 ring-1 ring-line/60 sm:h-16 sm:w-16">
+                    <div class="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-slate-950 ring-1 ring-line/60 sm:h-20 sm:w-20">
                       <img
                         src={other.coverImage}
                         alt={`Ilustrasi ${other.title}`}
@@ -262,24 +273,28 @@ const pageDescription = `${article.shortDefinition} Baca penjelasan lengkapnya d
                     </div>
                   )}
 
-                  <div class="flex min-w-0 flex-1 flex-col justify-between self-stretch">
+                  <div class="flex min-w-0 flex-1 flex-col justify-between">
                     <div>
-                      <div class="flex items-start justify-between gap-2">
-                        <span class="truncate text-[11px] font-semibold text-accent-text">
+                      <div class="flex items-center gap-2 text-[11px]">
+                        <span class="truncate font-semibold text-accent-text">
                           {other.accentBadge}
                         </span>
-                        <ArrowUpRight className="h-4 w-4 shrink-0 text-ink-faint transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent-strong" />
+                        <span aria-hidden="true" class="text-ink-faint">•</span>
+                        <span class="inline-flex shrink-0 items-center gap-1 text-ink-subtle">
+                          <Calendar className="h-3 w-3 text-ink-faint" />
+                          {formatArticlePublishedDate(other.publishedAt)}
+                        </span>
                       </div>
-                      <h3 class="mt-1 line-clamp-2 text-sm font-bold leading-snug text-ink transition-colors group-hover:text-accent-strong">
+                      <h3 class="mt-1 line-clamp-2 text-sm font-bold leading-snug text-ink transition-colors group-hover:text-accent-strong sm:text-base">
                         {other.title}
                       </h3>
+                      <p class="mt-1 line-clamp-2 text-xs leading-relaxed text-ink-muted">
+                        {other.subtitle}
+                      </p>
                     </div>
-
-                    <span class="mt-2.5 inline-flex items-center gap-1.5 text-xs text-ink-subtle">
-                      <Calendar className="h-3.5 w-3.5 text-ink-faint" />
-                      <span>{formatArticlePublishedDate(other.publishedAt)}</span>
-                    </span>
                   </div>
+
+                  <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-ink-faint transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-strong" />
                 </a>
               ))}
             </div>
