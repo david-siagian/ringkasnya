@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import BrandLogo from "@/components/BrandLogo";
+import AuthAmbientBackground from "@/components/auth/AuthAmbientBackground.astro";
+import AuthCardShell from "@/components/auth/AuthCardShell.astro";
 import RegisterForm from "@/components/auth/RegisterForm";
 import { isGoogleOAuthConfigured } from "@/lib/auth";
 
@@ -22,26 +23,23 @@ const googleEnabled = isGoogleOAuthConfigured(Astro.locals.runtime?.env);
 <BaseLayout
   title="Daftar Akun — Ringkasnya"
   description="Buat akun gratis di Ringkasnya untuk membaca ringkasan buku best-seller dan menyimpan progres bacaan Anda."
+  lockBodyScroll
 >
-  <main class="mx-auto flex min-h-[calc(100vh-14rem)] max-w-md flex-col justify-center px-4 py-12 sm:px-6">
-    <div class="rounded-2xl border border-line bg-surface p-6 shadow-xs sm:p-8">
-      <div class="mb-6 text-center">
-        <a href="/" class="inline-flex flex-col items-center gap-2">
-          <BrandLogo className="h-12 w-12" />
-        </a>
-        <h1 class="mt-3 text-2xl font-extrabold tracking-tight text-ink">
-          Buat Akun Gratis
-        </h1>
-        <p class="mt-1.5 text-sm text-ink-muted">
-          Mulai kebiasaan membaca 10 menit sehari bersama <span class="font-semibold text-accent-text">Ringkasnya</span>.
-        </p>
-      </div>
+  <AuthAmbientBackground />
 
-      <RegisterForm
-        client:load
-        googleEnabled={googleEnabled}
-        redirectTo={rawRedirect}
-      />
-    </div>
-  </main>
+  <AuthCardShell
+    slot="overlay"
+    title="Buat Akun Gratis"
+    headingId="register-card-title"
+  >
+    <Fragment slot="subtitle">
+      Mulai kebiasaan membaca 10 menit sehari bersama <span class="font-semibold text-accent-text">Ringkasnya</span>.
+    </Fragment>
+
+    <RegisterForm
+      client:load
+      googleEnabled={googleEnabled}
+      redirectTo={rawRedirect}
+    />
+  </AuthCardShell>
 </BaseLayout>
