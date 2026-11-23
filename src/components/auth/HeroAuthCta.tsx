@@ -29,6 +29,7 @@ export default function HeroAuthCta() {
       <div className="inline-flex items-center gap-2">
         <a
           href="/masuk"
+          data-no-transition="true"
           onClick={(e) => {
             e.preventDefault();
             openAuthModal("login");
@@ -40,6 +41,7 @@ export default function HeroAuthCta() {
         </a>
         <a
           href="/daftar"
+          data-no-transition="true"
           onClick={(e) => {
             e.preventDefault();
             openAuthModal("register");

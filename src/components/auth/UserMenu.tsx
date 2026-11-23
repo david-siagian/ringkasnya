@@ -73,6 +73,7 @@ export default function UserMenu({
           </p>
           <a
             href="/masuk"
+            data-no-transition="true"
             onClick={(e) => {
               e.preventDefault();
               onNavigate?.();
@@ -85,6 +86,7 @@ export default function UserMenu({
           </a>
           <a
             href="/daftar"
+            data-no-transition="true"
             onClick={(e) => {
               e.preventDefault();
               onNavigate?.();
@@ -158,6 +160,7 @@ export default function UserMenu({
       <div className="hidden md:flex items-center gap-1.5 pl-2 border-l border-line">
         <a
           href="/masuk"
+          data-no-transition="true"
           onClick={(e) => {
             e.preventDefault();
             openAuthModal("login");
@@ -168,6 +171,7 @@ export default function UserMenu({
         </a>
         <a
           href="/daftar"
+          data-no-transition="true"
           onClick={(e) => {
             e.preventDefault();
             openAuthModal("register");

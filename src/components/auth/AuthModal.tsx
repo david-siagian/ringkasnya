@@ -52,12 +52,11 @@ export default function AuthModal({ googleEnabled }: AuthModalProps) {
     }
 
     document.addEventListener("keydown", handleKeyDown);
-    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = prevOverflow;
+      document.body.style.overflow = "";
     };
   }, [isOpen, handleClose]);
 
