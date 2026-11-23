@@ -4,7 +4,9 @@ import {
   getBookCatalog,
   PUBLIC_PAGE_CACHE_CONTROL,
 } from "@/lib/books-repository";
+import { ARTICLES } from "@/data/articles";
 import CatalogSection from "@/components/CatalogSection";
+import HomeArticlesSection from "@/components/HomeArticlesSection.astro";
 import {
   ArrowRight,
   Layers,
@@ -108,6 +110,11 @@ Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
     {/* Katalog Buku Interaktif */}
     <div data-reveal>
       <CatalogSection client:load books={bookCatalog} />
+    </div>
+
+    {/* Artikel & Gagasan Ilmiah */}
+    <div data-reveal>
+      <HomeArticlesSection articles={ARTICLES} />
     </div>
 
     {/* Seksi Metode Membaca */}
