@@ -1,4 +1,4 @@
-import { LogIn, UserPlus, User } from "lucide-react";
+import { LogIn, User } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { openAuthModal } from "@/lib/auth-modal";
 
@@ -26,32 +26,18 @@ export default function HeroAuthCta() {
       style={{ animationDelay: "540ms" }}
     >
       <span className="text-ink-subtle">Simpan progres &amp; checklist bacaan:</span>
-      <div className="inline-flex items-center gap-2">
-        <a
-          href="/masuk"
-          data-no-transition="true"
-          onClick={(e) => {
-            e.preventDefault();
-            openAuthModal("login");
-          }}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-2xs transition-colors hover:border-line-strong hover:bg-page hover:text-ink"
-        >
-          <LogIn className="h-3.5 w-3.5 text-accent-strong" />
-          <span>Masuk</span>
-        </a>
-        <a
-          href="/daftar"
-          data-no-transition="true"
-          onClick={(e) => {
-            e.preventDefault();
-            openAuthModal("register");
-          }}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-accent-soft px-3 py-1.5 text-xs font-semibold text-accent-text border border-accent-line transition-colors hover:bg-accent-tint"
-        >
-          <UserPlus className="h-3.5 w-3.5" />
-          <span>Daftar Gratis</span>
-        </a>
-      </div>
+      <a
+        href="/masuk"
+        data-no-transition="true"
+        onClick={(e) => {
+          e.preventDefault();
+          openAuthModal("login");
+        }}
+        className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-emerald-700"
+      >
+        <LogIn className="h-3.5 w-3.5" />
+        <span>Masuk</span>
+      </a>
     </div>
   );
 }
