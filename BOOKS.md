@@ -85,31 +85,31 @@ Dokumen ini mencatat seluruh **100 buku** dalam peta jalan katalog Ringkasnya (`
 
 | No | Judul | Penulis | Kategori | Poin | Kilat | Mendalam | Slug |
 |---:|---|---|---|---:|---:|---:|---|
-| 59 | *Hello World* | Hannah Fry | `Teknologi & Masa Depan` | 6 | 5 mnt | 15 mnt | `hello-world` |
-| 60 | *Life 3.0* | Max Tegmark | `Teknologi & Masa Depan` | 7 | 6 mnt | 18 mnt | `life-3-0` |
-| 61 | *Cosmos* | Carl Sagan | `Sains & Alam Semesta` | 7 | 6 mnt | 18 mnt | `cosmos` |
-| 62 | *Pale Blue Dot* | Carl Sagan | `Sains & Alam Semesta` | 8 | 6 mnt | 18 mnt | `pale-blue-dot` |
-| 63 | *The Swerve* | Stephen Greenblatt | `Sejarah & Peradaban` | 6 | 5 mnt | 16 mnt | `the-swerve` |
-| 64 | *Nexus* | Yuval Noah Harari | `Teknologi & Masa Depan` | 8 | 7 mnt | 22 mnt | `nexus` |
-| 65 | *Co-Intelligence* | Ethan Mollick | `Teknologi & Masa Depan` | 6 | 5 mnt | 15 mnt | `co-intelligence` |
-| 66 | *Chip War* | Chris Miller | `Teknologi & Masa Depan` | 8 | 6 mnt | 18 mnt | `chip-war` |
-| 67 | *The Gene* | Siddhartha Mukherjee | `Tubuh & Kesehatan` | 9 | 7 mnt | 22 mnt | `the-gene` |
+| 59 | *Hello World* | Hannah Fry | `Teknologi & Masa Depan` | 6 | 6 mnt | 15 mnt | `hello-world` |
+| 60 | *Life 3.0* | Max Tegmark | `Teknologi & Masa Depan` | 7 | 7 mnt | 19 mnt | `life-3-0` |
+| 61 | *Cosmos* | Carl Sagan | `Sains & Alam Semesta` | 7 | 7 mnt | 19 mnt | `cosmos` |
+| 62 | *Pale Blue Dot* | Carl Sagan | `Sains & Alam Semesta` | 8 | 7 mnt | 20 mnt | `pale-blue-dot` |
+| 63 | *The Swerve* | Stephen Greenblatt | `Sejarah & Peradaban` | 6 | 6 mnt | 16 mnt | `the-swerve` |
+| 64 | *Nexus* | Yuval Noah Harari | `Teknologi & Masa Depan` | 8 | 8 mnt | 22 mnt | `nexus` |
+| 65 | *Co-Intelligence* | Ethan Mollick | `Teknologi & Masa Depan` | 6 | 6 mnt | 16 mnt | `co-intelligence` |
+| 66 | *Chip War* | Chris Miller | `Teknologi & Masa Depan` | 8 | 7 mnt | 20 mnt | `chip-war` |
+| 67 | *The Gene* | Siddhartha Mukherjee | `Tubuh & Kesehatan` | 9 | 8 mnt | 22 mnt | `the-gene` |
 | 68 | *Tiny Habits* | BJ Fogg | `Produktivitas & Pengembangan Diri` | 6 | 5 mnt | 16 mnt | `tiny-habits` |
 
 ### Batch 2 (`0006_add_books_batch_2.sql`)
 
 | No | Judul | Penulis | Kategori | Poin | Kilat | Mendalam | Slug |
 |---:|---|---|---|---:|---:|---:|---|
-| 69 | *Astrophysics for People in a Hurry* | Neil deGrasse Tyson | `Sains & Alam Semesta` | 5 | 4 mnt | 15 mnt | `astrophysics-for-people-in-a-hurry` |
-| 70 | *The Order of Time* | Carlo Rovelli | `Sains & Alam Semesta` | 6 | 5 mnt | 15 mnt | `the-order-of-time` |
-| 71 | *Breath* | James Nestor | `Tubuh & Kesehatan` | 6 | 5 mnt | 15 mnt | `breath` |
-| 72 | *Justice* | Michael J. Sandel | `Filsafat & Kebijaksanaan` | 6 | 5 mnt | 15 mnt | `justice` |
-| 73 | *The Sixth Extinction* | Elizabeth Kolbert | `Sains & Alam Semesta` | 6 | 5 mnt | 15 mnt | `the-sixth-extinction` |
-| 74 | *The Coming Wave* | Mustafa Suleyman | `Teknologi & Masa Depan` | 6 | 5 mnt | 15 mnt | `the-coming-wave` |
-| 75 | *Algorithms to Live By* | Brian Christian & Tom Griffiths | `Teknologi & Masa Depan` | 6 | 5 mnt | 15 mnt | `algorithms-to-live-by` |
-| 76 | *Humankind* | Rutger Bregman | `Sejarah & Peradaban` | 8 | 6 mnt | 18 mnt | `humankind` |
-| 77 | *The Information* | James Gleick | `Teknologi & Masa Depan` | 8 | 7 mnt | 20 mnt | `the-information` |
-| 78 | *The Innovators* | Walter Isaacson | `Teknologi & Masa Depan` | 9 | 7 mnt | 20 mnt | `the-innovators` |
+| 69 | *Astrophysics for People in a Hurry* | Neil deGrasse Tyson | `Sains & Alam Semesta` | 5 | 5 mnt | 15 mnt | `astrophysics-for-people-in-a-hurry` |
+| 70 | *The Order of Time* | Carlo Rovelli | `Sains & Alam Semesta` | 6 | 6 mnt | 16 mnt | `the-order-of-time` |
+| 71 | *Breath* | James Nestor | `Tubuh & Kesehatan` | 6 | 6 mnt | 16 mnt | `breath` |
+| 72 | *Justice* | Michael J. Sandel | `Filsafat & Kebijaksanaan` | 6 | 6 mnt | 16 mnt | `justice` |
+| 73 | *The Sixth Extinction* | Elizabeth Kolbert | `Sains & Alam Semesta` | 6 | 6 mnt | 16 mnt | `the-sixth-extinction` |
+| 74 | *The Coming Wave* | Mustafa Suleyman | `Teknologi & Masa Depan` | 6 | 6 mnt | 16 mnt | `the-coming-wave` |
+| 75 | *Algorithms to Live By* | Brian Christian & Tom Griffiths | `Teknologi & Masa Depan` | 6 | 6 mnt | 16 mnt | `algorithms-to-live-by` |
+| 76 | *Humankind* | Rutger Bregman | `Sejarah & Peradaban` | 8 | 7 mnt | 19 mnt | `humankind` |
+| 77 | *The Information* | James Gleick | `Teknologi & Masa Depan` | 8 | 8 mnt | 21 mnt | `the-information` |
+| 78 | *The Innovators* | Walter Isaacson | `Teknologi & Masa Depan` | 9 | 8 mnt | 21 mnt | `the-innovators` |
 
 ---
 
