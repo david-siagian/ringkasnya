@@ -65,12 +65,24 @@ export default function RegisterForm({
     };
 
     window.addEventListener("pageshow", resetLoading);
+    window.addEventListener("pagehide", resetLoading);
+    window.addEventListener("focus", resetLoading);
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
       window.removeEventListener("pageshow", resetLoading);
+      window.removeEventListener("pagehide", resetLoading);
+      window.removeEventListener("focus", resetLoading);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isGoogleLoading) return;
+    const timer = window.setTimeout(() => {
+      setIsGoogleLoading(false);
+    }, 8000);
+    return () => window.clearTimeout(timer);
+  }, [isGoogleLoading]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
