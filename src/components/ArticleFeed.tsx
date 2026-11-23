@@ -187,11 +187,7 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
 
                   <div className="flex flex-1 flex-col justify-between p-4 sm:p-5">
                     <div>
-                      <span className="inline-block max-w-full truncate rounded-full bg-surface-subtle px-2.5 py-0.5 text-[11px] font-medium text-ink-muted">
-                        {article.category}
-                      </span>
-
-                      <p className="mt-2.5 truncate text-[11px] font-semibold uppercase tracking-widest text-ink-subtle">
+                      <p className="truncate text-[11px] font-semibold uppercase tracking-widest text-ink-subtle">
                         {article.accentBadge}
                       </p>
                       <h2 className="mt-1 line-clamp-2 text-base font-extrabold leading-snug tracking-tight text-ink transition-colors group-hover:text-accent-text sm:text-lg">
