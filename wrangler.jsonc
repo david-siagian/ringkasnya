@@ -11,6 +11,9 @@
   "observability": {
     "enabled": true
   },
+  "vars": {
+    "BETTER_AUTH_URL": "https://dev-app.ringkasnya.workers.dev"
+  },
   "d1_databases": [
     {
       "binding": "DB",
