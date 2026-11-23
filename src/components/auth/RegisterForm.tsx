@@ -5,6 +5,7 @@ import { authClient } from "@/lib/auth-client";
 interface RegisterFormProps {
   googleEnabled: boolean;
   redirectTo?: string;
+  onSwitchMode?: () => void;
 }
 
 function getSafeRedirect(target?: string): string {
@@ -40,6 +41,7 @@ function GoogleIcon() {
 export default function RegisterForm({
   googleEnabled,
   redirectTo,
+  onSwitchMode,
 }: RegisterFormProps) {
   const safeRedirect = getSafeRedirect(redirectTo);
   const [name, setName] = useState("");
@@ -292,6 +294,12 @@ export default function RegisterForm({
         Sudah punya akun?{" "}
         <a
           href={`/masuk${redirectTo ? `?redirect=${encodeURIComponent(safeRedirect)}` : ""}`}
+          onClick={(e) => {
+            if (onSwitchMode) {
+              e.preventDefault();
+              onSwitchMode();
+            }
+          }}
           className="font-semibold text-accent-text hover:underline"
         >
           Masuk sekarang

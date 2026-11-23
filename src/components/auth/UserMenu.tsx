@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { User, LogOut, LogIn, UserPlus, ChevronDown } from "lucide-react";
 import { authClient, useSession } from "@/lib/auth-client";
+import { openAuthModal } from "@/lib/auth-modal";
 
 interface UserMenuProps {
   variant?: "desktop" | "mobile";
@@ -72,7 +73,11 @@ export default function UserMenu({
           </p>
           <a
             href="/masuk"
-            onClick={onNavigate}
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate?.();
+              openAuthModal("login");
+            }}
             className="flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-semibold text-ink-secondary transition-colors hover:bg-page hover:text-ink"
           >
             <LogIn className="h-4 w-4 text-accent-strong" />
@@ -80,7 +85,11 @@ export default function UserMenu({
           </a>
           <a
             href="/daftar"
-            onClick={onNavigate}
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate?.();
+              openAuthModal("register");
+            }}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-emerald-700"
           >
             <UserPlus className="h-4 w-4" />
@@ -149,12 +158,20 @@ export default function UserMenu({
       <div className="hidden md:flex items-center gap-1.5 pl-2 border-l border-line">
         <a
           href="/masuk"
+          onClick={(e) => {
+            e.preventDefault();
+            openAuthModal("login");
+          }}
           className="rounded-lg px-3 py-2 text-sm font-semibold text-ink-secondary transition-colors hover:bg-page hover:text-ink"
         >
           Masuk
         </a>
         <a
           href="/daftar"
+          onClick={(e) => {
+            e.preventDefault();
+            openAuthModal("register");
+          }}
           className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs transition-all hover:bg-emerald-700 active:scale-[0.98]"
         >
           Daftar

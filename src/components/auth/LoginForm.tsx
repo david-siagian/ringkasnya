@@ -5,6 +5,7 @@ import { authClient } from "@/lib/auth-client";
 interface LoginFormProps {
   googleEnabled: boolean;
   redirectTo?: string;
+  onSwitchMode?: () => void;
 }
 
 function getSafeRedirect(target?: string): string {
@@ -40,6 +41,7 @@ function GoogleIcon() {
 export default function LoginForm({
   googleEnabled,
   redirectTo,
+  onSwitchMode,
 }: LoginFormProps) {
   const safeRedirect = getSafeRedirect(redirectTo);
   const [email, setEmail] = useState("");
@@ -224,6 +226,12 @@ export default function LoginForm({
         Belum punya akun?{" "}
         <a
           href={`/daftar${redirectTo ? `?redirect=${encodeURIComponent(safeRedirect)}` : ""}`}
+          onClick={(e) => {
+            if (onSwitchMode) {
+              e.preventDefault();
+              onSwitchMode();
+            }
+          }}
           className="font-semibold text-accent-text hover:underline"
         >
           Daftar gratis

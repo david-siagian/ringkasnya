@@ -7,6 +7,8 @@ import {
   PageTransitionWrapper,
 } from "@/components/SmoothNavigation";
 import { THEME_STORAGE_KEY } from "@/lib/theme";
+import AuthModal from "@/components/auth/AuthModal";
+import { isGoogleOAuthConfigured } from "@/lib/auth";
 
 interface Props {
   title?: string;
@@ -19,6 +21,8 @@ const {
   description = "Platform ringkasan buku nonfiksi sains, sejarah, ekonomi, politik, dan psikologi dalam Bahasa Indonesia yang mudah dipahami. Dilengkapi Mode Kilat 5–7 Menit, Mode Mendalam 15–20 Menit, dan Konsep Kunci.",
   lockBodyScroll = false,
 } = Astro.props;
+
+const googleEnabled = isGoogleOAuthConfigured(Astro.locals.runtime?.env);
 ---
 
 <!doctype html>
@@ -61,6 +65,7 @@ const {
     </div>
     <Footer />
     <slot name="overlay" />
+    <AuthModal client:load googleEnabled={googleEnabled} />
     <script>
       function initScrollReveal() {
         if (!document.documentElement.classList.contains("reveal-ready")) return;
