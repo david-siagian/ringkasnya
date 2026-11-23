@@ -1,22 +1,25 @@
-# Ringkasnya — Baca Intinya, Praktikkan Ilmunya
+# Ringkasnya — Baca Intinya, Pahami Dunianya
 
-Website ringkasan buku populer dunia dalam Bahasa Indonesia dengan pendekatan **ATM (Amati, Tiru, Modifikasi)**:
-- **Mode Baca Dwi-Kecepatan**: *Mode Kilat (6–10 Menit)* & *Mode Mendalam (20–30 Menit)* dengan panjang teks terukur (~200 kata/menit).
-- **6 Buku Kurasi Modular**: *Atomic Habits*, *The Psychology of Money*, *Deep Work*, *Show Your Work!*, *Filosofi Teras*, dan *Essentialism*.
+Platform ringkasan buku nonfiksi pilihan dunia (**ringkasnya.com**) dalam Bahasa Indonesia yang mengalir dan mudah dipahami siapa saja—mulai dari sains, nalar & berpikir kritis, psikologi, sejarah, filsafat, hingga ekonomi dan organisasi:
+- **Dua Mode Baca**: *Mode Kilat (5–7 Menit)* untuk menangkap inti setiap bab dengan cepat & *Mode Mendalam (15–20 Menit)* untuk menyelami cerita, bukti, dan konteks lengkapnya (~200 kata/menit).
+- **Konsep Kunci**: Rangkuman konsep-konsep utama di setiap buku yang ditulis ulang dengan bahasa sederhana agar gagasan besarnya cepat melekat dan mudah ditinjau ulang.
+- **Katalog Nonfiksi Kurasi (Cloudflare D1)**: Tersedia dalam 10 kategori tematik yang diurutkan berdasarkan *editorial tier* dan popularitas Goodreads.
+- **Artikel Editorial & Popover Istilah**: Artikel singkat berdurasi 4–6 menit per rubrik yang dilengkapi ilustrasi SVG, definisi istilah interaktif, dan rekomendasi buku terkait.
+- **Kartu Kutipan & Pengalaman Baca Personal**: Kutipan pilihan yang bisa disalin atau diunduh sebagai kartu PNG bergaya editorial, fitur *bookmark*, penanda buku selesai (`localStorage`), pengatur ukuran huruf, serta mode terang/gelap.
 - **Navigasi & Transisi Smooth**: Smooth scroll `requestAnimationFrame` untuk tautan bagian (`#katalog`, `#metode`) dan transisi fade-slide antar halaman.
-- **Action Checklist Interaktif**: Daftar langkah nyata di akhir setiap ringkasan buku yang dapat dicentang pembaca dan tersimpan otomatis di browser (`localStorage`).
-- **Shareable Quotes**: Kutipan berkesan dari buku yang dapat disalin dalam 1 klik.
 
 ## Tech Stack (Cloudflare-Native Hybrid Stack)
 - **Astro 5** + **`@astrojs/cloudflare`** (Hybrid Static & Cloudflare Workers SSR)
 - **React 19** & **TypeScript**
 - **Tailwind CSS** & **Lucide Icons**
-- **Cloudflare Pages / Workers** (`wrangler.jsonc` siap untuk integrasi **Cloudflare D1** & **KV** pada fitur Login & Pembayaran)
+- **Cloudflare Workers & Cloudflare D1** (`wrangler.jsonc` terhubung ke database `ringkasnya-db` untuk katalog & konten buku)
+- **Playwright** (`npm run test:e2e`) untuk smoke test alur UI utama
 
 ## Cara Menjalankan secara Lokal
 
 ```bash
 npm install
+npm run db:migrate:local
 npm run dev
 ```
 
@@ -29,16 +32,13 @@ npm run build
 npm run cf:preview
 ```
 
-## Verification Plan & Release Pipeline
+## Verifikasi & Alur Rilis
 
-Setiap kali perbaikan atau fitur selesai dibuat, jalankan alur verifikasi hingga deploy produksi (`release-pipeline`):
+### 1. Verifikasi Lokal
+- Jalankan `npx tsc --noEmit` dan `npm run build` untuk memastikan pengecekan tipe TypeScript, kompilasi Astro, dan bundle Cloudflare Worker (`dist/_worker.js`) berjalan tanpa error.
+- Jalankan `npm run test:e2e` (Playwright smoke test) secara *on-demand* atau sebelum rilis ke `main`.
 
-### 1. Automated Verification
-- Menjalankan `npm run build` di `E:\MyApp\ringkasnya` (dengan `BypassSandbox: true` pada Windows) untuk memastikan kompilasi TypeScript, astro build, dan bundle Cloudflare Worker (`dist/_worker.js`) berjalan tanpa error.
-
-### 2. UI Verification (Playwright)
-- Setiap kali ada perubahan UI, uji tampilan, alur interaksi, dan layout secara langsung melalui **Playwright** (desktop & mobile) untuk memastikan tidak ada regresi visual maupun fungsional.
-
-### 3. Commit, Push & Deploy ke Cloudflare
-1. Commit dan push perubahan ke GitHub (`git push`, dengan `BypassSandbox: true`).
-2. Deploy ke produksi Cloudflare Workers (`npm run cf:deploy` atau `npx wrangler deploy`, dengan `BypassSandbox: true`).
+### 2. Git Workflow & Auto-Deploy Cloudflare
+- Pengerjaan fitur, perbaikan bug, dan pembaruan dilakukan melalui branch turunan dari `dev`, lalu di-merge kembali ke `dev`.
+- **Preview (`dev`)**: Push/merge ke branch `dev` memicu build & deploy Preview di Cloudflare Workers.
+- **Production (`main`)**: Push/merge ke branch `main` (khusus rilis) memicu build & deploy Production di Cloudflare Workers.
