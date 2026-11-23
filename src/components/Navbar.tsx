@@ -22,6 +22,7 @@ import {
   CATALOG_SEARCH_FOCUS_PARAM,
   CATALOG_SEARCH_INPUT_ID,
 } from "@/lib/search";
+import UserMenu from "@/components/auth/UserMenu";
 
 const NAV_ITEMS = [
   { label: "Beranda", href: "/", icon: Home },
@@ -205,6 +206,9 @@ export default function Navbar() {
               )}
             </button>
 
+            {/* Menu Akun Desktop */}
+            <UserMenu variant="desktop" />
+
             {/* Tombol Menu 3 Garis Horizontal (Mobile) */}
             <button
               type="button"
@@ -288,6 +292,10 @@ export default function Navbar() {
               </div>
             );
           })}
+
+          <div className="mt-4 border-t border-line-subtle pt-2">
+            <UserMenu variant="mobile" onNavigate={handleLinkClick} />
+          </div>
         </nav>
 
         <div className="border-t border-line-subtle p-4">

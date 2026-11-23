@@ -13,16 +13,19 @@
     "db:migrate:local": "wrangler d1 migrations apply ringkasnya-db --local",
     "db:migrate:preview": "wrangler d1 migrations apply ringkasnya-db --remote --preview",
     "db:migrate:prod": "wrangler d1 migrations apply ringkasnya-db --remote",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "astro sync && tsc --noEmit",
     "test:e2e": "playwright test"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.5.0",
     "@astrojs/react": "^4.2.0",
     "astro": "^5.5.0",
+    "better-auth": "^1.7.27",
+    "drizzle-orm": "^0.45.4",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1",
@@ -30,6 +33,7 @@
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",
+    "drizzle-kit": "^0.31.11",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2",

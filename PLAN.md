@@ -106,3 +106,12 @@ Selain **Bedah Istilah**, rubrik Artikel ke depannya dapat diperluas ke format e
   10. *Tiny Habits* — BJ Fogg (`Produktivitas & Pengembangan Diri`)
 - **Sisa Roadmap**: 32 buku lagi (Batch 2–4 @ ~10 buku/batch + Batch 5 @ 2 buku) menuju 100 buku.
 
+
+---
+
+## Fase 3 (Tahap 1): Arsitektur Login User, Database & Keamanan (`branch: dev`)
+
+- **Library & ORM**: **Better Auth (`better-auth`)** + **Drizzle ORM (`drizzle-orm/d1`)** di atas **Cloudflare D1** (`ringkasnya-db` & `ringkasnya-db-preview`).
+- **Migrasi SQL**: `migrations/0004_create_auth_tables.sql` (berurutan setelah `0001`–`0003` tabel buku) mencakup 6 tabel: `users`, `sessions`, `accounts`, `verifications`, `user_book_progress` (persiapan Fase 3.2), dan `subscriptions` (persiapan Fase 3.3).
+- **Keamanan Workers-Native**: Hashing kata sandi menggunakan Web Crypto API `PBKDF2-SHA256` (`src/lib/password.ts`), cookie sesi `HttpOnly`/`SameSite=Lax`, per-request factory `createAuth(env)` (`src/lib/auth.ts`), dan proteksi route `/akun` via Astro SSR middleware (`src/middleware.ts`).
+- **Halaman & UI**: `/masuk`, `/daftar`, `/akun` (`prerender = false`), endpoint `/api/auth/[...all]`, dan integrasi `UserMenu` di `Navbar.tsx` (desktop dropdown & mobile drawer) dengan dukungan Email/Password + Google OAuth opsional via `.dev.vars` / Cloudflare Secrets.

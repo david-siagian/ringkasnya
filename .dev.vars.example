@@ -1,0 +1,14 @@
+# Cloudflare Workers / Astro local secrets & environment variables
+# Salin file ini menjadi `.dev.vars` (file `.dev.vars` otomatis diabaikan oleh git)
+
+# Secret acak minimal 32 karakter untuk signing cookie & token sesi
+# Generate cepat: openssl rand -base64 32
+BETTER_AUTH_SECRET=ganti-dengan-string-acak-minimal-32-karakter-disini
+
+# Base URL aplikasi (lokal Astro dev: http://localhost:4321 | wrangler dev: http://localhost:8787)
+BETTER_AUTH_URL=http://localhost:4321
+
+# Google OAuth 2.0 (Opsional — tombol Google otomatis aktif jika keduanya diisi)
+# Redirect URI di Google Cloud Console: {BETTER_AUTH_URL}/api/auth/callback/google
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
