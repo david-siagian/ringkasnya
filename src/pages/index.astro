@@ -178,22 +178,9 @@ Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
       </div>
     </section>
 
-    {/* Opsi 3 (Posisi setelah #metode): Perbandingan Opsi 1 & Opsi 2 */}
+    {/* Artikel Pendamping */}
     <div data-reveal>
-      <HomeArticlesSection
-        articles={ARTICLES}
-        variant="compact-list"
-        previewLabel="Opsi 1: Grid Baris Kompak"
-        sectionId="artikel"
-      />
-    </div>
-    <div data-reveal>
-      <HomeArticlesSection
-        articles={ARTICLES}
-        variant="mini-strip"
-        previewLabel="Opsi 2: Strip 1 Baris"
-        sectionId="artikel-opsi-2"
-      />
+      <HomeArticlesSection articles={ARTICLES} />
     </div>
     {/* Tambahkan atribut `data-reveal` (opsional `style="--reveal-delay: 120ms;"`) pada seksi baru di bawah ini agar otomatis muncul dengan animasi scroll */}
   </div>
