@@ -5,7 +5,6 @@ import {
   PUBLIC_PAGE_CACHE_CONTROL,
 } from "@/lib/books-repository";
 import CatalogSection from "@/components/CatalogSection";
-import HeroAuthCta from "@/components/auth/HeroAuthCta";
 import {
   ArrowRight,
   Layers,
@@ -73,16 +72,7 @@ Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
               <span>Jelajahi Katalog Buku</span>
               <ArrowRight class="h-4 w-4" />
             </a>
-            <a
-              href="/buku/sapiens"
-              class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-line bg-surface px-6 py-3.5 text-sm font-semibold text-ink-secondary shadow-sm transition-all duration-200 hover:border-line-strong hover:bg-page active:scale-[0.98]"
-            >
-              <Zap className="h-4 w-4 text-amber-500" />
-              <span>Coba Baca: Sapiens</span>
-            </a>
           </div>
-
-          <HeroAuthCta client:load />
 
           {/* Statistik Ringkas */}
           <div class="animate-welcome mt-12 grid grid-cols-3 gap-4 border-t border-line/80 pt-8 text-center" style="animation-delay: 600ms;">

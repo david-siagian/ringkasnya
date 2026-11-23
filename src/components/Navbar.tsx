@@ -4,7 +4,6 @@ import {
   X,
   BookOpen,
   ArrowRight,
-  Search,
   Moon,
   Sun,
   Home,
@@ -13,15 +12,7 @@ import {
   FileText,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
-import {
-  navigateWithTransition,
-  smoothScrollToElement,
-} from "@/components/SmoothNavigation";
 import { useTheme } from "@/hooks/useTheme";
-import {
-  CATALOG_SEARCH_FOCUS_PARAM,
-  CATALOG_SEARCH_INPUT_ID,
-} from "@/lib/search";
 import UserMenu from "@/components/auth/UserMenu";
 
 const NAV_ITEMS = [
@@ -73,26 +64,6 @@ export default function Navbar() {
     observer.observe(header);
     return () => observer.disconnect();
   }, []);
-
-  /**
-   * Fokus ke kolom pencarian katalog bila ada di halaman ini (Katalog);
-   * jika tidak (mis. Beranda atau halaman buku), buka Katalog dengan kolom pencarian langsung aktif.
-   */
-  const handleSearchClick = () => {
-    setIsOpen(false);
-    const input = document.getElementById(
-      CATALOG_SEARCH_INPUT_ID
-    ) as HTMLInputElement | null;
-
-    if (input) {
-      // Fokus di dalam gesture klik agar keyboard mobile ikut terbuka
-      input.focus({ preventScroll: true });
-      smoothScrollToElement("katalog", 500);
-      return;
-    }
-
-    navigateWithTransition(`/katalog?${CATALOG_SEARCH_FOCUS_PARAM}=1`);
-  };
 
   // Close menu on Escape key press, resize to desktop, & lock body scroll when drawer is open
   useEffect(() => {
@@ -177,19 +148,8 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Kanan: Pencarian, Mode Gelap/Terang, & Menu Mobile */}
+          {/* Kanan: Mode Gelap/Terang, & Menu Mobile */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Tombol Pencarian Judul Buku */}
-            <button
-              type="button"
-              onClick={handleSearchClick}
-              aria-label="Cari judul buku"
-              title="Cari judul buku"
-              className={iconButtonClass}
-            >
-              <Search className="h-4 w-4" />
-            </button>
-
             {/* Tombol Mode Gelap / Terang */}
             <button
               type="button"

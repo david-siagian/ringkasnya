@@ -18,7 +18,7 @@ async function waitForAstroIslands(page: Page) {
 }
 
 test.describe("Ringkasnya Smoke Tests", () => {
-  test("beranda: tanpa error, tanpa filter/kotak pencarian, & tombol cari mengarahkan ke /katalog", async ({
+  test("beranda: tanpa error, tanpa filter/kotak pencarian, & CTA utama mengarahkan ke /katalog", async ({
     page,
   }) => {
     const errors = trackRuntimeErrors(page);
@@ -36,8 +36,15 @@ test.describe("Ringkasnya Smoke Tests", () => {
     );
     await expect(searchInput).toHaveCount(0);
 
-    const searchBtn = page.getByRole("button", { name: "Cari judul buku" });
-    await searchBtn.click();
+    await expect(
+      page.getByRole("button", { name: "Cari judul buku" })
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("link", { name: /Coba Baca: Sapiens/i })
+    ).toHaveCount(0);
+
+    const catalogLink = page.getByRole("link", { name: "Jelajahi Katalog Buku" });
+    await catalogLink.click();
 
     await expect(page).toHaveURL(/\/katalog/);
     await waitForAstroIslands(page);
