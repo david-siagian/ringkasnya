@@ -47,11 +47,38 @@ export interface ArticleFeedItem {
   subtitle: string;
   format: ArticleFormat;
   category: BookCategory;
-  readingTimeMinutes: number;
+  publishedAt: string;
   coverImage?: string;
   coverGradient: string;
   accentBadge: string;
   originLabel: string;
+}
+
+const INDONESIAN_SHORT_MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "Mei",
+  "Jun",
+  "Jul",
+  "Agu",
+  "Sep",
+  "Okt",
+  "Nov",
+  "Des",
+] as const;
+
+/** Memformat tanggal ISO `YYYY-MM-DD` menjadi format ringkas Bahasa Indonesia (mis. `22 Nov 2026`). */
+export function formatArticlePublishedDate(publishedAt: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(publishedAt.trim());
+  if (!match) return publishedAt;
+  const year = match[1];
+  const monthIndex = Number(match[2]) - 1;
+  const day = Number(match[3]);
+  const monthLabel = INDONESIAN_SHORT_MONTHS[monthIndex];
+  if (!monthLabel || Number.isNaN(day)) return publishedAt;
+  return `${day} ${monthLabel} ${year}`;
 }
 
 export interface ArticleHighlightBox {

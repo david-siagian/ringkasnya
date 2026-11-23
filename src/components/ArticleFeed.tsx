@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { ArrowRight, BookOpen, Clock, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Calendar, Sparkles } from "lucide-react";
 import {
   ARTICLE_FORMATS,
+  formatArticlePublishedDate,
   type ArticleFeedItem,
   type ArticleFormat,
 } from "@/types/article";
@@ -141,8 +142,8 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
 
                   <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-muted">
                     <span className="inline-flex items-center gap-1 font-medium text-ink-secondary">
-                      <Clock className="h-3.5 w-3.5 text-accent-strong" />
-                      {featuredItem.readingTimeMinutes} menit baca
+                      <Calendar className="h-3.5 w-3.5 text-accent-strong" />
+                      {formatArticlePublishedDate(featuredItem.publishedAt)}
                     </span>
                     <span className="inline-flex items-center gap-1">
                       <BookOpen className="h-3.5 w-3.5 text-ink-faint" />
@@ -203,8 +204,8 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
 
                     <div className="mt-4 flex items-center justify-between border-t border-line-subtle pt-3 text-xs text-ink-subtle">
                       <span className="inline-flex items-center gap-1.5 font-medium">
-                        <Clock className="h-3.5 w-3.5 text-ink-faint" />
-                        <span>{article.readingTimeMinutes} menit baca</span>
+                        <Calendar className="h-3.5 w-3.5 text-ink-faint" />
+                        <span>{formatArticlePublishedDate(article.publishedAt)}</span>
                       </span>
                       <ArrowRight className="h-4 w-4 text-ink-faint transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-accent-strong" />
                     </div>

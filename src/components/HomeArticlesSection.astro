@@ -1,6 +1,6 @@
 ---
-import type { Article } from "@/types/article";
-import { ArrowRight, BookOpen, Clock } from "lucide-react";
+import { formatArticlePublishedDate, type Article } from "@/types/article";
+import { ArrowRight, BookOpen, Calendar } from "lucide-react";
 
 interface Props {
   articles: Article[];
@@ -74,8 +74,8 @@ const otherArticles = articles.slice(1, 1 + MAX_OTHER_ARTICLES);
 
                 <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-muted">
                   <span class="inline-flex items-center gap-1 font-medium text-ink-secondary">
-                    <Clock className="h-3.5 w-3.5 text-accent-strong" />
-                    {featuredArticle.readingTimeMinutes} menit baca
+                    <Calendar className="h-3.5 w-3.5 text-accent-strong" />
+                    {formatArticlePublishedDate(featuredArticle.publishedAt)}
                   </span>
                   <span class="inline-flex items-center gap-1">
                     <BookOpen className="h-3.5 w-3.5 text-ink-faint" />
@@ -138,8 +138,8 @@ const otherArticles = articles.slice(1, 1 + MAX_OTHER_ARTICLES);
 
                       <div class="mt-3 flex items-center justify-between border-t border-line-subtle pt-2.5 text-[11px] text-ink-subtle sm:text-xs">
                         <span class="inline-flex items-center gap-1">
-                          <Clock className="h-3 w-3 text-ink-faint sm:h-3.5 sm:w-3.5" />
-                          {article.readingTimeMinutes} mnt baca
+                          <Calendar className="h-3 w-3 text-ink-faint sm:h-3.5 sm:w-3.5" />
+                          {formatArticlePublishedDate(article.publishedAt)}
                         </span>
                         <ArrowRight className="h-3.5 w-3.5 text-ink-faint transition-transform group-hover:translate-x-0.5 group-hover:text-accent-strong" />
                       </div>
