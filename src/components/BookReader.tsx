@@ -322,16 +322,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       ? book.keyTakeaways[clampedDeepStep - 1]
       : null;
 
-  const startQuickAt = (targetId: string, step?: number) => {
-    if (step !== undefined) {
-      setPendingQuickStep(step);
-    }
-    if (!hasStartedQuick) {
-      pendingScrollTargetRef.current = targetId;
-      setHasStartedQuick(true);
-      return;
-    }
-    smoothScrollToElement(targetId, 520);
+  const backToQuickIntro = () => {
+    setPendingQuickStep(null);
+    setHasStartedQuick(false);
+    pendingScrollToReadingTopRef.current = true;
   };
 
   const handleModeChange = (nextMode: "quick" | "deep") => {
@@ -347,6 +341,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         pendingScrollTargetRef.current = "kesimpulan-akhir";
         setPendingQuickStep(finalStep);
       } else {
+        setHasStartedQuick(false);
         setPendingQuickStep(0);
       }
       setReadMode("quick");
@@ -356,7 +351,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     const targetStep = hasStartedQuick ? detectActiveQuickStep() : 0;
     setPendingQuickStep(null);
     setDeepStep(targetStep);
-    pendingScrollToReadingTopRef.current = true;
+    if (targetStep > 0) {
+      pendingScrollToReadingTopRef.current = true;
+    }
     setReadMode("deep");
   };
 
@@ -604,8 +601,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       <main className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
         <div ref={readingAreaRef}>
           {readMode === "quick" ? (
-            /* MODE KILAT: Pengantar lalu Scroll Vertikal Penuh setelah klik Mulai */
-            <>
+            /* MODE KILAT: Pengantar (sebelum Mulai) -> Halaman Baca Vertikal Penuh (setelah Mulai) */
+            !hasStartedQuick ? (
               <IntroSection
                 book={book}
                 fs={fs}
@@ -614,63 +611,90 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 onSelectArticleTerm={setActiveArticleTerm}
                 onStartReading={() => {
                   const firstTakeaway = book.keyTakeaways[0];
-                  startQuickAt(
-                    firstTakeaway ? `poin-${firstTakeaway.number}` : "kesimpulan-akhir",
-                    firstTakeaway ? 1 : finalStep
-                  );
+                  setPendingQuickStep(firstTakeaway ? 1 : finalStep);
+                  pendingScrollToReadingTopRef.current = true;
+                  setHasStartedQuick(true);
                 }}
                 onSelectTakeaway={(num) => {
                   const idx = book.keyTakeaways.findIndex(
                     (t) => t.number === num
                   );
-                  startQuickAt(`poin-${num}`, idx >= 0 ? idx + 1 : undefined);
+                  if (idx >= 0) setPendingQuickStep(idx + 1);
+                  pendingScrollTargetRef.current = `poin-${num}`;
+                  setHasStartedQuick(true);
                 }}
               />
+            ) : (
+              <div className="animate-fade-slide" key="quick-reading-view">
+                {/* Bar Navigasi Atas Mode Kilat */}
+                <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
+                  <button
+                    type="button"
+                    onClick={backToQuickIntro}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
+                  >
+                    <List className="h-4 w-4" />
+                    <span>Daftar Poin</span>
+                  </button>
 
-              {hasStartedQuick && (
-                <div className="animate-fade-slide">
-                  <div className="mt-8 space-y-6">
-                    {book.keyTakeaways.map((takeaway, idx) => (
-                      <TakeawayCard
-                        key={takeaway.number}
-                        takeaway={takeaway}
-                        fs={fs}
-                        showDeepContent={false}
-                        scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
-                        onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
-                        articleTerms={ARTICLE_TERMS}
-                        onSelectArticleTerm={setActiveArticleTerm}
-                      />
-                    ))}
-                  </div>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                    <Zap className="h-3.5 w-3.5" />
+                    <span>Mode Kilat • {book.keyTakeaways.length} Poin Inti</span>
+                  </span>
+                </div>
 
-                  <div className="mt-8">
-                    <ConclusionSection
-                      conclusion={book.conclusion}
+                <div className="space-y-6">
+                  {book.keyTakeaways.map((takeaway, idx) => (
+                    <TakeawayCard
+                      key={takeaway.number}
+                      takeaway={takeaway}
                       fs={fs}
+                      showDeepContent={false}
                       scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                      onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
                       articleTerms={ARTICLE_TERMS}
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
-                  </div>
+                  ))}
+                </div>
 
-                  <KeyConceptsSection
-                    keyConcepts={book.keyConcepts}
+                <div className="mt-8">
+                  <ConclusionSection
+                    conclusion={book.conclusion}
                     fs={fs}
+                    scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
                     articleTerms={ARTICLE_TERMS}
                     onSelectArticleTerm={setActiveArticleTerm}
                   />
-
-                  <QuotesSection
-                    quotes={book.quotes}
-                    copyFeedback={copyFeedback}
-                    onCopyQuote={handleCopyQuote}
-                    onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
-                    fs={fs}
-                  />
                 </div>
-              )}
-            </>
+
+                <KeyConceptsSection
+                  keyConcepts={book.keyConcepts}
+                  fs={fs}
+                  articleTerms={ARTICLE_TERMS}
+                  onSelectArticleTerm={setActiveArticleTerm}
+                />
+
+                <QuotesSection
+                  quotes={book.quotes}
+                  copyFeedback={copyFeedback}
+                  onCopyQuote={handleCopyQuote}
+                  onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
+                  fs={fs}
+                />
+
+                <div className="mt-6 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={backToQuickIntro}
+                    className="inline-flex items-center gap-2 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2 text-xs font-semibold text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.98]"
+                  >
+                    <span>Kembali ke Pengantar</span>
+                    <RotateCcw className="h-4 w-4 shrink-0" />
+                  </button>
+                </div>
+              </div>
+            )
           ) : (
             /* MODE MENDALAM: Alur Halaman Per Halaman (Pengantar -> Poin Inti 1..N -> Penutup) */
             <div className="animate-fade-slide" key={`deep-step-${clampedDeepStep}`}>
