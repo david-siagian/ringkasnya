@@ -94,12 +94,13 @@ Setiap objek dalam array `key_takeaways_json` wajib memiliki 5 properti lengkap:
 
 ---
 
-## 5. Aturan Metadata Katalog & Visual (`books`)
+## 5. Aturan Judul, Subjudul, Tagline, & Metadata Katalog (`books`)
 
 - **`slug`:** Huruf kecil, dipisah tanda hubung (`kebab-case`), ringkas dari judul utama (mis. `sapiens`, `thinking-fast-and-slow`).
-- **`title`:** **Judul utama buku saja** tanpa subjudul setelah tanda titik dua (`:`) — mis. `Quiet`, bukan `Quiet: The Power of Introverts...`.
-- **`original_title`:** Subjudul/tagline penjelas dalam **Bahasa Indonesia**, **tidak boleh mengulang judul buku** di depannya (tanpa pola `"Judul: ..."`), dan **tidak boleh `NULL`/kosong** — mis. `Kekuatan Orang Introver di Dunia yang Tak Berhenti Bicara`.
-- **`tagline`:** 1 kalimat ringkas (**10–18 kata**) yang memikat untuk kartu/preview.
+- **Format Judul & Subjudul Buku (`title` & `original_title`):**
+  - **`title`:** **Cukup berisi judul utama buku saja** tanpa subjudul setelah tanda titik dua (`:`) — misalnya `Quiet` (bukan `Quiet: The Power of Introverts in a World That Can't Stop Talking`) atau `Sapiens` (bukan `Sapiens: A Brief History of Humankind`), agar tampilan kartu di katalog (`BookCard`) tetap bersih dan mudah dipindai.
+  - **`original_title`:** Tagline/subjudul yang tampil di bawah judul pada `BookPreviewModal` dan `BookReader` **wajib ditulis dalam Bahasa Indonesia**, **tidak boleh mengulang judul buku** di depannya (tanpa pola `"Judul: ..."`), dan **tidak boleh kosong/`NULL`** — misalnya `Kekuatan Orang Introver di Dunia yang Tak Berhenti Bicara`.
+- **`tagline`:** 1 kalimat ringkas (**10–18 kata**) dalam Bahasa Indonesia yang memikat dan menjelaskan daya tarik/tesis utama buku untuk tampilan kartu maupun pratinjau.
 - **`badge_text`:** Label singkat **2–3 kata** (mis. `Klasik Sains Populer`, `Psikologi Kognitif`, `Sejarah Ekonomi`).
 - **`category`:** Wajib memilih salah satu dari 11 kategori resmi di `CATEGORIES` (`src/lib/book-constants.ts`).
 - **`editorial_tier`:**
