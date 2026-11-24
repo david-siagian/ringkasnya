@@ -14,12 +14,14 @@ interface Props {
   title?: string;
   description?: string;
   lockBodyScroll?: boolean;
+  hideFooter?: boolean;
 }
 
 const {
   title = "Ringkasnya — Baca Intinya, Pahami Dunianya",
   description = "Platform ringkasan buku nonfiksi sains, sejarah, ekonomi, politik, dan psikologi dalam Bahasa Indonesia yang mudah dipahami. Dilengkapi Mode Kilat 5–7 Menit, Mode Mendalam 15–20 Menit, dan Konsep Kunci.",
   lockBodyScroll = false,
+  hideFooter = false,
 } = Astro.props;
 
 const googleEnabled = isGoogleOAuthConfigured(Astro.locals.runtime?.env);
@@ -63,7 +65,7 @@ const googleEnabled = isGoogleOAuthConfigured(Astro.locals.runtime?.env);
     >
       <slot />
     </div>
-    <Footer />
+    {!hideFooter && <Footer />}
     <slot name="overlay" />
     <AuthModal client:load googleEnabled={googleEnabled} />
     <script>

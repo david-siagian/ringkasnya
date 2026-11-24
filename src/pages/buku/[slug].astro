@@ -27,6 +27,6 @@ const pageTitle = `Ringkasan Buku ${book.title} (${book.author}) — Ringkasnya`
 const pageDescription = `${book.tagline} Baca ringkasan ${book.title} dalam ${book.quickTimeMinutes}-${book.readingTimeMinutes} menit lengkap dengan Action Checklist.`;
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
+<BaseLayout title={pageTitle} description={pageDescription} hideFooter={true}>
   <BookReader client:load book={book} relatedBooks={relatedBooks} />
 </BaseLayout>
