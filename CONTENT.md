@@ -102,12 +102,14 @@ Setiap objek dalam array `key_takeaways_json` wajib memiliki 5 properti lengkap:
   - **`original_title`:** Tagline/subjudul yang tampil di bawah judul pada `BookPreviewModal` dan `BookReader` **wajib ditulis dalam Bahasa Indonesia**, **tidak boleh mengulang judul buku** di depannya (tanpa pola `"Judul: ..."`), dan **tidak boleh kosong/`NULL`** — misalnya `Kekuatan Orang Introver di Dunia yang Tak Berhenti Bicara`.
 - **`tagline`:** 1 kalimat ringkas (**10–18 kata**) dalam Bahasa Indonesia yang memikat dan menjelaskan daya tarik/tesis utama buku untuk tampilan kartu maupun pratinjau.
 - **`badge_text`:** Label singkat **2–3 kata** (mis. `Klasik Sains Populer`, `Psikologi Kognitif`, `Sejarah Ekonomi`).
-- **`category`:** Wajib memilih salah satu dari 11 kategori resmi di `CATEGORIES` (`src/lib/book-constants.ts`).
-- **`editorial_tier`:**
-  - `1` = Nonfiksi berbasis sains, riset empiris, sejarah ilmiah, atau klasik intelektual.
-  - `2` = Nonfiksi populer, finansial praktis, atau refleksi populer.
-  - `3` = Kategori `Organisasi & Bisnis`, `Karier & Budaya Kerja`, dan `Produktivitas & Pengembangan Diri`.
-- **`goodreads_ratings`:** Angka perkiraan jumlah *ratings* buku di Goodreads (integer) untuk pengurutan katalog.
+- **`category`:** Wajib memilih salah satu dari 11 kategori resmi yang urutannya dipertahankan di `CATEGORIES` (`src/lib/book-constants.ts`): (1) `Sains & Alam Semesta`, (2) `Teknologi & Masa Depan`, (3) `Nalar & Berpikir Kritis`, (4) `Psikologi & Perilaku`, (5) `Sejarah & Peradaban`, (6) `Filsafat & Kebijaksanaan`, (7) `Ekonomi & Keuangan`, (8) `Organisasi & Bisnis`, (9) `Karier & Budaya Kerja`, (10) `Tubuh & Kesehatan`, (11) `Produktivitas & Pengembangan Diri`.
+- **`editorial_tier` & `goodreads_ratings` (Urutan Katalog):**
+  - `editorial_tier`:
+    - `1` = Nonfiksi berbasis sains, riset empiris, sejarah ilmiah, atau klasik intelektual.
+    - `2` = Nonfiksi populer, finansial praktis, atau refleksi populer.
+    - `3` = Kategori `Organisasi & Bisnis`, `Karier & Budaya Kerja`, dan `Produktivitas & Pengembangan Diri`.
+  - `goodreads_ratings`: Angka perkiraan jumlah *ratings* buku di Goodreads (integer).
+  - Query katalog di `src/lib/books-repository.ts` mengurutkan berdasarkan `editorial_tier` (`1` → `2` → `3`) terlebih dahulu lalu `goodreads_ratings` tertinggi di dalam masing-masing tier, sehingga **Perpustakaan Kurasi** dan bagian atas tab **Semua** selalu menonjolkan buku nonfiksi ilmiah/berbasis riset.
 - **`cover_gradient`:** Kelas gradien Tailwind bernuansa gelap (`800`–`950`) agar teks putih di `BookCard` dan `BookReader` selalu kontras (mis. `from-slate-950 via-indigo-950 to-slate-900`).
 - **`cover_accent`:** Wajib menyertakan kelas tema terang **dan** tema gelap (`bg-... text-... dark:bg-... dark:text-...`) agar pill kategori terbaca di Light maupun Dark Mode.
 - **`cover_image`:** Format vektor `.svg` (`viewBox="0 0 600 800"`) disimpan di `public/images/covers/<slug>.svg` bergaya editorial datar menyerupai sampul aslinya beserta judul, subjudul, dan nama penulis. Khusus **subjudul di dalam gambar sampul `.svg`**, wajib menggunakan **subjudul asli buku** (bila buku aslinya berbahasa Inggris, tampilkan subjudul pada sampul dalam Bahasa Inggris sesuai sampul aslinya; aturan ini hanya berlaku di dalam sampul `.svg`, sedangkan `original_title` dan `tagline` di database tetap wajib berbahasa Indonesia).
