@@ -1,6 +1,6 @@
 # Daftar Katalog 100 Buku — Ringkasnya
 
-Dokumen ini mencatat seluruh **100 buku** dalam peta jalan katalog Ringkasnya (`ringkasnya.com`), mencakup **58 buku awal**, **20 buku yang sudah digenerate (Batch 1–2)**, serta **22 buku yang belum digenerate (Batch 3–5)** beserta target skala poin inti dan durasi baca sesuai standar [`GEMINI.md`](./GEMINI.md).
+Dokumen ini mencatat seluruh **100 buku** dalam peta jalan katalog Ringkasnya (`ringkasnya.com`), mencakup **58 buku awal**, **20 buku Batch 1–2**, serta **22 buku Batch 3–5** beserta skala poin inti dan durasi baca sesuai standar [`GEMINI.md`](./GEMINI.md).
 
 ## Ringkasan Progres
 
@@ -9,8 +9,10 @@ Dokumen ini mencatat seluruh **100 buku** dalam peta jalan katalog Ringkasnya (`
 | **Buku Awal (Eksisting)** | **58 buku** | Sudah ada | Katalog awal sebelum ekspansi 100 buku |
 | **Batch 1** (`0003` & `0005`) | **10 buku** | Sudah ada | Sudah disesuaikan skala tebal halaman |
 | **Batch 2** (`0006`) | **10 buku** | Sudah ada | Sudah sesuai skala tebal halaman |
-| **Batch 3–5** (`0007`–`0009`) | **22 buku** | Belum digenerate | Roadmap fase selanjutnya (79–100) |
-| **Total Target Katalog** | **100 buku** | **78 / 100 Selesai** | **22 buku tersisa** |
+| **Batch 3** (`0013`) | **10 buku** | Sudah digenerate | Buku #79–#88 selesai dibuat |
+| **Batch 4** (`0014`) | **10 buku** | Sudah digenerate | Buku #89–#98 selesai dibuat |
+| **Batch 5** (`0015`) | **2 buku** | Sudah digenerate | Buku #99–#100 selesai dibuat |
+| **Total Target Katalog** | **100 buku** | **100 / 100 Selesai** | **Seluruh 100 buku lengkap** |
 
 ---
 
@@ -113,41 +115,41 @@ Dokumen ini mencatat seluruh **100 buku** dalam peta jalan katalog Ringkasnya (`
 
 ---
 
-## Bagian C: 22 Buku yang Belum Digenerate (Fase Selanjutnya)
+## Bagian C: 22 Buku Tambahan yang Sudah Digenerate (Batch 3–5)
 
-### Batch 3 — Rencana `0007_add_books_batch_3.sql` (10 Buku)
+### Batch 3 (`0013_add_books_batch_3.sql` — 10 Buku)
 
-| No | Judul | Penulis | Kategori | Est. Hal | Target Poin | Target Kilat | Target Mendalam | Slug |
+| No | Judul | Penulis | Kategori | Est. Hal | Poin | Kilat | Mendalam | Slug |
 |---:|---|---|---|---:|---:|---|---|---|
-| 79 | *A Short History of Nearly Everything* | Bill Bryson | `Sains & Alam Semesta` | ~544 | 9 | 7–8 mnt | 20–22 mnt | `a-short-history-of-nearly-everything` |
-| 80 | *The Elegant Universe* | Brian Greene | `Sains & Alam Semesta` | ~448 | 8 | 6–7 mnt | 18–20 mnt | `the-elegant-universe` |
-| 81 | *Chaos: Making a New Science* | James Gleick | `Sains & Alam Semesta` | ~352 | 6 | 5–6 mnt | 15–17 mnt | `chaos` |
-| 82 | *An Immense World* | Ed Yong | `Sains & Alam Semesta` | ~464 | 8 | 6–7 mnt | 18–20 mnt | `an-immense-world` |
-| 83 | *Spark* | John J. Ratey | `Tubuh & Kesehatan` | ~294 | 6 | 5–6 mnt | 15–17 mnt | `spark` |
-| 84 | *The Body: A Guide for Occupants* | Bill Bryson | `Tubuh & Kesehatan` | ~450 | 8 | 6–7 mnt | 18–20 mnt | `the-body` |
-| 85 | *I Contain Multitudes* | Ed Yong | `Tubuh & Kesehatan` | ~368 | 6 | 5–6 mnt | 15–17 mnt | `i-contain-multitudes` |
-| 86 | *Behave* | Robert Sapolsky | `Psikologi & Perilaku` | ~790 | 9 | 7–8 mnt | 20–22 mnt | `behave` |
-| 87 | *Incognito* | David Eagleman | `Psikologi & Perilaku` | ~290 | 6 | 5–6 mnt | 15–17 mnt | `incognito` |
-| 88 | *How Emotions Are Made* | Lisa Feldman Barrett | `Psikologi & Perilaku` | ~448 | 8 | 6–7 mnt | 18–20 mnt | `how-emotions-are-made` |
+| 79 | *A Short History of Nearly Everything* | Bill Bryson | `Sains & Alam Semesta` | ~544 | 9 | 7 mnt | 21 mnt | `a-short-history-of-nearly-everything` |
+| 80 | *The Elegant Universe* | Brian Greene | `Sains & Alam Semesta` | ~448 | 8 | 6 mnt | 18 mnt | `the-elegant-universe` |
+| 81 | *Chaos: Making a New Science* | James Gleick | `Sains & Alam Semesta` | ~352 | 6 | 5 mnt | 15 mnt | `chaos` |
+| 82 | *An Immense World* | Ed Yong | `Sains & Alam Semesta` | ~464 | 8 | 6 mnt | 18 mnt | `an-immense-world` |
+| 83 | *Spark* | John J. Ratey | `Tubuh & Kesehatan` | ~294 | 6 | 5 mnt | 15 mnt | `spark` |
+| 84 | *The Body: A Guide for Occupants* | Bill Bryson | `Tubuh & Kesehatan` | ~450 | 8 | 6 mnt | 18 mnt | `the-body` |
+| 85 | *I Contain Multitudes* | Ed Yong | `Tubuh & Kesehatan` | ~368 | 6 | 5 mnt | 15 mnt | `i-contain-multitudes` |
+| 86 | *Behave* | Robert Sapolsky | `Psikologi & Perilaku` | ~790 | 9 | 7 mnt | 20 mnt | `behave` |
+| 87 | *Incognito* | David Eagleman | `Psikologi & Perilaku` | ~290 | 6 | 5 mnt | 15 mnt | `incognito` |
+| 88 | *How Emotions Are Made* | Lisa Feldman Barrett | `Psikologi & Perilaku` | ~448 | 8 | 6 mnt | 18 mnt | `how-emotions-are-made` |
 
-### Batch 4 — Rencana `0008_add_books_batch_4.sql` (10 Buku)
+### Batch 4 (`0014_add_books_batch_4.sql` — 10 Buku)
 
-| No | Judul | Penulis | Kategori | Est. Hal | Target Poin | Target Kilat | Target Mendalam | Slug |
+| No | Judul | Penulis | Kategori | Est. Hal | Poin | Kilat | Mendalam | Slug |
 |---:|---|---|---|---:|---:|---|---|---|
-| 89 | *The Righteous Mind* | Jonathan Haidt | `Psikologi & Perilaku` | ~419 | 7 | 6–7 mnt | 18–20 mnt | `the-righteous-mind` |
-| 90 | *The Body Keeps the Score* | Bessel van der Kolk | `Psikologi & Perilaku` | ~464 | 8 | 6–7 mnt | 18–20 mnt | `the-body-keeps-the-score` |
-| 91 | *Superforecasting* | Philip E. Tetlock & Dan Gardner | `Nalar & Berpikir Kritis` | ~340 | 6 | 5–6 mnt | 15–17 mnt | `superforecasting` |
-| 92 | *The Signal and the Noise* | Nate Silver | `Nalar & Berpikir Kritis` | ~534 | 8 | 7–8 mnt | 20–22 mnt | `the-signal-and-the-noise` |
-| 93 | *Calling Bullshit* | Carl T. Bergstrom & Jevin D. West | `Nalar & Berpikir Kritis` | ~336 | 6 | 5–6 mnt | 15–17 mnt | `calling-bullshit` |
-| 94 | *Collapse* | Jared Diamond | `Sejarah & Peradaban` | ~575 | 9 | 7–8 mnt | 20–22 mnt | `collapse` |
-| 95 | *Origin Story* | David Christian | `Sejarah & Peradaban` | ~368 | 6 | 5–6 mnt | 15–17 mnt | `origin-story` |
-| 96 | *Poor Economics* | Abhijit V. Banerjee & Esther Duflo | `Ekonomi & Keuangan` | ~320 | 6 | 5–6 mnt | 15–17 mnt | `poor-economics` |
-| 97 | *Secret Life of Money* | Tad Crawford | `Ekonomi & Keuangan` | ~210 | 5 | 4–5 mnt | 15 mnt | `secret-life-of-money` |
-| 98 | *The Innovator's Dilemma* | Clayton M. Christensen | `Organisasi & Bisnis` | ~286 | 6 | 5–6 mnt | 15–17 mnt | `the-innovators-dilemma` |
+| 89 | *The Righteous Mind* | Jonathan Haidt | `Psikologi & Perilaku` | ~419 | 7 | 6 mnt | 19 mnt | `the-righteous-mind` |
+| 90 | *The Body Keeps the Score* | Bessel van der Kolk | `Psikologi & Perilaku` | ~464 | 8 | 6 mnt | 18 mnt | `the-body-keeps-the-score` |
+| 91 | *Superforecasting* | Philip E. Tetlock & Dan Gardner | `Nalar & Berpikir Kritis` | ~340 | 6 | 5 mnt | 15 mnt | `superforecasting` |
+| 92 | *The Signal and the Noise* | Nate Silver | `Nalar & Berpikir Kritis` | ~534 | 8 | 7 mnt | 20 mnt | `the-signal-and-the-noise` |
+| 93 | *Calling Bullshit* | Carl T. Bergstrom & Jevin D. West | `Nalar & Berpikir Kritis` | ~336 | 6 | 5 mnt | 15 mnt | `calling-bullshit` |
+| 94 | *Collapse* | Jared Diamond | `Sejarah & Peradaban` | ~575 | 9 | 7 mnt | 20 mnt | `collapse` |
+| 95 | *Origin Story* | David Christian | `Sejarah & Peradaban` | ~368 | 6 | 5 mnt | 16 mnt | `origin-story` |
+| 96 | *Poor Economics* | Abhijit V. Banerjee & Esther Duflo | `Ekonomi & Keuangan` | ~320 | 6 | 5 mnt | 16 mnt | `poor-economics` |
+| 97 | *Secret Life of Money* | Tad Crawford | `Ekonomi & Keuangan` | ~210 | 5 | 4 mnt | 15 mnt | `secret-life-of-money` |
+| 98 | *The Innovator's Dilemma* | Clayton M. Christensen | `Organisasi & Bisnis` | ~286 | 6 | 5 mnt | 16 mnt | `the-innovators-dilemma` |
 
-### Batch 5 — Rencana `0009_add_books_batch_5.sql` (2 Buku Terakhir)
+### Batch 5 (`0015_add_books_batch_5.sql` — 2 Buku Terakhir)
 
-| No | Judul | Penulis | Kategori | Est. Hal | Target Poin | Target Kilat | Target Mendalam | Slug |
+| No | Judul | Penulis | Kategori | Est. Hal | Poin | Kilat | Mendalam | Slug |
 |---:|---|---|---|---:|---:|---|---|---|
-| 99 | *The Design of Everyday Things* | Don Norman | `Karier & Budaya Kerja` | ~368 | 6 | 5–6 mnt | 15–17 mnt | `the-design-of-everyday-things` |
-| 100 | *Four Thousand Weeks* | Oliver Burkeman | `Produktivitas & Pengembangan Diri` | ~288 | 6 | 5–6 mnt | 15–17 mnt | `four-thousand-weeks` |
+| 99 | *The Design of Everyday Things* | Don Norman | `Karier & Budaya Kerja` | ~368 | 6 | 5 mnt | 16 mnt | `the-design-of-everyday-things` |
+| 100 | *Four Thousand Weeks* | Oliver Burkeman | `Produktivitas & Pengembangan Diri` | ~288 | 6 | 5 mnt | 15 mnt | `four-thousand-weeks` |
