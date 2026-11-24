@@ -5,6 +5,7 @@ import { ARTICLE_TERMS } from "@/data/article-terms";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
 import QuoteCardModal from "./QuoteCardModal";
+import Footer from "./Footer";
 import { ArticleTermPopover } from "./ArticleTermPopover";
 import {
   QuickKeyConceptsModal,
@@ -173,6 +174,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const totalTakeaways = book.keyTakeaways.length;
   const finalStep = totalTakeaways + 1;
   const clampedDeepStep = Math.max(0, Math.min(finalStep, deepStep));
+  const isIntroView =
+    (readMode === "quick" && !hasStartedQuick) ||
+    (readMode === "deep" && clampedDeepStep === 0);
 
   const readingProgress =
     readMode === "deep"
@@ -544,7 +548,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const nextTitle = nextTakeaway?.title ?? null;
 
   return (
-    <div className="min-h-screen bg-page pb-20">
+    <div className="flex min-h-screen flex-col bg-page">
       {/* Banner Header Buku */}
       <div
         className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}
@@ -763,10 +767,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       </div>
 
       {/* Konten Utama Ringkasan */}
-      <main className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 pt-8 pb-20 sm:px-6">
         <div ref={readingAreaRef}>
-          {(readMode === "quick" && !hasStartedQuick) ||
-          (readMode === "deep" && clampedDeepStep === 0) ? (
+          {isIntroView ? (
             <div
               className={`transition-opacity duration-[380ms] ease-out ${
                 isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
@@ -1030,6 +1033,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           <RelatedBooksSection relatedBooks={recommendedBooks} />
         )}
       </main>
+
+      {isIntroView && <Footer />}
 
       <QuickKeyConceptsModal
         open={isConceptsModalOpen}
