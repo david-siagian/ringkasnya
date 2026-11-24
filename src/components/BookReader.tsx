@@ -10,7 +10,6 @@ import {
   QuickKeyConceptsModal,
   QuickQuotesModal,
 } from "./BookReaderModals";
-import { ReaderWelcomeOverlay } from "./ReaderWelcomeOverlay";
 import {
   smoothScrollToElement,
   smoothScrollToY,
@@ -146,29 +145,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [isQuotesModalOpen, setIsQuotesModalOpen] = useState(false);
   const [activeArticleTerm, setActiveArticleTerm] =
     useState<ArticleTermEntry | null>(null);
-  const [welcomeOverlay, setWelcomeOverlay] = useState<{
-    open: boolean;
-    runId: number;
-  }>({ open: false, runId: 0 });
-
-  const closeReadingWelcome = useCallback(() => {
-    setWelcomeOverlay((prev) => (prev.open ? { ...prev, open: false } : prev));
-  }, []);
-
-  const triggerReadingWelcome = useCallback(() => {
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
-    setWelcomeOverlay((prev) => ({
-      open: true,
-      runId: prev.runId + 1,
-    }));
-  }, []);
+  const [isLeavingIntro, setIsLeavingIntro] = useState(false);
 
   const copyTimerRef = useRef<number | undefined>(undefined);
+  const introExitTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const readingAreaRef = useRef<HTMLDivElement>(null);
   const pendingScrollTargetRef = useRef<string | null>(null);
@@ -200,6 +180,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         ? scrollProgress
         : 0;
 
+  const cancelIntroExit = useCallback(() => {
+    window.clearTimeout(introExitTimerRef.current);
+    setIsLeavingIntro(false);
+  }, []);
+
   // Sinkronkan state awal dari URL query & reset modal saat berpindah buku
   useEffect(() => {
     const initial =
@@ -207,6 +192,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         ? parseReaderStateFromSearch(window.location.search, finalStep)
         : { mode: "quick" as const, startedQuick: false, deepStep: 0 };
 
+    cancelIntroExit();
     setReadMode(initial.mode);
     setHasStartedQuick(initial.startedQuick);
     setDeepStep(initial.deepStep);
@@ -214,11 +200,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setIsConceptsModalOpen(false);
     setIsQuotesModalOpen(false);
     setActiveArticleTerm(null);
-    setWelcomeOverlay((prev) => (prev.open ? { ...prev, open: false } : prev));
     pendingQuickStepRef.current = null;
     window.clearTimeout(pendingQuickStepTimerRef.current);
     wasAtCompletionEndRef.current = false;
-  }, [book.slug, finalStep]);
+  }, [book.slug, finalStep, cancelIntroExit]);
 
   // Pulihkan state reader saat tombol Back/Forward browser ditekan
   useEffect(() => {
@@ -227,7 +212,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         window.location.search,
         finalStep
       );
-      closeReadingWelcome();
+      cancelIntroExit();
       window.clearTimeout(pendingQuickStepTimerRef.current);
       pendingQuickStepRef.current = null;
       pendingScrollTargetRef.current = null;
@@ -239,7 +224,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, [finalStep, closeReadingWelcome]);
+  }, [finalStep, cancelIntroExit]);
 
   // Tandai buku selesai dibaca otomatis hanya saat transisi baru mencapai bagian akhir
   useEffect(() => {
@@ -284,6 +269,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     return () => {
       window.clearTimeout(copyTimerRef.current);
       window.clearTimeout(pendingQuickStepTimerRef.current);
+      window.clearTimeout(introExitTimerRef.current);
     };
   }, []);
 
@@ -421,7 +407,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   };
 
   const goToDeepStep = (nextStep: number) => {
-    closeReadingWelcome();
+    cancelIntroExit();
     const target = Math.max(0, Math.min(finalStep, nextStep));
     setDeepStep(target);
     pendingScrollToReadingTopRef.current = true;
@@ -440,7 +426,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       : null;
 
   const backToQuickIntro = () => {
-    closeReadingWelcome();
+    cancelIntroExit();
     setPendingQuickStep(null);
     setHasStartedQuick(false);
     pendingScrollToReadingTopRef.current = true;
@@ -449,7 +435,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   const handleModeChange = (nextMode: "quick" | "deep") => {
     if (nextMode === readMode) return;
-    closeReadingWelcome();
+    cancelIntroExit();
 
     if (nextMode === "quick") {
       let nextStartedQuick = false;
@@ -729,48 +715,71 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         <div ref={readingAreaRef}>
           {(readMode === "quick" && !hasStartedQuick) ||
           (readMode === "deep" && clampedDeepStep === 0) ? (
-            <IntroSection
-              book={book}
-              fs={fs}
-              mode={readMode}
-              articleTerms={ARTICLE_TERMS}
-              onSelectArticleTerm={setActiveArticleTerm}
-              onStartReading={() => {
-                if (readMode === "deep") {
-                  goToDeepStep(1);
-                  triggerReadingWelcome();
-                  return;
-                }
-                const firstTakeaway = book.keyTakeaways[0];
-                setPendingQuickStep(firstTakeaway ? 1 : finalStep);
-                pendingScrollToReadingTopRef.current = true;
-                setHasStartedQuick(true);
-                syncUrlHistory({
-                  mode: "quick",
-                  startedQuick: true,
-                  deepStep: 0,
-                });
-                triggerReadingWelcome();
-              }}
-              onSelectTakeaway={(num) => {
-                closeReadingWelcome();
-                if (readMode === "deep") {
-                  goToDeepStep(num);
-                  return;
-                }
-                const idx = book.keyTakeaways.findIndex(
-                  (t) => t.number === num
-                );
-                if (idx >= 0) setPendingQuickStep(idx + 1);
-                pendingScrollTargetRef.current = `poin-${num}`;
-                setHasStartedQuick(true);
-                syncUrlHistory({
-                  mode: "quick",
-                  startedQuick: true,
-                  deepStep: 0,
-                });
-              }}
-            />
+            <div
+              className={`transition-opacity duration-200 ease-out ${
+                isLeavingIntro ? "pointer-events-none opacity-0" : "opacity-100"
+              }`}
+            >
+              <IntroSection
+                book={book}
+                fs={fs}
+                mode={readMode}
+                articleTerms={ARTICLE_TERMS}
+                onSelectArticleTerm={setActiveArticleTerm}
+                onStartReading={() => {
+                  if (isLeavingIntro) return;
+
+                  const enterFirstPoint = () => {
+                    if (readMode === "deep") {
+                      goToDeepStep(1);
+                      return;
+                    }
+                    const firstTakeaway = book.keyTakeaways[0];
+                    setPendingQuickStep(firstTakeaway ? 1 : finalStep);
+                    pendingScrollToReadingTopRef.current = true;
+                    setHasStartedQuick(true);
+                    syncUrlHistory({
+                      mode: "quick",
+                      startedQuick: true,
+                      deepStep: 0,
+                    });
+                  };
+
+                  if (
+                    typeof window !== "undefined" &&
+                    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+                  ) {
+                    enterFirstPoint();
+                    return;
+                  }
+
+                  setIsLeavingIntro(true);
+                  window.clearTimeout(introExitTimerRef.current);
+                  introExitTimerRef.current = window.setTimeout(() => {
+                    setIsLeavingIntro(false);
+                    enterFirstPoint();
+                  }, 200);
+                }}
+                onSelectTakeaway={(num) => {
+                  cancelIntroExit();
+                  if (readMode === "deep") {
+                    goToDeepStep(num);
+                    return;
+                  }
+                  const idx = book.keyTakeaways.findIndex(
+                    (t) => t.number === num
+                  );
+                  if (idx >= 0) setPendingQuickStep(idx + 1);
+                  pendingScrollTargetRef.current = `poin-${num}`;
+                  setHasStartedQuick(true);
+                  syncUrlHistory({
+                    mode: "quick",
+                    startedQuick: true,
+                    deepStep: 0,
+                  });
+                }}
+              />
+            </div>
           ) : readMode === "quick" ? (
             /* MODE KILAT: Halaman Baca Vertikal Penuh (setelah Mulai) */
             <div className="animate-fade-slide" key="quick-reading-view">
@@ -996,13 +1005,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         term={activeArticleTerm}
         bookSlug={book.slug}
         onClose={() => setActiveArticleTerm(null)}
-      />
-
-      <ReaderWelcomeOverlay
-        open={welcomeOverlay.open}
-        runId={welcomeOverlay.runId}
-        book={book}
-        onComplete={closeReadingWelcome}
       />
     </div>
   );
