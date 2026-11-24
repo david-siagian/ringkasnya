@@ -792,7 +792,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             </div>
           ) : readMode === "quick" ? (
             /* MODE KILAT: Halaman Baca Vertikal Penuh (setelah Mulai) */
-            <div className="animate-fade-slide" key="quick-reading-view">
+            <div className="animate-reader-fade-in" key="quick-reading-view">
                 {/* Bar Navigasi Atas Mode Kilat */}
                 <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
                   <button
@@ -863,7 +863,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               </div>
           ) : (
             /* MODE MENDALAM: Alur Halaman Per Halaman (Poin Inti 1..N -> Penutup) */
-            <div className="animate-fade-slide" key={`deep-step-${clampedDeepStep}`}>
+            <div className="animate-reader-fade-in" key={`deep-step-${clampedDeepStep}`}>
               {/* Bar Navigasi Atas Stepper Mode Mendalam */}
                   <div className="relative z-20 mb-4 flex items-center justify-between gap-2 sm:gap-3 rounded-xl border border-line bg-surface px-3.5 py-2.5 sm:px-4 shadow-sm">
                     <button
