@@ -146,6 +146,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [activeArticleTerm, setActiveArticleTerm] =
     useState<ArticleTermEntry | null>(null);
   const [isLeavingView, setIsLeavingView] = useState(false);
+  const [isStartingSession, setIsStartingSession] = useState(false);
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const viewExitTimerRef = useRef<number | undefined>(undefined);
@@ -193,6 +194,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         : { mode: "quick" as const, startedQuick: false, deepStep: 0 };
 
     cancelViewExit();
+    setIsStartingSession(false);
     setReadMode(initial.mode);
     setHasStartedQuick(initial.startedQuick);
     setDeepStep(initial.deepStep);
@@ -213,6 +215,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         finalStep
       );
       cancelViewExit();
+      setIsStartingSession(false);
       window.clearTimeout(pendingQuickStepTimerRef.current);
       pendingQuickStepRef.current = null;
       pendingScrollTargetRef.current = null;
@@ -421,7 +424,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   };
 
   const transitionAfterFadeOut = useCallback(
-    (onReady: () => void) => {
+    (onReady: () => void, fadeOutMs = 200) => {
       if (isLeavingView) return;
 
       const enterNextView = () => {
@@ -446,7 +449,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       viewExitTimerRef.current = window.setTimeout(() => {
         setIsLeavingView(false);
         enterNextView();
-      }, 200);
+      }, fadeOutMs);
     },
     [isLeavingView, getReadingTopY]
   );
@@ -455,11 +458,13 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     const target = Math.max(0, Math.min(finalStep, nextStep));
     if (target === clampedDeepStep) return;
     transitionAfterFadeOut(() => {
+      setIsStartingSession(false);
       goToDeepStep(target, false);
     });
   };
 
   const handleReadTakeawayDeep = (step: number) => {
+    setIsStartingSession(false);
     setPendingQuickStep(null);
     goToDeepStep(step);
     setReadMode("deep");
@@ -472,6 +477,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   const backToQuickIntro = () => {
     cancelViewExit();
+    setIsStartingSession(false);
     setPendingQuickStep(null);
     setHasStartedQuick(false);
     pendingScrollToReadingTopRef.current = true;
@@ -481,6 +487,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const handleModeChange = (nextMode: "quick" | "deep") => {
     if (nextMode === readMode) return;
     cancelViewExit();
+    setIsStartingSession(false);
 
     if (nextMode === "quick") {
       let nextStartedQuick = false;
@@ -761,7 +768,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           {(readMode === "quick" && !hasStartedQuick) ||
           (readMode === "deep" && clampedDeepStep === 0) ? (
             <div
-              className={`transition-opacity duration-200 ease-out ${
+              className={`transition-opacity duration-[380ms] ease-out ${
                 isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
               }`}
             >
@@ -773,6 +780,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 onSelectArticleTerm={setActiveArticleTerm}
                 onStartReading={() => {
                   transitionAfterFadeOut(() => {
+                    setIsStartingSession(true);
                     if (readMode === "deep") {
                       goToDeepStep(1, false);
                       return;
@@ -785,10 +793,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       startedQuick: true,
                       deepStep: 0,
                     });
-                  });
+                  }, 380);
                 }}
                 onSelectTakeaway={(num) => {
                   cancelViewExit();
+                  setIsStartingSession(false);
                   if (readMode === "deep") {
                     goToDeepStep(num);
                     return;
@@ -809,7 +818,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             </div>
           ) : readMode === "quick" ? (
             /* MODE KILAT: Halaman Baca Vertikal Penuh (setelah Mulai) */
-            <div className="animate-reader-fade-in" key="quick-reading-view">
+            <div
+              className={
+                isStartingSession
+                  ? "animate-reader-start-fade-in"
+                  : "animate-reader-fade-in"
+              }
+              key="quick-reading-view"
+            >
                 {/* Bar Navigasi Atas Mode Kilat */}
                 <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
                   <button
@@ -885,7 +901,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
               }`}
             >
-              <div className="animate-reader-fade-in" key={`deep-step-${clampedDeepStep}`}>
+              <div
+                className={
+                  isStartingSession
+                    ? "animate-reader-start-fade-in"
+                    : "animate-reader-fade-in"
+                }
+                key={`deep-step-${clampedDeepStep}`}
+              >
                 {/* Bar Navigasi Atas Stepper Mode Mendalam */}
                   <div className="relative z-20 mb-4 flex items-center justify-between gap-2 sm:gap-3 rounded-xl border border-line bg-surface px-3.5 py-2.5 sm:px-4 shadow-sm">
                     <button

@@ -113,8 +113,13 @@ body {
   animation: fadeSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.animate-reader-start-fade-in {
+  animation: fadeSlideUp 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-reader-fade-in {
+  .animate-reader-fade-in,
+  .animate-reader-start-fade-in {
     animation: none !important;
   }
 }
