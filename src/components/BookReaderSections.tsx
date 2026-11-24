@@ -169,8 +169,8 @@ export function IntroSection({
         </div>
 
         {onStartReading && (
-          <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-line-subtle pt-5 sm:flex-row">
-            <p className={`${fs.subtext} text-ink-muted text-center sm:text-left`}>
+          <div className="mt-6 flex flex-col items-center gap-2.5 border-t border-line-subtle pt-5">
+            <p className={`${fs.subtext} text-center text-ink-muted`}>
               Siap Baca?
             </p>
             <button
