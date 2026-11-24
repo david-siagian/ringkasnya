@@ -17,6 +17,7 @@ import {
   Quote,
   Sparkles,
   Target,
+  Zap,
 } from "lucide-react";
 
 export const FONT_SCALES = {
@@ -66,7 +67,7 @@ interface IntroSectionProps {
   fs: FontScale;
   mode: "quick" | "deep";
   onSelectTakeaway?: (takeawayNumber: number) => void;
-  onStartDeepReading?: () => void;
+  onStartReading?: () => void;
   articleTerms?: readonly ArticleTermEntry[];
   onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
@@ -77,7 +78,7 @@ export function IntroSection({
   fs,
   mode,
   onSelectTakeaway,
-  onStartDeepReading,
+  onStartReading,
   articleTerms = [],
   onSelectArticleTerm,
 }: IntroSectionProps) {
@@ -174,22 +175,26 @@ export function IntroSection({
           )}
         </div>
 
-        {mode === "deep" && onStartDeepReading && (
+        {onStartReading && (
           <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-line-subtle pt-5 sm:flex-row">
             <p className={`${fs.subtext} text-ink-muted text-center sm:text-left`}>
               {firstTakeaway
-                ? `Siap menyelami isi buku bab demi bab mulai dari Poin Inti 1?`
+                ? mode === "deep"
+                  ? "Siap menyelami isi buku bab demi bab mulai dari Poin Inti 1?"
+                  : "Siap membaca intisari buku dari Poin Inti 1 sampai kesimpulan?"
                 : "Lanjut ke bagian penutup buku."}
             </p>
             <button
               type="button"
-              onClick={onStartDeepReading}
+              onClick={onStartReading}
               className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto"
             >
-              <BookOpen className="h-4 w-4" />
-              <span>
-                {firstTakeaway ? "Baca Poin Inti 1" : "Baca Kesimpulan Akhir"}
-              </span>
+              {mode === "quick" ? (
+                <Zap className="h-4 w-4" />
+              ) : (
+                <BookOpen className="h-4 w-4" />
+              )}
+              <span>Mulai</span>
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>

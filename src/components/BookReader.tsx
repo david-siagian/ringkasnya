@@ -80,6 +80,7 @@ async function copyTextToClipboard(text: string): Promise<boolean> {
 
 export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [readMode, setReadMode] = useState<"quick" | "deep">("quick");
+  const [hasStartedQuick, setHasStartedQuick] = useState(false);
   const [deepStep, setDeepStep] = useState(0);
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
@@ -120,10 +121,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const readingProgress =
     readMode === "deep"
       ? Math.round((clampedDeepStep / Math.max(1, finalStep)) * 100)
-      : scrollProgress;
+      : hasStartedQuick
+        ? scrollProgress
+        : 0;
 
-  // Reset step Mode Mendalam & modal cepat bila berpindah buku
+  // Reset step Mode Mendalam, status mulai Mode Kilat, & modal cepat bila berpindah buku
   useEffect(() => {
+    setHasStartedQuick(false);
+    setScrollProgress(0);
     setDeepStep(0);
     setIsConceptsModalOpen(false);
     setIsQuotesModalOpen(false);
@@ -137,7 +142,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   useEffect(() => {
     const isAtCompletionEnd =
       (readMode === "deep" && clampedDeepStep === finalStep) ||
-      (readMode === "quick" && scrollProgress >= 90);
+      (readMode === "quick" && hasStartedQuick && scrollProgress >= 90);
 
     if (isAtCompletionEnd && !wasAtCompletionEndRef.current) {
       markCompleted(book.slug);
@@ -145,6 +150,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     wasAtCompletionEndRef.current = isAtCompletionEnd;
   }, [
     readMode,
+    hasStartedQuick,
     clampedDeepStep,
     finalStep,
     scrollProgress,
@@ -178,9 +184,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     };
   }, []);
 
-  // Hitung progres membaca berbasis scroll saat berada di Mode Kilat
+  // Hitung progres membaca berbasis scroll saat berada di Mode Kilat (setelah klik Mulai)
   useEffect(() => {
-    if (readMode !== "quick") return;
+    if (readMode !== "quick" || !hasStartedQuick) return;
 
     let rafId = 0;
 
@@ -219,11 +225,15 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       window.removeEventListener("resize", scheduleUpdate);
       if (rafId) window.cancelAnimationFrame(rafId);
     };
-  }, [readMode, fontSize, book.slug]);
+  }, [readMode, hasStartedQuick, fontSize, book.slug]);
 
   // Jalankan smooth scroll tertunda setelah perpindahan mode atau halaman bab
   useEffect(() => {
-    if (readMode === "quick" && pendingScrollTargetRef.current) {
+    if (
+      readMode === "quick" &&
+      hasStartedQuick &&
+      pendingScrollTargetRef.current
+    ) {
       const targetId = pendingScrollTargetRef.current;
       pendingScrollTargetRef.current = null;
       const timer = window.setTimeout(() => {
@@ -244,7 +254,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       );
       smoothScrollToY(targetY, 420);
     }
-  }, [readMode, clampedDeepStep]);
+  }, [readMode, hasStartedQuick, clampedDeepStep]);
 
   const handleCopyQuote = async (quote: string, index: number) => {
     const textToCopy = `"${quote}" — ${book.title} (${book.author}) via ringkasnya.com`;
@@ -312,14 +322,28 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       ? book.keyTakeaways[clampedDeepStep - 1]
       : null;
 
+  const startQuickAt = (targetId: string, step?: number) => {
+    if (step !== undefined) {
+      setPendingQuickStep(step);
+    }
+    if (!hasStartedQuick) {
+      pendingScrollTargetRef.current = targetId;
+      setHasStartedQuick(true);
+      return;
+    }
+    smoothScrollToElement(targetId, 520);
+  };
+
   const handleModeChange = (nextMode: "quick" | "deep") => {
     if (nextMode === readMode) return;
 
     if (nextMode === "quick") {
       if (activeTakeaway) {
+        setHasStartedQuick(true);
         pendingScrollTargetRef.current = `poin-${activeTakeaway.number}`;
         setPendingQuickStep(clampedDeepStep);
       } else if (clampedDeepStep === finalStep) {
+        setHasStartedQuick(true);
         pendingScrollTargetRef.current = "kesimpulan-akhir";
         setPendingQuickStep(finalStep);
       } else {
@@ -329,7 +353,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       return;
     }
 
-    const targetStep = detectActiveQuickStep();
+    const targetStep = hasStartedQuick ? detectActiveQuickStep() : 0;
     setPendingQuickStep(null);
     setDeepStep(targetStep);
     pendingScrollToReadingTopRef.current = true;
@@ -580,7 +604,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       <main className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
         <div ref={readingAreaRef}>
           {readMode === "quick" ? (
-            /* MODE KILAT: Scroll Vertikal Penuh */
+            /* MODE KILAT: Pengantar lalu Scroll Vertikal Penuh setelah klik Mulai */
             <>
               <IntroSection
                 book={book}
@@ -588,54 +612,64 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 mode="quick"
                 articleTerms={ARTICLE_TERMS}
                 onSelectArticleTerm={setActiveArticleTerm}
+                onStartReading={() => {
+                  const firstTakeaway = book.keyTakeaways[0];
+                  startQuickAt(
+                    firstTakeaway ? `poin-${firstTakeaway.number}` : "kesimpulan-akhir",
+                    firstTakeaway ? 1 : finalStep
+                  );
+                }}
                 onSelectTakeaway={(num) => {
                   const idx = book.keyTakeaways.findIndex(
                     (t) => t.number === num
                   );
-                  if (idx >= 0) setPendingQuickStep(idx + 1);
-                  smoothScrollToElement(`poin-${num}`);
+                  startQuickAt(`poin-${num}`, idx >= 0 ? idx + 1 : undefined);
                 }}
               />
 
-              <div className="mt-8 space-y-6">
-                {book.keyTakeaways.map((takeaway, idx) => (
-                  <TakeawayCard
-                    key={takeaway.number}
-                    takeaway={takeaway}
+              {hasStartedQuick && (
+                <div className="animate-fade-slide">
+                  <div className="mt-8 space-y-6">
+                    {book.keyTakeaways.map((takeaway, idx) => (
+                      <TakeawayCard
+                        key={takeaway.number}
+                        takeaway={takeaway}
+                        fs={fs}
+                        showDeepContent={false}
+                        scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                        onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
+                        articleTerms={ARTICLE_TERMS}
+                        onSelectArticleTerm={setActiveArticleTerm}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="mt-8">
+                    <ConclusionSection
+                      conclusion={book.conclusion}
+                      fs={fs}
+                      scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                      articleTerms={ARTICLE_TERMS}
+                      onSelectArticleTerm={setActiveArticleTerm}
+                    />
+                  </div>
+
+                  <KeyConceptsSection
+                    keyConcepts={book.keyConcepts}
                     fs={fs}
-                    showDeepContent={false}
-                    scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
-                    onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
                     articleTerms={ARTICLE_TERMS}
                     onSelectArticleTerm={setActiveArticleTerm}
                   />
-                ))}
-              </div>
 
-              <div className="mt-8">
-                <ConclusionSection
-                  conclusion={book.conclusion}
-                  fs={fs}
-                  scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
-                  articleTerms={ARTICLE_TERMS}
-                  onSelectArticleTerm={setActiveArticleTerm}
-                />
-              </div>
-
-              <KeyConceptsSection
-                keyConcepts={book.keyConcepts}
-                fs={fs}
-                articleTerms={ARTICLE_TERMS}
-                onSelectArticleTerm={setActiveArticleTerm}
-              />
-
-              <QuotesSection
-                quotes={book.quotes}
-                copyFeedback={copyFeedback}
-                onCopyQuote={handleCopyQuote}
-                onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
-                fs={fs}
-              />
+                  <QuotesSection
+                    quotes={book.quotes}
+                    copyFeedback={copyFeedback}
+                    onCopyQuote={handleCopyQuote}
+                    onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
+                    fs={fs}
+                  />
+                </div>
+              )}
             </>
           ) : (
             /* MODE MENDALAM: Alur Halaman Per Halaman (Pengantar -> Poin Inti 1..N -> Penutup) */
@@ -648,7 +682,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   articleTerms={ARTICLE_TERMS}
                   onSelectArticleTerm={setActiveArticleTerm}
                   onSelectTakeaway={(num) => goToDeepStep(num)}
-                  onStartDeepReading={() => goToDeepStep(1)}
+                  onStartReading={() => goToDeepStep(1)}
                 />
               ) : (
                 <>
@@ -770,7 +804,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           )}
         </div>
 
-        {(readMode === "quick" || clampedDeepStep === finalStep) && (
+        {(readMode === "quick" ? hasStartedQuick : clampedDeepStep === finalStep) && (
           <RelatedBooksSection relatedBooks={recommendedBooks} />
         )}
       </main>

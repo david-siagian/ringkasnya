@@ -171,6 +171,9 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await quickBtn.click();
     await expect(quickBtn).toHaveClass(/bg-amber-500/);
 
+    // Mulai membaca Mode Kilat agar Poin Inti, Kesimpulan, Konsep Kunci, dan Kutipan tampil
+    await page.getByRole("button", { name: "Mulai" }).click();
+
     // Bagian Konsep Kunci tampil menggantikan Action Checklist
     await expect(
       page.getByRole("heading", {
@@ -217,6 +220,9 @@ test.describe("Ringkasnya Smoke Tests", () => {
       name: "Progres membaca",
     });
     await expect(progressBar).toBeVisible();
+
+    // Klik Mulai untuk membuka konten Mode Kilat
+    await page.getByRole("button", { name: "Mulai" }).click();
 
     // 2. Buat Kartu Kutipan PNG
     const createCardBtn = page
