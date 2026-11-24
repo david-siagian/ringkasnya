@@ -1,5 +1,10 @@
 # Workspace Rules
 
+## CRITICAL GATE: Feature & Bugfix Review Board (Wajib Sebelum Coding)
+- Setiap kali user meminta **fitur baru**, perubahan **alur pengguna / antarmuka**, atau **perbaikan bug (fixing)**, **WAJIB** baca dan jalankan skill `review-board` (`.agents/skills/review-board/SKILL.md`) **sebelum** memanggil `edit_file` atau `write_file`.
+- Evaluasi di dalam *internal thought* **tidak sah** — hasil Review Board harus dicetak ke chat sesuai format skill `review-board` sebelum perubahan kode pertama dilakukan.
+- *(Bypass: hanya lewati jika prompt secara eksplisit menyertakan `"skip review"`, `"no review"`, atau `"eksekusi"`.)*
+
 ## Planning & Documentation
 - Setiap kali membuat atau memperbarui dokumen rencana (Implementation Plan / `/plan`), selain menyimpannya di Artifact Directory sistem, **wajib** juga menyimpan salinan file rencana tersebut (`PLAN.md`) langsung di dalam folder proyek aktif (`E:\MyApp\ringkasnya\PLAN.md`).
 
@@ -56,47 +61,3 @@
 - **Playwright Smoke Test (On-Demand)**: Uji browser (`npm run test:e2e`, mengacu ke `tests/smoke.spec.ts`) hanya dijalankan jika diminta secara eksplisit oleh user, dengan skenario minimal:
   - **Beranda (`/`)**: Zero `console.error` / `pageerror`, pencarian & filter kategori berfungsi, serta navigasi/smooth scroll ke katalog berjalan normal.
   - **Halaman Reader (`/buku/<slug>`, mis. `/buku/sapiens`)**: Toggle **Mode Kilat vs Mode Mendalam** berfungsi, bagian **Konsep Kunci** tampil normal, tombol salin kutipan & tema (`useTheme`) bekerja, serta endpoint `/api/health` merespons normal.
-
-## Feature & Bugfix Review Board (Wajib Sebelum Coding)
-Setiap kali diminta menambahkan **fitur baru**, mengubah **alur pengguna**, atau melakukan **perbaikan bug (fixing)**, JANGAN langsung menulis atau mengubah kode terlebih dahulu. Lakukan evaluasi ringkas melalui 3 *role* berikut sebelum menyusun rencana implementasi.
-
-*(Bypass: Jika instruksi secara eksplisit menyertakan `"skip review"`, `"no review"` atau `"eksekusi"`, lewati Review Board dan langsung eksekusi.)*
-
-### I. Role Wajib (Selalu Aktif untuk Fitur & Perubahan Antarmuka)
-
-#### 1. Product & UX Reviewer (Human-Centric & Tren)
-- **Nilai & Kebiasaan Pengguna:** Apakah fitur/perbaikan menjawab kebutuhan pembaca ringkasan buku dan pendengar audio secara nyata, atau menambah beban visual/aliran yang tidak perlu?
-- **Ergonomi & Tren Produk:** Evaluasi alur baca, konsep kunci, pemutar audio, dan highlight terhadap pola aplikasi modern (kecepatan *time-to-value*, *mobile-first*, transisi halus, tanpa gangguan berlebih). Sarankan alternatif yang lebih ringan jika diperlukan.
-
-#### 2. QA & Edge-Case Skeptic (Keandalan & Akar Masalah)
-- **State & Kegagalan:** Periksa *empty state*, *loading state*, jaringan terputus/lambat, teks panjang, audio belum tersedia/gagal dimuat, dan klik ganda cepat.
-- **Akar Masalah vs Tambalan:** Pastikan *bug fix* menyentuh akar penyebab, bukan sekadar menyembunyikan *error* di UI.
-- **Verifikasi:** Rencanakan skenario pengujian spesifik (termasuk uji browser Playwright untuk alur UI utama) agar regresi mudah terdeteksi.
-
----
-
-### II. Role Kondisional (Aktifkan Hanya Sesuai Konteks Perubahan)
-
-#### 3. Growth & Retention Strategist *(Aktifkan jika menyentuh alur utama, onboarding, navigasi, atau pengalaman konsumsi konten)*
-- **Dampak pada Retensi & Alur Kembali:** Apakah fitur/perbaikan membantu pengguna kembali menggunakan aplikasi secara alami dan menyelesaikan nilai utamanya, atau justru menambah friksi yang membuat pengguna berhenti di tengah jalan?
-- **Nilai Jangka Panjang vs Gimmick:** Apakah efeknya mendorong kebiasaan penggunaan yang sehat dan berkelanjutan, atau sekadar kebaruan sesaat yang cepat diabaikan?
-
-#### 4. Cost & Unit Economics Auditor *(Aktifkan HANYA jika menyentuh AI/LLM, TTS, API berbayar, atau storage/egress Cloudflare R2)*
-- **Biaya Marginal & Caching:** Pastikan hasil generasi LLM/TTS dan aset audio di Cloudflare R2 di-*cache* atau dideduplikasi agar tidak memicu generasi maupun *request* berulang yang boros.
-- **Proteksi Abuse & Kuota:** Cegah *loop* permintaan ulang, eksekusi *batch* tak terkendali, atau pemanggilan API tanpa batas yang dapat membengkakkan tagihan.
-
-#### 5. Systems & Reliability Engineer *(Aktifkan HANYA jika mengubah alur data, skema database, batch pipeline, atau logika backend)*
-- **Ketahanan & Konsistensi Data:** Bagaimana perilaku sistem saat koneksi terputus, *retry* dijalankan, *payload* besar, atau proses *batch* gagal di tengah jalan (idempotensi dan *rollback*)?
-- **Performa & Maintainability:** Apakah *query*, *indexing*, atau manajemen *state* tetap efisien dan mudah di-*debug* seiring bertambahnya jumlah buku dan pengguna?
-
-#### 6. Security & Privacy Gatekeeper *(Aktifkan HANYA jika menyentuh auth, data pengguna, RLS, atau endpoint/API route)*
-- **Otorisasi & Validasi Server-Side:** Pastikan hak akses diperiksa di sisi *server* dan database (*Row Level Security* Supabase), bukan hanya disembunyikan di UI.
-- **Proteksi Input & Kebocoran Data:** Validasi seluruh input *endpoint*, cegah eksposur *secret*/kredensial, dan pastikan pengguna hanya dapat mengakses atau mengubah data miliknya sendiri.
-
----
-
-### Format Output Wajib Sebelum Mengubah Kode:
-1. **Role Aktif:** Sebutkan *role* wajib + *role* kondisional mana saja yang diaktifkan (dan abaikan *role* kondisional yang tidak relevan).
-2. **Review Singkat:** Maksimal 2 kalimat per *role* aktif agar padat dan mudah dibaca cepat dari layar ponsel.
-3. **Keputusan:** Nyatakan **Layak lanjut apa adanya**, **Lanjut dengan penyesuaian**, atau **Sebaiknya disederhanakan**, disertai alasan utama.
-4. **Konfirmasi:** Jika keputusan adalah **Layak lanjut apa adanya**, langsung terapkan perubahan tanpa perlu meminta konfirmasi user terlebih dahulu. Untuk keputusan selain itu (**Lanjut dengan penyesuaian** atau **Sebaiknya disederhanakan**), minta persetujuan eksplisit sebelum mulai menulis/mengubah kode.
