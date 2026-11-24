@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { BookCatalogItem, BookSummary } from "@/types/book";
 import type { ArticleTermEntry } from "@/types/article";
 import { RichBookText } from "./RichBookText";
+import BookPreviewModal from "./BookPreviewModal";
 import {
   AlertCircle,
   ArrowRight,
@@ -526,6 +527,8 @@ export function RelatedBooksSection({
 }: {
   relatedBooks: BookCatalogItem[];
 }) {
+  const [previewBook, setPreviewBook] = useState<BookCatalogItem | null>(null);
+
   return (
     <section className="mt-12">
       {relatedBooks.length > 0 && (
@@ -547,6 +550,11 @@ export function RelatedBooksSection({
               <a
                 key={other.slug}
                 href={`/buku/${other.slug}`}
+                data-no-transition="true"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPreviewBook(other);
+                }}
                 className="group flex min-w-0 items-start gap-4 rounded-2xl border border-line bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md sm:p-5"
               >
                 <div className="relative aspect-[3/4] w-20 shrink-0 overflow-hidden rounded-xl shadow-sm ring-1 ring-line/70 sm:w-24">
@@ -606,6 +614,11 @@ export function RelatedBooksSection({
           <span>Jelajahi Katalog Buku</span>
         </a>
       </div>
+
+      <BookPreviewModal
+        book={previewBook}
+        onClose={() => setPreviewBook(null)}
+      />
     </section>
   );
 }
