@@ -140,4 +140,4 @@ Secara ringkas, hal yang diverifikasi mencakup:
    - Setiap `deepContent` punya **4–8 paragraf** (ideal 5–7), masing-masing **35–90 kata** (ideal 45–75 kata), dengan total **~300–430 kata/bab** yang merata antarbab.
 4. **Jumlah Elemen Konsisten:** `who_is_it_for_json.length === 4`, `key_concepts_json.length === key_takeaways_json.length`, `quotes_json.length` antara `5–6`.
 5. **Durasi Baca Tepat Sasaran:** Hasil `withCalculatedReadingTimes` (`WORDS_PER_MINUTE = 200`) masuk rentang kelas tebal halaman buku, dan angkanya sama persis dengan `quick_time_minutes`, `reading_time_minutes`, serta `takeaways_count` di tabel `books`.
-6. **Sinkronisasi Dokumentasi:** Perbarui daftar di [`BOOKS.md`](./BOOKS.md) jika menambah buku baru atau mengubah durasi/poin buku yang ada.
+6. **Sinkronisasi Dokumentasi:** Perbarui daftar di [`BOOKS_LIST.md`](./BOOKS_LIST.md) jika menambah buku baru atau mengubah durasi/poin buku yang ada.

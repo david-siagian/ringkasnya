@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Validator Konten Buku Ringkasnya (berdasarkan CONTENT.md)
+ * Validator Konten Buku Ringkasnya (berdasarkan BOOK_CONTENT.md)
  *
  * Penggunaan:
  *   npm run validate:content -- migrations/0015_add_books_batch_5.sql
@@ -327,7 +327,7 @@ function validateBookEntry(entry) {
     }
     const sw = countWords(meta.synopsis);
     if (sw < 50 || sw > 105) {
-      warnings.push(`\`synopsis\` = ${sw} kata (ideal CONTENT.md: 65–85 kata).`);
+      warnings.push(`\`synopsis\` = ${sw} kata (ideal BOOK_CONTENT.md: 65–85 kata).`);
     }
   }
 
@@ -389,7 +389,7 @@ function validateBookEntry(entry) {
             if (qsw < 45 || qsw > 95) {
               errors.push(`Bab #${expectedNum} \`quickSummary\` = ${qsw} kata (batas aman: 50–80 kata, ideal 55–70).`);
             } else if (qsw < 50 || qsw > 80) {
-              warnings.push(`Bab #${expectedNum} \`quickSummary\` = ${qsw} kata (ideal CONTENT.md: 55–70 kata).`);
+              warnings.push(`Bab #${expectedNum} \`quickSummary\` = ${qsw} kata (ideal BOOK_CONTENT.md: 55–70 kata).`);
             }
           }
 
@@ -504,7 +504,7 @@ function validateBookEntry(entry) {
   if (content.conclusion !== undefined && typeof content.conclusion === "string") {
     const cw = countWords(content.conclusion);
     if (cw < 50 || cw > 150) {
-      warnings.push(`\`conclusion\` = ${cw} kata (ideal CONTENT.md: 75–110 kata).`);
+      warnings.push(`\`conclusion\` = ${cw} kata (ideal BOOK_CONTENT.md: 75–110 kata).`);
     }
   }
 

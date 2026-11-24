@@ -90,16 +90,16 @@ Selain **Bedah Istilah**, rubrik Artikel ke depannya dapat diperluas ke format e
 
 ## 5. Ekspansi Katalog 100 Buku & Pembaruan Kategori (Bertahap 10 Buku/Batch)
 
-> **Daftar Lengkap 100 Buku**: Lihat [`BOOKS.md`](./BOOKS.md) untuk daftar lengkap **58 buku awal**, **20 buku yang sudah digenerate (Batch 1–2)**, serta **22 buku yang belum digenerate (Batch 3–5)** beserta target skala poin inti & durasi baca masing-masing.
+> **Daftar Lengkap 100 Buku**: Lihat [`BOOKS_LIST.md`](./BOOKS_LIST.md) untuk daftar lengkap **58 buku awal**, **20 buku yang sudah digenerate (Batch 1–2)**, serta **22 buku yang belum digenerate (Batch 3–5)** beserta target skala poin inti & durasi baca masing-masing.
 
 - **Pembaruan Kategori (`0002_update_categories_tubuh_kesehatan.sql`)**:
   - Menambahkan kategori baru **`Teknologi & Masa Depan`**.
   - Mengubah nama kategori **`Kesehatan & Medis`** → **`Tubuh & Kesehatan`**.
 - **Progres Saat Ini (`78 / 100 Buku`)**:
-  - **Buku Awal (Eksisting)**: 58 buku (lihat [`BOOKS.md`](./BOOKS.md#bagian-a-58-buku-sebelumnya-sudah-ada-di-d1)).
+  - **Buku Awal (Eksisting)**: 58 buku (lihat [`BOOKS_LIST.md`](./BOOKS_LIST.md#fase-1-58-buku-awal-sudah-dimigrasikan--disesuaikan-di-d1)).
   - **Batch 1 (`0003_add_books_batch_1.sql` & `0005_rescale_books_batch_1.sql`)**: 10 buku selesai (`59–68`).
   - **Batch 2 (`0006_add_books_batch_2.sql`)**: 10 buku selesai (`69–78`).
-  - **Fase Selanjutnya (`Batch 3–5`)**: 22 buku tersisa (`79–100`, detail di [`BOOKS.md`](./BOOKS.md#bagian-c-22-buku-yang-belum-digenerate-fase-selanjutnya)).
+  - **Fase Selanjutnya (`Batch 3–5`)**: 22 buku tersisa (`79–100`, detail di [`BOOKS_LIST.md`](./BOOKS_LIST.md#fase-2-42-buku-terakhir-sudah-dimigrasikan-ke-d1)).
 
 
 ---

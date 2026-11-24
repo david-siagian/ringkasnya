@@ -1,6 +1,6 @@
 # Daftar Katalog 100 Buku — Ringkasnya
 
-Dokumen ini mencatat seluruh **100 buku** dalam katalog Ringkasnya (`ringkasnya.com`), terbagi menjadi **Fase 1 (58 buku awal)** dan **Fase 2 (42 buku terakhir, Batch 1–5)** beserta estimasi halaman, jumlah poin inti, dan durasi baca sesuai standar [`GEMINI.md`](./GEMINI.md).
+Dokumen ini mencatat seluruh **100 buku** dalam katalog Ringkasnya (`ringkasnya.com`), terbagi menjadi **Fase 1 (58 buku awal)** dan **Fase 2 (42 buku terakhir, Batch 1–5)** beserta estimasi halaman, jumlah poin inti, dan durasi baca sesuai standar [`BOOK_CONTENT.md`](./BOOK_CONTENT.md).
 
 ## Ringkasan Progres
 
