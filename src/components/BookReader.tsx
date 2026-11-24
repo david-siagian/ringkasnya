@@ -600,32 +600,40 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       {/* Konten Utama Ringkasan */}
       <main className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
         <div ref={readingAreaRef}>
-          {readMode === "quick" ? (
-            /* MODE KILAT: Pengantar (sebelum Mulai) -> Halaman Baca Vertikal Penuh (setelah Mulai) */
-            !hasStartedQuick ? (
-              <IntroSection
-                book={book}
-                fs={fs}
-                mode="quick"
-                articleTerms={ARTICLE_TERMS}
-                onSelectArticleTerm={setActiveArticleTerm}
-                onStartReading={() => {
-                  const firstTakeaway = book.keyTakeaways[0];
-                  setPendingQuickStep(firstTakeaway ? 1 : finalStep);
-                  pendingScrollToReadingTopRef.current = true;
-                  setHasStartedQuick(true);
-                }}
-                onSelectTakeaway={(num) => {
-                  const idx = book.keyTakeaways.findIndex(
-                    (t) => t.number === num
-                  );
-                  if (idx >= 0) setPendingQuickStep(idx + 1);
-                  pendingScrollTargetRef.current = `poin-${num}`;
-                  setHasStartedQuick(true);
-                }}
-              />
-            ) : (
-              <div className="animate-fade-slide" key="quick-reading-view">
+          {(readMode === "quick" && !hasStartedQuick) ||
+          (readMode === "deep" && clampedDeepStep === 0) ? (
+            <IntroSection
+              book={book}
+              fs={fs}
+              mode={readMode}
+              articleTerms={ARTICLE_TERMS}
+              onSelectArticleTerm={setActiveArticleTerm}
+              onStartReading={() => {
+                if (readMode === "deep") {
+                  goToDeepStep(1);
+                  return;
+                }
+                const firstTakeaway = book.keyTakeaways[0];
+                setPendingQuickStep(firstTakeaway ? 1 : finalStep);
+                pendingScrollToReadingTopRef.current = true;
+                setHasStartedQuick(true);
+              }}
+              onSelectTakeaway={(num) => {
+                if (readMode === "deep") {
+                  goToDeepStep(num);
+                  return;
+                }
+                const idx = book.keyTakeaways.findIndex(
+                  (t) => t.number === num
+                );
+                if (idx >= 0) setPendingQuickStep(idx + 1);
+                pendingScrollTargetRef.current = `poin-${num}`;
+                setHasStartedQuick(true);
+              }}
+            />
+          ) : readMode === "quick" ? (
+            /* MODE KILAT: Halaman Baca Vertikal Penuh (setelah Mulai) */
+            <div className="animate-fade-slide" key="quick-reading-view">
                 {/* Bar Navigasi Atas Mode Kilat */}
                 <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
                   <button
@@ -694,23 +702,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   </button>
                 </div>
               </div>
-            )
           ) : (
-            /* MODE MENDALAM: Alur Halaman Per Halaman (Pengantar -> Poin Inti 1..N -> Penutup) */
+            /* MODE MENDALAM: Alur Halaman Per Halaman (Poin Inti 1..N -> Penutup) */
             <div className="animate-fade-slide" key={`deep-step-${clampedDeepStep}`}>
-              {clampedDeepStep === 0 ? (
-                <IntroSection
-                  book={book}
-                  fs={fs}
-                  mode="deep"
-                  articleTerms={ARTICLE_TERMS}
-                  onSelectArticleTerm={setActiveArticleTerm}
-                  onSelectTakeaway={(num) => goToDeepStep(num)}
-                  onStartReading={() => goToDeepStep(1)}
-                />
-              ) : (
-                <>
-                  {/* Bar Navigasi Atas Stepper Mode Mendalam */}
+              {/* Bar Navigasi Atas Stepper Mode Mendalam */}
                   <div className="relative z-20 mb-4 flex items-center justify-between gap-2 sm:gap-3 rounded-xl border border-line bg-surface px-3.5 py-2.5 sm:px-4 shadow-sm">
                     <button
                       type="button"
@@ -822,8 +817,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       </button>
                     )}
                   </nav>
-                </>
-              )}
             </div>
           )}
         </div>
