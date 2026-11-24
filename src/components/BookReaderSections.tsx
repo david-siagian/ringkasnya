@@ -128,18 +128,11 @@ export function IntroSection({
 
       {/* Daftar Isi Poin Inti */}
       <div className="mt-6 rounded-2xl border border-line bg-surface p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2
-            className={`${fs.label} font-bold uppercase tracking-wider text-ink-subtle`}
-          >
-            Daftar Poin Inti ({book.keyTakeaways.length} Bab Ringkas)
-          </h2>
-          {mode === "deep" && (
-            <span className={`${fs.micro} font-medium text-ink-muted`}>
-              Klik poin untuk langsung menuju bab tersebut
-            </span>
-          )}
-        </div>
+        <h2
+          className={`${fs.label} font-bold uppercase tracking-wider text-ink-subtle`}
+        >
+          Daftar Poin Inti ({book.keyTakeaways.length} Bab Ringkas)
+        </h2>
 
         <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
           {book.keyTakeaways.map((item, idx) =>
