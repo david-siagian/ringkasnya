@@ -316,6 +316,17 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     };
   }, [readMode, hasStartedQuick, fontSize, book.slug]);
 
+  const getReadingTopY = useCallback(() => {
+    const area = readingAreaRef.current;
+    if (!area) return 0;
+    const stickyBottom =
+      toolbarRef.current?.getBoundingClientRect().bottom ?? 0;
+    return Math.max(
+      0,
+      window.scrollY + area.getBoundingClientRect().top - stickyBottom - 16
+    );
+  }, []);
+
   // Jalankan smooth scroll tertunda setelah perpindahan mode atau halaman bab
   useEffect(() => {
     if (
@@ -333,17 +344,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
     if (pendingScrollToReadingTopRef.current) {
       pendingScrollToReadingTopRef.current = false;
-      const area = readingAreaRef.current;
-      if (!area) return;
-      const stickyBottom =
-        toolbarRef.current?.getBoundingClientRect().bottom ?? 0;
-      const targetY = Math.max(
-        0,
-        window.scrollY + area.getBoundingClientRect().top - stickyBottom - 16
-      );
-      smoothScrollToY(targetY, 420);
+      if (!readingAreaRef.current) return;
+      smoothScrollToY(getReadingTopY(), 420);
     }
-  }, [readMode, hasStartedQuick, clampedDeepStep]);
+  }, [readMode, hasStartedQuick, clampedDeepStep, getReadingTopY]);
 
   const handleCopyQuote = async (quote: string, index: number) => {
     const textToCopy = `"${quote}" — ${book.title} (${book.author}) via ringkasnya.com`;
@@ -730,13 +734,19 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   if (isLeavingIntro) return;
 
                   const enterFirstPoint = () => {
+                    // Posisikan scroll secara instan saat layar masih opacity-0 agar tidak terlihat menggulir ke atas
+                    window.scrollTo({
+                      top: getReadingTopY(),
+                      behavior: "instant" as ScrollBehavior,
+                    });
+
                     if (readMode === "deep") {
                       goToDeepStep(1);
+                      pendingScrollToReadingTopRef.current = false;
                       return;
                     }
                     const firstTakeaway = book.keyTakeaways[0];
                     setPendingQuickStep(firstTakeaway ? 1 : finalStep);
-                    pendingScrollToReadingTopRef.current = true;
                     setHasStartedQuick(true);
                     syncUrlHistory({
                       mode: "quick",
