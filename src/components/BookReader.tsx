@@ -711,11 +711,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               ) : (
                 <>
                   {/* Bar Navigasi Atas Stepper Mode Mendalam */}
-                  <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
+                  <div className="relative z-20 mb-4 flex items-center justify-between gap-2 sm:gap-3 rounded-xl border border-line bg-surface px-3.5 py-2.5 sm:px-4 shadow-sm">
                     <button
                       type="button"
                       onClick={() => goToDeepStep(0)}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
+                      className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
                     >
                       <List className="h-4 w-4" />
                       <span>Daftar Poin</span>

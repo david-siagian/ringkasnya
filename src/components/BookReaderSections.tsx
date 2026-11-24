@@ -690,7 +690,7 @@ export function DeepStepDropdown({
   };
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative min-w-0">
       <button
         ref={triggerRef}
         type="button"
@@ -698,7 +698,7 @@ export function DeepStepDropdown({
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-label="Pilih halaman ringkasan"
-        className="inline-flex max-w-[220px] sm:max-w-xs items-center gap-2 rounded-xl border border-line bg-page px-3 py-1.5 text-xs font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+        className="inline-flex max-w-full sm:max-w-xs items-center gap-2 rounded-xl border border-line bg-page px-3 py-1.5 text-xs font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
       >
         <span className="truncate">{triggerLabel}</span>
         <ChevronDown
@@ -712,7 +712,7 @@ export function DeepStepDropdown({
         <div
           role="listbox"
           aria-label="Daftar halaman Mode Mendalam"
-          className="animate-fade-slide absolute right-0 z-30 mt-2 w-[min(calc(100vw-2.5rem),22rem)] overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-xl ring-1 ring-black/5 dark:ring-white/10"
+          className="animate-fade-slide absolute right-0 z-30 mt-2 w-[min(calc(100vw-3.5rem),22rem)] sm:w-[min(calc(100vw-4rem),22rem)] overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-xl ring-1 ring-black/5 dark:ring-white/10"
         >
           <div className="max-h-72 space-y-0.5 overflow-y-auto pr-0.5">
             <button
@@ -766,7 +766,7 @@ export function DeepStepDropdown({
                   >
                     {item.number}
                   </span>
-                  <span className="flex-1 line-clamp-2 leading-snug">
+                  <span className="flex-1 leading-snug">
                     {item.title}
                   </span>
                   {isActive && (
