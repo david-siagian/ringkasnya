@@ -110,7 +110,7 @@ Setiap objek dalam array `key_takeaways_json` wajib memiliki 5 properti lengkap:
 - **`goodreads_ratings`:** Angka perkiraan jumlah *ratings* buku di Goodreads (integer) untuk pengurutan katalog.
 - **`cover_gradient`:** Kelas gradien Tailwind bernuansa gelap (`800`–`950`) agar teks putih di `BookCard` dan `BookReader` selalu kontras (mis. `from-slate-950 via-indigo-950 to-slate-900`).
 - **`cover_accent`:** Wajib menyertakan kelas tema terang **dan** tema gelap (`bg-... text-... dark:bg-... dark:text-...`) agar pill kategori terbaca di Light maupun Dark Mode.
-- **`cover_image`:** Format vektor `.svg` (`viewBox="0 0 600 800"`) disimpan di `public/images/covers/<slug>.svg` bergaya editorial datar menyerupai sampul aslinya beserta judul dan nama penulis.
+- **`cover_image`:** Format vektor `.svg` (`viewBox="0 0 600 800"`) disimpan di `public/images/covers/<slug>.svg` bergaya editorial datar menyerupai sampul aslinya beserta judul, subjudul, dan nama penulis. Khusus **subjudul di dalam gambar sampul `.svg`**, wajib menggunakan **subjudul asli buku** (bila buku aslinya berbahasa Inggris, tampilkan subjudul pada sampul dalam Bahasa Inggris sesuai sampul aslinya; aturan ini hanya berlaku di dalam sampul `.svg`, sedangkan `original_title` dan `tagline` di database tetap wajib berbahasa Indonesia).
 
 ---
 
