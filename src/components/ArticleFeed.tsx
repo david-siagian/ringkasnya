@@ -26,8 +26,13 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
       ? undefined
       : ARTICLE_FORMATS.find((format) => format.id === selectedFormat);
 
+  const availableFormats = ARTICLE_FORMATS.map((format) => ({
+    ...format,
+    count: items.filter((item) => item.format === format.id).length,
+  })).filter((format) => format.count > 0);
+
   const pillBaseClass =
-    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40";
+    "inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40";
   const pillActiveClass =
     "border-accent-strong bg-accent-strong text-white";
   const pillInactiveClass =
@@ -40,7 +45,7 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
         <div
           role="tablist"
           aria-label="Filter rubrik artikel"
-          className="flex flex-wrap items-center justify-center gap-2 sm:justify-start"
+          className="-mx-4 flex flex-nowrap items-center gap-2 overflow-x-auto px-4 py-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:py-0"
         >
           <button
             type="button"
@@ -61,9 +66,8 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
             </span>
           </button>
 
-          {ARTICLE_FORMATS.map((format) => {
+          {availableFormats.map((format) => {
             const isActive = selectedFormat === format.id;
-            const count = items.filter((item) => item.format === format.id).length;
             return (
               <button
                 key={format.id}
@@ -76,21 +80,19 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
                 }`}
               >
                 <span>{format.label}</span>
-                {count > 0 && (
-                  <span
-                    className={`text-[11px] ${
-                      isActive ? "text-white/80" : "text-ink-subtle"
-                    }`}
-                  >
-                    {count}
-                  </span>
-                )}
+                <span
+                  className={`text-[11px] ${
+                    isActive ? "text-white/80" : "text-ink-subtle"
+                  }`}
+                >
+                  {format.count}
+                </span>
               </button>
             );
           })}
         </div>
 
-        <p className="text-center text-xs text-ink-subtle sm:text-right">
+        <p className="hidden shrink-0 text-right text-xs text-ink-subtle sm:block">
           {filteredItems.length} artikel
         </p>
       </div>
