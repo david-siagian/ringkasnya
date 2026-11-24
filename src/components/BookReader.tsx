@@ -47,6 +47,59 @@ interface BookReaderProps {
   relatedBooks: BookCatalogItem[];
 }
 
+interface ReaderNavState {
+  mode: "quick" | "deep";
+  startedQuick: boolean;
+  deepStep: number;
+}
+
+function parseReaderStateFromSearch(
+  search: string,
+  finalStep: number
+): ReaderNavState {
+  const params = new URLSearchParams(search);
+  const modeParam = params.get("mode");
+  if (modeParam === "deep") {
+    const rawStep = Number.parseInt(params.get("step") ?? "0", 10);
+    const deepStep = Number.isFinite(rawStep)
+      ? Math.max(0, Math.min(finalStep, rawStep))
+      : 0;
+    return { mode: "deep", startedQuick: false, deepStep };
+  }
+
+  const startedQuick = params.get("read") === "1";
+  return { mode: "quick", startedQuick, deepStep: 0 };
+}
+
+function buildReaderSearch(
+  state: ReaderNavState,
+  currentSearch: string,
+  finalStep: number
+): string {
+  const params = new URLSearchParams(currentSearch);
+  if (state.mode === "deep") {
+    const clampedStep = Math.max(0, Math.min(finalStep, state.deepStep));
+    params.set("mode", "deep");
+    params.delete("read");
+    if (clampedStep > 0) {
+      params.set("step", String(clampedStep));
+    } else {
+      params.delete("step");
+    }
+  } else if (state.startedQuick) {
+    params.set("mode", "quick");
+    params.set("read", "1");
+    params.delete("step");
+  } else {
+    params.delete("mode");
+    params.delete("read");
+    params.delete("step");
+  }
+
+  const qs = params.toString();
+  return qs ? `?${qs}` : "";
+}
+
 /** Offset scroll untuk tiap Poin Inti: tinggi navbar + toolbar reader (keduanya sticky). */
 const TAKEAWAY_SCROLL_MARGIN =
   "calc(var(--header-h) + var(--reader-toolbar-h) + 16px)";
@@ -147,11 +200,17 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         ? scrollProgress
         : 0;
 
-  // Reset step Mode Mendalam, status mulai Mode Kilat, & modal cepat bila berpindah buku
+  // Sinkronkan state awal dari URL query & reset modal saat berpindah buku
   useEffect(() => {
-    setHasStartedQuick(false);
+    const initial =
+      typeof window !== "undefined"
+        ? parseReaderStateFromSearch(window.location.search, finalStep)
+        : { mode: "quick" as const, startedQuick: false, deepStep: 0 };
+
+    setReadMode(initial.mode);
+    setHasStartedQuick(initial.startedQuick);
+    setDeepStep(initial.deepStep);
     setScrollProgress(0);
-    setDeepStep(0);
     setIsConceptsModalOpen(false);
     setIsQuotesModalOpen(false);
     setActiveArticleTerm(null);
@@ -159,7 +218,28 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     pendingQuickStepRef.current = null;
     window.clearTimeout(pendingQuickStepTimerRef.current);
     wasAtCompletionEndRef.current = false;
-  }, [book.slug]);
+  }, [book.slug, finalStep]);
+
+  // Pulihkan state reader saat tombol Back/Forward browser ditekan
+  useEffect(() => {
+    const handlePopState = () => {
+      const parsed = parseReaderStateFromSearch(
+        window.location.search,
+        finalStep
+      );
+      closeReadingWelcome();
+      window.clearTimeout(pendingQuickStepTimerRef.current);
+      pendingQuickStepRef.current = null;
+      pendingScrollTargetRef.current = null;
+      setReadMode(parsed.mode);
+      setHasStartedQuick(parsed.startedQuick);
+      setDeepStep(parsed.deepStep);
+      pendingScrollToReadingTopRef.current = true;
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [finalStep, closeReadingWelcome]);
 
   // Tandai buku selesai dibaca otomatis hanya saat transisi baru mencapai bagian akhir
   useEffect(() => {
@@ -328,11 +408,24 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     return detectedStep;
   };
 
+  const syncUrlHistory = (nextState: ReaderNavState) => {
+    if (typeof window === "undefined") return;
+    const nextSearch = buildReaderSearch(
+      nextState,
+      window.location.search,
+      finalStep
+    );
+    if (nextSearch === window.location.search) return;
+    const nextUrl = `${window.location.pathname}${nextSearch}${window.location.hash}`;
+    window.history.pushState(null, "", nextUrl);
+  };
+
   const goToDeepStep = (nextStep: number) => {
     closeReadingWelcome();
     const target = Math.max(0, Math.min(finalStep, nextStep));
     setDeepStep(target);
     pendingScrollToReadingTopRef.current = true;
+    syncUrlHistory({ mode: "deep", startedQuick: false, deepStep: target });
   };
 
   const handleReadTakeawayDeep = (step: number) => {
@@ -351,6 +444,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setPendingQuickStep(null);
     setHasStartedQuick(false);
     pendingScrollToReadingTopRef.current = true;
+    syncUrlHistory({ mode: "quick", startedQuick: false, deepStep: 0 });
   };
 
   const handleModeChange = (nextMode: "quick" | "deep") => {
@@ -358,19 +452,25 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     closeReadingWelcome();
 
     if (nextMode === "quick") {
+      let nextStartedQuick = false;
       if (activeTakeaway) {
-        setHasStartedQuick(true);
+        nextStartedQuick = true;
         pendingScrollTargetRef.current = `poin-${activeTakeaway.number}`;
         setPendingQuickStep(clampedDeepStep);
       } else if (clampedDeepStep === finalStep) {
-        setHasStartedQuick(true);
+        nextStartedQuick = true;
         pendingScrollTargetRef.current = "kesimpulan-akhir";
         setPendingQuickStep(finalStep);
       } else {
-        setHasStartedQuick(false);
         setPendingQuickStep(0);
       }
+      setHasStartedQuick(nextStartedQuick);
       setReadMode("quick");
+      syncUrlHistory({
+        mode: "quick",
+        startedQuick: nextStartedQuick,
+        deepStep: 0,
+      });
       return;
     }
 
@@ -381,6 +481,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       pendingScrollToReadingTopRef.current = true;
     }
     setReadMode("deep");
+    syncUrlHistory({ mode: "deep", startedQuick: false, deepStep: targetStep });
   };
 
   const fs = FONT_SCALES[fontSize];
@@ -644,6 +745,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 setPendingQuickStep(firstTakeaway ? 1 : finalStep);
                 pendingScrollToReadingTopRef.current = true;
                 setHasStartedQuick(true);
+                syncUrlHistory({
+                  mode: "quick",
+                  startedQuick: true,
+                  deepStep: 0,
+                });
                 triggerReadingWelcome();
               }}
               onSelectTakeaway={(num) => {
@@ -658,6 +764,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 if (idx >= 0) setPendingQuickStep(idx + 1);
                 pendingScrollTargetRef.current = `poin-${num}`;
                 setHasStartedQuick(true);
+                syncUrlHistory({
+                  mode: "quick",
+                  startedQuick: true,
+                  deepStep: 0,
+                });
               }}
             />
           ) : readMode === "quick" ? (
