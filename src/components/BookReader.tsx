@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import type { BookCatalogItem, BookSummary } from "@/types/book";
 import type { ArticleTermEntry } from "@/types/article";
 import { ARTICLE_TERMS } from "@/data/article-terms";
@@ -10,6 +10,7 @@ import {
   QuickKeyConceptsModal,
   QuickQuotesModal,
 } from "./BookReaderModals";
+import { ReaderWelcomeOverlay } from "./ReaderWelcomeOverlay";
 import {
   smoothScrollToElement,
   smoothScrollToY,
@@ -92,6 +93,29 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [isQuotesModalOpen, setIsQuotesModalOpen] = useState(false);
   const [activeArticleTerm, setActiveArticleTerm] =
     useState<ArticleTermEntry | null>(null);
+  const [welcomeOverlay, setWelcomeOverlay] = useState<{
+    open: boolean;
+    runId: number;
+    mode: "quick" | "deep";
+  }>({ open: false, runId: 0, mode: "quick" });
+
+  const closeReadingWelcome = useCallback(() => {
+    setWelcomeOverlay((prev) => (prev.open ? { ...prev, open: false } : prev));
+  }, []);
+
+  const triggerReadingWelcome = useCallback((mode: "quick" | "deep") => {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+    setWelcomeOverlay((prev) => ({
+      open: true,
+      runId: prev.runId + 1,
+      mode,
+    }));
+  }, []);
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
@@ -133,6 +157,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setIsConceptsModalOpen(false);
     setIsQuotesModalOpen(false);
     setActiveArticleTerm(null);
+    setWelcomeOverlay((prev) => (prev.open ? { ...prev, open: false } : prev));
     pendingQuickStepRef.current = null;
     window.clearTimeout(pendingQuickStepTimerRef.current);
     wasAtCompletionEndRef.current = false;
@@ -306,6 +331,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   };
 
   const goToDeepStep = (nextStep: number) => {
+    closeReadingWelcome();
     const target = Math.max(0, Math.min(finalStep, nextStep));
     setDeepStep(target);
     pendingScrollToReadingTopRef.current = true;
@@ -323,6 +349,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       : null;
 
   const backToQuickIntro = () => {
+    closeReadingWelcome();
     setPendingQuickStep(null);
     setHasStartedQuick(false);
     pendingScrollToReadingTopRef.current = true;
@@ -330,6 +357,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   const handleModeChange = (nextMode: "quick" | "deep") => {
     if (nextMode === readMode) return;
+    closeReadingWelcome();
 
     if (nextMode === "quick") {
       if (activeTakeaway) {
@@ -611,14 +639,17 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               onStartReading={() => {
                 if (readMode === "deep") {
                   goToDeepStep(1);
+                  triggerReadingWelcome("deep");
                   return;
                 }
                 const firstTakeaway = book.keyTakeaways[0];
                 setPendingQuickStep(firstTakeaway ? 1 : finalStep);
                 pendingScrollToReadingTopRef.current = true;
                 setHasStartedQuick(true);
+                triggerReadingWelcome("quick");
               }}
               onSelectTakeaway={(num) => {
+                closeReadingWelcome();
                 if (readMode === "deep") {
                   goToDeepStep(num);
                   return;
@@ -856,6 +887,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         term={activeArticleTerm}
         bookSlug={book.slug}
         onClose={() => setActiveArticleTerm(null)}
+      />
+
+      <ReaderWelcomeOverlay
+        open={welcomeOverlay.open}
+        runId={welcomeOverlay.runId}
+        mode={welcomeOverlay.mode}
+        book={book}
+        onComplete={closeReadingWelcome}
       />
     </div>
   );
