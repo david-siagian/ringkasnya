@@ -206,6 +206,15 @@ html.reveal-ready [data-reveal].is-revealed {
   }
 }
 
+@keyframes readerWelcomeProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 .animate-reader-welcome-backdrop-in {
   animation: readerWelcomeBackdropIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -226,12 +235,19 @@ html.reveal-ready [data-reveal].is-revealed {
   animation: readerWelcomeItemIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.animate-reader-welcome-progress {
+  animation-name: readerWelcomeProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-reader-welcome-backdrop-in,
   .animate-reader-welcome-backdrop-out,
   .animate-reader-welcome-card-in,
   .animate-reader-welcome-card-out,
-  .animate-reader-welcome-item {
+  .animate-reader-welcome-item,
+  .animate-reader-welcome-progress {
     animation: none !important;
   }
 }

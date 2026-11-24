@@ -176,6 +176,17 @@ export function ReaderWelcomeOverlay({
         >
           Ketuk di mana saja untuk langsung membaca
         </p>
+
+        {/* Progress bar halus di sisi bawah kartu */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-1 bg-white/15"
+        >
+          <div
+            className="animate-reader-welcome-progress h-full origin-left bg-white/80"
+            style={{ animationDuration: `${HOLD_DURATION_MS}ms` }}
+          />
+        </div>
       </div>
     </div>,
     document.body
