@@ -14,6 +14,7 @@
     "db:migrate:preview": "wrangler d1 migrations apply ringkasnya-db --remote --preview",
     "db:migrate:prod": "wrangler d1 migrations apply ringkasnya-db --remote",
     "typecheck": "astro sync && tsc --noEmit",
+    "validate:content": "node scripts/validate-content.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {

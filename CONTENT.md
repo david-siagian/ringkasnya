@@ -115,7 +115,20 @@ Setiap objek dalam array `key_takeaways_json` wajib memiliki 5 properti lengkap:
 
 ## 6. Checklist Validasi Sebelum Migrasi D1
 
-Sebelum menyimpan file migrasi SQL (`migrations/XXXX_*.sql`), wajib verifikasi hal berikut (ideal menggunakan skrip pengecekan otomatis):
+Sebelum menyimpan dan mendorong file migrasi SQL (`migrations/XXXX_*.sql`), wajib jalankan skrip validator otomatis:
+
+```bash
+# Validasi file migrasi tertentu
+npm run validate:content -- migrations/XXXX_nama_migrasi.sql
+
+# Validasi ketat (peringatan dianggap error)
+npm run validate:content -- --strict migrations/XXXX_nama_migrasi.sql
+
+# Validasi seluruh file migrasi
+npm run validate:content -- --all
+```
+
+Secara ringkas, hal yang diverifikasi mencakup:
 
 1. **JSON Valid & SQL Escaped:** Semua string JSON valid (`JSON.parse` lolos) dan seluruh tanda petik tunggal (`'`) di-escape menjadi `''` di SQL.
 2. **Penomoran & Urutan Bab:** Setiap item `key_takeaways_json` punya `number: 1..N` yang berurutan dan alur bab sesuai urutan buku asli.
