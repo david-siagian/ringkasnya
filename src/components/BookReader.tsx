@@ -145,10 +145,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [isQuotesModalOpen, setIsQuotesModalOpen] = useState(false);
   const [activeArticleTerm, setActiveArticleTerm] =
     useState<ArticleTermEntry | null>(null);
-  const [isLeavingIntro, setIsLeavingIntro] = useState(false);
+  const [isLeavingView, setIsLeavingView] = useState(false);
 
   const copyTimerRef = useRef<number | undefined>(undefined);
-  const introExitTimerRef = useRef<number | undefined>(undefined);
+  const viewExitTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const readingAreaRef = useRef<HTMLDivElement>(null);
   const pendingScrollTargetRef = useRef<string | null>(null);
@@ -180,9 +180,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         ? scrollProgress
         : 0;
 
-  const cancelIntroExit = useCallback(() => {
-    window.clearTimeout(introExitTimerRef.current);
-    setIsLeavingIntro(false);
+  const cancelViewExit = useCallback(() => {
+    window.clearTimeout(viewExitTimerRef.current);
+    setIsLeavingView(false);
   }, []);
 
   // Sinkronkan state awal dari URL query & reset modal saat berpindah buku
@@ -192,7 +192,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         ? parseReaderStateFromSearch(window.location.search, finalStep)
         : { mode: "quick" as const, startedQuick: false, deepStep: 0 };
 
-    cancelIntroExit();
+    cancelViewExit();
     setReadMode(initial.mode);
     setHasStartedQuick(initial.startedQuick);
     setDeepStep(initial.deepStep);
@@ -203,7 +203,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     pendingQuickStepRef.current = null;
     window.clearTimeout(pendingQuickStepTimerRef.current);
     wasAtCompletionEndRef.current = false;
-  }, [book.slug, finalStep, cancelIntroExit]);
+  }, [book.slug, finalStep, cancelViewExit]);
 
   // Pulihkan state reader saat tombol Back/Forward browser ditekan
   useEffect(() => {
@@ -212,7 +212,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         window.location.search,
         finalStep
       );
-      cancelIntroExit();
+      cancelViewExit();
       window.clearTimeout(pendingQuickStepTimerRef.current);
       pendingQuickStepRef.current = null;
       pendingScrollTargetRef.current = null;
@@ -224,7 +224,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, [finalStep, cancelIntroExit]);
+  }, [finalStep, cancelViewExit]);
 
   // Tandai buku selesai dibaca otomatis hanya saat transisi baru mencapai bagian akhir
   useEffect(() => {
@@ -269,7 +269,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     return () => {
       window.clearTimeout(copyTimerRef.current);
       window.clearTimeout(pendingQuickStepTimerRef.current);
-      window.clearTimeout(introExitTimerRef.current);
+      window.clearTimeout(viewExitTimerRef.current);
     };
   }, []);
 
@@ -410,12 +410,53 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     window.history.pushState(null, "", nextUrl);
   };
 
-  const goToDeepStep = (nextStep: number) => {
-    cancelIntroExit();
+  const goToDeepStep = (nextStep: number, scrollAfter = true) => {
+    cancelViewExit();
     const target = Math.max(0, Math.min(finalStep, nextStep));
     setDeepStep(target);
-    pendingScrollToReadingTopRef.current = true;
+    if (scrollAfter) {
+      pendingScrollToReadingTopRef.current = true;
+    }
     syncUrlHistory({ mode: "deep", startedQuick: false, deepStep: target });
+  };
+
+  const transitionAfterFadeOut = useCallback(
+    (onReady: () => void) => {
+      if (isLeavingView) return;
+
+      const enterNextView = () => {
+        // Posisikan scroll instan saat layar masih opacity-0 agar tidak terlihat menggulir ke atas
+        window.scrollTo({
+          top: getReadingTopY(),
+          behavior: "instant" as ScrollBehavior,
+        });
+        onReady();
+      };
+
+      if (
+        typeof window !== "undefined" &&
+        window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+      ) {
+        enterNextView();
+        return;
+      }
+
+      setIsLeavingView(true);
+      window.clearTimeout(viewExitTimerRef.current);
+      viewExitTimerRef.current = window.setTimeout(() => {
+        setIsLeavingView(false);
+        enterNextView();
+      }, 200);
+    },
+    [isLeavingView, getReadingTopY]
+  );
+
+  const transitionToDeepStep = (nextStep: number) => {
+    const target = Math.max(0, Math.min(finalStep, nextStep));
+    if (target === clampedDeepStep) return;
+    transitionAfterFadeOut(() => {
+      goToDeepStep(target, false);
+    });
   };
 
   const handleReadTakeawayDeep = (step: number) => {
@@ -430,7 +471,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       : null;
 
   const backToQuickIntro = () => {
-    cancelIntroExit();
+    cancelViewExit();
     setPendingQuickStep(null);
     setHasStartedQuick(false);
     pendingScrollToReadingTopRef.current = true;
@@ -439,7 +480,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   const handleModeChange = (nextMode: "quick" | "deep") => {
     if (nextMode === readMode) return;
-    cancelIntroExit();
+    cancelViewExit();
 
     if (nextMode === "quick") {
       let nextStartedQuick = false;
@@ -721,7 +762,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           (readMode === "deep" && clampedDeepStep === 0) ? (
             <div
               className={`transition-opacity duration-200 ease-out ${
-                isLeavingIntro ? "pointer-events-none opacity-0" : "opacity-100"
+                isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
               }`}
             >
               <IntroSection
@@ -731,18 +772,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 articleTerms={ARTICLE_TERMS}
                 onSelectArticleTerm={setActiveArticleTerm}
                 onStartReading={() => {
-                  if (isLeavingIntro) return;
-
-                  const enterFirstPoint = () => {
-                    // Posisikan scroll secara instan saat layar masih opacity-0 agar tidak terlihat menggulir ke atas
-                    window.scrollTo({
-                      top: getReadingTopY(),
-                      behavior: "instant" as ScrollBehavior,
-                    });
-
+                  transitionAfterFadeOut(() => {
                     if (readMode === "deep") {
-                      goToDeepStep(1);
-                      pendingScrollToReadingTopRef.current = false;
+                      goToDeepStep(1, false);
                       return;
                     }
                     const firstTakeaway = book.keyTakeaways[0];
@@ -753,25 +785,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       startedQuick: true,
                       deepStep: 0,
                     });
-                  };
-
-                  if (
-                    typeof window !== "undefined" &&
-                    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-                  ) {
-                    enterFirstPoint();
-                    return;
-                  }
-
-                  setIsLeavingIntro(true);
-                  window.clearTimeout(introExitTimerRef.current);
-                  introExitTimerRef.current = window.setTimeout(() => {
-                    setIsLeavingIntro(false);
-                    enterFirstPoint();
-                  }, 200);
+                  });
                 }}
                 onSelectTakeaway={(num) => {
-                  cancelIntroExit();
+                  cancelViewExit();
                   if (readMode === "deep") {
                     goToDeepStep(num);
                     return;
@@ -863,12 +880,17 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               </div>
           ) : (
             /* MODE MENDALAM: Alur Halaman Per Halaman (Poin Inti 1..N -> Penutup) */
-            <div className="animate-reader-fade-in" key={`deep-step-${clampedDeepStep}`}>
-              {/* Bar Navigasi Atas Stepper Mode Mendalam */}
+            <div
+              className={`transition-opacity duration-200 ease-out ${
+                isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
+              }`}
+            >
+              <div className="animate-reader-fade-in" key={`deep-step-${clampedDeepStep}`}>
+                {/* Bar Navigasi Atas Stepper Mode Mendalam */}
                   <div className="relative z-20 mb-4 flex items-center justify-between gap-2 sm:gap-3 rounded-xl border border-line bg-surface px-3.5 py-2.5 sm:px-4 shadow-sm">
                     <button
                       type="button"
-                      onClick={() => goToDeepStep(0)}
+                      onClick={() => transitionToDeepStep(0)}
                       className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
                     >
                       <List className="h-4 w-4" />
@@ -879,7 +901,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       currentStep={clampedDeepStep}
                       keyTakeaways={book.keyTakeaways}
                       finalStep={finalStep}
-                      onSelectStep={goToDeepStep}
+                      onSelectStep={transitionToDeepStep}
                     />
                   </div>
 
@@ -923,7 +945,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   >
                     <button
                       type="button"
-                      onClick={() => goToDeepStep(clampedDeepStep - 1)}
+                      onClick={() => transitionToDeepStep(clampedDeepStep - 1)}
                       aria-label={
                         prevTitle
                           ? `Sebelumnya: ${prevLabel} — ${prevTitle}`
@@ -945,7 +967,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     {clampedDeepStep < finalStep ? (
                       <button
                         type="button"
-                        onClick={() => goToDeepStep(clampedDeepStep + 1)}
+                        onClick={() => transitionToDeepStep(clampedDeepStep + 1)}
                         aria-label={
                           nextTitle
                             ? `Selanjutnya: ${nextLabel} — ${nextTitle}`
@@ -968,7 +990,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     ) : (
                       <button
                         type="button"
-                        onClick={() => goToDeepStep(0)}
+                        onClick={() => transitionToDeepStep(0)}
                         className="inline-flex max-w-[48%] sm:max-w-xs items-center gap-2 rounded-xl border border-accent-line bg-accent-soft px-3 py-2 text-xs font-semibold text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.98]"
                       >
                         <span className="truncate">Kembali ke Pengantar</span>
@@ -976,6 +998,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       </button>
                     )}
                   </nav>
+              </div>
             </div>
           )}
         </div>
