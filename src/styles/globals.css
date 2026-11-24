@@ -178,141 +178,52 @@ html.reveal-ready [data-reveal].is-revealed {
 @keyframes readerWelcomeCardIn {
   0% {
     opacity: 0;
-    transform: translateY(20px) scale(0.94);
+    transform: scale(0.97);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
   }
 }
 
 @keyframes readerWelcomeCardOut {
   0% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
   }
   100% {
     opacity: 0;
-    transform: translateY(-12px) scale(0.97);
+    transform: scale(0.985);
   }
 }
 
 @keyframes readerWelcomeItemIn {
   0% {
     opacity: 0;
-    transform: translateY(10px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes readerWelcomePageLeft {
-  0% {
-    opacity: 0.35;
-    transform: rotate(18deg) scaleX(0.62);
-  }
-  65% {
-    opacity: 1;
-    transform: rotate(-2deg) scaleX(1.03);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(0deg) scaleX(1);
-  }
-}
-
-@keyframes readerWelcomePageRight {
-  0% {
-    opacity: 0.35;
-    transform: rotate(-18deg) scaleX(0.62);
-  }
-  65% {
-    opacity: 1;
-    transform: rotate(2deg) scaleX(1.03);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(0deg) scaleX(1);
-  }
-}
-
-@keyframes readerWelcomeSpark {
-  0% {
-    opacity: 0;
-    transform: translateY(6px) scale(0.85);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(-1px) scale(1.04);
-  }
-  100% {
-    opacity: 0.9;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes readerWelcomeRipple {
-  0% {
-    opacity: 0.65;
-    transform: scale(0.92);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.42);
-  }
-}
-
-@keyframes readerWelcomeProgress {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
   }
 }
 
 .animate-reader-welcome-backdrop-in {
-  animation: readerWelcomeBackdropIn 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: readerWelcomeBackdropIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-reader-welcome-backdrop-out {
-  animation: readerWelcomeBackdropOut 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: readerWelcomeBackdropOut 0.52s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-reader-welcome-card-in {
-  animation: readerWelcomeCardIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: readerWelcomeCardIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .animate-reader-welcome-card-out {
-  animation: readerWelcomeCardOut 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: readerWelcomeCardOut 0.52s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-reader-welcome-item {
-  animation: readerWelcomeItemIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-reader-welcome-page-left {
-  animation: readerWelcomePageLeft 0.56s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
-}
-
-.animate-reader-welcome-page-right {
-  animation: readerWelcomePageRight 0.56s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
-}
-
-.animate-reader-welcome-spark {
-  animation: readerWelcomeSpark 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.14s both;
-}
-
-.animate-reader-welcome-ripple {
-  animation: readerWelcomeRipple 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
-}
-
-.animate-reader-welcome-progress {
-  animation-name: readerWelcomeProgress;
-  animation-timing-function: linear;
-  animation-fill-mode: both;
+  animation: readerWelcomeItemIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -320,12 +231,7 @@ html.reveal-ready [data-reveal].is-revealed {
   .animate-reader-welcome-backdrop-out,
   .animate-reader-welcome-card-in,
   .animate-reader-welcome-card-out,
-  .animate-reader-welcome-item,
-  .animate-reader-welcome-page-left,
-  .animate-reader-welcome-page-right,
-  .animate-reader-welcome-spark,
-  .animate-reader-welcome-ripple,
-  .animate-reader-welcome-progress {
+  .animate-reader-welcome-item {
     animation: none !important;
   }
 }

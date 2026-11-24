@@ -96,14 +96,13 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [welcomeOverlay, setWelcomeOverlay] = useState<{
     open: boolean;
     runId: number;
-    mode: "quick" | "deep";
-  }>({ open: false, runId: 0, mode: "quick" });
+  }>({ open: false, runId: 0 });
 
   const closeReadingWelcome = useCallback(() => {
     setWelcomeOverlay((prev) => (prev.open ? { ...prev, open: false } : prev));
   }, []);
 
-  const triggerReadingWelcome = useCallback((mode: "quick" | "deep") => {
+  const triggerReadingWelcome = useCallback(() => {
     if (
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
@@ -113,7 +112,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setWelcomeOverlay((prev) => ({
       open: true,
       runId: prev.runId + 1,
-      mode,
     }));
   }, []);
 
@@ -639,14 +637,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               onStartReading={() => {
                 if (readMode === "deep") {
                   goToDeepStep(1);
-                  triggerReadingWelcome("deep");
+                  triggerReadingWelcome();
                   return;
                 }
                 const firstTakeaway = book.keyTakeaways[0];
                 setPendingQuickStep(firstTakeaway ? 1 : finalStep);
                 pendingScrollToReadingTopRef.current = true;
                 setHasStartedQuick(true);
-                triggerReadingWelcome("quick");
+                triggerReadingWelcome();
               }}
               onSelectTakeaway={(num) => {
                 closeReadingWelcome();
@@ -892,7 +890,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       <ReaderWelcomeOverlay
         open={welcomeOverlay.open}
         runId={welcomeOverlay.runId}
-        mode={welcomeOverlay.mode}
         book={book}
         onComplete={closeReadingWelcome}
       />
