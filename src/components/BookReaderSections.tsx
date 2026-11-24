@@ -82,7 +82,6 @@ export function IntroSection({
   articleTerms = [],
   onSelectArticleTerm,
 }: IntroSectionProps) {
-  const firstTakeaway = book.keyTakeaways[0];
   const synopsisMatched = new Set<string>();
 
   return (
@@ -171,11 +170,7 @@ export function IntroSection({
         {onStartReading && (
           <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-line-subtle pt-5 sm:flex-row">
             <p className={`${fs.subtext} text-ink-muted text-center sm:text-left`}>
-              {firstTakeaway
-                ? mode === "deep"
-                  ? "Siap menyelami isi buku bab demi bab mulai dari Poin Inti 1?"
-                  : "Siap membaca intisari buku dari Poin Inti 1 sampai kesimpulan?"
-                : "Lanjut ke bagian penutup buku."}
+              Siap Baca?
             </p>
             <button
               type="button"
