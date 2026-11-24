@@ -39,7 +39,7 @@
     <text x="300" y="168" fill="#FFFFFF" font-size="40" font-weight="800" letter-spacing="5">THE INNOVATOR'S</text>
     <text x="300" y="242" fill="#FB923C" font-size="72" font-weight="900" letter-spacing="8">DILEMMA</text>
     <line x1="175" y1="268" x2="425" y2="268" stroke="#38BDF8" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#FFEDD5" font-size="17" font-weight="700" letter-spacing="3.2">MENGAPA INOVASI DISRUPTIF MENGALAHKAN RAKSASA</text>
+    <text x="300" y="726" fill="#FFEDD5" font-size="13.5" font-weight="700" letter-spacing="1.1">WHEN NEW TECHNOLOGIES CAUSE GREAT FIRMS TO FAIL</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

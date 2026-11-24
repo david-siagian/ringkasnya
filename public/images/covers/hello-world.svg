@@ -39,7 +39,7 @@
     <text x="300" y="176" fill="#FFFFFF" font-size="76" font-weight="900" letter-spacing="5">HELLO</text>
     <text x="300" y="252" fill="#FDE047" font-size="76" font-weight="900" letter-spacing="5">WORLD</text>
     <line x1="175" y1="278" x2="425" y2="278" stroke="#5EEAD4" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#CCFBF1" font-size="18" font-weight="700" letter-spacing="3.5">MANUSIA DI ERA ALGORITMA</text>
+    <text x="300" y="726" fill="#CCFBF1" font-size="16.5" font-weight="700" letter-spacing="2.4">BEING HUMAN IN THE AGE OF ALGORITHMS</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

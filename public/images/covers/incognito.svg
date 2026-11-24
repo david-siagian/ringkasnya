@@ -43,7 +43,6 @@
     <text x="300" y="218" fill="#FBBF24" font-size="74" font-weight="900" letter-spacing="8">INCOGNITO</text>
     <text x="300" y="264" fill="#E4E4E7" font-size="20" font-weight="700" letter-spacing="4">THE SECRET LIVES OF THE BRAIN</text>
     <line x1="175" y1="288" x2="425" y2="288" stroke="#A855F7" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#F3E8FF" font-size="17" font-weight="700" letter-spacing="3.2">KEHIDUPAN RAHASIA ALAM BAWAH SADAR</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

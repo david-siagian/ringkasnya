@@ -37,7 +37,7 @@
     <text x="300" y="168" fill="#FFFFFF" font-size="56" font-weight="900" letter-spacing="6">PALE BLUE</text>
     <text x="300" y="236" fill="#38BDF8" font-size="68" font-weight="900" letter-spacing="8">DOT</text>
     <line x1="185" y1="262" x2="415" y2="262" stroke="#38BDF8" stroke-width="2" opacity="0.65" />
-    <text x="300" y="726" fill="#E2E8F0" font-size="18" font-weight="700" letter-spacing="3.5">MASA DEPAN MANUSIA DI ANTARIKSA</text>
+    <text x="300" y="726" fill="#E2E8F0" font-size="15" font-weight="700" letter-spacing="1.6">A VISION OF THE HUMAN FUTURE IN SPACE</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

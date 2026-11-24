@@ -34,7 +34,7 @@
     <text x="300" y="172" fill="#FDE047" font-size="42" font-weight="900" letter-spacing="6">CO-</text>
     <text x="300" y="236" fill="#FFFFFF" font-size="50" font-weight="900" letter-spacing="4">INTELLIGENCE</text>
     <line x1="160" y1="262" x2="440" y2="262" stroke="#38BDF8" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#DBEAFE" font-size="18" font-weight="700" letter-spacing="3.5">HIDUP DAN BEKERJA BERSAMA AI</text>
+    <text x="300" y="726" fill="#DBEAFE" font-size="18" font-weight="700" letter-spacing="3.5">LIVING AND WORKING WITH AI</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

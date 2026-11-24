@@ -42,7 +42,7 @@
     <text x="300" y="96" fill="#FDE68A" font-size="20" font-weight="800" letter-spacing="5">YUVAL NOAH HARARI</text>
     <text x="300" y="206" fill="#FFFFFF" font-size="92" font-weight="900" letter-spacing="10">NEXUS</text>
     <line x1="170" y1="234" x2="430" y2="234" stroke="#F59E0B" stroke-width="2.5" opacity="0.8" />
-    <text x="300" y="726" fill="#E0E7FF" font-size="18" font-weight="700" letter-spacing="3">JARINGAN INFORMASI DARI ZAMAN BATU KE AI</text>
+    <text x="300" y="726" fill="#E0E7FF" font-size="15" font-weight="700" letter-spacing="1.6">A BRIEF HISTORY OF INFORMATION NETWORKS</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

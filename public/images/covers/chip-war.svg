@@ -48,7 +48,7 @@
     <text x="300" y="180" fill="#FFFFFF" font-size="88" font-weight="900" letter-spacing="10">CHIP</text>
     <text x="300" y="256" fill="#FBBF24" font-size="84" font-weight="900" letter-spacing="10">WAR</text>
     <line x1="175" y1="280" x2="425" y2="280" stroke="#FBBF24" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#FEE2E2" font-size="18" font-weight="700" letter-spacing="3.5">PEREBUTAN TEKNOLOGI PALING KRITIS</text>
+    <text x="300" y="726" fill="#FEE2E2" font-size="13.5" font-weight="700" letter-spacing="1.1">THE FIGHT FOR THE WORLD'S MOST CRITICAL TECHNOLOGY</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

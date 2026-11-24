@@ -36,7 +36,7 @@
     <text x="300" y="96" fill="#FED7AA" font-size="22" font-weight="800" letter-spacing="6">RUTGER BREGMAN</text>
     <text x="300" y="216" fill="#FFFFFF" font-size="68" font-weight="900" letter-spacing="6">HUMANKIND</text>
     <line x1="160" y1="246" x2="440" y2="246" stroke="#FBBF24" stroke-width="2.5" opacity="0.8" />
-    <text x="300" y="726" fill="#FFEDD5" font-size="18" font-weight="700" letter-spacing="3.5">SEJARAH PENUH HARAPAN TENTANG MANUSIA</text>
+    <text x="300" y="726" fill="#FFEDD5" font-size="18" font-weight="700" letter-spacing="3.5">A HOPEFUL HISTORY</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

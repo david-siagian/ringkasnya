@@ -45,7 +45,7 @@
     <text x="300" y="96" fill="#7DD3FC" font-size="22" font-weight="800" letter-spacing="7">CARL SAGAN</text>
     <text x="300" y="206" fill="#FFFFFF" font-size="88" font-weight="900" letter-spacing="10">COSMOS</text>
     <line x1="165" y1="234" x2="435" y2="234" stroke="#FDE047" stroke-width="2" opacity="0.75" />
-    <text x="300" y="726" fill="#E0F2FE" font-size="18" font-weight="700" letter-spacing="4">PERJALANAN SAINS &amp; ALAM SEMESTA</text>
+    <text x="300" y="726" fill="#E0F2FE" font-size="15" font-weight="700" letter-spacing="1.6">A PERSONAL VOYAGE THROUGH THE UNIVERSE</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

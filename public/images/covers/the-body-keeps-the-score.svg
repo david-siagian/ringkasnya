@@ -38,7 +38,7 @@
     <text x="300" y="166" fill="#FFFFFF" font-size="40" font-weight="800" letter-spacing="5">THE BODY KEEPS</text>
     <text x="300" y="242" fill="#22D3EE" font-size="72" font-weight="900" letter-spacing="8">THE SCORE</text>
     <line x1="175" y1="268" x2="425" y2="268" stroke="#FBBF24" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#CFFAFE" font-size="17" font-weight="700" letter-spacing="3.2">MEMAHAMI TRAUMA &amp; PEMULIHAN TUBUH</text>
+    <text x="300" y="726" fill="#CFFAFE" font-size="13.5" font-weight="700" letter-spacing="1.1">BRAIN, MIND, AND BODY IN THE HEALING OF TRAUMA</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

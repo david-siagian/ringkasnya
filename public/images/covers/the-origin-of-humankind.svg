@@ -43,7 +43,7 @@
     <text x="300" y="160" fill="#FFFBEB" font-size="34" font-weight="800" letter-spacing="3">THE ORIGIN OF</text>
     <text x="300" y="220" fill="#FDE68A" font-size="52" font-weight="900" letter-spacing="2">HUMANKIND</text>
     <line x1="190" y1="244" x2="410" y2="244" stroke="#F59E0B" stroke-width="2.5" opacity="0.75" />
-    <text x="300" y="726" fill="#FED7AA" font-size="18" font-weight="700" letter-spacing="4">EVOLUSI &amp; JEJAK FOSIL MANUSIA</text>
+    <text x="300" y="726" fill="#FED7AA" font-size="16.5" font-weight="700" letter-spacing="2.4">THE FOSSIL STORY OF HUMAN EVOLUTION</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

@@ -40,7 +40,7 @@
     <text x="300" y="212" fill="#FDE68A" font-size="44" font-weight="900" letter-spacing="2">FORGOTTEN</text>
     <text x="300" y="262" fill="#FFFFFF" font-size="44" font-weight="900" letter-spacing="2">ANCESTORS</text>
     <line x1="190" y1="286" x2="410" y2="286" stroke="#60A5FA" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#DBEAFE" font-size="18" font-weight="700" letter-spacing="4">AKAR EVOLUSI &amp; PERILAKU MANUSIA</text>
+    <text x="300" y="726" fill="#DBEAFE" font-size="18" font-weight="700" letter-spacing="3.5">A SEARCH FOR WHO WE ARE</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

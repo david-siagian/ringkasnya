@@ -42,7 +42,7 @@
     <text x="300" y="168" fill="#FFFFFF" font-size="40" font-weight="800" letter-spacing="5">FOUR THOUSAND</text>
     <text x="300" y="246" fill="#FBBF24" font-size="88" font-weight="900" letter-spacing="10">WEEKS</text>
     <line x1="175" y1="272" x2="425" y2="272" stroke="#FB7185" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#FEF3C7" font-size="17" font-weight="700" letter-spacing="3.2">MANAJEMEN WAKTU BAGI MANUSIA YANG TERBATAS</text>
+    <text x="300" y="726" fill="#FEF3C7" font-size="18" font-weight="700" letter-spacing="3.5">TIME MANAGEMENT FOR MORTALS</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

@@ -36,7 +36,7 @@
     <text x="300" y="160" fill="#FFFFFF" font-size="36" font-weight="800" letter-spacing="6">THE</text>
     <text x="300" y="242" fill="#FDE047" font-size="92" font-weight="900" letter-spacing="10">GENE</text>
     <line x1="175" y1="268" x2="425" y2="268" stroke="#FDA4AF" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#FFE4E6" font-size="18" font-weight="700" letter-spacing="3.5">SEJARAH INTIM KODE KEHIDUPAN</text>
+    <text x="300" y="726" fill="#FFE4E6" font-size="18" font-weight="700" letter-spacing="3.5">AN INTIMATE HISTORY</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

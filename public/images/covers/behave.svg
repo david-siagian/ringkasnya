@@ -40,7 +40,6 @@
     <text x="300" y="218" fill="#FBBF24" font-size="96" font-weight="900" letter-spacing="10">BEHAVE</text>
     <text x="300" y="264" fill="#E2E8F0" font-size="20" font-weight="700" letter-spacing="4">BIOLOGY OF HUMANS AT OUR BEST AND WORST</text>
     <line x1="175" y1="288" x2="425" y2="288" stroke="#38BDF8" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#E0E7FF" font-size="17" font-weight="700" letter-spacing="3.2">AKAR BIOLOGIS &amp; SOSIAL PERILAKU MANUSIA</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

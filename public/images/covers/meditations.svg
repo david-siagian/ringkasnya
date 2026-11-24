@@ -34,7 +34,7 @@
     <text x="300" y="106" fill="#FDE68A" font-size="22" font-weight="800" letter-spacing="6">MARCUS AURELIUS</text>
     <text x="300" y="182" fill="#FFFFFF" font-size="68" font-weight="900" letter-spacing="4">MEDITATIONS</text>
     <line x1="195" y1="208" x2="405" y2="208" stroke="#F59E0B" stroke-width="2" opacity="0.75" />
-    <text x="300" y="726" fill="#FEF3C7" font-size="18" font-weight="700" letter-spacing="4">CATATAN HARIAN SANG KAISAR STOA</text>
+    <text x="300" y="726" fill="#FEF3C7" font-size="15" font-weight="700" letter-spacing="1.6">THE STOIC PHILOSOPHY OF MARCUS AURELIUS</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

@@ -36,7 +36,7 @@
     <text x="300" y="160" fill="#FFFFFF" font-size="36" font-weight="800" letter-spacing="7">THE</text>
     <text x="300" y="232" fill="#FBBF24" font-size="60" font-weight="900" letter-spacing="5">INNOVATORS</text>
     <line x1="160" y1="260" x2="440" y2="260" stroke="#FBBF24" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#E2E8F0" font-size="18" font-weight="700" letter-spacing="3.5">SEJARAH KOLABORASI REVOLUSI DIGITAL</text>
+    <text x="300" y="726" fill="#E2E8F0" font-size="15" font-weight="700" letter-spacing="1.6">HOW GENIUSES CREATED THE DIGITAL REVOLUTION</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />

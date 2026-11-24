@@ -36,7 +36,7 @@
     <text x="300" y="156" fill="#FFFFFF" font-size="34" font-weight="800" letter-spacing="4">A BRIEF HISTORY OF</text>
     <text x="300" y="234" fill="#FDE047" font-size="88" font-weight="900" letter-spacing="8">TIME</text>
     <line x1="190" y1="258" x2="410" y2="258" stroke="#38BDF8" stroke-width="2" opacity="0.7" />
-    <text x="300" y="726" fill="#E0E7FF" font-size="18" font-weight="700" letter-spacing="4">DARI BIG BANG HINGGA LUBANG HITAM</text>
+    <text x="300" y="726" fill="#E0E7FF" font-size="16.5" font-weight="700" letter-spacing="2.4">FROM THE BIG BANG TO BLACK HOLES</text>
   </g>
 
   <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
