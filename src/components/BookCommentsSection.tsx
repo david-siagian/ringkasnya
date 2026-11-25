@@ -148,7 +148,7 @@ export default function BookCommentsSection({
 
   const trimmedDraft = draft.trim();
   const canSubmitDraft =
-    trimmedDraft.length >= OPINION_MIN_LENGTH &&
+    trimmedDraft.length > 0 &&
     trimmedDraft.length <= OPINION_MAX_LENGTH &&
     !isSubmitting;
 
@@ -162,9 +162,7 @@ export default function BookCommentsSection({
     }
 
     if (trimmedDraft.length < OPINION_MIN_LENGTH) {
-      setSubmitError(
-        `Komentar minimal ${OPINION_MIN_LENGTH} karakter agar gagasan tersampaikan dengan jelas.`
-      );
+      setSubmitError(`Komentar minimal ${OPINION_MIN_LENGTH} karakter.`);
       return;
     }
 

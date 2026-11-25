@@ -69,7 +69,7 @@ Seluruh **58 buku awal** telah dipindahkan dari file TypeScript statis (`src/dat
 Fitur interaksi **Komentar** pada halaman `BookReader` dengan prompt *"Bagikan opini Anda tentang buku ini"*:
 - **Penempatan**: Di bagian bawah `BookReader` setelah kesimpulan, konsep kunci, dan kutipan (sebelum rekomendasi buku lainnya) pada Mode Kilat maupun langkah penutup Mode Mendalam.
 - **Akses & Identitas**: Membaca komentar terbuka untuk publik; mengirim komentar, menyunting/menghapus komentar sendiri, dan memberi apresiasi **Bermanfaat** wajib login menggunakan akun Fase 3.1 (memanfaatkan modal login jika belum masuk).
-- **Struktur & Keamanan**: Daftar *flat* dengan sortir *Terbaru* / *Paling Bermanfaat*, *pagination* (*Muat lebih banyak*), sanitasi *plain-text only* (15–1.000 karakter), dan moderasi hapus untuk `role = 'admin'`.
+- **Struktur & Keamanan**: Daftar *flat* dengan sortir *Terbaru* / *Paling Bermanfaat*, *pagination* (*Muat lebih banyak*), sanitasi *plain-text only* (3–1.000 karakter), dan moderasi hapus untuk `role = 'admin'`.
 
 ---
 

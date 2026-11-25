@@ -1,4 +1,4 @@
-export const OPINION_MIN_LENGTH = 15;
+export const OPINION_MIN_LENGTH = 3;
 export const OPINION_MAX_LENGTH = 1000;
 export const OPINION_PAGE_SIZE = 10;
 
