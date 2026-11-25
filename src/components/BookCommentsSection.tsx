@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
   Edit3,
@@ -39,6 +39,15 @@ function formatRelativeTime(timestampMs: number): string {
   }).format(new Date(timestampMs));
 }
 
+function getStickyTopOffset(): number {
+  if (typeof window === "undefined") return 73;
+  const styles = getComputedStyle(document.documentElement);
+  const headerH = parseFloat(styles.getPropertyValue("--header-h")) || 73;
+  const toolbarH =
+    parseFloat(styles.getPropertyValue("--reader-toolbar-h")) || 0;
+  return headerH + toolbarH;
+}
+
 function AuthorAvatar({ name, image }: { name: string; image: string | null }) {
   const initial = (name.trim().charAt(0) || "P").toUpperCase();
   if (image) {
@@ -71,6 +80,8 @@ export default function BookCommentsSection({
   const [total, setTotal] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
   const [sort, setSort] = useState<OpinionSortOption>("newest");
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -335,8 +346,38 @@ export default function BookCommentsSection({
     }
   };
 
+  const handleExpandComments = () => {
+    setIsExpanded(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const panel = panelRef.current;
+        if (!panel) return;
+        const targetY =
+          window.scrollY +
+          panel.getBoundingClientRect().top -
+          getStickyTopOffset();
+        window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+      });
+    });
+  };
+
+  const handleCollapseComments = () => {
+    setIsExpanded(false);
+    requestAnimationFrame(() => {
+      const section = sectionRef.current;
+      if (!section) return;
+      const targetY =
+        window.scrollY +
+        section.getBoundingClientRect().top -
+        getStickyTopOffset() -
+        16;
+      window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+    });
+  };
+
   return (
     <section
+      ref={sectionRef}
       id="komentar-pembaca"
       aria-labelledby="komentar-heading"
       className="mx-auto mt-12 max-w-3xl"
@@ -436,7 +477,7 @@ export default function BookCommentsSection({
           type="button"
           aria-expanded={false}
           aria-controls="komentar-panel"
-          onClick={() => setIsExpanded(true)}
+          onClick={handleExpandComments}
           className="flex w-full items-center justify-between gap-3 rounded-b-2xl border-t border-line bg-page/40 px-4 py-2.5 text-left transition hover:bg-page/80 sm:px-5"
         >
           <span className="text-xs font-semibold text-ink-muted">
@@ -449,12 +490,16 @@ export default function BookCommentsSection({
           <ChevronDown className="h-4 w-4 shrink-0 text-ink-muted" />
         </button>
       ) : (
-        <div id="komentar-panel" className="rounded-b-2xl border-t border-line">
+        <div
+          ref={panelRef}
+          id="komentar-panel"
+          className="rounded-b-2xl border-t border-line"
+        >
           <button
             type="button"
             aria-expanded={true}
             aria-controls="komentar-panel"
-            onClick={() => setIsExpanded(false)}
+            onClick={handleCollapseComments}
             style={{ top: "calc(var(--header-h, 73px) + var(--reader-toolbar-h, 0px))" }}
             className="sticky z-30 flex w-full items-center justify-between gap-3 border-b border-line bg-surface/95 px-4 py-2.5 text-left backdrop-blur-sm transition hover:bg-page/80 sm:px-5"
           >
