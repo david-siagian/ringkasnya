@@ -110,3 +110,37 @@ Selain **Bedah Istilah**, rubrik Artikel ke depannya dapat diperluas ke format e
 - **Migrasi SQL**: `migrations/0004_create_auth_tables.sql` (berurutan setelah `0001`–`0003` tabel buku) mencakup 6 tabel: `users`, `sessions`, `accounts`, `verifications`, `user_book_progress` (persiapan Fase 3.2), dan `subscriptions` (persiapan Fase 3.3).
 - **Keamanan Workers-Native**: Hashing kata sandi menggunakan Web Crypto API `PBKDF2-SHA256` (`src/lib/password.ts`), cookie sesi `HttpOnly`/`SameSite=Lax`, per-request factory `createAuth(env)` (`src/lib/auth.ts`), dan proteksi route `/akun` via Astro SSR middleware (`src/middleware.ts`).
 - **Halaman & UI**: `/masuk`, `/daftar`, `/akun` (`prerender = false`), endpoint `/api/auth/[...all]`, dan integrasi `UserMenu` di `Navbar.tsx` (desktop dropdown & mobile drawer) dengan dukungan Email/Password + Google OAuth opsional via `.dev.vars` / Cloudflare Secrets.
+
+---
+
+## 6. Roadmap Penguatan Infrastruktur Cloudflare (Prioritas Penerapan)
+
+Daftar fitur Cloudflare kategori **Sangat Penting** dan **Penting** yang dijadwalkan untuk diterapkan guna memperkuat keamanan, performa, dan efisiensi kuota D1/Workers:
+
+### A. Prioritas 1 — Sangat Penting (Segera / Fase 3 Lanjutan)
+1. **Cloudflare Turnstile (Proteksi Anti-Bot pada Form Auth & Interaksi)**
+   - **Tujuan**: Melindungi endpoint pendaftaran (`/daftar`), masuk (`/masuk`), serta form masa depan (reset password & *Diskusi Ide*) dari *spam account*, *credential stuffing*, dan *brute-force* tanpa mengganggu UX dengan CAPTCHA visual.
+   - **Rencana Implementasi**:
+     - Pasang widget Turnstile di komponen form `/daftar` dan `/masuk`.
+     - Simpan `TURNSTILE_SITE_KEY` (vars/public) dan `TURNSTILE_SECRET_KEY` (Cloudflare Secrets / `.dev.vars`).
+     - Lakukan verifikasi token *server-side* (`siteverify`) sebelum meneruskan request ke `better-auth` di `/api/auth/[...all]`.
+
+2. **Cloudflare KV (`SESSION_KV`) — Aktivasi Session Cache & Rate Limiting**
+   - **Tujuan**: Mengurangi beban baca/tulis pada Cloudflare D1 dan menurunkan latensi pengecekan sesi serta pembatasan request (*rate limiting*).
+   - **Rencana Implementasi**:
+     - Buat KV namespace untuk production & preview, lalu aktifkan binding `SESSION_KV` di `wrangler.jsonc` (yang saat ini masih dikomentari).
+     - Integrasikan `SESSION_KV` sebagai *secondary storage* / cache sesi pada `better-auth` (`src/lib/auth.ts`).
+     - Terapkan *rate limiting* ringan berbasis KV pada endpoint sensitif (`/api/auth/*`, endpoint komunitas/API publik).
+
+### B. Prioritas 2 — Penting (Optimasi Skala & Operasional)
+3. **Workers Cache / Cache Rules (Optimasi & Invalidasi Cache Konten Publik)**
+   - **Tujuan**: Memaksimalkan kecepatan muat halaman bacaan publik (`/`, `/katalog`, `/buku/[slug]`, `/artikel`, `/artikel/[slug]`) yang bersifat *read-heavy* dan meminimalkan eksekusi SSR berulang ke D1 (melengkapi header `s-maxage=300` yang sudah berjalan).
+   - **Rencana Implementasi**:
+     - Terapkan strategi *edge caching* terstruktur menggunakan `Workers Cache` / `Cache Rules` untuk halaman publik non-personal.
+     - Siapkan mekanisme *cache invalidation* (atau *cache key versioning*) saat Admin CMS / migrasi D1 memperbarui konten buku atau artikel.
+
+4. **Cloudflare WAF & Rate Limiting Rules (Pertahanan Layer Jaringan)**
+   - **Tujuan**: Memblokir trafik berbahaya, *bot scraper* agresif, dan lonjakan request ke `/api/auth/*` atau `/api/*` di layer jaringan sebelum menyentuh Worker dan menghabiskan kuota D1/CPU.
+   - **Rencana Implementasi**:
+     - Konfigurasi *Rate Limiting Rules* di dashboard Cloudflare khusus untuk endpoint `/api/auth/*` (mis. batas percobaan login/daftar per IP) dan `/api/*`.
+     - Aktifkan aturan WAF dasar untuk mitigasi pola serangan umum dan *abusive bots*.
