@@ -8,6 +8,7 @@ import QuoteCardModal from "./QuoteCardModal";
 import Footer from "./Footer";
 import { ArticleTermPopover } from "./ArticleTermPopover";
 import {
+  ConfirmUnmarkCompletedModal,
   QuickKeyConceptsModal,
   QuickQuotesModal,
 } from "./BookReaderModals";
@@ -144,6 +145,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   );
   const [isConceptsModalOpen, setIsConceptsModalOpen] = useState(false);
   const [isQuotesModalOpen, setIsQuotesModalOpen] = useState(false);
+  const [isUnmarkConfirmOpen, setIsUnmarkConfirmOpen] = useState(false);
   const [activeArticleTerm, setActiveArticleTerm] =
     useState<ArticleTermEntry | null>(null);
   const [isLeavingView, setIsLeavingView] = useState(false);
@@ -205,6 +207,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setScrollProgress(0);
     setIsConceptsModalOpen(false);
     setIsQuotesModalOpen(false);
+    setIsUnmarkConfirmOpen(false);
     setActiveArticleTerm(null);
     pendingQuickStepRef.current = null;
     window.clearTimeout(pendingQuickStepTimerRef.current);
@@ -554,7 +557,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}
       >
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-2.5">
             <a
               href="/katalog"
               className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm transition hover:bg-black/30"
@@ -563,21 +566,37 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               Kembali ke Katalog
             </a>
 
-            <button
-              type="button"
-              onClick={() => toggleBookmark(book.slug)}
-              aria-pressed={saved}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold backdrop-blur-sm transition ${
-                saved
-                  ? "bg-emerald-500 text-white shadow-sm hover:bg-emerald-600"
-                  : "bg-black/20 text-white/90 hover:bg-black/30"
-              }`}
-            >
-              <Bookmark
-                className={`h-3.5 w-3.5 ${saved ? "fill-current" : ""}`}
-              />
-              <span>{saved ? "Tersimpan" : "Simpan Buku"}</span>
-            </button>
+            <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
+              {completed && (
+                <button
+                  type="button"
+                  onClick={() => setIsUnmarkConfirmOpen(true)}
+                  title="Klik untuk hapus tanda selesai dibaca"
+                  aria-label="Hapus tanda selesai dibaca"
+                  className="group inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-emerald-600 active:scale-[0.98]"
+                >
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  <span>Selesai Dibaca</span>
+                  <X className="h-3.5 w-3.5 opacity-80 transition group-hover:opacity-100" />
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={() => toggleBookmark(book.slug)}
+                aria-pressed={saved}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold backdrop-blur-sm transition ${
+                  saved
+                    ? "bg-emerald-500 text-white shadow-sm hover:bg-emerald-600"
+                    : "bg-black/20 text-white/90 hover:bg-black/30"
+                }`}
+              >
+                <Bookmark
+                  className={`h-3.5 w-3.5 ${saved ? "fill-current" : ""}`}
+                />
+                <span>{saved ? "Tersimpan" : "Simpan Buku"}</span>
+              </button>
+            </div>
           </div>
 
           <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
@@ -596,23 +615,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
                   {book.category}
                 </span>
-                {completed && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      unmarkCompleted(book.slug);
-                      setIsConceptsModalOpen(false);
-                      setIsQuotesModalOpen(false);
-                    }}
-                    title="Klik untuk hapus tanda selesai dibaca"
-                    aria-label="Hapus tanda selesai dibaca"
-                    className="group inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 px-3 py-1 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-600 active:scale-[0.98]"
-                  >
-                    <CheckCircle2 className="h-3.5 w-3.5" />
-                    <span>Selesai Dibaca</span>
-                    <X className="h-3 w-3 opacity-80 transition group-hover:opacity-100" />
-                  </button>
-                )}
                 <span className="inline-flex items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-xs font-medium">
                   <Zap className="h-3.5 w-3.5 text-amber-300" />
                   Mode Kilat: {book.quickTimeMinutes} Mnt
@@ -1041,6 +1043,18 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         onClose={() => setIsConceptsModalOpen(false)}
         bookTitle={book.title}
         keyConcepts={book.keyConcepts}
+      />
+
+      <ConfirmUnmarkCompletedModal
+        open={isUnmarkConfirmOpen}
+        onClose={() => setIsUnmarkConfirmOpen(false)}
+        onConfirm={() => {
+          unmarkCompleted(book.slug);
+          setIsUnmarkConfirmOpen(false);
+          setIsConceptsModalOpen(false);
+          setIsQuotesModalOpen(false);
+        }}
+        bookTitle={book.title}
       />
 
       <QuickQuotesModal
