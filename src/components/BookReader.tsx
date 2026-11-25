@@ -12,6 +12,7 @@ import {
   ConfirmUnmarkCompletedModal,
   QuickKeyConceptsModal,
   QuickQuotesModal,
+  ReaderToast,
 } from "./BookReaderModals";
 import {
   smoothScrollToElement,
@@ -147,6 +148,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [isConceptsModalOpen, setIsConceptsModalOpen] = useState(false);
   const [isQuotesModalOpen, setIsQuotesModalOpen] = useState(false);
   const [isUnmarkConfirmOpen, setIsUnmarkConfirmOpen] = useState(false);
+  const [unmarkToastMessage, setUnmarkToastMessage] = useState<string | null>(
+    null
+  );
   const [activeArticleTerm, setActiveArticleTerm] =
     useState<ArticleTermEntry | null>(null);
   const [isLeavingView, setIsLeavingView] = useState(false);
@@ -154,6 +158,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const viewExitTimerRef = useRef<number | undefined>(undefined);
+  const unmarkToastTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const readingAreaRef = useRef<HTMLDivElement>(null);
   const pendingScrollTargetRef = useRef<string | null>(null);
@@ -209,6 +214,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setIsConceptsModalOpen(false);
     setIsQuotesModalOpen(false);
     setIsUnmarkConfirmOpen(false);
+    setUnmarkToastMessage(null);
+    window.clearTimeout(unmarkToastTimerRef.current);
     setActiveArticleTerm(null);
     pendingQuickStepRef.current = null;
     window.clearTimeout(pendingQuickStepTimerRef.current);
@@ -281,6 +288,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       window.clearTimeout(copyTimerRef.current);
       window.clearTimeout(pendingQuickStepTimerRef.current);
       window.clearTimeout(viewExitTimerRef.current);
+      window.clearTimeout(unmarkToastTimerRef.current);
     };
   }, []);
 
@@ -1057,8 +1065,20 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           setIsUnmarkConfirmOpen(false);
           setIsConceptsModalOpen(false);
           setIsQuotesModalOpen(false);
+          setUnmarkToastMessage(
+            `Berhasil menghapus tanda selesai untuk "${book.title}".`
+          );
+          window.clearTimeout(unmarkToastTimerRef.current);
+          unmarkToastTimerRef.current = window.setTimeout(() => {
+            setUnmarkToastMessage(null);
+          }, 3000);
         }}
         bookTitle={book.title}
+      />
+
+      <ReaderToast
+        open={Boolean(unmarkToastMessage)}
+        message={unmarkToastMessage ?? ""}
       />
 
       <QuickQuotesModal

@@ -17,6 +17,7 @@ interface ReaderModalShellProps {
   onClose: () => void;
   titleId: string;
   maxWidthClass?: string;
+  blurBackdrop?: boolean;
   children: ReactNode;
 }
 
@@ -26,6 +27,7 @@ function ReaderModalShell({
   onClose,
   titleId,
   maxWidthClass = "max-w-xl",
+  blurBackdrop = true,
   children,
 }: ReaderModalShellProps) {
   const [mounted, setMounted] = useState(false);
@@ -57,7 +59,9 @@ function ReaderModalShell({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[75] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-md dark:bg-black/75"
+      className={`fixed inset-0 z-[75] flex items-center justify-center bg-slate-900/55 p-4 dark:bg-black/75 ${
+        blurBackdrop ? "backdrop-blur-md" : ""
+      }`}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -270,6 +274,7 @@ export function ConfirmUnmarkCompletedModal({
       onClose={onClose}
       titleId="confirm-unmark-completed-title"
       maxWidthClass="max-w-md"
+      blurBackdrop={false}
     >
       <div className="flex items-start justify-between gap-3 border-b border-line px-6 py-4">
         <div className="flex items-center gap-2.5">
@@ -318,5 +323,37 @@ export function ConfirmUnmarkCompletedModal({
         </div>
       </div>
     </ReaderModalShell>
+  );
+}
+
+interface ReaderToastProps {
+  open: boolean;
+  message: string;
+}
+
+/** Notifikasi toast ringan di bagian bawah layar untuk konfirmasi aksi di reader. */
+export function ReaderToast({ open, message }: ReaderToastProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || !open || !message) return null;
+
+  return createPortal(
+    <div
+      role="status"
+      aria-live="polite"
+      className="pointer-events-none fixed inset-x-0 bottom-5 z-[85] flex justify-center px-4"
+    >
+      <div className="animate-fade-slide flex max-w-md items-center gap-2.5 rounded-2xl border border-line bg-surface px-4 py-3 text-sm font-medium leading-snug text-ink shadow-xl">
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+          <Check className="h-3.5 w-3.5" />
+        </span>
+        <span className="line-clamp-2">{message}</span>
+      </div>
+    </div>,
+    document.body
   );
 }
