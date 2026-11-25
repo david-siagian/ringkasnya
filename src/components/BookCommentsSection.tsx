@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import {
+  ChevronDown,
   Edit3,
   Loader2,
   MessageSquare,
@@ -69,6 +70,7 @@ export default function BookCommentsSection({
   const [opinions, setOpinions] = useState<BookOpinionItem[]>([]);
   const [total, setTotal] = useState(0);
   const [hasMore, setHasMore] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [sort, setSort] = useState<OpinionSortOption>("newest");
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -136,6 +138,16 @@ export default function BookCommentsSection({
   useEffect(() => {
     void loadOpinions(sort, 0, false);
   }, [loadOpinions, sort, currentUser?.id]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (
+      window.location.hash === "#komentar-pembaca" ||
+      window.location.hash === "#komentar"
+    ) {
+      setIsExpanded(true);
+    }
+  }, []);
 
   const promptAuth = () => {
     const redirectTo =
@@ -328,57 +340,80 @@ export default function BookCommentsSection({
       aria-labelledby="komentar-heading"
       className="mx-auto mt-12 max-w-3xl"
     >
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <button
+        type="button"
+        aria-expanded={isExpanded}
+        aria-controls="komentar-panel"
+        onClick={() => setIsExpanded((prev) => !prev)}
+        className="flex w-full items-center justify-between gap-3 rounded-2xl border border-line bg-surface px-4 py-3.5 text-left shadow-sm transition hover:border-accent-line sm:px-5"
+      >
         <div className="flex items-center gap-2.5">
-          <MessageSquare className="h-5 w-5 text-accent-text" />
+          <MessageSquare className="h-5 w-5 shrink-0 text-accent-text" />
           <h2
             id="komentar-heading"
-            className="text-xl font-extrabold text-ink"
+            className="text-lg font-extrabold text-ink sm:text-xl"
           >
             Komentar
           </h2>
-          {total > 0 && (
-            <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-bold text-accent-text">
-              {total}
-            </span>
-          )}
+          <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-bold text-accent-text">
+            {isLoading && total === 0 ? "..." : total}
+          </span>
         </div>
 
-        <div
-          role="group"
-          aria-label="Urutkan komentar"
-          className="inline-flex rounded-xl border border-line bg-surface p-1 text-xs"
-        >
-          <button
-            type="button"
-            onClick={() => setSort("newest")}
-            className={`rounded-lg px-3 py-1.5 font-semibold transition ${
-              sort === "newest"
-                ? "bg-accent-soft text-accent-text"
-                : "text-ink-muted hover:text-ink"
+        <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold text-ink-muted">
+          <span>
+            {isExpanded
+              ? "Tutup"
+              : total > 0
+                ? "Lihat komentar"
+                : "Tulis komentar"}
+          </span>
+          <ChevronDown
+            className={`h-4 w-4 transition-transform duration-200 ${
+              isExpanded ? "rotate-180" : ""
             }`}
-          >
-            Terbaru
-          </button>
-          <button
-            type="button"
-            onClick={() => setSort("helpful")}
-            className={`rounded-lg px-3 py-1.5 font-semibold transition ${
-              sort === "helpful"
-                ? "bg-accent-soft text-accent-text"
-                : "text-ink-muted hover:text-ink"
-            }`}
-          >
-            Paling Bermanfaat
-          </button>
-        </div>
-      </div>
+          />
+        </span>
+      </button>
 
-      {/* Form Komentar */}
-      <form
-        onSubmit={handleSubmit}
-        className="mt-4 rounded-2xl border border-line bg-surface p-4 sm:p-5 shadow-sm"
-      >
+      {isExpanded && (
+        <div id="komentar-panel" className="mt-4">
+          <div className="flex justify-end">
+            <div
+              role="group"
+              aria-label="Urutkan komentar"
+              className="inline-flex rounded-xl border border-line bg-surface p-1 text-xs"
+            >
+              <button
+                type="button"
+                onClick={() => setSort("newest")}
+                className={`rounded-lg px-3 py-1.5 font-semibold transition ${
+                  sort === "newest"
+                    ? "bg-accent-soft text-accent-text"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                Terbaru
+              </button>
+              <button
+                type="button"
+                onClick={() => setSort("helpful")}
+                className={`rounded-lg px-3 py-1.5 font-semibold transition ${
+                  sort === "helpful"
+                    ? "bg-accent-soft text-accent-text"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                Paling Bermanfaat
+              </button>
+            </div>
+          </div>
+
+          {/* Form Komentar */}
+          <form
+            onSubmit={handleSubmit}
+            className="mt-3 rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5"
+          >
         <textarea
           id="komentar-input"
           aria-label="Bagikan komentar Anda tentang buku ini"
@@ -659,6 +694,8 @@ export default function BookCommentsSection({
           </div>
         )}
       </div>
+        </div>
+      )}
     </section>
   );
 }
