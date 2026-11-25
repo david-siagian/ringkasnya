@@ -661,6 +661,12 @@ export default function BookCommentsSection({
                     onClick={() => void handleToggleHelpful(item.id)}
                     disabled={isVoting}
                     aria-pressed={item.hasVoted}
+                    aria-label={
+                      item.hasVoted
+                        ? "Batalkan tanda bermanfaat"
+                        : "Tandai bermanfaat"
+                    }
+                    title="Bermanfaat"
                     className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
                       item.hasVoted
                         ? "border-accent-line bg-accent-soft text-accent-text"
@@ -668,11 +674,8 @@ export default function BookCommentsSection({
                     } disabled:opacity-60`}
                   >
                     <ThumbsUp className="h-3.5 w-3.5" />
-                    <span>Bermanfaat</span>
                     {item.helpfulCount > 0 && (
-                      <span className="ml-0.5 font-bold">
-                        ({item.helpfulCount})
-                      </span>
+                      <span className="font-bold">{item.helpfulCount}</span>
                     )}
                   </button>
                 </div>
