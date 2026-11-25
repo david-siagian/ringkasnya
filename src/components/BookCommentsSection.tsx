@@ -199,6 +199,7 @@ export default function BookCommentsSection({
 
       setDraft("");
       setTotal((prev) => prev + 1);
+      setIsExpanded(true);
       if (sort === "newest") {
         setOpinions((prev) => [data.opinion!, ...prev]);
       } else {
@@ -341,13 +342,7 @@ export default function BookCommentsSection({
       className="mx-auto mt-12 max-w-3xl"
     >
       <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
-        <button
-          type="button"
-          aria-expanded={isExpanded}
-          aria-controls="komentar-panel"
-          onClick={() => setIsExpanded((prev) => !prev)}
-          className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left transition hover:bg-page/50 sm:px-5"
-        >
+        <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2 sm:px-5">
           <div className="flex items-center gap-2.5">
             <MessageSquare className="h-5 w-5 shrink-0 text-accent-text" />
             <h2
@@ -360,27 +355,10 @@ export default function BookCommentsSection({
               {isLoading && total === 0 ? "..." : total}
             </span>
           </div>
+        </div>
 
-          <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold text-ink-muted">
-            <span>
-              {isExpanded
-                ? "Tutup"
-                : total > 0
-                  ? "Lihat komentar"
-                  : "Tulis komentar"}
-            </span>
-            <ChevronDown
-              className={`h-4 w-4 transition-transform duration-200 ${
-                isExpanded ? "rotate-180" : ""
-              }`}
-            />
-          </span>
-        </button>
-
-        {isExpanded && (
-          <div id="komentar-panel" className="border-t border-line">
-            {/* Form Komentar */}
-            <form onSubmit={handleSubmit} className="p-4 sm:p-5">
+        {/* Form Komentar */}
+        <form onSubmit={handleSubmit} className="px-4 pt-1 pb-4 sm:px-5 sm:pb-5">
         <textarea
           id="komentar-input"
           aria-label="Bagikan komentar Anda tentang buku ini"
@@ -452,41 +430,67 @@ export default function BookCommentsSection({
         </div>
       </form>
 
-      {/* Daftar Komentar */}
-      <div className="border-t border-line">
-        <div className="flex items-center justify-between gap-2 px-4 pt-3.5 pb-1 sm:px-5">
-          <span className="text-xs font-semibold text-ink-subtle">
-            {total > 0 ? `${total} komentar` : "Daftar komentar"}
-          </span>
-          <div
-            role="group"
-            aria-label="Urutkan komentar"
-            className="inline-flex rounded-xl border border-line bg-page p-0.5 text-xs"
-          >
-            <button
-              type="button"
-              onClick={() => setSort("newest")}
-              className={`rounded-lg px-2.5 py-1 font-semibold transition ${
-                sort === "newest"
-                  ? "bg-accent-soft text-accent-text"
-                  : "text-ink-muted hover:text-ink"
-              }`}
+      {/* Accordion Daftar Komentar */}
+      <button
+        type="button"
+        aria-expanded={isExpanded}
+        aria-controls="komentar-panel"
+        onClick={() => setIsExpanded((prev) => !prev)}
+        className="flex w-full items-center justify-between gap-3 border-t border-line bg-page/40 px-4 py-3 text-left transition hover:bg-page/80 sm:px-5"
+      >
+        <span className="text-xs font-semibold text-ink-muted">
+          {isExpanded
+            ? `Sembunyikan komentar (${isLoading && total === 0 ? "..." : total})`
+            : total > 0
+              ? `Lihat ${total} komentar`
+              : isLoading
+                ? "Memuat komentar..."
+                : "Lihat daftar komentar (0)"}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-ink-muted transition-transform duration-200 ${
+            isExpanded ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {isExpanded && (
+        <div id="komentar-panel" className="border-t border-line">
+          <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-2.5 sm:px-5">
+            <span className="text-xs font-semibold text-ink-subtle">
+              {total > 0 ? `${total} komentar` : "Daftar komentar"}
+            </span>
+            <div
+              role="group"
+              aria-label="Urutkan komentar"
+              className="inline-flex rounded-xl border border-line bg-page p-0.5 text-xs"
             >
-              Terbaru
-            </button>
-            <button
-              type="button"
-              onClick={() => setSort("helpful")}
-              className={`rounded-lg px-2.5 py-1 font-semibold transition ${
-                sort === "helpful"
-                  ? "bg-accent-soft text-accent-text"
-                  : "text-ink-muted hover:text-ink"
-              }`}
-            >
-              Paling Bermanfaat
-            </button>
+              <button
+                type="button"
+                onClick={() => setSort("newest")}
+                className={`rounded-lg px-2.5 py-1 font-semibold transition ${
+                  sort === "newest"
+                    ? "bg-accent-soft text-accent-text"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                Terbaru
+              </button>
+              <button
+                type="button"
+                onClick={() => setSort("helpful")}
+                className={`rounded-lg px-2.5 py-1 font-semibold transition ${
+                  sort === "helpful"
+                    ? "bg-accent-soft text-accent-text"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                Paling Bermanfaat
+              </button>
+            </div>
           </div>
-        </div>
+
+          <div className="max-h-[420px] overflow-y-auto overscroll-contain sm:max-h-[480px]">
 
         {isLoading ? (
           <div className="divide-y divide-line">
