@@ -18,7 +18,7 @@ import {
   OPINION_PAGE_SIZE,
 } from "@/lib/opinions";
 
-interface BookCommentsSectionProps {
+interface BookOpinionsSectionProps {
   bookSlug: string;
 }
 
@@ -70,9 +70,9 @@ function AuthorAvatar({ name, image }: { name: string; image: string | null }) {
   );
 }
 
-export default function BookCommentsSection({
+export default function BookOpinionsSection({
   bookSlug,
-}: BookCommentsSectionProps) {
+}: BookOpinionsSectionProps) {
   const { data: session } = useSession();
   const currentUser = session?.user ?? null;
 
@@ -126,7 +126,7 @@ export default function BookCommentsSection({
           error?: string;
         };
         if (!res.ok) {
-          throw new Error(data.error || "Gagal memuat komentar.");
+          throw new Error(data.error || "Gagal memuat opini.");
         }
 
         setOpinions((prev) =>
@@ -136,7 +136,7 @@ export default function BookCommentsSection({
         setHasMore(data.hasMore);
       } catch (error) {
         setFetchError(
-          error instanceof Error ? error.message : "Gagal memuat komentar."
+          error instanceof Error ? error.message : "Gagal memuat opini."
         );
       } finally {
         setIsLoading(false);
@@ -153,8 +153,8 @@ export default function BookCommentsSection({
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (
-      window.location.hash === "#komentar-pembaca" ||
-      window.location.hash === "#komentar"
+      window.location.hash === "#opini-pembaca" ||
+      window.location.hash === "#opini"
     ) {
       setIsExpanded(true);
     }
@@ -184,7 +184,7 @@ export default function BookCommentsSection({
     }
 
     if (trimmedDraft.length === 0) {
-      setSubmitError("Komentar tidak boleh kosong.");
+      setSubmitError("Opini tidak boleh kosong.");
       return;
     }
 
@@ -205,7 +205,7 @@ export default function BookCommentsSection({
         return;
       }
       if (!res.ok || !data.opinion) {
-        throw new Error(data.error || "Gagal mengirim komentar.");
+        throw new Error(data.error || "Gagal mengirim opini.");
       }
 
       setDraft("");
@@ -218,7 +218,7 @@ export default function BookCommentsSection({
       }
     } catch (error) {
       setSubmitError(
-        error instanceof Error ? error.message : "Gagal mengirim komentar."
+        error instanceof Error ? error.message : "Gagal mengirim opini."
       );
     } finally {
       setIsSubmitting(false);
@@ -278,7 +278,7 @@ export default function BookCommentsSection({
     setEditError(null);
     const trimmed = editDraft.trim();
     if (trimmed.length === 0) {
-      setEditError("Komentar tidak boleh kosong.");
+      setEditError("Opini tidak boleh kosong.");
       return;
     }
 
@@ -299,7 +299,7 @@ export default function BookCommentsSection({
       };
 
       if (!res.ok || !data.content) {
-        throw new Error(data.error || "Gagal memperbarui komentar.");
+        throw new Error(data.error || "Gagal memperbarui opini.");
       }
 
       setOpinions((prev) =>
@@ -317,7 +317,7 @@ export default function BookCommentsSection({
       setEditDraft("");
     } catch (error) {
       setEditError(
-        error instanceof Error ? error.message : "Gagal memperbarui komentar."
+        error instanceof Error ? error.message : "Gagal memperbarui opini."
       );
     } finally {
       setIsSavingEdit(false);
@@ -333,7 +333,7 @@ export default function BookCommentsSection({
       );
       const data = (await res.json()) as { deleted?: boolean; error?: string };
       if (!res.ok || !data.deleted) {
-        throw new Error(data.error || "Gagal menghapus komentar.");
+        throw new Error(data.error || "Gagal menghapus opini.");
       }
 
       setOpinions((prev) => prev.filter((item) => item.id !== opinionId));
@@ -346,7 +346,7 @@ export default function BookCommentsSection({
     }
   };
 
-  const handleExpandComments = () => {
+  const handleExpandOpinions = () => {
     setIsExpanded(true);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -361,7 +361,7 @@ export default function BookCommentsSection({
     });
   };
 
-  const handleCollapseComments = () => {
+  const handleCollapseOpinions = () => {
     setIsExpanded(false);
     requestAnimationFrame(() => {
       const section = sectionRef.current;
@@ -378,8 +378,8 @@ export default function BookCommentsSection({
   return (
     <section
       ref={sectionRef}
-      id="komentar-pembaca"
-      aria-labelledby="komentar-heading"
+      id="opini-pembaca"
+      aria-labelledby="opini-heading"
       className="mx-auto mt-12 max-w-3xl"
     >
       <div className="rounded-2xl border border-line bg-surface shadow-sm">
@@ -387,10 +387,10 @@ export default function BookCommentsSection({
           <div className="flex items-center gap-2">
             <MessageSquare className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
             <h2
-              id="komentar-heading"
+              id="opini-heading"
               className="text-base font-extrabold text-ink sm:text-lg"
             >
-              Komentar
+              Opini
             </h2>
             <span className="rounded-full bg-accent-soft px-2 py-0.5 text-xs font-bold text-accent-text">
               {isLoading && total === 0 ? "..." : total}
@@ -398,11 +398,11 @@ export default function BookCommentsSection({
           </div>
         </div>
 
-        {/* Form Komentar */}
+        {/* Form Opini */}
         <form onSubmit={handleSubmit} className="px-4 pt-1 pb-3.5 sm:px-5 sm:pb-4">
         <textarea
-          id="komentar-input"
-          aria-label="Bagikan komentar Anda tentang buku ini"
+          id="opini-input"
+          aria-label="Bagikan opini Anda tentang buku ini"
           rows={2}
           maxLength={OPINION_MAX_LENGTH}
           value={draft}
@@ -410,7 +410,7 @@ export default function BookCommentsSection({
             setDraft(e.target.value);
             if (submitError) setSubmitError(null);
           }}
-          placeholder="Bagikan komentar Anda tentang buku ini"
+          placeholder="Bagikan opini Anda tentang buku ini"
           className="min-h-[64px] w-full resize-y rounded-xl border border-line bg-page px-3 py-2 text-sm leading-relaxed text-ink placeholder:text-ink-subtle focus:border-accent-line focus:outline-none focus:ring-2 focus:ring-accent-soft"
         />
 
@@ -439,7 +439,7 @@ export default function BookCommentsSection({
                 >
                   Masuk
                 </button>{" "}
-                untuk mengirim komentar • {trimmedDraft.length}/
+                untuk mengirim opini • {trimmedDraft.length}/
                 {OPINION_MAX_LENGTH}
               </span>
             )}
@@ -456,7 +456,7 @@ export default function BookCommentsSection({
               ) : (
                 <Send className="h-3.5 w-3.5" />
               )}
-              <span>{isSubmitting ? "Mengirim..." : "Kirim Komentar"}</span>
+              <span>{isSubmitting ? "Mengirim..." : "Kirim Opini"}</span>
             </button>
           ) : (
             <button
@@ -471,51 +471,51 @@ export default function BookCommentsSection({
         </div>
       </form>
 
-      {/* Accordion Daftar Komentar */}
+      {/* Accordion Daftar Opini */}
       {!isExpanded ? (
         <button
           type="button"
           aria-expanded={false}
-          aria-controls="komentar-panel"
-          onClick={handleExpandComments}
+          aria-controls="opini-panel"
+          onClick={handleExpandOpinions}
           className="flex w-full items-center justify-between gap-3 rounded-b-2xl border-t border-line bg-page/40 px-4 py-2.5 text-left transition hover:bg-page/80 sm:px-5"
         >
           <span className="text-xs font-semibold text-ink-muted">
             {total > 0
-              ? `Lihat ${total} komentar`
+              ? `Lihat ${total} opini`
               : isLoading
-                ? "Memuat komentar..."
-                : "Lihat daftar komentar (0)"}
+                ? "Memuat opini..."
+                : "Lihat daftar opini (0)"}
           </span>
           <ChevronDown className="h-4 w-4 shrink-0 text-ink-muted" />
         </button>
       ) : (
         <div
           ref={panelRef}
-          id="komentar-panel"
+          id="opini-panel"
           className="rounded-b-2xl border-t border-line"
         >
           <button
             type="button"
             aria-expanded={true}
-            aria-controls="komentar-panel"
-            onClick={handleCollapseComments}
+            aria-controls="opini-panel"
+            onClick={handleCollapseOpinions}
             style={{ top: "calc(var(--header-h, 73px) + var(--reader-toolbar-h, 0px))" }}
             className="sticky z-30 flex w-full items-center justify-between gap-3 border-b border-line bg-surface/95 px-4 py-2.5 text-left backdrop-blur-sm transition hover:bg-page/80 sm:px-5"
           >
             <span className="text-xs font-semibold text-ink-muted">
-              Sembunyikan komentar ({isLoading && total === 0 ? "..." : total})
+              Sembunyikan opini ({isLoading && total === 0 ? "..." : total})
             </span>
             <ChevronDown className="h-4 w-4 shrink-0 rotate-180 text-ink-muted" />
           </button>
 
           <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-2 sm:px-5">
             <span className="text-xs font-semibold text-ink-subtle">
-              {total > 0 ? `${total} komentar` : "Daftar komentar"}
+              {total > 0 ? `${total} opini` : "Daftar opini"}
             </span>
             <div
               role="group"
-              aria-label="Urutkan komentar"
+              aria-label="Urutkan opini"
               className="inline-flex rounded-xl border border-line bg-page p-0.5 text-xs"
             >
               <button
@@ -572,7 +572,7 @@ export default function BookCommentsSection({
         ) : opinions.length === 0 ? (
           <div className="px-4 py-6 text-center sm:px-5">
             <p className="text-sm font-medium text-ink-muted">
-              Belum ada komentar tentang buku ini
+              Belum ada opini tentang buku ini
             </p>
           </div>
         ) : (
@@ -616,7 +616,7 @@ export default function BookCommentsSection({
                             setEditError(null);
                             setConfirmDeleteId(null);
                           }}
-                          aria-label="Sunting komentar"
+                          aria-label="Sunting opini"
                           className="rounded-lg p-1.5 text-ink-subtle transition hover:bg-page hover:text-ink"
                         >
                           <Edit3 className="h-3.5 w-3.5" />
@@ -626,7 +626,7 @@ export default function BookCommentsSection({
                         <button
                           type="button"
                           onClick={() => setConfirmDeleteId(item.id)}
-                          aria-label="Hapus komentar"
+                          aria-label="Hapus opini"
                           className="rounded-lg p-1.5 text-ink-subtle transition hover:bg-page hover:text-rose-600 dark:hover:text-rose-400"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -639,7 +639,7 @@ export default function BookCommentsSection({
                 {isConfirmingDelete && (
                   <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs dark:border-rose-900/60 dark:bg-rose-950/40">
                     <span className="font-medium text-rose-700 dark:text-rose-300">
-                      Hapus komentar ini secara permanen?
+                      Hapus opini ini secara permanen?
                     </span>
                     <div className="flex items-center gap-2">
                       <button
@@ -748,7 +748,7 @@ export default function BookCommentsSection({
             >
               {isLoadingMore && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               <span>
-                {isLoadingMore ? "Memuat..." : "Komentar lainnya"}
+                {isLoadingMore ? "Memuat..." : "Opini lainnya"}
               </span>
             </button>
           </div>

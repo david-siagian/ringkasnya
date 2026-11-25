@@ -33,7 +33,7 @@ export function validateOpinionContent(
   raw: unknown
 ): { ok: true; content: string } | { ok: false; error: string } {
   if (typeof raw !== "string") {
-    return { ok: false, error: "Isi komentar harus berupa teks." };
+    return { ok: false, error: "Isi opini harus berupa teks." };
   }
 
   const normalized = raw
@@ -44,14 +44,14 @@ export function validateOpinionContent(
   if (normalized.length === 0) {
     return {
       ok: false,
-      error: "Komentar tidak boleh kosong.",
+      error: "Opini tidak boleh kosong.",
     };
   }
 
   if (normalized.length > OPINION_MAX_LENGTH) {
     return {
       ok: false,
-      error: `Komentar maksimal ${OPINION_MAX_LENGTH} karakter.`,
+      error: `Opini maksimal ${OPINION_MAX_LENGTH} karakter.`,
     };
   }
 

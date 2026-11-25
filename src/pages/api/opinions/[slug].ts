@@ -117,8 +117,8 @@ export const GET: APIRoute = async (context) => {
       hasMore: offset + opinions.length < total,
     });
   } catch (error) {
-    console.error("[GET /api/opinions] Gagal memuat komentar:", error);
-    return jsonResponse({ error: "Gagal memuat komentar." }, 500);
+    console.error("[GET /api/opinions] Gagal memuat opini:", error);
+    return jsonResponse({ error: "Gagal memuat opini." }, 500);
   }
 };
 
@@ -197,7 +197,7 @@ export const POST: APIRoute = async (context) => {
 
     return jsonResponse({ opinion }, 201);
   } catch (error) {
-    console.error("[POST /api/opinions] Gagal menyimpan komentar:", error);
-    return jsonResponse({ error: "Gagal menyimpan komentar. Coba lagi." }, 500);
+    console.error("[POST /api/opinions] Gagal menyimpan opini:", error);
+    return jsonResponse({ error: "Gagal menyimpan opini. Coba lagi." }, 500);
   }
 };

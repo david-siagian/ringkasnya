@@ -15,7 +15,7 @@ Dokumen ini menyimpan rencana pengembangan **Fase 3** untuk `ringkasnya.com`, me
 | **2. Fase 3.2 — Progres Baca & Bookmark** | **Pending** | Tabel `user_book_progress` siap; API & integrasi UI belum dibuat |
 | **2. Fase 3.3 — Payment & Keanggotaan** | **Pending** | Tabel `subscriptions` siap; payment gateway & webhook belum dibuat |
 | **2. Admin CMS (`/admin`)** | **Pending** | Dashboard & API admin (CRUD ringkasan, publish, hitung durasi) belum dibuat |
-| **3. Komentar Pembaca** | **Selesai** | Fitur *Komentar* aktif di `BookReader`, D1 (`0024`), wajib login untuk kirim & apresiasi *Bermanfaat* |
+| **3. Opini Pembaca** | **Selesai** | Fitur *Opini* aktif di `BookReader`, D1 (`0024`), wajib login untuk kirim & apresiasi *Bermanfaat* |
 | **4. Artikel — Gelombang 1 (MVP)** | **Selesai** | 6 artikel Bedah Istilah Ilmiah aktif di `src/pages/artikel/` |
 | **4. Artikel — Gelombang Berikutnya** | **Pending** | Backlog editorial (istilah baru & format esai/roadmap/eksperimen) |
 | **5. Ekspansi Katalog 100 Buku** | **Selesai** | **100 / 100 buku** (Fase 1 + Batch 1–5) lengkap di Cloudflare D1 |
@@ -62,13 +62,13 @@ Seluruh **58 buku awal** telah dipindahkan dari file TypeScript statis (`src/dat
 
 ---
 
-## 3. Fitur Komentar Pembaca — Selesai
+## 3. Fitur Opini Pembaca — Selesai
 
-> **Status**: Selesai diimplementasikan (`migrations/0024_create_book_opinions.sql`, `src/pages/api/opinions/`, `src/components/BookCommentsSection.tsx`).
+> **Status**: Selesai diimplementasikan (`migrations/0024_create_book_opinions.sql`, `src/pages/api/opinions/`, `src/components/BookOpinionsSection.tsx`).
 
-Fitur interaksi **Komentar** pada halaman `BookReader` dengan placeholder *"Bagikan komentar Anda tentang buku ini"*:
+Fitur interaksi **Opini** pada halaman `BookReader` dengan placeholder *"Bagikan opini Anda tentang buku ini"*:
 - **Penempatan**: Di bagian bawah `BookReader` setelah kesimpulan, konsep kunci, dan kutipan (sebelum rekomendasi buku lainnya) pada Mode Kilat maupun langkah penutup Mode Mendalam.
-- **Akses & Identitas**: Membaca komentar terbuka untuk publik; mengirim komentar, menyunting/menghapus komentar sendiri, dan memberi apresiasi **Bermanfaat** wajib login menggunakan akun Fase 3.1 (memanfaatkan modal login jika belum masuk).
+- **Akses & Identitas**: Membaca opini terbuka untuk publik; mengirim opini, menyunting/menghapus opini sendiri, dan memberi apresiasi **Bermanfaat** wajib login menggunakan akun Fase 3.1 (memanfaatkan modal login jika belum masuk).
 - **Struktur & Keamanan**: Daftar *flat* dengan sortir *Terbaru* / *Paling Bermanfaat*, *pagination* (*Muat lebih banyak*), sanitasi *plain-text only* (maksimal 1.000 karakter), dan moderasi hapus untuk `role = 'admin'`.
 
 ---
