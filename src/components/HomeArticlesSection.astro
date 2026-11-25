@@ -41,42 +41,43 @@ const displayedArticles = articles.slice(0, 3);
           {displayedArticles.map((article) => (
             <a
               href={`/artikel/${article.slug}`}
-              class="group flex flex-col justify-between rounded-2xl border border-line/80 bg-surface p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md"
+              class="group flex items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md"
             >
-              <div>
-                <div class="flex items-center gap-3.5">
-                  {article.coverImage && (
-                    <div class="h-14 w-14 shrink-0 overflow-hidden rounded-xl ring-1 ring-line/60">
-                      <img
-                        src={article.coverImage}
-                        alt={`Ilustrasi artikel ${article.title}`}
-                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                  )}
+              {article.coverImage && (
+                <div class="w-28 shrink-0 overflow-hidden border-r border-line/60 bg-slate-950 sm:w-32">
+                  <img
+                    src={article.coverImage}
+                    alt={`Ilustrasi artikel ${article.title}`}
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              )}
 
-                  <div class="min-w-0 flex-1">
-                    <p class="truncate text-xs font-semibold text-accent-text">
+              <div class="flex min-w-0 flex-1 flex-col justify-between p-4 sm:p-5">
+                <div>
+                  <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
+                    <span class="truncate font-semibold text-accent-text">
                       {article.accentBadge}
-                    </p>
-                    <p class="mt-0.5 inline-flex items-center gap-1 text-xs text-ink-subtle">
+                    </span>
+                    <span aria-hidden="true" class="text-ink-faint">&middot;</span>
+                    <span class="inline-flex shrink-0 items-center gap-1 text-ink-subtle">
                       <Calendar className="h-3.5 w-3.5 text-ink-faint" />
                       {formatArticlePublishedDate(article.publishedAt)}
-                    </p>
+                    </span>
                   </div>
+
+                  <h3 class="mt-2 line-clamp-2 text-base font-bold leading-snug text-ink transition-colors group-hover:text-accent-text sm:text-lg">
+                    {article.title}
+                  </h3>
+                  <p class="mt-1.5 line-clamp-3 text-xs leading-relaxed text-ink-muted sm:text-sm">
+                    {article.subtitle}
+                  </p>
                 </div>
 
-                <h3 class="mt-4 line-clamp-2 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-accent-text">
-                  {article.title}
-                </h3>
-                <p class="mt-2 line-clamp-3 text-sm leading-relaxed text-ink-muted">
-                  {article.subtitle}
-                </p>
-              </div>
-
-              <div class="mt-5 flex items-center justify-between border-t border-line-subtle pt-3.5 text-xs font-semibold text-accent-strong group-hover:text-accent-text">
-                <span>Baca Artikel</span>
-                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                <div class="mt-4 flex items-center justify-between border-t border-line-subtle pt-3 text-xs font-semibold text-accent-strong group-hover:text-accent-text">
+                  <span>Baca Artikel</span>
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </div>
               </div>
             </a>
           ))}

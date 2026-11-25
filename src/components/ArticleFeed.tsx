@@ -101,50 +101,53 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
       {filteredItems.length > 0 ? (
         <section
           aria-label="Daftar Artikel"
-          className="mt-6 grid grid-cols-1 gap-3.5 md:grid-cols-2 sm:gap-4"
+          className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
           {filteredItems.map((article) => (
             <a
               key={article.slug}
               href={`/artikel/${article.slug}`}
-              className="group flex items-start gap-3.5 rounded-xl border border-line/85 bg-surface p-3.5 transition-colors duration-150 hover:border-accent-line hover:bg-surface-subtle/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 sm:gap-4 sm:p-4"
+              className="group flex items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
             >
               {article.coverImage && (
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-slate-950 ring-1 ring-line/60 sm:h-20 sm:w-20">
+                <div className="w-28 shrink-0 overflow-hidden border-r border-line/60 bg-slate-950 sm:w-32">
                   <img
                     src={article.coverImage}
                     alt={`Ilustrasi ${article.title}`}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
                   />
                 </div>
               )}
 
-              <div className="flex min-w-0 flex-1 flex-col justify-between">
+              <div className="flex min-w-0 flex-1 flex-col justify-between p-4 sm:p-5">
                 <div>
-                  <div className="flex items-center gap-2 text-[11px]">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
                     <span className="truncate font-semibold text-accent-text">
                       {article.accentBadge}
                     </span>
                     <span aria-hidden="true" className="text-ink-faint">
-                      •
+                      &middot;
                     </span>
                     <span className="inline-flex shrink-0 items-center gap-1 text-ink-subtle">
-                      <Calendar className="h-3 w-3 text-ink-faint" />
+                      <Calendar className="h-3.5 w-3.5 text-ink-faint" />
                       {formatArticlePublishedDate(article.publishedAt)}
                     </span>
                   </div>
 
-                  <h2 className="mt-1 line-clamp-2 text-sm font-bold leading-snug text-ink transition-colors group-hover:text-accent-strong sm:text-base">
+                  <h2 className="mt-2 line-clamp-2 text-base font-bold leading-snug text-ink transition-colors group-hover:text-accent-text sm:text-lg">
                     {article.title}
                   </h2>
-                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-ink-muted">
+                  <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-ink-muted sm:text-sm">
                     {article.subtitle}
                   </p>
                 </div>
-              </div>
 
-              <ArrowRight className="mt-1 hidden h-4 w-4 shrink-0 text-ink-faint transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-accent-strong sm:block" />
+                <div className="mt-4 flex items-center justify-between border-t border-line-subtle pt-3 text-xs font-semibold text-accent-strong group-hover:text-accent-text">
+                  <span>Baca Artikel</span>
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </div>
+              </div>
             </a>
           ))}
         </section>
