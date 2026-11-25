@@ -15,6 +15,16 @@ export function isGoogleOAuthConfigured(env?: Partial<Env>): boolean {
  * fallback aman agar gangguan KV tidak mematahkan autentikasi D1.
  */
 function createKvSecondaryStorage(kv: KVNamespace) {
+  const putValue = async (key: string, value: string, ttl?: number) => {
+    if (typeof ttl === "number" && ttl > 0) {
+      // Cloudflare KV mewajibkan expirationTtl minimal 60 detik
+      const expirationTtl = Math.max(Math.ceil(ttl), 60);
+      await kv.put(key, value, { expirationTtl });
+      return;
+    }
+    await kv.put(key, value);
+  };
+
   return {
     get: async (key: string): Promise<string | null> => {
       try {
@@ -26,13 +36,7 @@ function createKvSecondaryStorage(kv: KVNamespace) {
     },
     set: async (key: string, value: string, ttl?: number): Promise<void> => {
       try {
-        if (typeof ttl === "number" && ttl > 0) {
-          // Cloudflare KV mewajibkan expirationTtl minimal 60 detik
-          const expirationTtl = Math.max(Math.ceil(ttl), 60);
-          await kv.put(key, value, { expirationTtl });
-        } else {
-          await kv.put(key, value);
-        }
+        await putValue(key, value, ttl);
       } catch (error) {
         console.warn("[auth kv] Gagal menulis key:", key, error);
       }
@@ -42,6 +46,29 @@ function createKvSecondaryStorage(kv: KVNamespace) {
         await kv.delete(key);
       } catch (error) {
         console.warn("[auth kv] Gagal menghapus key:", key, error);
+      }
+    },
+    getAndDelete: async (key: string): Promise<string | null> => {
+      try {
+        const value = await kv.get(key);
+        if (value !== null) {
+          await kv.delete(key);
+        }
+        return value;
+      } catch (error) {
+        console.warn("[auth kv] Gagal getAndDelete key:", key, error);
+        return null;
+      }
+    },
+    increment: async (key: string, ttl?: number): Promise<number> => {
+      try {
+        const current = await kv.get(key);
+        const next = (current ? Number.parseInt(current, 10) || 0 : 0) + 1;
+        await putValue(key, String(next), ttl);
+        return next;
+      } catch (error) {
+        console.warn("[auth kv] Gagal increment key:", key, error);
+        return 1;
       }
     },
   };
