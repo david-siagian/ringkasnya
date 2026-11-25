@@ -101,28 +101,28 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
       {filteredItems.length > 0 ? (
         <section
           aria-label="Daftar Artikel"
-          className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-6 grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
         >
           {filteredItems.map((article) => (
             <a
               key={article.slug}
               href={`/artikel/${article.slug}`}
-              className="group flex items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+              className="group flex items-center gap-3.5 rounded-2xl border border-line/90 bg-surface p-3.5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 sm:items-stretch sm:gap-0 sm:overflow-hidden sm:border-line/80 sm:p-0"
             >
               {article.coverImage && (
-                <div className="w-28 shrink-0 overflow-hidden border-r border-line/60 bg-slate-950 sm:w-32">
+                <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl ring-1 ring-line/60 sm:h-auto sm:w-36 sm:rounded-none sm:border-r sm:border-line/60 sm:bg-slate-950 sm:ring-0 md:w-40">
                   <img
                     src={article.coverImage}
                     alt={`Ilustrasi ${article.title}`}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 sm:object-contain"
                     loading="lazy"
                   />
                 </div>
               )}
 
-              <div className="flex min-w-0 flex-1 flex-col justify-between p-4 sm:p-5">
+              <div className="flex min-w-0 flex-1 flex-col justify-between sm:p-4">
                 <div>
-                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
+                  <div className="flex items-center gap-2 text-[11px]">
                     <span className="truncate font-semibold text-accent-text">
                       {article.accentBadge}
                     </span>
@@ -130,20 +130,20 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
                       &middot;
                     </span>
                     <span className="inline-flex shrink-0 items-center gap-1 text-ink-subtle">
-                      <Calendar className="h-3.5 w-3.5 text-ink-faint" />
+                      <Calendar className="h-3 w-3 text-ink-faint" />
                       {formatArticlePublishedDate(article.publishedAt)}
                     </span>
                   </div>
 
-                  <h2 className="mt-2 line-clamp-2 text-base font-bold leading-snug text-ink transition-colors group-hover:text-accent-text sm:text-lg">
+                  <h2 className="mt-0.5 line-clamp-1 text-sm font-extrabold text-ink transition-colors group-hover:text-accent-text sm:mt-1.5 sm:line-clamp-2 sm:text-sm sm:font-bold sm:leading-snug lg:text-[15px]">
                     {article.title}
                   </h2>
-                  <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-ink-muted sm:text-sm">
+                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-ink-muted">
                     {article.subtitle}
                   </p>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between border-t border-line-subtle pt-3 text-xs font-semibold text-accent-strong group-hover:text-accent-text">
+                <div className="mt-3 hidden items-center justify-between border-t border-line-subtle pt-2.5 text-[11px] font-semibold text-accent-strong group-hover:text-accent-text sm:flex">
                   <span>Baca Artikel</span>
                   <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                 </div>
