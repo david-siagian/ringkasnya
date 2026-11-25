@@ -23,6 +23,13 @@
       "migrations_dir": "migrations"
     }
   ],
+  "kv_namespaces": [
+    {
+      "binding": "SESSION_KV",
+      "id": "8b4bdc32e4494dbbbffff764b3e99140",
+      "preview_id": "c21a2251722d4a7ea5b5d3c6a315db2f"
+    }
+  ],
   "previews": {
     "d1_databases": [
       {
@@ -31,13 +38,12 @@
         "database_id": "1bd684d1-0202-47a5-bb8e-3b46855888e5",
         "migrations_dir": "migrations"
       }
+    ],
+    "kv_namespaces": [
+      {
+        "binding": "SESSION_KV",
+        "id": "c21a2251722d4a7ea5b5d3c6a315db2f"
+      }
     ]
   }
-  // Siap diaktifkan untuk Fase 3 (Session & Rate Limiting):
-  // "kv_namespaces": [
-  //   {
-  //     "binding": "SESSION_KV",
-  //     "id": "<KV_NAMESPACE_ID>"
-  //   }
-  // ]
 }

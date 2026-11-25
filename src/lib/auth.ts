@@ -10,6 +10,44 @@ export function isGoogleOAuthConfigured(env?: Partial<Env>): boolean {
 }
 
 /**
+ * Adapter secondaryStorage Better Auth menggunakan Cloudflare KV.
+ * Menyertakan guard TTL minimum 60 detik (syarat Cloudflare KV) dan
+ * fallback aman agar gangguan KV tidak mematahkan autentikasi D1.
+ */
+function createKvSecondaryStorage(kv: KVNamespace) {
+  return {
+    get: async (key: string): Promise<string | null> => {
+      try {
+        return await kv.get(key);
+      } catch (error) {
+        console.warn("[auth kv] Gagal membaca key:", key, error);
+        return null;
+      }
+    },
+    set: async (key: string, value: string, ttl?: number): Promise<void> => {
+      try {
+        if (typeof ttl === "number" && ttl > 0) {
+          // Cloudflare KV mewajibkan expirationTtl minimal 60 detik
+          const expirationTtl = Math.max(Math.ceil(ttl), 60);
+          await kv.put(key, value, { expirationTtl });
+        } else {
+          await kv.put(key, value);
+        }
+      } catch (error) {
+        console.warn("[auth kv] Gagal menulis key:", key, error);
+      }
+    },
+    delete: async (key: string): Promise<void> => {
+      try {
+        await kv.delete(key);
+      } catch (error) {
+        console.warn("[auth kv] Gagal menghapus key:", key, error);
+      }
+    },
+  };
+}
+
+/**
  * Factory per-request untuk Better Auth di Cloudflare Workers.
  * Wajib dipanggil di dalam request handler/middleware karena binding `env.DB`
  * hanya tersedia saat runtime request.
@@ -22,6 +60,9 @@ export function createAuth(env: Env, requestUrl?: string) {
     "dev-only-ringkasnya-fallback-secret-change-in-production";
 
   const googleConfigured = isGoogleOAuthConfigured(env);
+  const kvStorage = env.SESSION_KV
+    ? createKvSecondaryStorage(env.SESSION_KV)
+    : undefined;
 
   return betterAuth({
     appName: "ringkasnya.id",
@@ -36,6 +77,7 @@ export function createAuth(env: Env, requestUrl?: string) {
         verification: schema.verifications,
       },
     }),
+    ...(kvStorage ? { secondaryStorage: kvStorage } : {}),
     emailAndPassword: {
       enabled: true,
       minPasswordLength: 8,
