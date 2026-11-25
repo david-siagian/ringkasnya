@@ -30,15 +30,16 @@
 - **Alur Kerja Fitur / Bugfix / Lainnya**:
   1. Pastikan berada di branch `dev` terbaru (`git checkout dev`, lalu `git pull origin dev`), kemudian buat branch baru dari `dev` (misalnya `feat/<nama-fitur>`, `fix/<nama-bug>`, `docs/<topik>`, `chore/<topik>`).
   2. Kerjakan perubahan pada branch baru tersebut (tidak perlu menjalankan `npm run build` maupun `npx test` secara lokal; untuk *refactor* besar yang menyentuh banyak file/tipe data, jalankan `npm run typecheck` sebelum push agar terhindar dari bolak-balik memperbaiki error di CI).
-  3. Commit dan push perubahan ke branch baru tersebut (`git push -u origin <nama-branch>`).
-  4. Merge branch tersebut ke `dev` (`git checkout dev`, `git merge <nama-branch>`, `git push origin dev`), lalu pantau status workflow GitHub Actions (`.github/workflows/deploy.yml`) menggunakan `gh run list` / `gh run watch` untuk memastikan seluruh step (TypeScript Check, Build Project, dan Apply D1 Migrations) berjalan sukses.
+  3. Commit dan push perubahan ke branch baru tersebut (`git push -u origin <nama-branch>`). **Jangan langsung merge ke `dev`** — biarkan tetap di branch kerja tersebut terlebih dahulu.
+  4. Kirim **URL preview** untuk branch tersebut kepada user, lalu **selalu tanyakan**: `"Apakah sudah oke dan sudah bisa saya merge ke dev?"`
+  5. Baru setelah user menjawab sudah oke / menyetujui, lakukan merge ke `dev` (`git checkout dev`, `git merge <nama-branch>`, `git push`), lalu pantau status workflow GitHub Actions (`.github/workflows/deploy.yml`) menggunakan `gh run list` / `gh run watch` untuk memastikan seluruh step (TypeScript Check, Build Project, dan Apply D1 Migrations) berjalan sukses.
 
 ## Deployment & Rilis
 - **Auto-Deploy Cloudflare & GitHub Actions Aktif**:
   - **Preview (`dev`)**: Push/merge ke branch `dev` memicu workflow GitHub Actions (`CI & D1 Migrations`: typecheck, build, dan migrasi D1 preview) serta build & deploy Preview di Cloudflare Workers.
   - **Production (`main`)**: Push/merge ke branch `main` (khusus rilis) memicu workflow GitHub Actions (`CI & D1 Migrations`: typecheck, build, dan migrasi D1 production) serta build & deploy Production di Cloudflare Workers.
   - Tidak perlu menjalankan `npx wrangler deploy`, `npm run build`, maupun `npx test` secara manual setelah `git push`; cukup pantau eksekusi GitHub Actions hingga seluruh step dinyatakan sukses.
-- **Auto-Push Setelah Selesai Fitur/Bug**: Setiap kali selesai mengerjakan fitur atau perbaikan bug, langsung lakukan `git commit` dan `git push` ke branch kerja (yang ditarik dari `dev`), lalu merge ke `dev` dan push `dev`, kemudian pantau hasil GitHub Actions hingga sukses, kecuali user meminta untuk tidak di-push terlebih dahulu.
+- **Auto-Push ke Branch Kerja (Tunggu Konfirmasi Sebelum Merge ke `dev`)**: Setiap kali selesai mengerjakan fitur atau perbaikan bug, langsung lakukan `git commit` dan `git push` ke branch kerja (yang ditarik dari `dev`), **jangan langsung merge ke `dev`**. Kirimkan URL preview kepada user dan selalu tanyakan `"Apakah sudah oke dan sudah bisa saya merge ke dev?"`. Lakukan merge ke `dev` dan push `dev` (serta pantau hasil GitHub Actions hingga sukses) hanya setelah user menjawab sudah oke, kecuali user meminta untuk tidak di-push terlebih dahulu.
 
 ## Pengujian & Verifikasi
 - **GitHub Actions sebagai Gerbang Utama**: Tidak perlu menjalankan `npm run build` ataupun `npx test` / `npm run test:e2e` secara lokal saat pengerjaan harian (cukup `npm run typecheck` opsional bila melakukan *refactor* besar lintas file/tipe data). Setelah push ke `dev` atau `main`, pantau workflow GitHub Actions (`gh run list` / `gh run watch`) untuk memastikan seluruh step berhasil.
