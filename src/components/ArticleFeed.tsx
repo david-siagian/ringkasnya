@@ -110,7 +110,7 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
               className="group flex items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
             >
               {article.coverImage && (
-                <div className="w-32 shrink-0 overflow-hidden border-r border-line/60 bg-slate-950 sm:w-36 md:w-40">
+                <div className="w-24 shrink-0 overflow-hidden border-r border-line/60 bg-slate-950 sm:w-28 md:w-32">
                   <img
                     src={article.coverImage}
                     alt={`Ilustrasi ${article.title}`}
@@ -120,9 +120,9 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
                 </div>
               )}
 
-              <div className="flex min-w-0 flex-1 flex-col justify-between p-3.5 sm:p-4">
+              <div className="flex min-w-0 flex-1 flex-col justify-between px-3.5 py-2.5 sm:px-4 sm:py-3">
                 <div>
-                  <div className="flex items-center gap-2 text-[11px]">
+                  <div className="flex items-center gap-2 text-[10px] sm:text-[11px]">
                     <span className="truncate font-semibold text-accent-text">
                       {article.accentBadge}
                     </span>
@@ -135,17 +135,17 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
                     </span>
                   </div>
 
-                  <h2 className="mt-1 line-clamp-2 text-sm font-bold leading-snug text-ink transition-colors group-hover:text-accent-text sm:mt-1.5 lg:text-[15px]">
+                  <h2 className="mt-1 line-clamp-2 text-[13px] font-bold leading-tight text-ink transition-colors group-hover:text-accent-text sm:text-sm">
                     {article.title}
                   </h2>
-                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-ink-muted">
+                  <p className="mt-1 line-clamp-1 text-[11px] leading-snug text-ink-muted sm:line-clamp-2 sm:text-xs">
                     {article.subtitle}
                   </p>
                 </div>
 
-                <div className="mt-2.5 flex items-center justify-between border-t border-line-subtle pt-2 text-[11px] font-semibold text-accent-strong group-hover:text-accent-text sm:mt-3 sm:pt-2.5">
+                <div className="mt-2 flex items-center justify-between border-t border-line-subtle pt-1.5 text-[11px] font-semibold text-accent-strong group-hover:text-accent-text">
                   <span>Baca Artikel</span>
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 sm:h-3.5 sm:w-3.5" />
                 </div>
               </div>
             </a>
