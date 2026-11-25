@@ -557,7 +557,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}
       >
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
-          <div className="flex flex-wrap items-center justify-between gap-2.5">
+          <div className="flex items-start justify-between gap-2.5">
             <a
               href="/katalog"
               className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm transition hover:bg-black/30"
@@ -566,21 +566,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               Kembali ke Katalog
             </a>
 
-            <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
-              {completed && (
-                <button
-                  type="button"
-                  onClick={() => setIsUnmarkConfirmOpen(true)}
-                  title="Klik untuk hapus tanda selesai dibaca"
-                  aria-label="Hapus tanda selesai dibaca"
-                  className="group inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-emerald-600 active:scale-[0.98]"
-                >
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  <span>Selesai Dibaca</span>
-                  <X className="h-3.5 w-3.5 opacity-80 transition group-hover:opacity-100" />
-                </button>
-              )}
-
+            <div className="ml-auto flex flex-col items-end gap-2">
               <button
                 type="button"
                 onClick={() => toggleBookmark(book.slug)}
@@ -596,6 +582,20 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 />
                 <span>{saved ? "Tersimpan" : "Simpan Buku"}</span>
               </button>
+
+              {completed && (
+                <button
+                  type="button"
+                  onClick={() => setIsUnmarkConfirmOpen(true)}
+                  title="Klik untuk hapus tanda selesai dibaca"
+                  aria-label="Hapus tanda selesai dibaca"
+                  className="group inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-emerald-600 active:scale-[0.98]"
+                >
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  <span>Selesai Dibaca</span>
+                  <X className="h-3.5 w-3.5 opacity-80 transition group-hover:opacity-100" />
+                </button>
+              )}
             </div>
           </div>
 
