@@ -1,4 +1,3 @@
-export const OPINION_MIN_LENGTH = 3;
 export const OPINION_MAX_LENGTH = 1000;
 export const OPINION_PAGE_SIZE = 10;
 
@@ -34,7 +33,7 @@ export function validateOpinionContent(
   raw: unknown
 ): { ok: true; content: string } | { ok: false; error: string } {
   if (typeof raw !== "string") {
-    return { ok: false, error: "Isi opini harus berupa teks." };
+    return { ok: false, error: "Isi komentar harus berupa teks." };
   }
 
   const normalized = raw
@@ -42,17 +41,17 @@ export function validateOpinionContent(
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 
-  if (normalized.length < OPINION_MIN_LENGTH) {
+  if (normalized.length === 0) {
     return {
       ok: false,
-      error: `Opini minimal ${OPINION_MIN_LENGTH} karakter agar gagasan tersampaikan dengan jelas.`,
+      error: "Komentar tidak boleh kosong.",
     };
   }
 
   if (normalized.length > OPINION_MAX_LENGTH) {
     return {
       ok: false,
-      error: `Opini maksimal ${OPINION_MAX_LENGTH} karakter.`,
+      error: `Komentar maksimal ${OPINION_MAX_LENGTH} karakter.`,
     };
   }
 

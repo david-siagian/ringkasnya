@@ -14,7 +14,6 @@ import {
   type BookOpinionsResponse,
   type OpinionSortOption,
   OPINION_MAX_LENGTH,
-  OPINION_MIN_LENGTH,
   OPINION_PAGE_SIZE,
 } from "@/lib/opinions";
 
@@ -161,8 +160,8 @@ export default function BookCommentsSection({
       return;
     }
 
-    if (trimmedDraft.length < OPINION_MIN_LENGTH) {
-      setSubmitError(`Komentar minimal ${OPINION_MIN_LENGTH} karakter.`);
+    if (trimmedDraft.length === 0) {
+      setSubmitError("Komentar tidak boleh kosong.");
       return;
     }
 
@@ -254,8 +253,8 @@ export default function BookCommentsSection({
   const handleSaveEdit = async (opinionId: string) => {
     setEditError(null);
     const trimmed = editDraft.trim();
-    if (trimmed.length < OPINION_MIN_LENGTH) {
-      setEditError(`Komentar minimal ${OPINION_MIN_LENGTH} karakter.`);
+    if (trimmed.length === 0) {
+      setEditError("Komentar tidak boleh kosong.");
       return;
     }
 
@@ -380,14 +379,9 @@ export default function BookCommentsSection({
         onSubmit={handleSubmit}
         className="mt-4 rounded-2xl border border-line bg-surface p-4 sm:p-5 shadow-sm"
       >
-        <label
-          htmlFor="komentar-input"
-          className="block text-sm font-semibold text-ink"
-        >
-          Bagikan opini Anda tentang buku ini
-        </label>
         <textarea
           id="komentar-input"
+          aria-label="Bagikan komentar Anda tentang buku ini"
           rows={3}
           maxLength={OPINION_MAX_LENGTH}
           value={draft}
@@ -395,8 +389,8 @@ export default function BookCommentsSection({
             setDraft(e.target.value);
             if (submitError) setSubmitError(null);
           }}
-          placeholder="Bagikan opini Anda tentang buku ini..."
-          className="mt-2.5 w-full resize-y rounded-xl border border-line bg-page px-3.5 py-2.5 text-sm leading-relaxed text-ink placeholder:text-ink-subtle focus:border-accent-line focus:outline-none focus:ring-2 focus:ring-accent-soft"
+          placeholder="Bagikan komentar Anda tentang buku ini"
+          className="w-full resize-y rounded-xl border border-line bg-page px-3.5 py-2.5 text-sm leading-relaxed text-ink placeholder:text-ink-subtle focus:border-accent-line focus:outline-none focus:ring-2 focus:ring-accent-soft"
         />
 
         {submitError && (
@@ -488,10 +482,7 @@ export default function BookCommentsSection({
         ) : opinions.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-line bg-surface/60 p-6 text-center">
             <p className="text-sm font-medium text-ink-muted">
-              Belum ada komentar untuk buku ini.
-            </p>
-            <p className="mt-1 text-xs text-ink-subtle">
-              Jadilah yang pertama membagikan opini atau refleksi Anda di atas.
+              Belum ada komentar tentang buku ini
             </p>
           </div>
         ) : (
