@@ -8,7 +8,7 @@ interface Props {
 
 const { articles } = Astro.props;
 
-const displayedArticles = articles.slice(0, 3);
+const displayedArticles = articles.slice(0, 4);
 ---
 
 {
@@ -37,7 +37,7 @@ const displayedArticles = articles.slice(0, 3);
           </a>
         </div>
 
-        <div class="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+        <div class="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:gap-6">
           {displayedArticles.map((article) => (
             <a
               href={`/artikel/${article.slug}`}
