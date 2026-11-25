@@ -341,28 +341,28 @@ export default function BookCommentsSection({
       aria-labelledby="komentar-heading"
       className="mx-auto mt-12 max-w-3xl"
     >
-      <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
-        <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2 sm:px-5">
-          <div className="flex items-center gap-2.5">
-            <MessageSquare className="h-5 w-5 shrink-0 text-accent-text" />
+      <div className="rounded-2xl border border-line bg-surface shadow-sm">
+        <div className="flex items-center justify-between gap-3 rounded-t-2xl px-4 pt-3.5 pb-1.5 sm:px-5">
+          <div className="flex items-center gap-2">
+            <MessageSquare className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
             <h2
               id="komentar-heading"
-              className="text-lg font-extrabold text-ink sm:text-xl"
+              className="text-base font-extrabold text-ink sm:text-lg"
             >
               Komentar
             </h2>
-            <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-bold text-accent-text">
+            <span className="rounded-full bg-accent-soft px-2 py-0.5 text-xs font-bold text-accent-text">
               {isLoading && total === 0 ? "..." : total}
             </span>
           </div>
         </div>
 
         {/* Form Komentar */}
-        <form onSubmit={handleSubmit} className="px-4 pt-1 pb-4 sm:px-5 sm:pb-5">
+        <form onSubmit={handleSubmit} className="px-4 pt-1 pb-3.5 sm:px-5 sm:pb-4">
         <textarea
           id="komentar-input"
           aria-label="Bagikan komentar Anda tentang buku ini"
-          rows={3}
+          rows={2}
           maxLength={OPINION_MAX_LENGTH}
           value={draft}
           onChange={(e) => {
@@ -370,16 +370,16 @@ export default function BookCommentsSection({
             if (submitError) setSubmitError(null);
           }}
           placeholder="Bagikan komentar Anda tentang buku ini"
-          className="w-full resize-y rounded-xl border border-line bg-page px-3.5 py-2.5 text-sm leading-relaxed text-ink placeholder:text-ink-subtle focus:border-accent-line focus:outline-none focus:ring-2 focus:ring-accent-soft"
+          className="min-h-[64px] w-full resize-y rounded-xl border border-line bg-page px-3 py-2 text-sm leading-relaxed text-ink placeholder:text-ink-subtle focus:border-accent-line focus:outline-none focus:ring-2 focus:ring-accent-soft"
         />
 
         {submitError && (
-          <p className="mt-2 text-xs font-medium text-rose-600 dark:text-rose-400">
+          <p className="mt-1.5 text-xs font-medium text-rose-600 dark:text-rose-400">
             {submitError}
           </p>
         )}
 
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2.5">
           <div className="text-xs text-ink-subtle">
             {currentUser ? (
               <span>
@@ -431,32 +431,39 @@ export default function BookCommentsSection({
       </form>
 
       {/* Accordion Daftar Komentar */}
-      <button
-        type="button"
-        aria-expanded={isExpanded}
-        aria-controls="komentar-panel"
-        onClick={() => setIsExpanded((prev) => !prev)}
-        className="flex w-full items-center justify-between gap-3 border-t border-line bg-page/40 px-4 py-3 text-left transition hover:bg-page/80 sm:px-5"
-      >
-        <span className="text-xs font-semibold text-ink-muted">
-          {isExpanded
-            ? `Sembunyikan komentar (${isLoading && total === 0 ? "..." : total})`
-            : total > 0
+      {!isExpanded ? (
+        <button
+          type="button"
+          aria-expanded={false}
+          aria-controls="komentar-panel"
+          onClick={() => setIsExpanded(true)}
+          className="flex w-full items-center justify-between gap-3 rounded-b-2xl border-t border-line bg-page/40 px-4 py-2.5 text-left transition hover:bg-page/80 sm:px-5"
+        >
+          <span className="text-xs font-semibold text-ink-muted">
+            {total > 0
               ? `Lihat ${total} komentar`
               : isLoading
                 ? "Memuat komentar..."
                 : "Lihat daftar komentar (0)"}
-        </span>
-        <ChevronDown
-          className={`h-4 w-4 shrink-0 text-ink-muted transition-transform duration-200 ${
-            isExpanded ? "rotate-180" : ""
-          }`}
-        />
-      </button>
+          </span>
+          <ChevronDown className="h-4 w-4 shrink-0 text-ink-muted" />
+        </button>
+      ) : (
+        <div id="komentar-panel" className="rounded-b-2xl border-t border-line">
+          <button
+            type="button"
+            aria-expanded={true}
+            aria-controls="komentar-panel"
+            onClick={() => setIsExpanded(false)}
+            className="sticky top-[73px] z-20 flex w-full items-center justify-between gap-3 border-b border-line bg-surface/95 px-4 py-2.5 text-left backdrop-blur-sm transition hover:bg-page/80 sm:px-5"
+          >
+            <span className="text-xs font-semibold text-ink-muted">
+              Sembunyikan komentar ({isLoading && total === 0 ? "..." : total})
+            </span>
+            <ChevronDown className="h-4 w-4 shrink-0 rotate-180 text-ink-muted" />
+          </button>
 
-      {isExpanded && (
-        <div id="komentar-panel" className="border-t border-line">
-          <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-2.5 sm:px-5">
+          <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-2 sm:px-5">
             <span className="text-xs font-semibold text-ink-subtle">
               {total > 0 ? `${total} komentar` : "Daftar komentar"}
             </span>
@@ -490,7 +497,7 @@ export default function BookCommentsSection({
             </div>
           </div>
 
-          <div className="max-h-[420px] overflow-y-auto sm:max-h-[480px]">
+          <div>
 
         {isLoading ? (
           <div className="divide-y divide-line">
@@ -533,7 +540,7 @@ export default function BookCommentsSection({
             return (
               <article
                 key={item.id}
-                className="px-4 py-4 sm:px-5"
+                className="px-4 py-3 sm:px-5"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2.5">
@@ -683,16 +690,16 @@ export default function BookCommentsSection({
         )}
 
         {hasMore && !isLoading && (
-          <div className="border-t border-line px-4 py-3 text-center sm:px-5">
+          <div className="rounded-b-2xl border-t border-line px-4 py-2.5 text-center sm:px-5">
             <button
               type="button"
               onClick={() => void loadOpinions(sort, opinions.length, true)}
               disabled={isLoadingMore}
-              className="inline-flex items-center gap-2 rounded-xl border border-line bg-page px-4 py-2 text-xs font-semibold text-ink transition hover:border-accent-line hover:bg-surface disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-line bg-page px-4 py-1.5 text-xs font-semibold text-ink transition hover:border-accent-line hover:bg-surface disabled:opacity-50"
             >
               {isLoadingMore && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               <span>
-                {isLoadingMore ? "Memuat..." : "Muat lebih banyak"}
+                {isLoadingMore ? "Memuat..." : "Komentar lainnya"}
               </span>
             </button>
           </div>
