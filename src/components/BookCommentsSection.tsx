@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import {
+  ChevronDown,
   Edit3,
   Loader2,
   MessageSquare,
@@ -69,6 +70,7 @@ export default function BookCommentsSection({
   const [opinions, setOpinions] = useState<BookOpinionItem[]>([]);
   const [total, setTotal] = useState(0);
   const [hasMore, setHasMore] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [sort, setSort] = useState<OpinionSortOption>("newest");
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -137,6 +139,16 @@ export default function BookCommentsSection({
     void loadOpinions(sort, 0, false);
   }, [loadOpinions, sort, currentUser?.id]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (
+      window.location.hash === "#komentar-pembaca" ||
+      window.location.hash === "#komentar"
+    ) {
+      setIsExpanded(true);
+    }
+  }, []);
+
   const promptAuth = () => {
     const redirectTo =
       typeof window !== "undefined"
@@ -187,6 +199,7 @@ export default function BookCommentsSection({
 
       setDraft("");
       setTotal((prev) => prev + 1);
+      setIsExpanded(true);
       if (sort === "newest") {
         setOpinions((prev) => [data.opinion!, ...prev]);
       } else {
@@ -328,57 +341,24 @@ export default function BookCommentsSection({
       aria-labelledby="komentar-heading"
       className="mx-auto mt-12 max-w-3xl"
     >
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <MessageSquare className="h-5 w-5 text-accent-text" />
-          <h2
-            id="komentar-heading"
-            className="text-xl font-extrabold text-ink"
-          >
-            Komentar
-          </h2>
-          {total > 0 && (
+      <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
+        <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2 sm:px-5">
+          <div className="flex items-center gap-2.5">
+            <MessageSquare className="h-5 w-5 shrink-0 text-accent-text" />
+            <h2
+              id="komentar-heading"
+              className="text-lg font-extrabold text-ink sm:text-xl"
+            >
+              Komentar
+            </h2>
             <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-bold text-accent-text">
-              {total}
+              {isLoading && total === 0 ? "..." : total}
             </span>
-          )}
+          </div>
         </div>
 
-        <div
-          role="group"
-          aria-label="Urutkan komentar"
-          className="inline-flex rounded-xl border border-line bg-surface p-1 text-xs"
-        >
-          <button
-            type="button"
-            onClick={() => setSort("newest")}
-            className={`rounded-lg px-3 py-1.5 font-semibold transition ${
-              sort === "newest"
-                ? "bg-accent-soft text-accent-text"
-                : "text-ink-muted hover:text-ink"
-            }`}
-          >
-            Terbaru
-          </button>
-          <button
-            type="button"
-            onClick={() => setSort("helpful")}
-            className={`rounded-lg px-3 py-1.5 font-semibold transition ${
-              sort === "helpful"
-                ? "bg-accent-soft text-accent-text"
-                : "text-ink-muted hover:text-ink"
-            }`}
-          >
-            Paling Bermanfaat
-          </button>
-        </div>
-      </div>
-
-      {/* Form Komentar */}
-      <form
-        onSubmit={handleSubmit}
-        className="mt-4 rounded-2xl border border-line bg-surface p-4 sm:p-5 shadow-sm"
-      >
+        {/* Form Komentar */}
+        <form onSubmit={handleSubmit} className="px-4 pt-1 pb-4 sm:px-5 sm:pb-5">
         <textarea
           id="komentar-input"
           aria-label="Bagikan komentar Anda tentang buku ini"
@@ -450,15 +430,72 @@ export default function BookCommentsSection({
         </div>
       </form>
 
-      {/* Daftar Komentar */}
-      <div className="mt-5 space-y-3.5">
-        {isLoading ? (
-          <div className="space-y-3">
-            {[0, 1].map((idx) => (
-              <div
-                key={idx}
-                className="animate-pulse rounded-2xl border border-line bg-surface p-5"
+      {/* Accordion Daftar Komentar */}
+      <button
+        type="button"
+        aria-expanded={isExpanded}
+        aria-controls="komentar-panel"
+        onClick={() => setIsExpanded((prev) => !prev)}
+        className="flex w-full items-center justify-between gap-3 border-t border-line bg-page/40 px-4 py-3 text-left transition hover:bg-page/80 sm:px-5"
+      >
+        <span className="text-xs font-semibold text-ink-muted">
+          {isExpanded
+            ? `Sembunyikan komentar (${isLoading && total === 0 ? "..." : total})`
+            : total > 0
+              ? `Lihat ${total} komentar`
+              : isLoading
+                ? "Memuat komentar..."
+                : "Lihat daftar komentar (0)"}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-ink-muted transition-transform duration-200 ${
+            isExpanded ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {isExpanded && (
+        <div id="komentar-panel" className="border-t border-line">
+          <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-2.5 sm:px-5">
+            <span className="text-xs font-semibold text-ink-subtle">
+              {total > 0 ? `${total} komentar` : "Daftar komentar"}
+            </span>
+            <div
+              role="group"
+              aria-label="Urutkan komentar"
+              className="inline-flex rounded-xl border border-line bg-page p-0.5 text-xs"
+            >
+              <button
+                type="button"
+                onClick={() => setSort("newest")}
+                className={`rounded-lg px-2.5 py-1 font-semibold transition ${
+                  sort === "newest"
+                    ? "bg-accent-soft text-accent-text"
+                    : "text-ink-muted hover:text-ink"
+                }`}
               >
+                Terbaru
+              </button>
+              <button
+                type="button"
+                onClick={() => setSort("helpful")}
+                className={`rounded-lg px-2.5 py-1 font-semibold transition ${
+                  sort === "helpful"
+                    ? "bg-accent-soft text-accent-text"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                Paling Bermanfaat
+              </button>
+            </div>
+          </div>
+
+          <div className="max-h-[420px] overflow-y-auto sm:max-h-[480px]">
+
+        {isLoading ? (
+          <div className="divide-y divide-line">
+            {[0, 1].map((idx) => (
+              <div key={idx} className="animate-pulse px-4 py-4 sm:px-5">
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-line" />
                   <div className="h-3.5 w-32 rounded bg-line" />
@@ -469,7 +506,7 @@ export default function BookCommentsSection({
             ))}
           </div>
         ) : fetchError ? (
-          <div className="rounded-2xl border border-line bg-surface p-5 text-center">
+          <div className="px-4 py-6 text-center sm:px-5">
             <p className="text-sm text-ink-muted">{fetchError}</p>
             <button
               type="button"
@@ -480,13 +517,14 @@ export default function BookCommentsSection({
             </button>
           </div>
         ) : opinions.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-line bg-surface/60 p-6 text-center">
+          <div className="px-4 py-6 text-center sm:px-5">
             <p className="text-sm font-medium text-ink-muted">
               Belum ada komentar tentang buku ini
             </p>
           </div>
         ) : (
-          opinions.map((item) => {
+          <div className="divide-y divide-line">
+          {opinions.map((item) => {
             const isEdited = item.updatedAt > item.createdAt + 1500;
             const isEditing = editingId === item.id;
             const isConfirmingDelete = confirmDeleteId === item.id;
@@ -495,7 +533,7 @@ export default function BookCommentsSection({
             return (
               <article
                 key={item.id}
-                className="rounded-2xl border border-line bg-surface p-4 sm:p-5 shadow-sm"
+                className="px-4 py-4 sm:px-5"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2.5">
@@ -640,22 +678,26 @@ export default function BookCommentsSection({
                 </div>
               </article>
             );
-          })
+          })}
+          </div>
         )}
 
         {hasMore && !isLoading && (
-          <div className="pt-2 text-center">
+          <div className="border-t border-line px-4 py-3 text-center sm:px-5">
             <button
               type="button"
               onClick={() => void loadOpinions(sort, opinions.length, true)}
               disabled={isLoadingMore}
-              className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-4 py-2 text-xs font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-page disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-line bg-page px-4 py-2 text-xs font-semibold text-ink transition hover:border-accent-line hover:bg-surface disabled:opacity-50"
             >
               {isLoadingMore && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               <span>
                 {isLoadingMore ? "Memuat..." : "Muat lebih banyak"}
               </span>
             </button>
+          </div>
+        )}
+      </div>
           </div>
         )}
       </div>
