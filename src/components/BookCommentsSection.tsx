@@ -490,7 +490,7 @@ export default function BookCommentsSection({
             </div>
           </div>
 
-          <div className="max-h-[420px] overflow-y-auto overscroll-contain sm:max-h-[480px]">
+          <div className="max-h-[420px] overflow-y-auto sm:max-h-[480px]">
 
         {isLoading ? (
           <div className="divide-y divide-line">
