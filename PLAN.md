@@ -9,7 +9,7 @@ Dokumen ini menyimpan rencana pengembangan **Fase 3** untuk `ringkasnya.com`, me
 | Area / Tahap | Status | Keterangan |
 |---|---|---|
 | **1. Infrastruktur Cloudflare D1 (`DB`)** | **Selesai** | Production (`ringkasnya-db`) & Preview (`ringkasnya-db-preview`) aktif |
-| **1. Cloudflare KV (`SESSION_KV`)** | **Pending** | Masih dikomentari di `wrangler.jsonc`; menunggu aktivasi sesi edge & rate-limiting |
+| **1. Cloudflare KV (`SESSION_KV`)** | **Selesai** | Production & Preview (`SESSION_KV_preview`) aktif sebagai `secondaryStorage` Better Auth |
 | **1B. Migrasi Konten Statis ke D1** | **Selesai** | 58 buku awal dimigrasikan ke D1; `src/data/books/` dibersihkan |
 | **2. Fase 3.1 — Auth Dasar & Akun** | **Selesai** | Better Auth + Drizzle ORM (`0004`), `/masuk`, `/daftar`, `/akun`, `UserMenu` |
 | **2. Fase 3.2 — Progres Baca & Bookmark** | **Pending** | Tabel `user_book_progress` siap; API & integrasi UI belum dibuat |
@@ -29,7 +29,11 @@ Mengaktifkan binding yang sudah disiapkan di `wrangler.jsonc`:
   - Production (`main`): `ringkasnya-db`
   - Preview (`dev`): `ringkasnya-db-preview` (terisolasi di blok `previews` agar pengujian tidak memengaruhi data production)
   - Migrasi SQL: folder `migrations/` dengan verifikasi koneksi aman (`SELECT 1`) di `/api/health`.
-- **Cloudflare KV (`SESSION_KV`) — Pending**: Penyimpanan sesi autentikasi dan *rate-limiting* ringan di edge (saat ini masih dikomentari di `wrangler.jsonc`).
+- **Cloudflare KV (`SESSION_KV`) — Selesai**:
+  - Production (`main`): `SESSION_KV` (`8b4bdc32e4494dbbbffff764b3e99140`)
+  - Preview (`dev`): `SESSION_KV_preview` (`c21a2251722d4a7ea5b5d3c6a315db2f`)
+  - Terintegrasi ke **Better Auth** sebagai `secondaryStorage` (`src/lib/auth.ts`) untuk *session caching* di edge (dengan guard `expirationTtl >= 60` detik dan *fallback* aman ke D1).
+  - *Catatan*: Proteksi *rate-limiting* direkomendasikan memakai **Cloudflare WAF Rate Limiting** di lapisan edge.
 - **API Routes (`src/pages/api/`) — Sebagian Aktif**:
   - **Aktif**: `/api/health` dan `/api/auth/[...all]`.
   - **Pending**: endpoint progres baca/bookmark, endpoint Admin CMS, webhook pembayaran, dan fitur komunitas.
