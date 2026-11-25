@@ -16,6 +16,7 @@ interface ReaderModalShellProps {
   open: boolean;
   onClose: () => void;
   titleId: string;
+  maxWidthClass?: string;
   children: ReactNode;
 }
 
@@ -24,6 +25,7 @@ function ReaderModalShell({
   open,
   onClose,
   titleId,
+  maxWidthClass = "max-w-xl",
   children,
 }: ReaderModalShellProps) {
   const [mounted, setMounted] = useState(false);
@@ -62,7 +64,7 @@ function ReaderModalShell({
       aria-labelledby={titleId}
     >
       <div
-        className="animate-fade-slide relative flex max-h-[88vh] w-full max-w-xl flex-col overflow-hidden rounded-3xl bg-surface shadow-2xl ring-1 ring-line"
+        className={`animate-fade-slide relative flex max-h-[88vh] w-full ${maxWidthClass} flex-col overflow-hidden rounded-3xl bg-surface shadow-2xl ring-1 ring-line`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}
@@ -243,6 +245,77 @@ export function QuickQuotesModal({
             </div>
           </div>
         ))}
+      </div>
+    </ReaderModalShell>
+  );
+}
+
+interface ConfirmUnmarkCompletedModalProps {
+  open: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  bookTitle: string;
+}
+
+/** Modal konfirmasi sebelum menghapus penanda selesai dibaca pada buku. */
+export function ConfirmUnmarkCompletedModal({
+  open,
+  onClose,
+  onConfirm,
+  bookTitle,
+}: ConfirmUnmarkCompletedModalProps) {
+  return (
+    <ReaderModalShell
+      open={open}
+      onClose={onClose}
+      titleId="confirm-unmark-completed-title"
+      maxWidthClass="max-w-md"
+    >
+      <div className="flex items-start justify-between gap-3 border-b border-line px-6 py-4">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400">
+            <AlertCircle className="h-5 w-5" />
+          </div>
+          <h2
+            id="confirm-unmark-completed-title"
+            className="text-base font-extrabold text-ink sm:text-lg"
+          >
+            Hapus Tanda Selesai?
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Tutup modal konfirmasi"
+          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-subtle text-ink-muted transition hover:bg-page hover:text-ink"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="px-6 py-5">
+        <p className="text-sm leading-relaxed text-ink-muted">
+          Apakah Anda yakin ingin menghapus tanda selesai dibaca untuk{" "}
+          <span className="font-semibold text-ink">{bookTitle}</span>?
+        </p>
+
+        <div className="mt-6 flex items-center justify-end gap-2.5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex items-center justify-center rounded-xl border border-line bg-surface-subtle px-4 py-2 text-xs font-semibold text-ink transition hover:bg-page active:scale-[0.98]"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="inline-flex items-center justify-center rounded-xl bg-rose-600 px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-rose-700 active:scale-[0.98]"
+          >
+            Ya, Hapus
+          </button>
+        </div>
       </div>
     </ReaderModalShell>
   );
