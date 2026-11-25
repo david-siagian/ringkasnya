@@ -29,7 +29,7 @@ interface CatalogSectionProps {
 }
 
 const MAX_PREVIEW_OTHER_BOOKS = 6;
-const DEFAULT_PREVIEW_COLS = 5;
+const DEFAULT_GRID_COLS = 5;
 const DEFAULT_ITEMS_PER_PAGE = 20;
 
 function getPageNumbers(currentPage: number, totalPages: number): (number | "ellipsis")[] {
@@ -63,9 +63,9 @@ export default function CatalogSection({
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [previewBook, setPreviewBook] = useState<BookCatalogItem | null>(null);
-  const [previewCols, setPreviewCols] = useState(DEFAULT_PREVIEW_COLS);
+  const [gridCols, setGridCols] = useState(DEFAULT_GRID_COLS);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const previewGridRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const { bookmarkedCount, isBookmarked } = useBookmarks();
 
   useEffect(() => {
@@ -133,11 +133,20 @@ export default function CatalogSection({
     });
   }, [books, selectedCategory, searchQuery, isBookmarked]);
 
-  const hasPreviewOtherBooks = !isFull && filteredBooks.length > 1;
+  const effectiveItemsPerPage = isFull
+    ? Math.max(gridCols, Math.floor(itemsPerPage / gridCols) * gridCols)
+    : itemsPerPage;
+
+  const totalPages = isFull
+    ? Math.max(1, Math.ceil(filteredBooks.length / effectiveItemsPerPage))
+    : 1;
+  const safePage = Math.min(currentPage, totalPages);
+
+  const hasGrid = isFull ? filteredBooks.length > 0 : filteredBooks.length > 1;
 
   useEffect(() => {
-    if (isFull) return;
-    const gridEl = previewGridRef.current;
+    if (!hasGrid) return;
+    const gridEl = gridRef.current;
     if (!gridEl) return;
 
     const updateCols = () => {
@@ -147,7 +156,7 @@ export default function CatalogSection({
         .filter((track) => track && track !== "none");
       const cols = tracks.length;
       if (cols >= 1) {
-        setPreviewCols((prev) => (prev === cols ? prev : cols));
+        setGridCols((prev) => (prev === cols ? prev : cols));
       }
     };
 
@@ -161,24 +170,19 @@ export default function CatalogSection({
 
     window.addEventListener("resize", updateCols);
     return () => window.removeEventListener("resize", updateCols);
-  }, [isFull, hasPreviewOtherBooks]);
-
-  const totalPages = isFull
-    ? Math.max(1, Math.ceil(filteredBooks.length / itemsPerPage))
-    : 1;
-  const safePage = Math.min(currentPage, totalPages);
+  }, [isFull, hasGrid, selectedCategory, searchQuery, safePage]);
 
   const displayedBooks = useMemo(() => {
     if (!isFull) {
       const previewOtherCount = Math.max(
-        previewCols,
-        Math.floor(MAX_PREVIEW_OTHER_BOOKS / previewCols) * previewCols
+        gridCols,
+        Math.floor(MAX_PREVIEW_OTHER_BOOKS / gridCols) * gridCols
       );
       return filteredBooks.slice(0, 1 + previewOtherCount);
     }
-    const startIndex = (safePage - 1) * itemsPerPage;
-    return filteredBooks.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredBooks, isFull, previewCols, safePage, itemsPerPage]);
+    const startIndex = (safePage - 1) * effectiveItemsPerPage;
+    return filteredBooks.slice(startIndex, startIndex + effectiveItemsPerPage);
+  }, [filteredBooks, isFull, gridCols, safePage, effectiveItemsPerPage]);
 
   const syncCatalogUrl = (
     page: number,
@@ -221,8 +225,9 @@ export default function CatalogSection({
     smoothScrollToElement("katalog", 500);
   };
 
-  const startItem = filteredBooks.length === 0 ? 0 : (safePage - 1) * itemsPerPage + 1;
-  const endItem = Math.min(safePage * itemsPerPage, filteredBooks.length);
+  const startItem =
+    filteredBooks.length === 0 ? 0 : (safePage - 1) * effectiveItemsPerPage + 1;
+  const endItem = Math.min(safePage * effectiveItemsPerPage, filteredBooks.length);
   const pageNumbers = getPageNumbers(safePage, totalPages);
 
   return (
@@ -328,6 +333,7 @@ export default function CatalogSection({
         isFull ? (
           <div
             key={`${selectedCategory}-${searchQuery}-${safePage}`}
+            ref={gridRef}
             className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
           >
             {displayedBooks.map((book) => (
@@ -420,7 +426,7 @@ export default function CatalogSection({
                   Jelajahi Buku Lainnya
                 </p>
                 <div
-                  ref={previewGridRef}
+                  ref={gridRef}
                   className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
                 >
                   {displayedBooks.slice(1).map((book) => (
