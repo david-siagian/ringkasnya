@@ -139,3 +139,46 @@ export const subscriptions = sqliteTable(
     uniqueIndex("idx_subscriptions_external_id").on(table.externalId),
   ]
 );
+
+// Fase 3: Opini Pembaca & Apresiasi Bermanfaat
+export const bookOpinions = sqliteTable(
+  "book_opinions",
+  {
+    id: text("id").primaryKey(),
+    bookSlug: text("book_slug").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    content: text("content").notNull(),
+    helpfulCount: integer("helpful_count").notNull().default(0),
+    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+  },
+  (table) => [
+    index("idx_book_opinions_slug_created").on(table.bookSlug, table.createdAt),
+    index("idx_book_opinions_slug_helpful").on(
+      table.bookSlug,
+      table.helpfulCount,
+      table.createdAt
+    ),
+    index("idx_book_opinions_user_id").on(table.userId),
+  ]
+);
+
+export const bookOpinionVotes = sqliteTable(
+  "book_opinion_votes",
+  {
+    id: text("id").primaryKey(),
+    opinionId: text("opinion_id")
+      .notNull()
+      .references(() => bookOpinions.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_opinion_votes_unique").on(table.opinionId, table.userId),
+    index("idx_opinion_votes_user_id").on(table.userId),
+  ]
+);

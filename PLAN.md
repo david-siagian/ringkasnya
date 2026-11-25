@@ -15,7 +15,7 @@ Dokumen ini menyimpan rencana pengembangan **Fase 3** untuk `ringkasnya.com`, me
 | **2. Fase 3.2 — Progres Baca & Bookmark** | **Pending** | Tabel `user_book_progress` siap; API & integrasi UI belum dibuat |
 | **2. Fase 3.3 — Payment & Keanggotaan** | **Pending** | Tabel `subscriptions` siap; payment gateway & webhook belum dibuat |
 | **2. Admin CMS (`/admin`)** | **Pending** | Dashboard & API admin (CRUD ringkasan, publish, hitung durasi) belum dibuat |
-| **3. Diskusi Ide / Catatan Pembaca** | **Pending** | Backlog Fase 3; menunggu finalisasi nama, identitas pengirim & struktur |
+| **3. Komentar Pembaca** | **Selesai** | Fitur *Komentar* aktif di `BookReader`, D1 (`0024`), wajib login untuk kirim & apresiasi *Bermanfaat* |
 | **4. Artikel — Gelombang 1 (MVP)** | **Selesai** | 6 artikel Bedah Istilah Ilmiah aktif di `src/pages/artikel/` |
 | **4. Artikel — Gelombang Berikutnya** | **Pending** | Backlog editorial (istilah baru & format esai/roadmap/eksperimen) |
 | **5. Ekspansi Katalog 100 Buku** | **Selesai** | **100 / 100 buku** (Fase 1 + Batch 1–5) lengkap di Cloudflare D1 |
@@ -62,35 +62,14 @@ Seluruh **58 buku awal** telah dipindahkan dari file TypeScript statis (`src/dat
 
 ---
 
-## 3. Fitur Baru (Backlog Fase 3): Diskusi Ide / Catatan Pembaca — Pending
+## 3. Fitur Komentar Pembaca — Selesai
 
-> **Status**: Pending / disimpan untuk Fase 3 (belum diimplementasikan).
+> **Status**: Selesai diimplementasikan (`migrations/0024_create_book_opinions.sql`, `src/pages/api/opinions/`, `src/components/BookCommentsSection.tsx`).
 
-Fitur interaksi agar pembaca dapat menuliskan tanggapan atau gagasan terhadap suatu buku tanpa menggunakan label *"Komentar"* yang bernuansa media sosial kasual.
-
-### A. Kandidat Nama Fitur
-- **Diskusi Ide** *(rekomendasi utama — kritis, setara, mendorong pertukaran gagasan)*
-- **Catatan Pembaca** *(hangat, seperti margin notes)*
-- **Refleksi Pembaca** *(kontemplatif, fokus pada dampak bacaan)*
-- **Sudut Pandang** *(editorial, memancing perspektif alternatif)*
-- **Ruang Gagasan** *(bernuansa klub buku modern)*
-
-### B. Konsep Product & UX
-- **Penempatan**: Diletakkan di bagian bawah halaman `BookReader` setelah kesimpulan agar tidak mengganggu alur baca utama.
-- **Pemantik Diskusi**: Menyertakan 1 *prompt* pemantik singkat (mis. *"Gagasan mana yang paling menarik atau justru ingin Anda sanggah?"*) agar kualitas tulisan pembaca tetap bernas.
-- **Empty State**: Dirancang tetap mengundang saat buku belum memiliki tanggapan agar halaman tidak terasa sepi.
-
-### C. Kebutuhan Teknis & Keamanan
-- **Penyimpanan**: Persisten di Cloudflare D1 (terhubung per `slug` buku).
-- **Sanitasi & Keamanan**: Sanitasi *plain-text only* (anti-XSS), validasi input server-side, dan *rate limiting* di endpoint API.
-- **Anti-Bot & Moderasi**: Proteksi anti-bot (mis. Cloudflare Turnstile) serta mekanisme moderasi/hapus dari sisi admin.
-
-### D. Keputusan Terbuka (Difinalisasi Saat Memulai Implementasi)
-1. **Nama Final**: Memilih antara *Diskusi Ide*, *Catatan Pembaca*, atau kandidat lain.
-2. **Identitas Pengirim**:
-   - *Opsi A (Ringan)*: Nama tampilan / opsional anonim + Turnstile (tanpa wajib login).
-   - *Opsi B (Terintegrasi Auth)*: Wajib login menggunakan akun Fase 3.
-3. **Struktur Interaksi**: 1 tingkat (*flat*) + tombol apresiasi (*"Bermanfaat"*) vs mendukung *reply/thread*.
+Fitur interaksi **Komentar** pada halaman `BookReader` dengan prompt *"Bagikan opini Anda tentang buku ini"*:
+- **Penempatan**: Di bagian bawah `BookReader` setelah kesimpulan, konsep kunci, dan kutipan (sebelum rekomendasi buku lainnya) pada Mode Kilat maupun langkah penutup Mode Mendalam.
+- **Akses & Identitas**: Membaca komentar terbuka untuk publik; mengirim komentar, menyunting/menghapus komentar sendiri, dan memberi apresiasi **Bermanfaat** wajib login menggunakan akun Fase 3.1 (memanfaatkan modal login jika belum masuk).
+- **Struktur & Keamanan**: Daftar *flat* dengan sortir *Terbaru* / *Paling Bermanfaat*, *pagination* (*Muat lebih banyak*), sanitasi *plain-text only* (15–1.000 karakter), dan moderasi hapus untuk `role = 'admin'`.
 
 ---
 

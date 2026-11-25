@@ -5,6 +5,7 @@ import { ARTICLE_TERMS } from "@/data/article-terms";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
 import QuoteCardModal from "./QuoteCardModal";
+import BookCommentsSection from "./BookCommentsSection";
 import Footer from "./Footer";
 import { ArticleTermPopover } from "./ArticleTermPopover";
 import {
@@ -1032,7 +1033,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         </div>
 
         {(readMode === "quick" ? hasStartedQuick : clampedDeepStep === finalStep) && (
-          <RelatedBooksSection relatedBooks={recommendedBooks} />
+          <>
+            <BookCommentsSection bookSlug={book.slug} />
+            <RelatedBooksSection relatedBooks={recommendedBooks} />
+          </>
         )}
       </main>
 
