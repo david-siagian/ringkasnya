@@ -455,7 +455,8 @@ export default function BookCommentsSection({
             aria-expanded={true}
             aria-controls="komentar-panel"
             onClick={() => setIsExpanded(false)}
-            className="sticky top-[73px] z-20 flex w-full items-center justify-between gap-3 border-b border-line bg-surface/95 px-4 py-2.5 text-left backdrop-blur-sm transition hover:bg-page/80 sm:px-5"
+            style={{ top: "calc(var(--header-h, 73px) + var(--reader-toolbar-h, 0px))" }}
+            className="sticky z-30 flex w-full items-center justify-between gap-3 border-b border-line bg-surface/95 px-4 py-2.5 text-left backdrop-blur-sm transition hover:bg-page/80 sm:px-5"
           >
             <span className="text-xs font-semibold text-ink-muted">
               Sembunyikan komentar ({isLoading && total === 0 ? "..." : total})
