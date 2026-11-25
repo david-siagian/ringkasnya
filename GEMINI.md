@@ -28,7 +28,7 @@
 - **Branch `main` Hanya untuk Rilis (Production)**: Jangan melakukan commit atau push langsung ke `main` untuk pengerjaan fitur, bugfix, atau perubahan harian.
 - **Branch `dev` sebagai Integrasi & Preview**: Semua perubahan fitur/bugfix digabungkan terlebih dahulu ke branch `dev`.
 - **Alur Kerja Fitur / Bugfix / Lainnya**:
-  1. Pastikan berada di branch `dev` terbaru (`git checkout dev`, lalu `git pull origin dev`), kemudian buat branch baru dari `dev` (misalnya `feat/<nama-fitur>`, `fix/<nama-bug>`, `docs/<topik>`, `chore/<topik>`).
+  1. Pastikan berada di branch `dev` terbaru (`git checkout dev`, lalu `git pull origin dev`), kemudian buat branch baru dari `dev` (misalnya `feat/<nama-fitur>`, `fix/<nama-bug>`, `docs/<topik>`, `chore/<topik>`). **Pengecualian**: jika ada permintaan fitur baru atau bug baru di sesi percakapan yang sama tetapi sebelumnya sudah ada branch yang dibuat di percakapan tersebut, **tetap gunakan branch tersebut** tanpa perlu membuat branch baru.
   2. Kerjakan perubahan pada branch baru tersebut (tidak perlu menjalankan `npm run build` maupun `npx test` secara lokal; untuk *refactor* besar yang menyentuh banyak file/tipe data, jalankan `npm run typecheck` sebelum push agar terhindar dari bolak-balik memperbaiki error di CI).
   3. Commit dan push perubahan ke branch baru tersebut (`git push -u origin <nama-branch>`). **Jangan langsung merge ke `dev`** — biarkan tetap di branch kerja tersebut terlebih dahulu.
   4. Kirim **URL preview** untuk branch tersebut kepada user, lalu **selalu tanyakan**: `"Apakah sudah oke dan sudah bisa saya merge ke dev?"`
