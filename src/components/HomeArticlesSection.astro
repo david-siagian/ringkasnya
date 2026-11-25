@@ -37,44 +37,101 @@ const displayedArticles = articles.slice(0, 4);
           </a>
         </div>
 
-        <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-5">
-          {displayedArticles.map((article) => (
-            <a
-              href={`/artikel/${article.slug}`}
-              class="group flex items-center gap-3.5 rounded-2xl border border-line/90 bg-surface p-3.5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md sm:gap-4 sm:p-5 lg:gap-5 lg:p-6"
-            >
-              {article.coverImage && (
-                <div class="h-16 w-16 shrink-0 overflow-hidden rounded-xl ring-1 ring-line/60 sm:h-20 sm:w-20 md:h-24 md:w-24 lg:h-28 lg:w-28">
-                  <img
-                    src={article.coverImage}
-                    alt={`Ilustrasi artikel ${article.title}`}
-                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-              )}
+        {/* Opsi A: 2 Kolom Horizontal Lebih Berisi */}
+        <div class="mt-6">
+          <p class="mb-3 inline-flex items-center rounded-full border border-accent-line bg-accent-soft px-3 py-1 text-xs font-bold text-accent-text">
+            Opsi A — 2 Kolom Horizontal (Lebih Berisi)
+          </p>
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6">
+            {displayedArticles.map((article) => (
+              <a
+                href={`/artikel/${article.slug}`}
+                class="group flex items-center gap-4 rounded-2xl border border-line/90 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md sm:p-5 lg:gap-5 lg:p-6"
+              >
+                {article.coverImage && (
+                  <div class="h-20 w-20 shrink-0 overflow-hidden rounded-xl ring-1 ring-line/60 sm:h-24 sm:w-24 lg:h-36 lg:w-36">
+                    <img
+                      src={article.coverImage}
+                      alt={`Ilustrasi artikel ${article.title}`}
+                      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                )}
 
-              <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-2 text-[11px] sm:text-xs">
-                  <span class="font-semibold text-accent-text">
-                    {article.accentBadge}
-                  </span>
-                  <span class="text-ink-faint">&middot;</span>
-                  <span class="inline-flex items-center gap-1 text-ink-subtle">
-                    <Calendar className="h-3 w-3 text-ink-faint sm:h-3.5 sm:w-3.5" />
-                    {formatArticlePublishedDate(article.publishedAt)}
-                  </span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2 text-[11px] sm:text-xs">
+                    <span class="font-semibold text-accent-text">
+                      {article.accentBadge}
+                    </span>
+                    <span class="text-ink-faint">&middot;</span>
+                    <span class="inline-flex items-center gap-1 text-ink-subtle">
+                      <Calendar className="h-3 w-3 text-ink-faint sm:h-3.5 sm:w-3.5" />
+                      {formatArticlePublishedDate(article.publishedAt)}
+                    </span>
+                  </div>
+                  <h3 class="mt-1 line-clamp-2 text-sm font-extrabold leading-snug text-ink transition-colors group-hover:text-accent-text sm:text-base lg:text-lg">
+                    {article.title}
+                  </h3>
+                  <p class="mt-1.5 line-clamp-2 text-xs leading-relaxed text-ink-muted sm:line-clamp-3 sm:text-sm">
+                    {article.subtitle}
+                  </p>
                 </div>
-                <h3 class="mt-1 line-clamp-2 text-sm font-extrabold leading-snug text-ink transition-colors group-hover:text-accent-text sm:text-base lg:text-lg">
-                  {article.title}
-                </h3>
-                <p class="mt-1.5 line-clamp-2 text-xs leading-relaxed text-ink-muted sm:text-sm">
-                  {article.subtitle}
-                </p>
-              </div>
 
-              <ArrowRight className="hidden h-4 w-4 shrink-0 text-ink-faint transition-transform group-hover:translate-x-0.5 group-hover:text-accent-strong sm:block lg:h-5 lg:w-5" />
-            </a>
-          ))}
+                <ArrowRight className="hidden h-4 w-4 shrink-0 text-ink-faint transition-transform group-hover:translate-x-0.5 group-hover:text-accent-strong sm:block lg:h-5 lg:w-5" />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Opsi B: 4 Kolom Vertikal di Desktop */}
+        <div class="mt-10 border-t border-line/60 pt-8">
+          <p class="mb-3 inline-flex items-center rounded-full border border-accent-line bg-accent-soft px-3 py-1 text-xs font-bold text-accent-text">
+            Opsi B — 4 Kolom Vertikal (Proporsional Desktop)
+          </p>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+            {displayedArticles.map((article) => (
+              <a
+                href={`/artikel/${article.slug}`}
+                class="group flex flex-col overflow-hidden rounded-2xl border border-line/90 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md"
+              >
+                {article.coverImage && (
+                  <div class="aspect-square w-full overflow-hidden border-b border-line/60 bg-slate-950">
+                    <img
+                      src={article.coverImage}
+                      alt={`Ilustrasi artikel ${article.title}`}
+                      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                )}
+
+                <div class="flex flex-1 flex-col justify-between p-4 sm:p-5">
+                  <div>
+                    <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] sm:text-xs">
+                      <span class="font-semibold text-accent-text">
+                        {article.accentBadge}
+                      </span>
+                      <span class="text-ink-faint">&middot;</span>
+                      <span class="inline-flex items-center gap-1 text-ink-subtle">
+                        <Calendar className="h-3 w-3 text-ink-faint" />
+                        {formatArticlePublishedDate(article.publishedAt)}
+                      </span>
+                    </div>
+                    <h3 class="mt-1.5 line-clamp-2 text-base font-extrabold leading-snug text-ink transition-colors group-hover:text-accent-text">
+                      {article.title}
+                    </h3>
+                    <p class="mt-1.5 line-clamp-2 text-xs leading-relaxed text-ink-muted sm:text-sm">
+                      {article.subtitle}
+                    </p>
+                  </div>
+
+                  <div class="mt-4 flex items-center justify-between border-t border-line-subtle pt-3 text-xs font-semibold text-accent-strong group-hover:text-accent-text">
+                    <span>Baca Artikel</span>
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>
