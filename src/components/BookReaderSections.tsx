@@ -73,7 +73,8 @@ interface IntroSectionProps {
   fs: FontScale;
   mode: "quick" | "deep";
   onSelectTakeaway?: (takeawayNumber: number) => void;
-  onStartReading?: () => void;
+  onStartQuickReading?: () => void;
+  onStartDeepReading?: () => void;
   articleTerms?: readonly ArticleTermEntry[];
   onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
@@ -84,7 +85,8 @@ export function IntroSection({
   fs,
   mode,
   onSelectTakeaway,
-  onStartReading,
+  onStartQuickReading,
+  onStartDeepReading,
   articleTerms = [],
   onSelectArticleTerm,
 }: IntroSectionProps) {
@@ -173,24 +175,35 @@ export function IntroSection({
           )}
         </div>
 
-        {onStartReading && (
-          <div className="mt-6 flex flex-col items-center gap-2.5 border-t border-line-subtle pt-5">
+        {(onStartDeepReading || onStartQuickReading) && (
+          <div className="mt-6 flex flex-col items-center gap-3 border-t border-line-subtle pt-5">
             <p className={`${fs.subtext} text-center text-ink-muted`}>
-              Siap Baca?
+              Pilih cara baca untuk memulai:
             </p>
-            <button
-              type="button"
-              onClick={onStartReading}
-              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto"
-            >
-              {mode === "quick" ? (
-                <Zap className="h-4 w-4" />
-              ) : (
-                <BookOpen className="h-4 w-4" />
+            <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+              {onStartDeepReading && (
+                <button
+                  type="button"
+                  onClick={onStartDeepReading}
+                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  <span>Mulai Baca Mendalam ({book.readingTimeMinutes} mnt)</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
               )}
-              <span>Mulai</span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
+              {onStartQuickReading && (
+                <button
+                  type="button"
+                  onClick={onStartQuickReading}
+                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-sm font-bold text-white shadow-md shadow-amber-500/20 transition hover:bg-amber-600 active:scale-[0.98] sm:w-auto"
+                >
+                  <Zap className="h-4 w-4" />
+                  <span>Mulai Baca Kilat ({book.quickTimeMinutes} mnt)</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>

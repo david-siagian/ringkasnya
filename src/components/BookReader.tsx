@@ -926,36 +926,42 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         style={{ top: "var(--header-h)" }}
         className="sticky z-40 border-b border-line bg-surface/95 shadow-sm backdrop-blur-md"
       >
-        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          {/* Toggle Mode Kilat (kiri, default) vs Mendalam (kanan) */}
-          <div className="flex items-center rounded-xl bg-surface-subtle p-1">
-            <button
-              type="button"
-              onClick={() => handleModeChange("quick")}
-              aria-pressed={readMode === "quick"}
-              className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
-                readMode === "quick"
-                  ? "bg-amber-500 text-white shadow-sm"
-                  : "text-ink-muted hover:text-ink"
-              }`}
-            >
-              <Zap className="h-4 w-4" />
-              <span>Kilat ({book.quickTimeMinutes} mnt)</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleModeChange("deep")}
-              aria-pressed={readMode === "deep"}
-              className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
-                readMode === "deep"
-                  ? "bg-surface text-ink shadow-sm"
-                  : "text-ink-muted hover:text-ink"
-              }`}
-            >
-              <BookOpen className="h-4 w-4 text-accent-strong" />
-              <span>Mendalam ({book.readingTimeMinutes} mnt)</span>
-            </button>
-          </div>
+        <div
+          className={`mx-auto flex max-w-4xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6 ${
+            isIntroView ? "justify-end" : "justify-between"
+          }`}
+        >
+          {/* Toggle Mode Kilat (kiri, default) vs Mendalam (kanan) — tampil setelah masuk poin bacaan */}
+          {!isIntroView && (
+            <div className="flex items-center rounded-xl bg-surface-subtle p-1">
+              <button
+                type="button"
+                onClick={() => handleModeChange("quick")}
+                aria-pressed={readMode === "quick"}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
+                  readMode === "quick"
+                    ? "bg-amber-500 text-white shadow-sm"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                <Zap className="h-4 w-4" />
+                <span>Kilat ({book.quickTimeMinutes} mnt)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleModeChange("deep")}
+                aria-pressed={readMode === "deep"}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
+                  readMode === "deep"
+                    ? "bg-surface text-ink shadow-sm"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                <BookOpen className="h-4 w-4 text-accent-strong" />
+                <span>Mendalam ({book.readingTimeMinutes} mnt)</span>
+              </button>
+            </div>
+          )}
 
           {/* Kontrol Ukuran Teks */}
           <div className="flex items-center gap-1.5">
@@ -1039,19 +1045,27 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 mode={readMode}
                 articleTerms={ARTICLE_TERMS}
                 onSelectArticleTerm={setActiveArticleTerm}
-                onStartReading={() => {
+                onStartDeepReading={() => {
                   transitionAfterFadeOut(() => {
                     setIsStartingSession(true);
-                    if (readMode === "deep") {
-                      goToDeepStep(1, false);
-                      return;
-                    }
+                    setReadMode("deep");
+                    setHasStartedQuick(false);
+                    setIsQuickDone(false);
+                    goToDeepStep(1, false);
+                  }, 380);
+                }}
+                onStartQuickReading={() => {
+                  transitionAfterFadeOut(() => {
+                    setIsStartingSession(true);
+                    setReadMode("quick");
+                    setIsQuickDone(false);
                     const firstTakeaway = book.keyTakeaways[0];
                     setPendingQuickStep(firstTakeaway ? 1 : finalStep);
                     setHasStartedQuick(true);
                     syncUrlHistory({
                       mode: "quick",
                       startedQuick: true,
+                      quickDone: false,
                       deepStep: 0,
                     });
                   }, 380);

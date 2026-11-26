@@ -163,16 +163,20 @@ test.describe("Ringkasnya Smoke Tests", () => {
       page.getByRole("heading", { name: /Sapiens/i })
     ).toBeVisible();
 
-    // Toggle Mode Mendalam vs Mode Kilat
-    const deepBtn = page.getByRole("button", { name: /Mendalam/i });
-    const quickBtn = page.getByRole("button", { name: /Kilat/i });
+    // Di halaman pengantar, toggle Kilat/Mendalam di toolbar disembunyikan dan diganti 2 tombol mulai
+    await expect(page.getByRole("button", { name: /^Kilat \(/i })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /^Mendalam \(/i })).toHaveCount(0);
+
+    // Mulai membaca Mode Kilat dari halaman pengantar
+    await page.getByRole("button", { name: /Mulai Baca Kilat/i }).click();
+
+    // Toggle Mode Mendalam vs Mode Kilat tampil saat sudah masuk poin bacaan
+    const deepBtn = page.getByRole("button", { name: /^Mendalam/i });
+    const quickBtn = page.getByRole("button", { name: /^Kilat/i });
     await deepBtn.click();
     await expect(deepBtn).toHaveClass(/shadow-sm/);
     await quickBtn.click();
     await expect(quickBtn).toHaveClass(/bg-amber-500/);
-
-    // Mulai membaca Mode Kilat agar Poin Inti, Kesimpulan, Konsep Kunci, dan Kutipan tampil
-    await page.getByRole("button", { name: "Mulai" }).click();
 
     // Bagian Konsep Kunci tampil (accordion) & bisa dibuka
     const conceptsAccordion = page.getByRole("button", {
@@ -229,8 +233,8 @@ test.describe("Ringkasnya Smoke Tests", () => {
     });
     await expect(progressBar).toBeVisible();
 
-    // Klik Mulai untuk membuka konten Mode Kilat
-    await page.getByRole("button", { name: "Mulai" }).click();
+    // Klik Mulai Baca Kilat untuk membuka konten Mode Kilat
+    await page.getByRole("button", { name: /Mulai Baca Kilat/i }).click();
 
     // 2. Buat Kartu Kutipan PNG (buka accordion Kutipan Berkesan terlebih dahulu)
     const quotesAccordion = page.getByRole("button", {
