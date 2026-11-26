@@ -382,43 +382,54 @@ export function MarkCompletedSection({
   fs,
 }: MarkCompletedSectionProps) {
   return (
-    <section className="mt-6 flex flex-col gap-4 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
-      <div className="flex items-start gap-3">
+    <section
+      className={`mt-6 flex flex-col gap-5 rounded-2xl border-2 p-6 shadow-md transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-8 ${
+        isCompleted
+          ? "border-emerald-500/45 bg-emerald-500/10 shadow-emerald-950/5"
+          : "border-emerald-500/40 bg-gradient-to-br from-emerald-500/10 via-accent-soft/60 to-surface shadow-emerald-950/10"
+      }`}
+    >
+      <div className="flex items-start gap-4">
         <span
-          className={`mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
+          className={`mt-0.5 inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-sm ${
             isCompleted
-              ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-              : "bg-accent-soft text-accent-text"
+              ? "bg-emerald-600 text-white"
+              : "bg-emerald-600/15 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300"
           }`}
         >
-          <CheckCircle2 className="h-5 w-5" />
+          <CheckCircle2 className="h-6 w-6" />
         </span>
-        <div>
-          <h3 className={`${fs.lead} font-extrabold text-ink`}>
+        <div className="min-w-0">
+          <span
+            className={`block ${fs.micro} font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300`}
+          >
+            {isCompleted ? "Selesai Dibaca" : "Langkah Terakhir"}
+          </span>
+          <h3 className={`mt-0.5 ${fs.sectionHeading} font-extrabold text-ink`}>
             {isCompleted
-              ? "Bacaan Selesai"
+              ? "Bacaan Ini Sudah Selesai"
               : "Sudah selesai membaca ringkasan ini?"}
           </h3>
-          <p className={`mt-0.5 ${fs.subtext} text-ink-muted`}>
+          <p className={`mt-1 ${fs.subtext} leading-relaxed text-ink-muted`}>
             {isCompleted
-              ? "Buku ini sudah tercatat di daftar bacaan selesai."
-              : "Klik tombol di samping untuk mencatat buku ini sebagai selesai dibaca."}
+              ? "Buku ini sudah tercatat di daftar bacaan selesai Anda."
+              : "Tandai buku ini selesai dibaca agar progres bacaan Anda tercatat rapi."}
           </p>
         </div>
       </div>
 
       {isCompleted ? (
-        <span className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 px-4 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
+        <span className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-5 py-3 text-sm font-bold text-emerald-700 dark:text-emerald-300 sm:w-auto">
+          <CheckCircle2 className="h-5 w-5 shrink-0" />
           <span>Sudah Selesai Dibaca</span>
         </span>
       ) : (
         <button
           type="button"
           onClick={onMarkCompleted}
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
+          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-md shadow-emerald-600/25 transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto"
         >
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <CheckCircle2 className="h-5 w-5 shrink-0" />
           <span>Tandai Selesai Dibaca</span>
         </button>
       )}
