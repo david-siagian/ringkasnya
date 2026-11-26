@@ -34,6 +34,9 @@ Mengaktifkan binding yang sudah disiapkan di `wrangler.jsonc`:
   - Preview (`dev`): `SESSION_KV_preview` (`c21a2251722d4a7ea5b5d3c6a315db2f`)
   - Terintegrasi ke **Better Auth** sebagai `secondaryStorage` (`src/lib/auth.ts`) untuk *session caching* di edge (dengan guard `expirationTtl >= 60` detik dan *fallback* aman ke D1).
   - *Catatan*: Proteksi *rate-limiting* direkomendasikan memakai **Cloudflare WAF Rate Limiting** di lapisan edge.
+- **URL Preview Build Cloudflare (Branch Kerja & `dev`)**:
+  - Setiap branch baru yang di-push ke GitHub otomatis memicu **Cloudflare Workers Builds** dengan format URL preview: `https://<slug-branch>-app.ringkasnya.workers.dev` (karakter `/` pada nama branch diubah menjadi `-`, misalnya branch `dev` → `https://dev-app.ringkasnya.workers.dev`, branch `fix/contoh` → `https://fix-contoh-app.ringkasnya.workers.dev`).
+  - Saat melaporkan hasil pengerjaan branch baru sebelum merge ke `dev`, **selalu berikan URL preview build Cloudflare** tersebut (bukan URL GitHub/PR).
 - **API Routes (`src/pages/api/`) — Sebagian Aktif**:
   - **Aktif**: `/api/health` dan `/api/auth/[...all]`.
   - **Pending**: endpoint progres baca/bookmark, endpoint Admin CMS, webhook pembayaran, dan fitur komunitas.
