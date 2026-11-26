@@ -1,18 +1,13 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { User, Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, ArrowRight } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { completeAuthRedirect, getSafeRedirect } from "@/lib/auth-modal";
 
 interface RegisterFormProps {
   googleEnabled: boolean;
   redirectTo?: string;
   onSwitchMode?: () => void;
-}
-
-function getSafeRedirect(target?: string): string {
-  if (!target || !target.startsWith("/") || target.startsWith("//")) {
-    return "/akun";
-  }
-  return target;
+  onSuccess?: () => void;
 }
 
 function GoogleIcon() {
@@ -42,6 +37,7 @@ export default function RegisterForm({
   googleEnabled,
   redirectTo,
   onSwitchMode,
+  onSuccess,
 }: RegisterFormProps) {
   const safeRedirect = getSafeRedirect(redirectTo);
   const [name, setName] = useState("");
@@ -130,7 +126,7 @@ export default function RegisterForm({
         return;
       }
 
-      window.location.href = safeRedirect;
+      completeAuthRedirect(safeRedirect, onSuccess);
     } catch {
       setErrorMessage("Terjadi kesalahan koneksi. Silakan coba beberapa saat lagi.");
       setIsLoading(false);

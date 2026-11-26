@@ -118,12 +118,14 @@ export default function AuthModal({ googleEnabled }: AuthModalProps) {
               googleEnabled={googleEnabled}
               redirectTo={redirectTo}
               onSwitchMode={() => setMode("register")}
+              onSuccess={handleClose}
             />
           ) : (
             <RegisterForm
               googleEnabled={googleEnabled}
               redirectTo={redirectTo}
               onSwitchMode={() => setMode("login")}
+              onSuccess={handleClose}
             />
           )}
         </div>

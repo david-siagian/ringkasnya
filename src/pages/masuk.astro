@@ -4,14 +4,12 @@ import AuthAmbientBackground from "@/components/auth/AuthAmbientBackground.astro
 import AuthCardShell from "@/components/auth/AuthCardShell.astro";
 import LoginForm from "@/components/auth/LoginForm";
 import { isGoogleOAuthConfigured } from "@/lib/auth";
+import { getSafeRedirect } from "@/lib/auth-modal";
 
 export const prerender = false;
 
 const rawRedirect = Astro.url.searchParams.get("redirect") ?? undefined;
-const safeRedirect =
-  rawRedirect && rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
-    ? rawRedirect
-    : "/akun";
+const safeRedirect = getSafeRedirect(rawRedirect);
 
 if (Astro.locals.user) {
   return Astro.redirect(safeRedirect);

@@ -164,8 +164,8 @@ export default function BookOpinionsSection({
   const promptAuth = () => {
     const redirectTo =
       typeof window !== "undefined"
-        ? window.location.pathname + window.location.search
-        : `/buku/${bookSlug}`;
+        ? `${window.location.pathname}${window.location.search}#opini-pembaca`
+        : `/buku/${bookSlug}#opini-pembaca`;
     openAuthModal("login", redirectTo);
   };
 
