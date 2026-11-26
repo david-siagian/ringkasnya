@@ -329,10 +329,15 @@ export function ConfirmUnmarkCompletedModal({
 interface ReaderToastProps {
   open: boolean;
   message: string;
+  bottomOffsetClass?: string;
 }
 
 /** Notifikasi toast ringan di bagian bawah layar untuk konfirmasi aksi di reader. */
-export function ReaderToast({ open, message }: ReaderToastProps) {
+export function ReaderToast({
+  open,
+  message,
+  bottomOffsetClass = "bottom-5",
+}: ReaderToastProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -345,7 +350,7 @@ export function ReaderToast({ open, message }: ReaderToastProps) {
     <div
       role="status"
       aria-live="polite"
-      className="pointer-events-none fixed inset-x-0 bottom-5 z-[85] flex justify-center px-4"
+      className={`pointer-events-none fixed inset-x-0 ${bottomOffsetClass} z-[85] flex justify-center px-4`}
     >
       <div className="animate-fade-slide flex max-w-md items-center gap-2.5 rounded-2xl border border-line bg-surface px-4 py-3 text-sm font-medium leading-snug text-ink shadow-xl">
         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">

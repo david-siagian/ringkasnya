@@ -20,7 +20,7 @@ import {
 } from "./SmoothNavigation";
 import {
   ConclusionSection,
-  DeepStepDropdown,
+  DeepReadingBottomBar,
   FONT_SCALES,
   IntroSection,
   KeyConceptsSection,
@@ -32,13 +32,14 @@ import {
 } from "./BookReaderSections";
 import {
   ArrowLeft,
-  ArrowRight,
   Bookmark,
   BookOpen,
   CheckCircle2,
   Clock,
   Layers,
   List,
+  Maximize2,
+  Minimize2,
   Quote,
   RotateCcw,
   Type,
@@ -156,12 +157,16 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     useState<ArticleTermEntry | null>(null);
   const [isLeavingView, setIsLeavingView] = useState(false);
   const [isStartingSession, setIsStartingSession] = useState(false);
+  const [isFocusMode, setIsFocusMode] = useState(false);
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const viewExitTimerRef = useRef<number | undefined>(undefined);
   const unmarkToastTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const readingAreaRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(
+    null
+  );
   const pendingScrollTargetRef = useRef<string | null>(null);
   const pendingScrollToReadingTopRef = useRef(false);
   const pendingQuickStepRef = useRef<number | null>(null);
@@ -185,9 +190,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const isIntroView =
     (readMode === "quick" && !hasStartedQuick) ||
     (readMode === "deep" && clampedDeepStep === 0);
+  const showDeepBottomBar = readMode === "deep" && !isIntroView;
   const isEndOfBookView =
     readMode === "quick" ? hasStartedQuick : clampedDeepStep === finalStep;
-  const showFooter = isIntroView || isEndOfBookView;
+  const showFooter = !isFocusMode && (isIntroView || isEndOfBookView);
 
   const readingProgress =
     readMode === "deep"
@@ -463,13 +469,98 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     [isLeavingView, getReadingTopY]
   );
 
-  const transitionToDeepStep = (nextStep: number) => {
-    const target = Math.max(0, Math.min(finalStep, nextStep));
-    if (target === clampedDeepStep) return;
-    transitionAfterFadeOut(() => {
-      setIsStartingSession(false);
-      goToDeepStep(target, false);
-    });
+  const transitionToDeepStep = useCallback(
+    (nextStep: number) => {
+      const target = Math.max(0, Math.min(finalStep, nextStep));
+      if (target === clampedDeepStep) return;
+      transitionAfterFadeOut(() => {
+        setIsStartingSession(false);
+        goToDeepStep(target, false);
+      });
+    },
+    [clampedDeepStep, finalStep, transitionAfterFadeOut]
+  );
+
+  // Navigasi keyboard (ArrowLeft / ArrowRight) di Mode Mendalam
+  useEffect(() => {
+    if (!showDeepBottomBar) return;
+    const isAnyModalOpen =
+      isConceptsModalOpen ||
+      isQuotesModalOpen ||
+      isUnmarkConfirmOpen ||
+      Boolean(activeQuoteForCard) ||
+      Boolean(activeArticleTerm);
+    if (isAnyModalOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
+        return;
+      }
+      const target = event.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      if (event.key === "ArrowLeft" && clampedDeepStep > 0) {
+        event.preventDefault();
+        transitionToDeepStep(clampedDeepStep - 1);
+      } else if (event.key === "ArrowRight" && clampedDeepStep < finalStep) {
+        event.preventDefault();
+        transitionToDeepStep(clampedDeepStep + 1);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [
+    showDeepBottomBar,
+    isConceptsModalOpen,
+    isQuotesModalOpen,
+    isUnmarkConfirmOpen,
+    activeQuoteForCard,
+    activeArticleTerm,
+    clampedDeepStep,
+    finalStep,
+    transitionToDeepStep,
+  ]);
+
+  const handleDeepTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (event.touches.length !== 1) {
+      touchStartRef.current = null;
+      return;
+    }
+    const touch = event.touches[0];
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now(),
+    };
+  };
+
+  const handleDeepTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!start || event.changedTouches.length !== 1) return;
+    if (window.getSelection()?.toString()) return;
+
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    const dt = Date.now() - start.time;
+
+    if (dt < 600 && Math.abs(dx) > 64 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0 && clampedDeepStep < finalStep) {
+        transitionToDeepStep(clampedDeepStep + 1);
+      } else if (dx > 0 && clampedDeepStep > 0) {
+        transitionToDeepStep(clampedDeepStep - 1);
+      }
+    }
   };
 
   const handleReadTakeawayDeep = (step: number) => {
@@ -554,10 +645,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-page">
-      {/* Banner Header Buku */}
-      <div
-        className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}
-      >
+      {/* Banner Header Buku (disembunyikan saat Mode Fokus aktif) */}
+      {!isFocusMode && (
+        <div
+          className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}
+        >
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
           <div className="flex items-start justify-between gap-2.5">
             <a
@@ -669,6 +761,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           </div>
         </div>
       </div>
+      )}
 
       {/* Sticky Reader Toolbar (Mode Baca & Ukuran Huruf) */}
       <div
@@ -743,8 +836,30 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             >
               A+
             </button>
+            <button
+              type="button"
+              onClick={() => setIsFocusMode((prev) => !prev)}
+              aria-pressed={isFocusMode}
+              title={
+                isFocusMode
+                  ? "Keluar dari Mode Fokus"
+                  : "Mode Fokus (sembunyikan header buku)"
+              }
+              className={`ml-1 inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-semibold transition ${
+                isFocusMode
+                  ? "border-accent-strong bg-accent-soft text-accent-text"
+                  : "border-line text-ink-muted hover:bg-page hover:text-ink"
+              }`}
+            >
+              {isFocusMode ? (
+                <Minimize2 className="h-3.5 w-3.5" />
+              ) : (
+                <Maximize2 className="h-3.5 w-3.5" />
+              )}
+              <span className="hidden sm:inline">Fokus</span>
+            </button>
             <span
-              className="ml-1.5 min-w-[2.5rem] text-right text-xs font-semibold tabular-nums text-ink-muted"
+              className="ml-1 min-w-[2.5rem] text-right text-xs font-semibold tabular-nums text-ink-muted"
               title="Progres membaca"
             >
               {readingProgress}%
@@ -771,7 +886,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       </div>
 
       {/* Konten Utama Ringkasan */}
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 pt-8 pb-20 sm:px-6">
+      <main
+        className={`mx-auto w-full max-w-4xl flex-1 px-4 pt-8 sm:px-6 ${
+          showDeepBottomBar ? "pb-28" : "pb-20"
+        }`}
+      >
         <div ref={readingAreaRef}>
           {isIntroView ? (
             <div
@@ -911,6 +1030,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           ) : (
             /* MODE MENDALAM: Alur Halaman Per Halaman (Poin Inti 1..N -> Penutup) */
             <div
+              onTouchStart={handleDeepTouchStart}
+              onTouchEnd={handleDeepTouchEnd}
               className={`transition-opacity duration-200 ease-out ${
                 isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
               }`}
@@ -923,25 +1044,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 }
                 key={`deep-step-${clampedDeepStep}`}
               >
-                {/* Bar Navigasi Atas Stepper Mode Mendalam */}
-                  <div className="relative z-20 mb-4 flex items-center justify-between gap-2 sm:gap-3 rounded-xl border border-line bg-surface px-3.5 py-2.5 sm:px-4 shadow-sm">
-                    <button
-                      type="button"
-                      onClick={() => transitionToDeepStep(0)}
-                      className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
-                    >
-                      <List className="h-4 w-4" />
-                      <span>Daftar Poin</span>
-                    </button>
-
-                    <DeepStepDropdown
-                      currentStep={clampedDeepStep}
-                      keyTakeaways={book.keyTakeaways}
-                      finalStep={finalStep}
-                      onSelectStep={transitionToDeepStep}
-                    />
-                  </div>
-
                   {/* Konten Halaman Aktif */}
                   {activeTakeaway ? (
                     <TakeawayCard
@@ -980,67 +1082,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       />
                     </>
                   )}
-
-                  {/* Navigasi Panah Sebelumnya / Selanjutnya */}
-                  <nav
-                    aria-label="Navigasi halaman Mode Mendalam"
-                    className="mt-6 flex items-center justify-between gap-3"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => transitionToDeepStep(clampedDeepStep - 1)}
-                      aria-label={
-                        prevTitle
-                          ? `Sebelumnya: ${prevLabel} — ${prevTitle}`
-                          : `Sebelumnya: ${prevLabel}`
-                      }
-                      className="inline-flex max-w-[48%] sm:max-w-xs items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-left text-xs font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-page active:scale-[0.98]"
-                    >
-                      <ArrowLeft className="h-4 w-4 shrink-0 text-ink-muted" />
-                      <span className="min-w-0">
-                        <span className="block truncate text-[10px] font-medium leading-tight text-ink-subtle">
-                          {prevTitle ? `Sebelumnya • ${prevLabel}` : "Sebelumnya"}
-                        </span>
-                        <span className="block truncate text-xs font-semibold leading-snug text-ink">
-                          {prevTitle ?? prevLabel}
-                        </span>
-                      </span>
-                    </button>
-
-                    {clampedDeepStep < finalStep ? (
-                      <button
-                        type="button"
-                        onClick={() => transitionToDeepStep(clampedDeepStep + 1)}
-                        aria-label={
-                          nextTitle
-                            ? `Selanjutnya: ${nextLabel} — ${nextTitle}`
-                            : `Selanjutnya: ${nextLabel}`
-                        }
-                        className="inline-flex max-w-[48%] sm:max-w-xs items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-right text-xs font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
-                      >
-                        <span className="min-w-0">
-                          <span className="block truncate text-[10px] font-medium leading-tight text-emerald-100">
-                            {nextTitle
-                              ? `Selanjutnya • ${nextLabel}`
-                              : "Selanjutnya"}
-                          </span>
-                          <span className="block truncate text-xs font-semibold leading-snug">
-                            {nextTitle ?? nextLabel}
-                          </span>
-                        </span>
-                        <ArrowRight className="h-4 w-4 shrink-0" />
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => transitionToDeepStep(0)}
-                        className="inline-flex max-w-[48%] sm:max-w-xs items-center gap-2 rounded-xl border border-accent-line bg-accent-soft px-3 py-2 text-xs font-semibold text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.98]"
-                      >
-                        <span className="truncate">Kembali ke Pengantar</span>
-                        <RotateCcw className="h-4 w-4 shrink-0" />
-                      </button>
-                    )}
-                  </nav>
               </div>
             </div>
           )}
@@ -1055,6 +1096,20 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       </main>
 
       {showFooter && <Footer />}
+
+      {showDeepBottomBar && (
+        <DeepReadingBottomBar
+          currentStep={clampedDeepStep}
+          keyTakeaways={book.keyTakeaways}
+          finalStep={finalStep}
+          readingTimeMinutes={book.readingTimeMinutes}
+          prevLabel={prevLabel}
+          prevTitle={prevTitle}
+          nextLabel={nextLabel}
+          nextTitle={nextTitle}
+          onSelectStep={transitionToDeepStep}
+        />
+      )}
 
       <QuickKeyConceptsModal
         open={isConceptsModalOpen}
@@ -1085,6 +1140,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       <ReaderToast
         open={Boolean(unmarkToastMessage)}
         message={unmarkToastMessage ?? ""}
+        bottomOffsetClass={showDeepBottomBar ? "bottom-24" : "bottom-5"}
       />
 
       <QuickQuotesModal

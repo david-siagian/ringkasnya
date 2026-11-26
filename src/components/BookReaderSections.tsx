@@ -5,17 +5,20 @@ import { RichBookText } from "./RichBookText";
 import BookPreviewModal from "./BookPreviewModal";
 import {
   AlertCircle,
+  ArrowLeft,
   ArrowRight,
   BookOpen,
   Check,
   CheckCircle2,
   ChevronDown,
+  ChevronUp,
   Copy,
   ImageDown,
   Layers,
   LayoutGrid,
   Lightbulb,
   Quote,
+  RotateCcw,
   Sparkles,
   Target,
   X,
@@ -754,20 +757,30 @@ export function RelatedBooksSection({
   );
 }
 
-interface DeepStepDropdownProps {
+interface DeepReadingBottomBarProps {
   currentStep: number;
   keyTakeaways: BookSummary["keyTakeaways"];
   finalStep: number;
+  readingTimeMinutes: number;
+  prevLabel: string;
+  prevTitle: string | null;
+  nextLabel: string;
+  nextTitle: string | null;
   onSelectStep: (step: number) => void;
 }
 
-/** Dropdown kustom untuk melompat cepat antar halaman di Mode Mendalam. */
-export function DeepStepDropdown({
+/** Bar navigasi bawah fixed untuk Mode Mendalam beserta indikator posisi & quick-jump. */
+export function DeepReadingBottomBar({
   currentStep,
   keyTakeaways,
   finalStep,
+  readingTimeMinutes,
+  prevLabel,
+  prevTitle,
+  nextLabel,
+  nextTitle,
   onSelectStep,
-}: DeepStepDropdownProps) {
+}: DeepReadingBottomBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -809,12 +822,16 @@ export function DeepStepDropdown({
       ? keyTakeaways[currentStep - 1]
       : null;
 
-  const triggerLabel =
-    currentStep === 0
-      ? "Pengantar"
-      : activeTakeaway
-        ? `Poin ${activeTakeaway.number}/${totalTakeaways}: ${activeTakeaway.title}`
-        : "Penutup: Kesimpulan & Konsep";
+  const remainingMinutes = activeTakeaway
+    ? Math.max(
+        1,
+        Math.round(
+          (readingTimeMinutes *
+            Math.max(1, totalTakeaways - currentStep + 1)) /
+            Math.max(1, totalTakeaways)
+        )
+      )
+    : 0;
 
   const handleChoose = (step: number) => {
     setIsOpen(false);
@@ -822,122 +839,187 @@ export function DeepStepDropdown({
   };
 
   return (
-    <div ref={containerRef} className="relative min-w-0">
-      <button
-        ref={triggerRef}
-        type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        aria-label="Pilih halaman ringkasan"
-        className="inline-flex max-w-full sm:max-w-xs items-center gap-2 rounded-xl border border-line bg-page px-3 py-1.5 text-xs font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+    <div
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 backdrop-blur-md shadow-[0_-4px_20px_-6px_rgba(0,0,0,0.08)] dark:shadow-[0_-4px_20px_-6px_rgba(0,0,0,0.35)] pb-[env(safe-area-inset-bottom)]"
+    >
+      <nav
+        aria-label="Navigasi halaman Mode Mendalam"
+        className="mx-auto flex max-w-4xl items-center justify-between gap-2 px-3 py-2.5 sm:px-6"
       >
-        <span className="truncate">{triggerLabel}</span>
-        <ChevronDown
-          className={`h-3.5 w-3.5 shrink-0 text-ink-muted transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {isOpen && (
-        <div
-          role="listbox"
-          aria-label="Daftar halaman Mode Mendalam"
-          className="animate-fade-slide absolute right-0 z-30 mt-2 w-[min(calc(100vw-3.5rem),22rem)] sm:w-[min(calc(100vw-4rem),22rem)] overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-xl ring-1 ring-black/5 dark:ring-white/10"
+        <button
+          type="button"
+          onClick={() => onSelectStep(currentStep - 1)}
+          aria-label={
+            prevTitle
+              ? `Sebelumnya: ${prevLabel} — ${prevTitle}`
+              : `Sebelumnya: ${prevLabel}`
+          }
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-line bg-page px-3 py-2 text-xs sm:text-sm font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-surface active:scale-[0.98]"
         >
-          <div className="max-h-72 space-y-0.5 overflow-y-auto pr-0.5">
-            <button
-              type="button"
-              role="option"
-              aria-selected={currentStep === 0}
-              onClick={() => handleChoose(0)}
-              className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-xs transition ${
-                currentStep === 0
-                  ? "bg-accent-soft font-bold text-accent-text"
-                  : "font-medium text-ink-secondary hover:bg-page hover:text-ink"
-              }`}
-            >
-              <span
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg ${
-                  currentStep === 0
-                    ? "bg-emerald-600 text-white"
-                    : "bg-surface-subtle text-ink-muted"
-                }`}
-              >
-                <BookOpen className="h-3.5 w-3.5" />
-              </span>
-              <span className="flex-1 truncate">Pengantar &amp; Sinopsis</span>
-              {currentStep === 0 && (
-                <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-              )}
-            </button>
+          <ArrowLeft className="h-4 w-4 shrink-0 text-ink-muted" />
+          <span>Sebelumnya</span>
+        </button>
 
-            {keyTakeaways.map((item, idx) => {
-              const stepNum = idx + 1;
-              const isActive = currentStep === stepNum;
-              return (
+        <div ref={containerRef} className="relative min-w-0 flex justify-center">
+          {isOpen && (
+            <div
+              role="listbox"
+              aria-label="Daftar halaman Mode Mendalam"
+              className="animate-fade-slide absolute bottom-full left-1/2 mb-3 w-[min(calc(100vw-2rem),22rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
+            >
+              <div className="max-h-72 space-y-0.5 overflow-y-auto pr-0.5">
                 <button
-                  key={item.number}
                   type="button"
                   role="option"
-                  aria-selected={isActive}
-                  onClick={() => handleChoose(stepNum)}
-                  className={`flex w-full items-start gap-2.5 rounded-xl px-3 py-2 text-left text-xs transition ${
-                    isActive
+                  aria-selected={currentStep === 0}
+                  onClick={() => handleChoose(0)}
+                  className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-xs transition ${
+                    currentStep === 0
                       ? "bg-accent-soft font-bold text-accent-text"
                       : "font-medium text-ink-secondary hover:bg-page hover:text-ink"
                   }`}
                 >
                   <span
-                    className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
-                      isActive
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg ${
+                      currentStep === 0
                         ? "bg-emerald-600 text-white"
                         : "bg-surface-subtle text-ink-muted"
                     }`}
                   >
-                    {item.number}
+                    <BookOpen className="h-3.5 w-3.5" />
                   </span>
-                  <span className="flex-1 leading-snug">
-                    {item.title}
-                  </span>
-                  {isActive && (
-                    <Check className="mt-1 h-3.5 w-3.5 shrink-0 text-accent-strong" />
+                  <span className="flex-1 truncate">Pengantar &amp; Sinopsis</span>
+                  {currentStep === 0 && (
+                    <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
                   )}
                 </button>
-              );
-            })}
 
-            <button
-              type="button"
-              role="option"
-              aria-selected={currentStep === finalStep}
-              onClick={() => handleChoose(finalStep)}
-              className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-xs transition ${
-                currentStep === finalStep
-                  ? "bg-accent-soft font-bold text-accent-text"
-                  : "font-medium text-ink-secondary hover:bg-page hover:text-ink"
-              }`}
-            >
-              <span
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg ${
-                  currentStep === finalStep
-                    ? "bg-emerald-600 text-white"
-                    : "bg-surface-subtle text-ink-muted"
-                }`}
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-              </span>
-              <span className="flex-1 truncate">
-                Penutup: Kesimpulan &amp; Konsep
-              </span>
-              {currentStep === finalStep && (
-                <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+                {keyTakeaways.map((item, idx) => {
+                  const stepNum = idx + 1;
+                  const isActive = currentStep === stepNum;
+                  return (
+                    <button
+                      key={item.number}
+                      type="button"
+                      role="option"
+                      aria-selected={isActive}
+                      onClick={() => handleChoose(stepNum)}
+                      className={`flex w-full items-start gap-2.5 rounded-xl px-3 py-2 text-left text-xs transition ${
+                        isActive
+                          ? "bg-accent-soft font-bold text-accent-text"
+                          : "font-medium text-ink-secondary hover:bg-page hover:text-ink"
+                      }`}
+                    >
+                      <span
+                        className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
+                          isActive
+                            ? "bg-emerald-600 text-white"
+                            : "bg-surface-subtle text-ink-muted"
+                        }`}
+                      >
+                        {item.number}
+                      </span>
+                      <span className="flex-1 leading-snug">
+                        {item.title}
+                      </span>
+                      {isActive && (
+                        <Check className="mt-1 h-3.5 w-3.5 shrink-0 text-accent-strong" />
+                      )}
+                    </button>
+                  );
+                })}
+
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={currentStep === finalStep}
+                  onClick={() => handleChoose(finalStep)}
+                  className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-xs transition ${
+                    currentStep === finalStep
+                      ? "bg-accent-soft font-bold text-accent-text"
+                      : "font-medium text-ink-secondary hover:bg-page hover:text-ink"
+                  }`}
+                >
+                  <span
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg ${
+                      currentStep === finalStep
+                        ? "bg-emerald-600 text-white"
+                        : "bg-surface-subtle text-ink-muted"
+                    }`}
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="flex-1 truncate">
+                    Penutup: Kesimpulan &amp; Konsep
+                  </span>
+                  {currentStep === finalStep && (
+                    <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+
+          <button
+            ref={triggerRef}
+            type="button"
+            onClick={() => setIsOpen((prev) => !prev)}
+            aria-haspopup="listbox"
+            aria-expanded={isOpen}
+            aria-label={
+              activeTakeaway
+                ? `Poin ${activeTakeaway.number} dari ${totalTakeaways}. Ketuk untuk lompat ke poin lain.`
+                : "Kesimpulan Akhir. Ketuk untuk lompat ke poin lain."
+            }
+            className="inline-flex flex-col items-center rounded-xl px-2.5 py-1 text-center transition hover:bg-page focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+          >
+            <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold tabular-nums text-ink">
+              {activeTakeaway ? (
+                <span>
+                  <span className="hidden sm:inline">Poin </span>
+                  {activeTakeaway.number} / {totalTakeaways}
+                </span>
+              ) : (
+                <span>Kesimpulan</span>
               )}
-            </button>
-          </div>
+              <ChevronUp
+                className={`h-3.5 w-3.5 shrink-0 text-ink-muted transition-transform duration-200 ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+              />
+            </span>
+            <span className="text-[10px] sm:text-[11px] font-medium leading-tight text-ink-subtle">
+              {activeTakeaway ? `~${remainingMinutes} mnt lagi` : "Bagian akhir"}
+            </span>
+          </button>
         </div>
-      )}
+
+        {currentStep < finalStep ? (
+          <button
+            type="button"
+            onClick={() => onSelectStep(currentStep + 1)}
+            aria-label={
+              nextTitle
+                ? `Selanjutnya: ${nextLabel} — ${nextTitle}`
+                : `Selanjutnya: ${nextLabel}`
+            }
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
+          >
+            <span>Selanjutnya</span>
+            <ArrowRight className="h-4 w-4 shrink-0" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => onSelectStep(0)}
+            aria-label="Kembali ke Pengantar"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2 text-xs sm:text-sm font-semibold text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.98]"
+          >
+            <span>Pengantar</span>
+            <RotateCcw className="h-4 w-4 shrink-0" />
+          </button>
+        )}
+      </nav>
     </div>
   );
 }
