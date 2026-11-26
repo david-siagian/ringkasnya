@@ -10,8 +10,6 @@ import Footer from "./Footer";
 import { ArticleTermPopover } from "./ArticleTermPopover";
 import {
   ConfirmUnmarkCompletedModal,
-  QuickKeyConceptsModal,
-  QuickQuotesModal,
   ReaderToast,
 } from "./BookReaderModals";
 import {
@@ -150,8 +148,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [activeQuoteForCard, setActiveQuoteForCard] = useState<string | null>(
     null
   );
-  const [isConceptsModalOpen, setIsConceptsModalOpen] = useState(false);
-  const [isQuotesModalOpen, setIsQuotesModalOpen] = useState(false);
   const [isUnmarkConfirmOpen, setIsUnmarkConfirmOpen] = useState(false);
   const [unmarkToastMessage, setUnmarkToastMessage] = useState<string | null>(
     null
@@ -247,8 +243,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setIsQuickDone(Boolean(initial.quickDone));
     setDeepStep(initial.deepStep);
     setScrollProgress(0);
-    setIsConceptsModalOpen(false);
-    setIsQuotesModalOpen(false);
     setIsUnmarkConfirmOpen(false);
     setUnmarkToastMessage(null);
     window.clearTimeout(unmarkToastTimerRef.current);
@@ -523,8 +517,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   useEffect(() => {
     if (!showDeepBottomBar) return;
     const isAnyModalOpen =
-      isConceptsModalOpen ||
-      isQuotesModalOpen ||
       isUnmarkConfirmOpen ||
       Boolean(activeQuoteForCard) ||
       Boolean(activeArticleTerm);
@@ -558,8 +550,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [
     showDeepBottomBar,
-    isConceptsModalOpen,
-    isQuotesModalOpen,
     isUnmarkConfirmOpen,
     activeQuoteForCard,
     activeArticleTerm,
@@ -739,6 +729,84 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           : "Kesimpulan Akhir";
   const nextTitle = nextTakeaway?.title ?? null;
 
+  const explorationTabsSection = (
+    <div className="mt-8">
+      <div
+        role="tablist"
+        aria-label="Eksplorasi setelah membaca"
+        className="grid grid-cols-3 gap-1.5 rounded-2xl border border-line bg-surface-subtle p-1.5"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected={penutupTab === "concepts"}
+          onClick={() => setPenutupTab("concepts")}
+          className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
+            penutupTab === "concepts"
+              ? "bg-surface text-ink shadow-sm"
+              : "text-ink-muted hover:text-ink"
+          }`}
+        >
+          <Layers className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+          <span className="truncate">
+            Konsep ({book.keyConcepts.length})
+          </span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={penutupTab === "quotes"}
+          onClick={() => setPenutupTab("quotes")}
+          className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
+            penutupTab === "quotes"
+              ? "bg-surface text-ink shadow-sm"
+              : "text-ink-muted hover:text-ink"
+          }`}
+        >
+          <Quote className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+          <span className="truncate">
+            Kutipan ({book.quotes.length})
+          </span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={penutupTab === "opinions"}
+          onClick={() => setPenutupTab("opinions")}
+          className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
+            penutupTab === "opinions"
+              ? "bg-surface text-ink shadow-sm"
+              : "text-ink-muted hover:text-ink"
+          }`}
+        >
+          <MessageSquare className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+          <span className="truncate">Opini</span>
+        </button>
+      </div>
+
+      <div role="tabpanel">
+        {penutupTab === "concepts" ? (
+          <KeyConceptsSection
+            keyConcepts={book.keyConcepts}
+            fs={fs}
+            articleTerms={ARTICLE_TERMS}
+            onSelectArticleTerm={setActiveArticleTerm}
+          />
+        ) : penutupTab === "quotes" ? (
+          <QuotesSection
+            quotes={book.quotes}
+            copyFeedback={copyFeedback}
+            onCopyQuote={handleCopyQuote}
+            onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
+            fs={fs}
+          />
+        ) : (
+          <BookOpinionsSection bookSlug={book.slug} />
+        )}
+      </div>
+    </div>
+  );
+
   const penutupExplorerContent = (
     <>
       <MarkCompletedSection
@@ -749,81 +817,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       />
 
       {/* Tab Eksplorasi Penutup: Konsep Kunci, Kutipan, & Opini */}
-      <div className="mt-8">
-        <div
-          role="tablist"
-          aria-label="Eksplorasi setelah membaca"
-          className="grid grid-cols-3 gap-1.5 rounded-2xl border border-line bg-surface-subtle p-1.5"
-        >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={penutupTab === "concepts"}
-            onClick={() => setPenutupTab("concepts")}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
-              penutupTab === "concepts"
-                ? "bg-surface text-ink shadow-sm"
-                : "text-ink-muted hover:text-ink"
-            }`}
-          >
-            <Layers className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-            <span className="truncate">
-              Konsep ({book.keyConcepts.length})
-            </span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={penutupTab === "quotes"}
-            onClick={() => setPenutupTab("quotes")}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
-              penutupTab === "quotes"
-                ? "bg-surface text-ink shadow-sm"
-                : "text-ink-muted hover:text-ink"
-            }`}
-          >
-            <Quote className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-            <span className="truncate">
-              Kutipan ({book.quotes.length})
-            </span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={penutupTab === "opinions"}
-            onClick={() => setPenutupTab("opinions")}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
-              penutupTab === "opinions"
-                ? "bg-surface text-ink shadow-sm"
-                : "text-ink-muted hover:text-ink"
-            }`}
-          >
-            <MessageSquare className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-            <span className="truncate">Opini</span>
-          </button>
-        </div>
-
-        <div role="tabpanel">
-          {penutupTab === "concepts" ? (
-            <KeyConceptsSection
-              keyConcepts={book.keyConcepts}
-              fs={fs}
-              articleTerms={ARTICLE_TERMS}
-              onSelectArticleTerm={setActiveArticleTerm}
-            />
-          ) : penutupTab === "quotes" ? (
-            <QuotesSection
-              quotes={book.quotes}
-              copyFeedback={copyFeedback}
-              onCopyQuote={handleCopyQuote}
-              onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
-              fs={fs}
-            />
-          ) : (
-            <BookOpinionsSection bookSlug={book.slug} />
-          )}
-        </div>
-      </div>
+      {explorationTabsSection}
 
       <RelatedBooksSection relatedBooks={recommendedBooks} />
     </>
@@ -920,29 +914,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-white/90">
                 {book.tagline}
               </p>
-
-              {completed && (
-                <div className="mt-5 flex flex-wrap items-center gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setIsConceptsModalOpen(true)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-white/95 px-3.5 py-2 text-xs font-bold text-emerald-900 shadow-sm transition hover:bg-white active:scale-[0.98]"
-                  >
-                    <Layers className="h-4 w-4 text-emerald-600" />
-                    <span>
-                      Konsep Kunci ({book.keyConcepts.length})
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsQuotesModalOpen(true)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-black/30 px-3.5 py-2 text-xs font-bold text-white ring-1 ring-white/25 backdrop-blur-sm transition hover:bg-black/45 active:scale-[0.98]"
-                  >
-                    <Quote className="h-4 w-4 text-emerald-300" />
-                    <span>Kutipan ({book.quotes.length})</span>
-                  </button>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -1105,6 +1076,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   });
                 }}
               />
+              {completed && explorationTabsSection}
             </div>
           ) : readMode === "quick" ? (
             isQuickDone ? (
@@ -1276,21 +1248,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         />
       )}
 
-      <QuickKeyConceptsModal
-        open={isConceptsModalOpen}
-        onClose={() => setIsConceptsModalOpen(false)}
-        bookTitle={book.title}
-        keyConcepts={book.keyConcepts}
-      />
-
       <ConfirmUnmarkCompletedModal
         open={isUnmarkConfirmOpen}
         onClose={() => setIsUnmarkConfirmOpen(false)}
         onConfirm={() => {
           unmarkCompleted(book.slug);
           setIsUnmarkConfirmOpen(false);
-          setIsConceptsModalOpen(false);
-          setIsQuotesModalOpen(false);
           setUnmarkToastMessage(
             `Berhasil menghapus tanda selesai untuk "${book.title}".`
           );
@@ -1306,16 +1269,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         open={Boolean(unmarkToastMessage)}
         message={unmarkToastMessage ?? ""}
         bottomOffsetClass={showDeepBottomBar ? "bottom-24" : "bottom-5"}
-      />
-
-      <QuickQuotesModal
-        open={isQuotesModalOpen}
-        onClose={() => setIsQuotesModalOpen(false)}
-        bookTitle={book.title}
-        quotes={book.quotes}
-        copyFeedback={copyFeedback}
-        onCopyQuote={handleCopyQuote}
-        onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
       />
 
       <QuoteCardModal
