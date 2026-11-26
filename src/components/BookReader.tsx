@@ -54,6 +54,7 @@ interface BookReaderProps {
 interface ReaderNavState {
   mode: "quick" | "deep";
   startedQuick: boolean;
+  quickDone?: boolean;
   deepStep: number;
 }
 
@@ -68,11 +69,13 @@ function parseReaderStateFromSearch(
     const deepStep = Number.isFinite(rawStep)
       ? Math.max(0, Math.min(finalStep, rawStep))
       : 0;
-    return { mode: "deep", startedQuick: false, deepStep };
+    return { mode: "deep", startedQuick: false, quickDone: false, deepStep };
   }
 
-  const startedQuick = params.get("read") === "1";
-  return { mode: "quick", startedQuick, deepStep: 0 };
+  const readParam = params.get("read");
+  const startedQuick = readParam === "1" || readParam === "done";
+  const quickDone = readParam === "done";
+  return { mode: "quick", startedQuick, quickDone, deepStep: 0 };
 }
 
 function buildReaderSearch(
@@ -92,7 +95,7 @@ function buildReaderSearch(
     }
   } else if (state.startedQuick) {
     params.set("mode", "quick");
-    params.set("read", "1");
+    params.set("read", state.quickDone ? "done" : "1");
     params.delete("step");
   } else {
     params.delete("mode");
@@ -139,6 +142,7 @@ async function copyTextToClipboard(text: string): Promise<boolean> {
 export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [readMode, setReadMode] = useState<"quick" | "deep">("quick");
   const [hasStartedQuick, setHasStartedQuick] = useState(false);
+  const [isQuickDone, setIsQuickDone] = useState(false);
   const [deepStep, setDeepStep] = useState(0);
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
@@ -194,7 +198,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     (readMode === "deep" && clampedDeepStep === 0);
   const showDeepBottomBar = readMode === "deep" && !isIntroView;
   const isEndOfBookView =
-    readMode === "quick" ? hasStartedQuick : clampedDeepStep === finalStep;
+    readMode === "quick"
+      ? hasStartedQuick && isQuickDone
+      : clampedDeepStep === finalStep;
   const showFooter = isIntroView || isEndOfBookView;
 
   // Sembunyikan navbar utama saat sesi baca dimulai agar tampilan reader lebih bersih
@@ -217,7 +223,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     readMode === "deep"
       ? Math.round((clampedDeepStep / Math.max(1, finalStep)) * 100)
       : hasStartedQuick
-        ? scrollProgress
+        ? isQuickDone
+          ? 100
+          : scrollProgress
         : 0;
 
   const cancelViewExit = useCallback(() => {
@@ -236,6 +244,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setIsStartingSession(false);
     setReadMode(initial.mode);
     setHasStartedQuick(initial.startedQuick);
+    setIsQuickDone(Boolean(initial.quickDone));
     setDeepStep(initial.deepStep);
     setScrollProgress(0);
     setIsConceptsModalOpen(false);
@@ -262,6 +271,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       pendingScrollTargetRef.current = null;
       setReadMode(parsed.mode);
       setHasStartedQuick(parsed.startedQuick);
+      setIsQuickDone(Boolean(parsed.quickDone));
       setDeepStep(parsed.deepStep);
       pendingScrollToReadingTopRef.current = true;
     };
@@ -608,8 +618,45 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setIsStartingSession(false);
     setPendingQuickStep(null);
     setHasStartedQuick(false);
+    setIsQuickDone(false);
     pendingScrollToReadingTopRef.current = true;
-    syncUrlHistory({ mode: "quick", startedQuick: false, deepStep: 0 });
+    syncUrlHistory({
+      mode: "quick",
+      startedQuick: false,
+      quickDone: false,
+      deepStep: 0,
+    });
+  };
+
+  const handleQuickComplete = () => {
+    markCompleted(book.slug);
+    transitionAfterFadeOut(() => {
+      setIsStartingSession(false);
+      setPendingQuickStep(null);
+      setIsQuickDone(true);
+      pendingScrollToReadingTopRef.current = true;
+      syncUrlHistory({
+        mode: "quick",
+        startedQuick: true,
+        quickDone: true,
+        deepStep: 0,
+      });
+    });
+  };
+
+  const backToQuickReading = () => {
+    transitionAfterFadeOut(() => {
+      setIsStartingSession(false);
+      setPendingQuickStep(null);
+      setIsQuickDone(false);
+      pendingScrollToReadingTopRef.current = true;
+      syncUrlHistory({
+        mode: "quick",
+        startedQuick: true,
+        quickDone: false,
+        deepStep: 0,
+      });
+    });
   };
 
   const handleModeChange = (nextMode: "quick" | "deep") => {
@@ -619,29 +666,42 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
     if (nextMode === "quick") {
       let nextStartedQuick = false;
+      let nextQuickDone = false;
       if (activeTakeaway) {
         nextStartedQuick = true;
         pendingScrollTargetRef.current = `poin-${activeTakeaway.number}`;
         setPendingQuickStep(clampedDeepStep);
-      } else if (clampedDeepStep >= conclusionStep) {
+      } else if (clampedDeepStep === conclusionStep) {
         nextStartedQuick = true;
         pendingScrollTargetRef.current = "kesimpulan-akhir";
         setPendingQuickStep(conclusionStep);
+      } else if (clampedDeepStep === finalStep) {
+        nextStartedQuick = true;
+        nextQuickDone = true;
+        pendingScrollToReadingTopRef.current = true;
+        setPendingQuickStep(null);
       } else {
         setPendingQuickStep(0);
       }
       setHasStartedQuick(nextStartedQuick);
+      setIsQuickDone(nextQuickDone);
       setReadMode("quick");
       syncUrlHistory({
         mode: "quick",
         startedQuick: nextStartedQuick,
+        quickDone: nextQuickDone,
         deepStep: 0,
       });
       return;
     }
 
-    const targetStep = hasStartedQuick ? detectActiveQuickStep() : 0;
+    const targetStep = isQuickDone
+      ? finalStep
+      : hasStartedQuick
+        ? detectActiveQuickStep()
+        : 0;
     setPendingQuickStep(null);
+    setIsQuickDone(false);
     setDeepStep(targetStep);
     if (targetStep > 0) {
       pendingScrollToReadingTopRef.current = true;
@@ -678,6 +738,96 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           ? `Poin Inti ${nextTakeaway.number}`
           : "Kesimpulan Akhir";
   const nextTitle = nextTakeaway?.title ?? null;
+
+  const penutupExplorerContent = (
+    <>
+      <MarkCompletedSection
+        isCompleted={completed}
+        onMarkCompleted={handleMarkCompleted}
+        onRequestUnmark={() => setIsUnmarkConfirmOpen(true)}
+        fs={fs}
+      />
+
+      {/* Tab Eksplorasi Penutup: Konsep Kunci, Kutipan, & Opini */}
+      <div className="mt-8">
+        <div
+          role="tablist"
+          aria-label="Eksplorasi setelah membaca"
+          className="grid grid-cols-3 gap-1.5 rounded-2xl border border-line bg-surface-subtle p-1.5"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={penutupTab === "concepts"}
+            onClick={() => setPenutupTab("concepts")}
+            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
+              penutupTab === "concepts"
+                ? "bg-surface text-ink shadow-sm"
+                : "text-ink-muted hover:text-ink"
+            }`}
+          >
+            <Layers className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+            <span className="truncate">
+              Konsep ({book.keyConcepts.length})
+            </span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={penutupTab === "quotes"}
+            onClick={() => setPenutupTab("quotes")}
+            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
+              penutupTab === "quotes"
+                ? "bg-surface text-ink shadow-sm"
+                : "text-ink-muted hover:text-ink"
+            }`}
+          >
+            <Quote className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+            <span className="truncate">
+              Kutipan ({book.quotes.length})
+            </span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={penutupTab === "opinions"}
+            onClick={() => setPenutupTab("opinions")}
+            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
+              penutupTab === "opinions"
+                ? "bg-surface text-ink shadow-sm"
+                : "text-ink-muted hover:text-ink"
+            }`}
+          >
+            <MessageSquare className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+            <span className="truncate">Opini</span>
+          </button>
+        </div>
+
+        <div role="tabpanel">
+          {penutupTab === "concepts" ? (
+            <KeyConceptsSection
+              keyConcepts={book.keyConcepts}
+              fs={fs}
+              articleTerms={ARTICLE_TERMS}
+              onSelectArticleTerm={setActiveArticleTerm}
+            />
+          ) : penutupTab === "quotes" ? (
+            <QuotesSection
+              quotes={book.quotes}
+              copyFeedback={copyFeedback}
+              onCopyQuote={handleCopyQuote}
+              onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
+              fs={fs}
+            />
+          ) : (
+            <BookOpinionsSection bookSlug={book.slug} />
+          )}
+        </div>
+      </div>
+
+      <RelatedBooksSection relatedBooks={recommendedBooks} />
+    </>
+  );
 
   return (
     <div className="flex min-h-screen flex-col bg-page">
@@ -957,90 +1107,116 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               />
             </div>
           ) : readMode === "quick" ? (
-            /* MODE KILAT: Halaman Baca Vertikal Penuh (setelah Mulai) */
-            <div
-              className={
-                isStartingSession
-                  ? "animate-reader-start-fade-in"
-                  : "animate-reader-fade-in"
-              }
-              key="quick-reading-view"
-            >
-                {/* Bar Navigasi Atas Mode Kilat */}
-                <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
-                  <button
-                    type="button"
-                    onClick={backToQuickIntro}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
-                  >
-                    <List className="h-4 w-4" />
-                    <span>Daftar Poin</span>
-                  </button>
+            isQuickDone ? (
+              /* MODE KILAT: Halaman Penutup (setelah tombol Selesai) */
+              <div
+                className={`transition-opacity duration-200 ease-out ${
+                  isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
+                }`}
+              >
+                <div className="animate-reader-fade-in" key="quick-done-view">
+                  <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
+                    <button
+                      type="button"
+                      onClick={backToQuickReading}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      <span>Kembali ke Bacaan</span>
+                    </button>
 
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
-                    <Zap className="h-3.5 w-3.5" />
-                    <span>Mode Kilat • {book.keyTakeaways.length} Poin Inti</span>
-                  </span>
+                    <button
+                      type="button"
+                      onClick={backToQuickIntro}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-text transition hover:underline"
+                    >
+                      <span>Pengantar</span>
+                      <RotateCcw className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+
+                  {penutupExplorerContent}
                 </div>
+              </div>
+            ) : (
+              /* MODE KILAT: Halaman Baca Vertikal Penuh (setelah Mulai) */
+              <div
+                className={`transition-opacity duration-200 ease-out ${
+                  isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
+                }`}
+              >
+                <div
+                  className={
+                    isStartingSession
+                      ? "animate-reader-start-fade-in"
+                      : "animate-reader-fade-in"
+                  }
+                  key="quick-reading-view"
+                >
+                  {/* Bar Navigasi Atas Mode Kilat */}
+                  <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
+                    <button
+                      type="button"
+                      onClick={backToQuickIntro}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
+                    >
+                      <List className="h-4 w-4" />
+                      <span>Daftar Poin</span>
+                    </button>
 
-                <div className="space-y-6">
-                  {book.keyTakeaways.map((takeaway, idx) => (
-                    <TakeawayCard
-                      key={takeaway.number}
-                      takeaway={takeaway}
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                      <Zap className="h-3.5 w-3.5" />
+                      <span>Mode Kilat • {book.keyTakeaways.length} Poin Inti</span>
+                    </span>
+                  </div>
+
+                  <div className="space-y-6">
+                    {book.keyTakeaways.map((takeaway, idx) => (
+                      <TakeawayCard
+                        key={takeaway.number}
+                        takeaway={takeaway}
+                        fs={fs}
+                        showDeepContent={false}
+                        scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                        onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
+                        articleTerms={ARTICLE_TERMS}
+                        onSelectArticleTerm={setActiveArticleTerm}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="mt-8">
+                    <ConclusionSection
+                      conclusion={book.conclusion}
                       fs={fs}
-                      showDeepContent={false}
                       scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
-                      onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
                       articleTerms={ARTICLE_TERMS}
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
-                  ))}
-                </div>
+                  </div>
 
-                <div className="mt-8">
-                  <ConclusionSection
-                    conclusion={book.conclusion}
-                    fs={fs}
-                    scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
-                    articleTerms={ARTICLE_TERMS}
-                    onSelectArticleTerm={setActiveArticleTerm}
-                  />
-                </div>
+                  <div className="mt-6 flex items-center justify-between gap-3">
+                    <button
+                      type="button"
+                      onClick={backToQuickIntro}
+                      className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-page active:scale-[0.98]"
+                    >
+                      <RotateCcw className="h-4 w-4 shrink-0 text-ink-muted" />
+                      <span>Pengantar</span>
+                    </button>
 
-                <MarkCompletedSection
-                  isCompleted={completed}
-                  onMarkCompleted={handleMarkCompleted}
-                  onRequestUnmark={() => setIsUnmarkConfirmOpen(true)}
-                  fs={fs}
-                />
-
-                <KeyConceptsSection
-                  keyConcepts={book.keyConcepts}
-                  fs={fs}
-                  articleTerms={ARTICLE_TERMS}
-                  onSelectArticleTerm={setActiveArticleTerm}
-                />
-
-                <QuotesSection
-                  quotes={book.quotes}
-                  copyFeedback={copyFeedback}
-                  onCopyQuote={handleCopyQuote}
-                  onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
-                  fs={fs}
-                />
-
-                <div className="mt-6 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={backToQuickIntro}
-                    className="inline-flex items-center gap-2 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2 text-xs font-semibold text-accent-text shadow-sm transition hover:bg-accent-tint active:scale-[0.98]"
-                  >
-                    <span>Kembali ke Pengantar</span>
-                    <RotateCcw className="h-4 w-4 shrink-0" />
-                  </button>
+                    <button
+                      type="button"
+                      onClick={handleQuickComplete}
+                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
+                    >
+                      <span>Selesai</span>
+                      <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    </button>
+                  </div>
                 </div>
               </div>
+            )
           ) : (
             /* MODE MENDALAM: Alur Halaman Per Halaman (Poin Inti 1..N -> Penutup) */
             <div
@@ -1075,107 +1251,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
                   ) : (
-                    <>
-                      <MarkCompletedSection
-                        isCompleted={completed}
-                        onMarkCompleted={handleMarkCompleted}
-                        onRequestUnmark={() => setIsUnmarkConfirmOpen(true)}
-                        fs={fs}
-                      />
-
-                      {/* Tab Eksplorasi Penutup: Konsep Kunci, Kutipan, & Opini */}
-                      <div className="mt-8">
-                        <div
-                          role="tablist"
-                          aria-label="Eksplorasi setelah membaca"
-                          className="grid grid-cols-3 gap-1.5 rounded-2xl border border-line bg-surface-subtle p-1.5"
-                        >
-                          <button
-                            type="button"
-                            role="tab"
-                            aria-selected={penutupTab === "concepts"}
-                            onClick={() => setPenutupTab("concepts")}
-                            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
-                              penutupTab === "concepts"
-                                ? "bg-surface text-ink shadow-sm"
-                                : "text-ink-muted hover:text-ink"
-                            }`}
-                          >
-                            <Layers className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-                            <span className="truncate">
-                              Konsep ({book.keyConcepts.length})
-                            </span>
-                          </button>
-                          <button
-                            type="button"
-                            role="tab"
-                            aria-selected={penutupTab === "quotes"}
-                            onClick={() => setPenutupTab("quotes")}
-                            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
-                              penutupTab === "quotes"
-                                ? "bg-surface text-ink shadow-sm"
-                                : "text-ink-muted hover:text-ink"
-                            }`}
-                          >
-                            <Quote className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-                            <span className="truncate">
-                              Kutipan ({book.quotes.length})
-                            </span>
-                          </button>
-                          <button
-                            type="button"
-                            role="tab"
-                            aria-selected={penutupTab === "opinions"}
-                            onClick={() => setPenutupTab("opinions")}
-                            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
-                              penutupTab === "opinions"
-                                ? "bg-surface text-ink shadow-sm"
-                                : "text-ink-muted hover:text-ink"
-                            }`}
-                          >
-                            <MessageSquare className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-                            <span className="truncate">Opini</span>
-                          </button>
-                        </div>
-
-                        <div role="tabpanel">
-                          {penutupTab === "concepts" ? (
-                            <KeyConceptsSection
-                              keyConcepts={book.keyConcepts}
-                              fs={fs}
-                              articleTerms={ARTICLE_TERMS}
-                              onSelectArticleTerm={setActiveArticleTerm}
-                            />
-                          ) : penutupTab === "quotes" ? (
-                            <QuotesSection
-                              quotes={book.quotes}
-                              copyFeedback={copyFeedback}
-                              onCopyQuote={handleCopyQuote}
-                              onOpenQuoteCard={(quote) =>
-                                setActiveQuoteForCard(quote)
-                              }
-                              fs={fs}
-                            />
-                          ) : (
-                            <BookOpinionsSection bookSlug={book.slug} />
-                          )}
-                        </div>
-                      </div>
-
-                      <RelatedBooksSection relatedBooks={recommendedBooks} />
-                    </>
+                    penutupExplorerContent
                   )}
               </div>
             </div>
           )}
         </div>
-
-        {readMode === "quick" && hasStartedQuick && (
-          <>
-            <BookOpinionsSection bookSlug={book.slug} />
-            <RelatedBooksSection relatedBooks={recommendedBooks} />
-          </>
-        )}
       </main>
 
       {showFooter && <Footer />}
