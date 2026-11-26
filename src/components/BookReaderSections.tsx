@@ -471,83 +471,65 @@ interface KeyConceptsSectionProps {
   onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
 
-/** Daftar kartu Konsep Kunci sebagai rangkuman gagasan utama buku (accordion). */
+/** Daftar kartu Konsep Kunci sebagai rangkuman gagasan utama buku. */
 export function KeyConceptsSection({
   keyConcepts,
   fs,
   articleTerms = [],
   onSelectArticleTerm,
 }: KeyConceptsSectionProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const conceptsMatched = new Set<string>();
 
   return (
     <section className="rounded-b-2xl border border-line bg-surface shadow-sm overflow-hidden">
-      <button
-        type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        aria-expanded={isOpen}
-        aria-controls="key-concepts-content"
-        className="flex w-full items-center justify-between gap-4 p-6 sm:p-8 text-left transition-colors hover:bg-page/50"
-      >
-        <div className="min-w-0">
-          <div className="flex items-center gap-2 text-ink">
-            <Layers className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
-            <h2 className="text-base font-extrabold text-ink sm:text-lg">
-              Konsep Kunci ({keyConcepts.length})
-            </h2>
-          </div>
+      <div className="px-6 py-5 sm:px-8 sm:py-6">
+        <div className="flex items-center gap-2 text-ink">
+          <Layers className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
+          <h2 className="text-base font-extrabold text-ink sm:text-lg">
+            Konsep Kunci ({keyConcepts.length})
+          </h2>
         </div>
-        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-page text-ink-muted transition-colors">
-          <ChevronDown
-            className={`h-5 w-5 transition-transform duration-200 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-          />
-        </span>
-      </button>
+      </div>
 
-      {isOpen && (
-        <div
-          id="key-concepts-content"
-          className="border-t border-line/70 px-6 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6"
-        >
-          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-            {keyConcepts.map((concept, idx) => (
-              <div
-                key={idx}
-                className="rounded-xl border border-line bg-page/70 p-4 sm:p-5 transition-colors hover:border-accent-line"
-              >
-                <div className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-xs font-bold text-white">
-                    {idx + 1}
-                  </span>
-                  <div className="min-w-0">
-                    <h3 className={`${fs.lead} font-extrabold text-ink`}>
-                      <RichBookText
-                        text={concept.title}
-                        terms={articleTerms}
-                        onSelectTerm={onSelectArticleTerm}
-                        matchedSlugs={conceptsMatched}
-                      />
-                    </h3>
-                    <p
-                      className={`mt-1.5 ${fs.compact} leading-relaxed text-ink-secondary`}
-                    >
-                      <RichBookText
-                        text={concept.explanation}
-                        terms={articleTerms}
-                        onSelectTerm={onSelectArticleTerm}
-                        matchedSlugs={conceptsMatched}
-                      />
-                    </p>
-                  </div>
+      <div
+        id="key-concepts-content"
+        className="border-t border-line/70 px-6 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6"
+      >
+        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+          {keyConcepts.map((concept, idx) => (
+            <div
+              key={idx}
+              className="rounded-xl border border-line bg-page/70 p-4 sm:p-5 transition-colors hover:border-accent-line"
+            >
+              <div className="flex items-start gap-3">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-xs font-bold text-white">
+                  {idx + 1}
+                </span>
+                <div className="min-w-0">
+                  <h3 className={`${fs.lead} font-extrabold text-ink`}>
+                    <RichBookText
+                      text={concept.title}
+                      terms={articleTerms}
+                      onSelectTerm={onSelectArticleTerm}
+                      matchedSlugs={conceptsMatched}
+                    />
+                  </h3>
+                  <p
+                    className={`mt-1.5 ${fs.compact} leading-relaxed text-ink-secondary`}
+                  >
+                    <RichBookText
+                      text={concept.explanation}
+                      terms={articleTerms}
+                      onSelectTerm={onSelectArticleTerm}
+                      matchedSlugs={conceptsMatched}
+                    />
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
     </section>
   );
 }
@@ -560,7 +542,7 @@ interface QuotesSectionProps {
   fs: FontScale;
 }
 
-/** Daftar kutipan berkesan dengan tombol salin dan buat kartu PNG (accordion). */
+/** Daftar kutipan pilihan dengan tombol salin dan buat kartu PNG. */
 export function QuotesSection({
   quotes,
   copyFeedback,
@@ -568,92 +550,73 @@ export function QuotesSection({
   onOpenQuoteCard,
   fs,
 }: QuotesSectionProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <section className="rounded-b-2xl border border-line bg-surface shadow-sm overflow-hidden">
-      <button
-        type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        aria-expanded={isOpen}
-        aria-controls="quotes-section-content"
-        className="flex w-full items-center justify-between gap-4 p-6 sm:p-8 text-left transition-colors hover:bg-page/50"
+      <div className="px-6 py-5 sm:px-8 sm:py-6">
+        <div className="flex items-center gap-2 text-ink">
+          <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
+          <h2 className="text-base font-extrabold text-ink sm:text-lg">
+            Kutipan Pilihan ({quotes.length})
+          </h2>
+        </div>
+      </div>
+
+      <div
+        id="quotes-section-content"
+        className="border-t border-line/70 px-6 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6"
       >
-        <div className="min-w-0">
-          <div className="flex items-center gap-2 text-ink">
-            <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
-            <h2 className="text-base font-extrabold text-ink sm:text-lg">
-              Kutipan Pilihan ({quotes.length})
-            </h2>
-          </div>
-        </div>
-        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-page text-ink-muted transition-colors">
-          <ChevronDown
-            className={`h-5 w-5 transition-transform duration-200 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-          />
-        </span>
-      </button>
-
-      {isOpen && (
-        <div
-          id="quotes-section-content"
-          className="border-t border-line/70 px-6 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6"
-        >
-          <div className="grid grid-cols-1 gap-4">
-            {quotes.map((quote, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col justify-between gap-4 rounded-xl border border-line-subtle bg-page p-5 sm:flex-row sm:items-center"
+        <div className="grid grid-cols-1 gap-4">
+          {quotes.map((quote, idx) => (
+            <div
+              key={idx}
+              className="flex flex-col justify-between gap-4 rounded-xl border border-line-subtle bg-page p-5 sm:flex-row sm:items-center"
+            >
+              <blockquote
+                className={`${fs.lead} font-semibold italic text-ink`}
               >
-                <blockquote
-                  className={`${fs.lead} font-semibold italic text-ink`}
+                &ldquo;{quote}&rdquo;
+              </blockquote>
+              <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:self-center">
+                <button
+                  type="button"
+                  onClick={() => onCopyQuote(quote, idx)}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
                 >
-                  &ldquo;{quote}&rdquo;
-                </blockquote>
-                <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:self-center">
-                  <button
-                    type="button"
-                    onClick={() => onCopyQuote(quote, idx)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
-                  >
-                    {copyFeedback?.index === idx &&
-                    copyFeedback.status === "success" ? (
-                      <>
-                        <Check className="h-3.5 w-3.5 text-accent-strong" />
-                        <span className="text-accent-text">Tersalin!</span>
-                      </>
-                    ) : copyFeedback?.index === idx &&
-                      copyFeedback.status === "error" ? (
-                      <>
-                        <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
-                        <span className="text-rose-600 dark:text-rose-400">
-                          Gagal menyalin
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-3.5 w-3.5" />
-                        <span>Salin Kutipan</span>
-                      </>
-                    )}
-                  </button>
+                  {copyFeedback?.index === idx &&
+                  copyFeedback.status === "success" ? (
+                    <>
+                      <Check className="h-3.5 w-3.5 text-accent-strong" />
+                      <span className="text-accent-text">Tersalin!</span>
+                    </>
+                  ) : copyFeedback?.index === idx &&
+                    copyFeedback.status === "error" ? (
+                    <>
+                      <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
+                      <span className="text-rose-600 dark:text-rose-400">
+                        Gagal menyalin
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3.5 w-3.5" />
+                      <span>Salin Kutipan</span>
+                    </>
+                  )}
+                </button>
 
-                  <button
-                    type="button"
-                    onClick={() => onOpenQuoteCard(quote)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
-                  >
-                    <ImageDown className="h-3.5 w-3.5" />
-                    <span>Buat Kartu</span>
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => onOpenQuoteCard(quote)}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
+                >
+                  <ImageDown className="h-3.5 w-3.5" />
+                  <span>Buat Kartu</span>
+                </button>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
     </section>
   );
 }
