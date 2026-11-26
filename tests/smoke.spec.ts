@@ -174,14 +174,22 @@ test.describe("Ringkasnya Smoke Tests", () => {
     // Mulai membaca Mode Kilat agar Poin Inti, Kesimpulan, Konsep Kunci, dan Kutipan tampil
     await page.getByRole("button", { name: "Mulai" }).click();
 
-    // Bagian Konsep Kunci tampil menggantikan Action Checklist
-    await expect(
-      page.getByRole("heading", {
-        name: "Gagasan Utama yang Perlu Dibawa Pulang",
-      })
-    ).toBeVisible();
+    // Bagian Konsep Kunci tampil (accordion) & bisa dibuka
+    const conceptsAccordion = page.getByRole("button", {
+      name: /Gagasan Utama yang Perlu Dibawa Pulang/i,
+    });
+    await expect(conceptsAccordion).toBeVisible();
+    await expect(conceptsAccordion).toHaveAttribute("aria-expanded", "false");
+    await conceptsAccordion.click();
+    await expect(conceptsAccordion).toHaveAttribute("aria-expanded", "true");
 
-    // Salin kutipan
+    // Buka accordion Kutipan Berkesan lalu salin kutipan
+    const quotesAccordion = page.getByRole("button", {
+      name: /Kutipan Berkesan/i,
+    });
+    await quotesAccordion.click();
+    await expect(quotesAccordion).toHaveAttribute("aria-expanded", "true");
+
     const copyBtn = page
       .getByRole("button", { name: "Salin Kutipan" })
       .first();
@@ -224,7 +232,13 @@ test.describe("Ringkasnya Smoke Tests", () => {
     // Klik Mulai untuk membuka konten Mode Kilat
     await page.getByRole("button", { name: "Mulai" }).click();
 
-    // 2. Buat Kartu Kutipan PNG
+    // 2. Buat Kartu Kutipan PNG (buka accordion Kutipan Berkesan terlebih dahulu)
+    const quotesAccordion = page.getByRole("button", {
+      name: /Kutipan Berkesan/i,
+    });
+    await quotesAccordion.scrollIntoViewIfNeeded();
+    await quotesAccordion.click();
+
     const createCardBtn = page
       .getByRole("button", { name: "Buat Kartu" })
       .first();

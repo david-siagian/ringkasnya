@@ -165,7 +165,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const pendingScrollToReadingTopRef = useRef(false);
   const pendingQuickStepRef = useRef<number | null>(null);
   const pendingQuickStepTimerRef = useRef<number | undefined>(undefined);
-  const wasAtCompletionEndRef = useRef(false);
 
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const { isCompleted, markCompleted, unmarkCompleted } = useCompletedBooks();
@@ -219,7 +218,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setActiveArticleTerm(null);
     pendingQuickStepRef.current = null;
     window.clearTimeout(pendingQuickStepTimerRef.current);
-    wasAtCompletionEndRef.current = false;
   }, [book.slug, finalStep, cancelViewExit]);
 
   // Pulihkan state reader saat tombol Back/Forward browser ditekan
@@ -244,25 +242,16 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [finalStep, cancelViewExit]);
 
-  // Tandai buku selesai dibaca otomatis hanya saat transisi baru mencapai bagian akhir
-  useEffect(() => {
-    const isAtCompletionEnd =
-      (readMode === "deep" && clampedDeepStep === finalStep) ||
-      (readMode === "quick" && hasStartedQuick && scrollProgress >= 90);
-
-    if (isAtCompletionEnd && !wasAtCompletionEndRef.current) {
-      markCompleted(book.slug);
-    }
-    wasAtCompletionEndRef.current = isAtCompletionEnd;
-  }, [
-    readMode,
-    hasStartedQuick,
-    clampedDeepStep,
-    finalStep,
-    scrollProgress,
-    book.slug,
-    markCompleted,
-  ]);
+  const handleMarkCompleted = useCallback(() => {
+    markCompleted(book.slug);
+    setUnmarkToastMessage(
+      `Buku "${book.title}" ditandai selesai dibaca.`
+    );
+    window.clearTimeout(unmarkToastTimerRef.current);
+    unmarkToastTimerRef.current = window.setTimeout(() => {
+      setUnmarkToastMessage(null);
+    }, 3000);
+  }, [book.slug, book.title, markCompleted]);
 
   // Sinkronkan tinggi toolbar sticky (bisa 2 baris di mobile) ke CSS var `--reader-toolbar-h`
   useEffect(() => {
@@ -879,6 +868,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
                     articleTerms={ARTICLE_TERMS}
                     onSelectArticleTerm={setActiveArticleTerm}
+                    isCompleted={completed}
+                    onMarkCompleted={handleMarkCompleted}
                   />
                 </div>
 
@@ -958,6 +949,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                         fs={fs}
                         articleTerms={ARTICLE_TERMS}
                         onSelectArticleTerm={setActiveArticleTerm}
+                        isCompleted={completed}
+                        onMarkCompleted={handleMarkCompleted}
                       />
                       <KeyConceptsSection
                         keyConcepts={book.keyConcepts}
