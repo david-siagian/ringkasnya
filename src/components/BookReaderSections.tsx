@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { BookCatalogItem, BookSummary } from "@/types/book";
 import type { ArticleTermEntry } from "@/types/article";
 import { RichBookText } from "./RichBookText";
@@ -781,10 +782,15 @@ export function DeepReadingBottomBar({
   nextTitle,
   onSelectStep,
 }: DeepReadingBottomBarProps) {
+  const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const totalTakeaways = keyTakeaways.length;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setIsOpen(false);
@@ -838,7 +844,9 @@ export function DeepReadingBottomBar({
     onSelectStep(step);
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 backdrop-blur-md shadow-[0_-4px_20px_-6px_rgba(0,0,0,0.08)] dark:shadow-[0_-4px_20px_-6px_rgba(0,0,0,0.35)] pb-[env(safe-area-inset-bottom)]"
     >
@@ -1020,6 +1028,7 @@ export function DeepReadingBottomBar({
           </button>
         )}
       </nav>
-    </div>
+    </div>,
+    document.body
   );
 }
