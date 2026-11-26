@@ -185,6 +185,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const isIntroView =
     (readMode === "quick" && !hasStartedQuick) ||
     (readMode === "deep" && clampedDeepStep === 0);
+  const isEndOfBookView =
+    readMode === "quick" ? hasStartedQuick : clampedDeepStep === finalStep;
+  const showFooter = isIntroView || isEndOfBookView;
 
   const readingProgress =
     readMode === "deep"
@@ -1040,7 +1043,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           )}
         </div>
 
-        {(readMode === "quick" ? hasStartedQuick : clampedDeepStep === finalStep) && (
+        {isEndOfBookView && (
           <>
             <BookOpinionsSection bookSlug={book.slug} />
             <RelatedBooksSection relatedBooks={recommendedBooks} />
@@ -1048,7 +1051,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         )}
       </main>
 
-      {isIntroView && <Footer />}
+      {showFooter && <Footer />}
 
       <QuickKeyConceptsModal
         open={isConceptsModalOpen}
