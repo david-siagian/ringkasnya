@@ -181,17 +181,6 @@ export function IntroSection({
               Pilih cara baca untuk memulai:
             </p>
             <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
-              {onStartDeepReading && (
-                <button
-                  type="button"
-                  onClick={onStartDeepReading}
-                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  <span>Mulai Baca Mendalam ({book.readingTimeMinutes} mnt)</span>
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              )}
               {onStartQuickReading && (
                 <button
                   type="button"
@@ -200,6 +189,17 @@ export function IntroSection({
                 >
                   <Zap className="h-4 w-4" />
                   <span>Mulai Baca Kilat ({book.quickTimeMinutes} mnt)</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              )}
+              {onStartDeepReading && (
+                <button
+                  type="button"
+                  onClick={onStartDeepReading}
+                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  <span>Mulai Baca Mendalam ({book.readingTimeMinutes} mnt)</span>
                   <ArrowRight className="h-4 w-4" />
                 </button>
               )}

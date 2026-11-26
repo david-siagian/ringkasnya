@@ -163,9 +163,10 @@ test.describe("Ringkasnya Smoke Tests", () => {
       page.getByRole("heading", { name: /Sapiens/i })
     ).toBeVisible();
 
-    // Di halaman pengantar, toggle Kilat/Mendalam di toolbar disembunyikan dan diganti 2 tombol mulai
+    // Di halaman pengantar, toolbar (toggle Kilat/Mendalam & kontrol ukuran huruf) disembunyikan
     await expect(page.getByRole("button", { name: /^Kilat \(/i })).toHaveCount(0);
     await expect(page.getByRole("button", { name: /^Mendalam \(/i })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "A+", exact: true })).toHaveCount(0);
 
     // Mulai membaca Mode Kilat dari halaman pengantar
     await page.getByRole("button", { name: /Mulai Baca Kilat/i }).click();
@@ -227,14 +228,14 @@ test.describe("Ringkasnya Smoke Tests", () => {
     await page.goto("/buku/sapiens");
     await waitForAstroIslands(page);
 
-    // 1. Reading Progress Bar
+    // Klik Mulai Baca Kilat untuk membuka konten Mode Kilat
+    await page.getByRole("button", { name: /Mulai Baca Kilat/i }).click();
+
+    // 1. Reading Progress Bar tampil saat sudah masuk poin bacaan
     const progressBar = page.getByRole("progressbar", {
       name: "Progres membaca",
     });
     await expect(progressBar).toBeVisible();
-
-    // Klik Mulai Baca Kilat untuk membuka konten Mode Kilat
-    await page.getByRole("button", { name: /Mulai Baca Kilat/i }).click();
 
     // 2. Buat Kartu Kutipan PNG (buka accordion Kutipan Berkesan terlebih dahulu)
     const quotesAccordion = page.getByRole("button", {
