@@ -478,19 +478,12 @@ export function KeyConceptsSection({
         className="flex w-full items-center justify-between gap-4 p-6 sm:p-8 text-left transition-colors hover:bg-page/50"
       >
         <div className="min-w-0">
-          <div className="inline-flex items-center gap-2 text-accent-text">
+          <div className="inline-flex items-center gap-2.5 text-accent-text">
             <Layers className="h-5 w-5 shrink-0" />
-            <span className={`${fs.label} font-bold uppercase tracking-wider`}>
+            <h2 className={`${fs.blockHeading} font-bold uppercase tracking-wider`}>
               Konsep Kunci ({keyConcepts.length})
-            </span>
+            </h2>
           </div>
-          <h2 className={`mt-1 ${fs.blockHeading} font-extrabold text-ink`}>
-            Gagasan Utama yang Perlu Dibawa Pulang
-          </h2>
-          <p className={`mt-1 ${fs.subtext} text-ink-muted`}>
-            Rangkuman konsep inti dari buku ini dalam bahasa yang ringkas agar
-            mudah diingat kembali kapan saja.
-          </p>
         </div>
         <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-page text-ink-muted transition-colors">
           <ChevronDown
@@ -574,16 +567,12 @@ export function QuotesSection({
         className="flex w-full items-center justify-between gap-4 p-6 sm:p-8 text-left transition-colors hover:bg-page/50"
       >
         <div className="min-w-0">
-          <div className="flex items-center gap-2 text-ink">
-            <Quote className="h-5 w-5 shrink-0 text-accent-strong" />
-            <h2 className={`${fs.blockHeading} font-extrabold`}>
-              Kutipan Berkesan ({quotes.length})
+          <div className="inline-flex items-center gap-2.5 text-accent-text">
+            <Quote className="h-5 w-5 shrink-0" />
+            <h2 className={`${fs.blockHeading} font-bold uppercase tracking-wider`}>
+              Kutipan Pilihan ({quotes.length})
             </h2>
           </div>
-          <p className={`mt-1 ${fs.subtext} text-ink-subtle`}>
-            Klik tombol salin untuk membagikan kutipan favoritmu ke WhatsApp atau
-            media sosial.
-          </p>
         </div>
         <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-page text-ink-muted transition-colors">
           <ChevronDown
