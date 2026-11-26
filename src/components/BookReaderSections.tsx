@@ -18,6 +18,7 @@ import {
   Quote,
   Sparkles,
   Target,
+  X,
   Zap,
 } from "lucide-react";
 
@@ -372,6 +373,7 @@ export function ConclusionSection({
 interface MarkCompletedSectionProps {
   isCompleted: boolean;
   onMarkCompleted: () => void;
+  onRequestUnmark: () => void;
   fs: FontScale;
 }
 
@@ -379,6 +381,7 @@ interface MarkCompletedSectionProps {
 export function MarkCompletedSection({
   isCompleted,
   onMarkCompleted,
+  onRequestUnmark,
   fs,
 }: MarkCompletedSectionProps) {
   return (
@@ -412,17 +415,24 @@ export function MarkCompletedSection({
           </h3>
           <p className={`mt-1 ${fs.subtext} leading-relaxed text-ink-muted`}>
             {isCompleted
-              ? "Buku ini sudah tercatat di daftar bacaan selesai Anda."
+              ? "Buku ini sudah tercatat di daftar bacaan selesai Anda. Klik tombol untuk membatalkan jika perlu."
               : "Tandai buku ini selesai dibaca agar progres bacaan Anda tercatat rapi."}
           </p>
         </div>
       </div>
 
       {isCompleted ? (
-        <span className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-5 py-3 text-sm font-bold text-emerald-700 dark:text-emerald-300 sm:w-auto">
+        <button
+          type="button"
+          onClick={onRequestUnmark}
+          title="Klik untuk hapus tanda selesai dibaca"
+          aria-label="Hapus tanda selesai dibaca"
+          className="group inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-5 py-3 text-sm font-bold text-emerald-700 transition hover:bg-emerald-500/25 active:scale-[0.98] dark:text-emerald-300 sm:w-auto"
+        >
           <CheckCircle2 className="h-5 w-5 shrink-0" />
           <span>Sudah Selesai Dibaca</span>
-        </span>
+          <X className="h-4 w-4 shrink-0 opacity-75 transition group-hover:opacity-100" />
+        </button>
       ) : (
         <button
           type="button"

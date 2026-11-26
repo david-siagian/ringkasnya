@@ -875,6 +875,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 <MarkCompletedSection
                   isCompleted={completed}
                   onMarkCompleted={handleMarkCompleted}
+                  onRequestUnmark={() => setIsUnmarkConfirmOpen(true)}
                   fs={fs}
                 />
 
@@ -958,6 +959,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       <MarkCompletedSection
                         isCompleted={completed}
                         onMarkCompleted={handleMarkCompleted}
+                        onRequestUnmark={() => setIsUnmarkConfirmOpen(true)}
                         fs={fs}
                       />
                       <KeyConceptsSection
