@@ -734,7 +734,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       <div
         role="tablist"
         aria-label="Eksplorasi setelah membaca"
-        className="grid grid-cols-3 gap-1.5 rounded-2xl border border-line bg-surface-subtle p-1.5"
+        className="grid grid-cols-3 gap-1.5 rounded-t-2xl border border-b-0 border-line bg-surface-subtle p-1.5"
       >
         <button
           type="button"

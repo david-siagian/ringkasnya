@@ -469,7 +469,7 @@ export function KeyConceptsSection({
   const conceptsMatched = new Set<string>();
 
   return (
-    <section className="mt-8 rounded-2xl border-2 border-accent-line/70 bg-surface shadow-sm overflow-hidden">
+    <section className="rounded-b-2xl border border-line bg-surface shadow-sm overflow-hidden">
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -479,8 +479,8 @@ export function KeyConceptsSection({
       >
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-ink">
-            <Layers className="h-5 w-5 shrink-0 text-accent-strong" />
-            <h2 className={`${fs.sectionHeading} font-extrabold`}>
+            <Layers className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
+            <h2 className="text-base font-extrabold text-ink sm:text-lg">
               Konsep Kunci ({keyConcepts.length})
             </h2>
           </div>
@@ -558,7 +558,7 @@ export function QuotesSection({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="mt-8 rounded-2xl border border-line bg-surface shadow-sm overflow-hidden">
+    <section className="rounded-b-2xl border border-line bg-surface shadow-sm overflow-hidden">
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -568,8 +568,8 @@ export function QuotesSection({
       >
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-ink">
-            <Quote className="h-5 w-5 shrink-0 text-accent-strong" />
-            <h2 className={`${fs.sectionHeading} font-extrabold`}>
+            <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
+            <h2 className="text-base font-extrabold text-ink sm:text-lg">
               Kutipan Pilihan ({quotes.length})
             </h2>
           </div>
