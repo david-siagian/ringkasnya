@@ -18,10 +18,6 @@ import {
 export const prerender = false;
 
 const bookCatalog = await getBookCatalog(Astro.locals.runtime?.env?.DB);
-const minQuickMinutes =
-  bookCatalog.length > 0
-    ? Math.min(...bookCatalog.map((b) => b.quickTimeMinutes))
-    : 5;
 
 Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
 ---
@@ -38,7 +34,7 @@ Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
         <div class="mx-auto max-w-3xl text-center">
           <div class="animate-welcome inline-flex items-center gap-2 rounded-full border border-accent-line bg-accent-soft px-3.5 py-1.5 text-xs font-semibold text-accent-text shadow-sm" style="animation-delay: 120ms;">
             <Sparkles className="h-3.5 w-3.5 text-accent-strong" />
-            <span>Serap Pengetahuan Buku Nonfiksi Dunia Mulai dari {minQuickMinutes} Menit</span>
+            <span>Serap Pengetahuan Buku Nonfiksi Dunia Mulai dari 5 Menit</span>
           </div>
 
           <h1 class="animate-welcome mt-6 text-4xl font-extrabold tracking-tight text-ink sm:text-5xl md:text-6xl" style="animation-delay: 240ms;">
