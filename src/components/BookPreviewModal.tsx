@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { BookCatalogItem } from "@/types/book";
 import { ArrowRight, BookOpen, CheckCircle2, Clock, Target, X, Zap } from "lucide-react";
@@ -13,55 +13,90 @@ export default function BookPreviewModal({
   onClose,
 }: BookPreviewModalProps) {
   const [mounted, setMounted] = useState(false);
+  const onCloseRef = useRef(onClose);
+  const pushedHistoryRef = useRef(false);
+
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const handleClose = useCallback(() => {
+    if (pushedHistoryRef.current) {
+      pushedHistoryRef.current = false;
+      onCloseRef.current();
+      window.history.back();
+      return;
+    }
+    onCloseRef.current();
+  }, []);
+
   useEffect(() => {
-    if (!book) return;
+    if (!book) {
+      pushedHistoryRef.current = false;
+      return;
+    }
+
+    if (!pushedHistoryRef.current) {
+      window.history.pushState(
+        { ...(window.history.state ?? {}), bookPreview: book.slug },
+        ""
+      );
+      pushedHistoryRef.current = true;
+    }
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onClose();
+        handleClose();
+      }
+    };
+
+    const handlePopState = () => {
+      if (pushedHistoryRef.current) {
+        pushedHistoryRef.current = false;
+        onCloseRef.current();
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("popstate", handlePopState);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("popstate", handlePopState);
       document.body.style.overflow = prevOverflow;
     };
-  }, [book, onClose]);
+  }, [book, handleClose]);
 
   if (!mounted || !book) return null;
 
   return createPortal(
     <div
       className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-md dark:bg-black/75"
-      onClick={onClose}
+      onClick={handleClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="preview-book-title"
     >
       <div
-        className="animate-fade-slide relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-surface shadow-2xl ring-1 ring-line"
+        className="animate-fade-slide relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl bg-surface shadow-2xl ring-1 ring-line"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Tombol X di pojok kanan atas card */}
+        {/* Tombol X tetap fixed di pojok kanan atas card */}
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           aria-label="Tutup preview buku"
-          className="absolute right-4 top-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/25 text-white backdrop-blur-sm transition hover:bg-black/45 focus:outline-none focus:ring-2 focus:ring-white/60"
+          className="absolute right-4 top-4 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-900/50 text-white shadow-sm backdrop-blur-md transition hover:bg-slate-900/70 focus:outline-none focus:ring-2 focus:ring-white/70"
         >
           <X className="h-4 w-4" />
         </button>
 
-        {/* Header Preview: Buku beserta background gradasinya */}
+        <div className="overflow-y-auto">
+          {/* Header Preview: Buku beserta background gradasinya */}
         <div
           className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} p-6 sm:p-8 text-white`}
         >
@@ -151,6 +186,7 @@ export default function BookPreviewModal({
               <ArrowRight className="h-4 w-4" />
             </a>
           </div>
+        </div>
         </div>
       </div>
     </div>,
