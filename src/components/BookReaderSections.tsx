@@ -870,12 +870,13 @@ export function DeepReadingBottomBar({
 
         <div ref={containerRef} className="relative min-w-0 flex justify-center">
           {isOpen && (
-            <div
-              role="listbox"
-              aria-label="Daftar halaman Mode Mendalam"
-              className="animate-fade-slide absolute bottom-full left-1/2 mb-3 w-[min(calc(100vw-2rem),22rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
-            >
-              <div className="max-h-72 space-y-0.5 overflow-y-auto pr-0.5">
+            <div className="pointer-events-none fixed inset-x-0 bottom-[4.75rem] z-50 flex justify-center px-4">
+              <div
+                role="listbox"
+                aria-label="Daftar halaman Mode Mendalam"
+                className="pointer-events-auto animate-fade-slide w-full max-w-sm overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
+              >
+                <div className="max-h-[min(60vh,22rem)] space-y-0.5 overflow-y-auto pr-0.5">
                 <button
                   type="button"
                   role="option"
@@ -964,6 +965,7 @@ export function DeepReadingBottomBar({
                     <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
                   )}
                 </button>
+                </div>
               </div>
             </div>
           )}
