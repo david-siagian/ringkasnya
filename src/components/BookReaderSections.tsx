@@ -761,6 +761,7 @@ export function RelatedBooksSection({
 interface DeepReadingBottomBarProps {
   currentStep: number;
   keyTakeaways: BookSummary["keyTakeaways"];
+  conclusionStep: number;
   finalStep: number;
   readingTimeMinutes: number;
   prevLabel: string;
@@ -774,6 +775,7 @@ interface DeepReadingBottomBarProps {
 export function DeepReadingBottomBar({
   currentStep,
   keyTakeaways,
+  conclusionStep,
   finalStep,
   readingTimeMinutes,
   prevLabel,
@@ -941,6 +943,32 @@ export function DeepReadingBottomBar({
                 <button
                   type="button"
                   role="option"
+                  aria-selected={currentStep === conclusionStep}
+                  onClick={() => handleChoose(conclusionStep)}
+                  className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-xs transition ${
+                    currentStep === conclusionStep
+                      ? "bg-accent-soft font-bold text-accent-text"
+                      : "font-medium text-ink-secondary hover:bg-page hover:text-ink"
+                  }`}
+                >
+                  <span
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg ${
+                      currentStep === conclusionStep
+                        ? "bg-emerald-600 text-white"
+                        : "bg-surface-subtle text-ink-muted"
+                    }`}
+                  >
+                    <Lightbulb className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="flex-1 truncate">Kesimpulan Akhir</span>
+                  {currentStep === conclusionStep && (
+                    <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  role="option"
                   aria-selected={currentStep === finalStep}
                   onClick={() => handleChoose(finalStep)}
                   className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-xs transition ${
@@ -959,7 +987,7 @@ export function DeepReadingBottomBar({
                     <Sparkles className="h-3.5 w-3.5" />
                   </span>
                   <span className="flex-1 truncate">
-                    Penutup: Kesimpulan &amp; Konsep
+                    Penutup: Konsep, Kutipan &amp; Opini
                   </span>
                   {currentStep === finalStep && (
                     <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
@@ -979,7 +1007,9 @@ export function DeepReadingBottomBar({
             aria-label={
               activeTakeaway
                 ? `Poin ${activeTakeaway.number} dari ${totalTakeaways}. Ketuk untuk lompat ke poin lain.`
-                : "Kesimpulan Akhir. Ketuk untuk lompat ke poin lain."
+                : currentStep === conclusionStep
+                  ? "Kesimpulan Akhir. Ketuk untuk lompat ke poin lain."
+                  : "Halaman Penutup. Ketuk untuk lompat ke poin lain."
             }
             className="inline-flex flex-col items-center rounded-xl px-2.5 py-1 text-center transition hover:bg-page focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
           >
@@ -989,8 +1019,10 @@ export function DeepReadingBottomBar({
                   <span className="hidden sm:inline">Poin </span>
                   {activeTakeaway.number} / {totalTakeaways}
                 </span>
-              ) : (
+              ) : currentStep === conclusionStep ? (
                 <span>Kesimpulan</span>
+              ) : (
+                <span>Penutup</span>
               )}
               <ChevronUp
                 className={`h-3.5 w-3.5 shrink-0 text-ink-muted transition-transform duration-200 ${
@@ -999,12 +1031,16 @@ export function DeepReadingBottomBar({
               />
             </span>
             <span className="text-[10px] sm:text-[11px] font-medium leading-tight text-ink-subtle">
-              {activeTakeaway ? `~${remainingMinutes} mnt lagi` : "Bagian akhir"}
+              {activeTakeaway
+                ? `~${remainingMinutes} mnt lagi`
+                : currentStep === conclusionStep
+                  ? "Langkah terakhir"
+                  : "Selesai • 100%"}
             </span>
           </button>
         </div>
 
-        {currentStep < finalStep ? (
+        {currentStep < conclusionStep ? (
           <button
             type="button"
             onClick={() => onSelectStep(currentStep + 1)}
@@ -1017,6 +1053,16 @@ export function DeepReadingBottomBar({
           >
             <span>Selanjutnya</span>
             <ArrowRight className="h-4 w-4 shrink-0" />
+          </button>
+        ) : currentStep === conclusionStep ? (
+          <button
+            type="button"
+            onClick={() => onSelectStep(finalStep)}
+            aria-label="Selesai membaca dan tandai buku selesai"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
+          >
+            <span>Selesai</span>
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
           </button>
         ) : (
           <button

@@ -38,8 +38,7 @@ import {
   Clock,
   Layers,
   List,
-  Maximize2,
-  Minimize2,
+  MessageSquare,
   Quote,
   RotateCcw,
   Type,
@@ -157,7 +156,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     useState<ArticleTermEntry | null>(null);
   const [isLeavingView, setIsLeavingView] = useState(false);
   const [isStartingSession, setIsStartingSession] = useState(false);
-  const [isFocusMode, setIsFocusMode] = useState(false);
+  const [penutupTab, setPenutupTab] = useState<"concepts" | "quotes" | "opinions">(
+    "concepts"
+  );
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const viewExitTimerRef = useRef<number | undefined>(undefined);
@@ -185,7 +186,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   ].slice(0, 2);
 
   const totalTakeaways = book.keyTakeaways.length;
-  const finalStep = totalTakeaways + 1;
+  const conclusionStep = totalTakeaways + 1;
+  const finalStep = totalTakeaways + 2;
   const clampedDeepStep = Math.max(0, Math.min(finalStep, deepStep));
   const isIntroView =
     (readMode === "quick" && !hasStartedQuick) ||
@@ -193,7 +195,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const showDeepBottomBar = readMode === "deep" && !isIntroView;
   const isEndOfBookView =
     readMode === "quick" ? hasStartedQuick : clampedDeepStep === finalStep;
-  const showFooter = !isFocusMode && (isIntroView || isEndOfBookView);
+  const showFooter = isIntroView || isEndOfBookView;
 
   const readingProgress =
     readMode === "deep"
@@ -473,12 +475,22 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     (nextStep: number) => {
       const target = Math.max(0, Math.min(finalStep, nextStep));
       if (target === clampedDeepStep) return;
+      if (clampedDeepStep === conclusionStep && target === finalStep) {
+        markCompleted(book.slug);
+      }
       transitionAfterFadeOut(() => {
         setIsStartingSession(false);
         goToDeepStep(target, false);
       });
     },
-    [clampedDeepStep, finalStep, transitionAfterFadeOut]
+    [
+      clampedDeepStep,
+      conclusionStep,
+      finalStep,
+      book.slug,
+      markCompleted,
+      transitionAfterFadeOut,
+    ]
   );
 
   // Navigasi keyboard (ArrowLeft / ArrowRight) di Mode Mendalam
@@ -595,10 +607,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         nextStartedQuick = true;
         pendingScrollTargetRef.current = `poin-${activeTakeaway.number}`;
         setPendingQuickStep(clampedDeepStep);
-      } else if (clampedDeepStep === finalStep) {
+      } else if (clampedDeepStep >= conclusionStep) {
         nextStartedQuick = true;
         pendingScrollTargetRef.current = "kesimpulan-akhir";
-        setPendingQuickStep(finalStep);
+        setPendingQuickStep(conclusionStep);
       } else {
         setPendingQuickStep(0);
       }
@@ -625,7 +637,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const fs = FONT_SCALES[fontSize];
 
   const prevTakeaway =
-    clampedDeepStep >= 2
+    clampedDeepStep >= 2 && clampedDeepStep <= conclusionStep
       ? book.keyTakeaways[clampedDeepStep - 2] ?? null
       : null;
   const nextTakeaway =
@@ -633,20 +645,28 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       ? book.keyTakeaways[clampedDeepStep] ?? null
       : null;
 
-  const prevLabel = prevTakeaway
-    ? `Poin Inti ${prevTakeaway.number}`
-    : "Pengantar";
+  const prevLabel =
+    clampedDeepStep === finalStep
+      ? "Kesimpulan Akhir"
+      : prevTakeaway
+        ? `Poin Inti ${prevTakeaway.number}`
+        : "Pengantar";
   const prevTitle = prevTakeaway?.title ?? null;
 
-  const nextLabel = nextTakeaway
-    ? `Poin Inti ${nextTakeaway.number}`
-    : "Kesimpulan Akhir";
+  const nextLabel =
+    clampedDeepStep === conclusionStep
+      ? "Selesai"
+      : clampedDeepStep === finalStep
+        ? "Pengantar"
+        : nextTakeaway
+          ? `Poin Inti ${nextTakeaway.number}`
+          : "Kesimpulan Akhir";
   const nextTitle = nextTakeaway?.title ?? null;
 
   return (
     <div className="flex min-h-screen flex-col bg-page">
-      {/* Banner Header Buku (disembunyikan saat Mode Fokus aktif) */}
-      {!isFocusMode && (
+      {/* Banner Header Buku (tampil di halaman Pengantar saja agar sesi baca bersih) */}
+      {isIntroView && (
         <div
           className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} text-white`}
         >
@@ -836,30 +856,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             >
               A+
             </button>
-            <button
-              type="button"
-              onClick={() => setIsFocusMode((prev) => !prev)}
-              aria-pressed={isFocusMode}
-              title={
-                isFocusMode
-                  ? "Keluar dari Mode Fokus"
-                  : "Mode Fokus (sembunyikan header buku)"
-              }
-              className={`ml-1 inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-semibold transition ${
-                isFocusMode
-                  ? "border-accent-strong bg-accent-soft text-accent-text"
-                  : "border-line text-ink-muted hover:bg-page hover:text-ink"
-              }`}
-            >
-              {isFocusMode ? (
-                <Minimize2 className="h-3.5 w-3.5" />
-              ) : (
-                <Maximize2 className="h-3.5 w-3.5" />
-              )}
-              <span className="hidden sm:inline">Fokus</span>
-            </button>
             <span
-              className="ml-1 min-w-[2.5rem] text-right text-xs font-semibold tabular-nums text-ink-muted"
+              className="ml-1.5 min-w-[2.5rem] text-right text-xs font-semibold tabular-nums text-ink-muted"
               title="Progres membaca"
             >
               {readingProgress}%
@@ -1053,33 +1051,102 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       articleTerms={ARTICLE_TERMS}
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
+                  ) : clampedDeepStep === conclusionStep ? (
+                    <ConclusionSection
+                      conclusion={book.conclusion}
+                      fs={fs}
+                      articleTerms={ARTICLE_TERMS}
+                      onSelectArticleTerm={setActiveArticleTerm}
+                    />
                   ) : (
                     <>
-                      <ConclusionSection
-                        conclusion={book.conclusion}
-                        fs={fs}
-                        articleTerms={ARTICLE_TERMS}
-                        onSelectArticleTerm={setActiveArticleTerm}
-                      />
                       <MarkCompletedSection
                         isCompleted={completed}
                         onMarkCompleted={handleMarkCompleted}
                         onRequestUnmark={() => setIsUnmarkConfirmOpen(true)}
                         fs={fs}
                       />
-                      <KeyConceptsSection
-                        keyConcepts={book.keyConcepts}
-                        fs={fs}
-                        articleTerms={ARTICLE_TERMS}
-                        onSelectArticleTerm={setActiveArticleTerm}
-                      />
-                      <QuotesSection
-                        quotes={book.quotes}
-                        copyFeedback={copyFeedback}
-                        onCopyQuote={handleCopyQuote}
-                        onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
-                        fs={fs}
-                      />
+
+                      {/* Tab Eksplorasi Penutup: Konsep Kunci, Kutipan, & Opini */}
+                      <div className="mt-8">
+                        <div
+                          role="tablist"
+                          aria-label="Eksplorasi setelah membaca"
+                          className="grid grid-cols-3 gap-1.5 rounded-2xl border border-line bg-surface-subtle p-1.5"
+                        >
+                          <button
+                            type="button"
+                            role="tab"
+                            aria-selected={penutupTab === "concepts"}
+                            onClick={() => setPenutupTab("concepts")}
+                            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
+                              penutupTab === "concepts"
+                                ? "bg-surface text-ink shadow-sm"
+                                : "text-ink-muted hover:text-ink"
+                            }`}
+                          >
+                            <Layers className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+                            <span className="truncate">
+                              Konsep ({book.keyConcepts.length})
+                            </span>
+                          </button>
+                          <button
+                            type="button"
+                            role="tab"
+                            aria-selected={penutupTab === "quotes"}
+                            onClick={() => setPenutupTab("quotes")}
+                            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
+                              penutupTab === "quotes"
+                                ? "bg-surface text-ink shadow-sm"
+                                : "text-ink-muted hover:text-ink"
+                            }`}
+                          >
+                            <Quote className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+                            <span className="truncate">
+                              Kutipan ({book.quotes.length})
+                            </span>
+                          </button>
+                          <button
+                            type="button"
+                            role="tab"
+                            aria-selected={penutupTab === "opinions"}
+                            onClick={() => setPenutupTab("opinions")}
+                            className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
+                              penutupTab === "opinions"
+                                ? "bg-surface text-ink shadow-sm"
+                                : "text-ink-muted hover:text-ink"
+                            }`}
+                          >
+                            <MessageSquare className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+                            <span className="truncate">Opini</span>
+                          </button>
+                        </div>
+
+                        <div role="tabpanel">
+                          {penutupTab === "concepts" ? (
+                            <KeyConceptsSection
+                              keyConcepts={book.keyConcepts}
+                              fs={fs}
+                              articleTerms={ARTICLE_TERMS}
+                              onSelectArticleTerm={setActiveArticleTerm}
+                            />
+                          ) : penutupTab === "quotes" ? (
+                            <QuotesSection
+                              quotes={book.quotes}
+                              copyFeedback={copyFeedback}
+                              onCopyQuote={handleCopyQuote}
+                              onOpenQuoteCard={(quote) =>
+                                setActiveQuoteForCard(quote)
+                              }
+                              fs={fs}
+                            />
+                          ) : (
+                            <BookOpinionsSection bookSlug={book.slug} />
+                          )}
+                        </div>
+                      </div>
+
+                      <RelatedBooksSection relatedBooks={recommendedBooks} />
                     </>
                   )}
               </div>
@@ -1087,7 +1154,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           )}
         </div>
 
-        {isEndOfBookView && (
+        {readMode === "quick" && hasStartedQuick && (
           <>
             <BookOpinionsSection bookSlug={book.slug} />
             <RelatedBooksSection relatedBooks={recommendedBooks} />
@@ -1101,6 +1168,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         <DeepReadingBottomBar
           currentStep={clampedDeepStep}
           keyTakeaways={book.keyTakeaways}
+          conclusionStep={conclusionStep}
           finalStep={finalStep}
           readingTimeMinutes={book.readingTimeMinutes}
           prevLabel={prevLabel}
