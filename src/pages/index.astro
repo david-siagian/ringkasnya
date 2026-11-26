@@ -22,6 +22,10 @@ const minQuickMinutes =
   bookCatalog.length > 0
     ? Math.min(...bookCatalog.map((b) => b.quickTimeMinutes))
     : 5;
+const maxReadingMinutes =
+  bookCatalog.length > 0
+    ? Math.max(...bookCatalog.map((b) => b.readingTimeMinutes))
+    : 20;
 
 Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
 ---
@@ -80,7 +84,7 @@ Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
           <div class="animate-welcome mt-12 grid grid-cols-3 gap-4 border-t border-line/80 pt-8 text-center" style="animation-delay: 600ms;">
             <div>
               <p class="text-2xl font-extrabold text-ink sm:text-3xl">
-                5–20 <span class="text-sm font-semibold text-accent-strong">Mnt</span>
+                {minQuickMinutes}–{maxReadingMinutes} <span class="text-sm font-semibold text-accent-strong">Mnt</span>
               </p>
               <p class="mt-0.5 text-xs text-ink-subtle">
                 Waktu Baca Fleksibel
