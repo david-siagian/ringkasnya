@@ -314,8 +314,6 @@ interface ConclusionSectionProps {
   scrollMarginTop?: string;
   articleTerms?: readonly ArticleTermEntry[];
   onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
-  isCompleted?: boolean;
-  onMarkCompleted?: () => void;
 }
 
 /** Bagian Kesimpulan Akhir buku. */
@@ -325,8 +323,6 @@ export function ConclusionSection({
   scrollMarginTop,
   articleTerms = [],
   onSelectArticleTerm,
-  isCompleted = false,
-  onMarkCompleted,
 }: ConclusionSectionProps) {
   const conclusionMatched = new Set<string>();
 
@@ -369,30 +365,62 @@ export function ConclusionSection({
             </p>
           ))}
       </div>
+    </section>
+  );
+}
 
-      {onMarkCompleted && (
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-accent-line/60 pt-5">
-          <p className={`${fs.subtext} font-medium text-ink-muted`}>
+interface MarkCompletedSectionProps {
+  isCompleted: boolean;
+  onMarkCompleted: () => void;
+  fs: FontScale;
+}
+
+/** Kartu aksi terpisah untuk menandai buku selesai dibaca setelah Kesimpulan Akhir. */
+export function MarkCompletedSection({
+  isCompleted,
+  onMarkCompleted,
+  fs,
+}: MarkCompletedSectionProps) {
+  return (
+    <section className="mt-6 flex flex-col gap-4 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="flex items-start gap-3">
+        <span
+          className={`mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
+            isCompleted
+              ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
+              : "bg-accent-soft text-accent-text"
+          }`}
+        >
+          <CheckCircle2 className="h-5 w-5" />
+        </span>
+        <div>
+          <h3 className={`${fs.lead} font-extrabold text-ink`}>
             {isCompleted
-              ? "Buku ini sudah ditandai selesai dibaca."
-              : "Sudah selesai membaca kesimpulan akhir?"}
+              ? "Bacaan Selesai"
+              : "Sudah selesai membaca ringkasan ini?"}
+          </h3>
+          <p className={`mt-0.5 ${fs.subtext} text-ink-muted`}>
+            {isCompleted
+              ? "Buku ini sudah tercatat di daftar bacaan selesai."
+              : "Klik tombol di samping untuk mencatat buku ini sebagai selesai dibaca."}
           </p>
-          {isCompleted ? (
-            <span className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 px-4 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300">
-              <CheckCircle2 className="h-4 w-4 shrink-0" />
-              <span>Sudah Selesai Dibaca</span>
-            </span>
-          ) : (
-            <button
-              type="button"
-              onClick={onMarkCompleted}
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
-            >
-              <CheckCircle2 className="h-4 w-4 shrink-0" />
-              <span>Tandai Selesai Dibaca</span>
-            </button>
-          )}
         </div>
+      </div>
+
+      {isCompleted ? (
+        <span className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 px-4 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <span>Sudah Selesai Dibaca</span>
+        </span>
+      ) : (
+        <button
+          type="button"
+          onClick={onMarkCompleted}
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
+        >
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <span>Tandai Selesai Dibaca</span>
+        </button>
       )}
     </section>
   );

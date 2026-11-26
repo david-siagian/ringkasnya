@@ -24,6 +24,7 @@ import {
   FONT_SCALES,
   IntroSection,
   KeyConceptsSection,
+  MarkCompletedSection,
   QuotesSection,
   RelatedBooksSection,
   TakeawayCard,
@@ -868,10 +869,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
                     articleTerms={ARTICLE_TERMS}
                     onSelectArticleTerm={setActiveArticleTerm}
-                    isCompleted={completed}
-                    onMarkCompleted={handleMarkCompleted}
                   />
                 </div>
+
+                <MarkCompletedSection
+                  isCompleted={completed}
+                  onMarkCompleted={handleMarkCompleted}
+                  fs={fs}
+                />
 
                 <KeyConceptsSection
                   keyConcepts={book.keyConcepts}
@@ -949,8 +954,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                         fs={fs}
                         articleTerms={ARTICLE_TERMS}
                         onSelectArticleTerm={setActiveArticleTerm}
+                      />
+                      <MarkCompletedSection
                         isCompleted={completed}
                         onMarkCompleted={handleMarkCompleted}
+                        fs={fs}
                       />
                       <KeyConceptsSection
                         keyConcepts={book.keyConcepts}
