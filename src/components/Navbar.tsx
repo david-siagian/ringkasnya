@@ -37,6 +37,7 @@ function normalizePath(path: string): string {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isHiddenByReader, setIsHiddenByReader] = useState(false);
   const [currentPath, setCurrentPath] = useState<string>("");
   const { isDark, mounted, toggleTheme } = useTheme();
   const headerRef = useRef<HTMLElement>(null);
@@ -45,8 +46,28 @@ export default function Navbar() {
     setCurrentPath(normalizePath(window.location.pathname));
   }, []);
 
+  useEffect(() => {
+    const handleReaderNavbar = (event: Event) => {
+      const hidden = Boolean((event as CustomEvent<{ hidden?: boolean }>).detail?.hidden);
+      setIsHiddenByReader(hidden);
+      if (hidden) setIsOpen(false);
+    };
+
+    window.addEventListener("ringkasnya:navbar-visibility", handleReaderNavbar);
+    return () =>
+      window.removeEventListener(
+        "ringkasnya:navbar-visibility",
+        handleReaderNavbar
+      );
+  }, []);
+
   // Sinkronkan tinggi navbar aktual ke CSS var `--header-h` (dipakai toolbar sticky & scroll offset)
   useEffect(() => {
+    if (isHiddenByReader) {
+      document.documentElement.style.setProperty("--header-h", "0px");
+      return;
+    }
+
     const header = headerRef.current;
     if (!header) return;
 
@@ -61,7 +82,7 @@ export default function Navbar() {
     const observer = new ResizeObserver(updateHeaderHeight);
     observer.observe(header);
     return () => observer.disconnect();
-  }, []);
+  }, [isHiddenByReader]);
 
   // Close menu on Escape key press, resize to desktop, & lock body scroll when drawer is open
   useEffect(() => {
@@ -98,6 +119,10 @@ export default function Navbar() {
 
   const iconButtonClass =
     "inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-ink-secondary shadow-xs transition-colors hover:bg-page hover:text-accent-strong focus:outline-none focus:ring-2 focus:ring-emerald-500/20 active:scale-95";
+
+  if (isHiddenByReader) {
+    return null;
+  }
 
   return (
     <>

@@ -42,7 +42,8 @@ function formatRelativeTime(timestampMs: number): string {
 function getStickyTopOffset(): number {
   if (typeof window === "undefined") return 73;
   const styles = getComputedStyle(document.documentElement);
-  const headerH = parseFloat(styles.getPropertyValue("--header-h")) || 73;
+  const parsedHeaderH = parseFloat(styles.getPropertyValue("--header-h"));
+  const headerH = Number.isFinite(parsedHeaderH) ? parsedHeaderH : 73;
   const toolbarH =
     parseFloat(styles.getPropertyValue("--reader-toolbar-h")) || 0;
   return headerH + toolbarH;

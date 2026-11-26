@@ -197,6 +197,22 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     readMode === "quick" ? hasStartedQuick : clampedDeepStep === finalStep;
   const showFooter = isIntroView || isEndOfBookView;
 
+  // Sembunyikan navbar utama saat sesi baca dimulai agar tampilan reader lebih bersih
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("ringkasnya:navbar-visibility", {
+        detail: { hidden: !isIntroView },
+      })
+    );
+    return () => {
+      window.dispatchEvent(
+        new CustomEvent("ringkasnya:navbar-visibility", {
+          detail: { hidden: false },
+        })
+      );
+    };
+  }, [isIntroView]);
+
   const readingProgress =
     readMode === "deep"
       ? Math.round((clampedDeepStep / Math.max(1, finalStep)) * 100)
