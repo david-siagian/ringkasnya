@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { User, LogOut, LogIn, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, LogOut, LogIn } from "lucide-react";
 import { authClient, useSession } from "@/lib/auth-client";
 import { openAuthModal } from "@/lib/auth-modal";
 
@@ -23,30 +23,12 @@ export default function UserMenu({
   onNavigate,
 }: UserMenuProps) {
   const { data: session, isPending } = useSession();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false);
-      }
-    }
-
-    if (dropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownOpen]);
 
   async function handleSignOut() {
     setIsSigningOut(true);
     try {
       await authClient.signOut();
-      setDropdownOpen(false);
       onNavigate?.();
       window.location.href = "/";
     } catch {
@@ -93,7 +75,11 @@ export default function UserMenu({
         <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
           Akun Saya
         </p>
-        <div className="flex items-center gap-3 rounded-xl border border-line-subtle bg-page px-3 py-2.5">
+        <a
+          href="/akun"
+          onClick={onNavigate}
+          className="flex items-center gap-3 rounded-xl border border-line-subtle bg-page px-3 py-2.5 transition-colors hover:border-emerald-400/60 hover:bg-accent-soft/40"
+        >
           {user.image ? (
             <img
               src={user.image}
@@ -109,15 +95,7 @@ export default function UserMenu({
             <p className="truncate text-sm font-bold text-ink">{user.name}</p>
             <p className="truncate text-xs text-ink-subtle">{user.email}</p>
           </div>
-        </div>
-
-        <a
-          href="/akun"
-          onClick={onNavigate}
-          className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-ink-secondary transition-colors hover:bg-accent-soft hover:text-accent-text"
-        >
-          <User className="h-4 w-4 text-accent-strong" />
-          <span>Dashboard Akun</span>
+          <ArrowRight className="h-3.5 w-3.5 shrink-0 text-ink-faint" />
         </a>
 
         <button
@@ -162,15 +140,10 @@ export default function UserMenu({
   }
 
   return (
-    <div
-      ref={menuRef}
-      className="relative hidden md:block pl-2 border-l border-line"
-    >
-      <button
-        type="button"
-        onClick={() => setDropdownOpen((prev) => !prev)}
-        aria-expanded={dropdownOpen}
-        aria-haspopup="menu"
+    <div className="hidden md:block pl-2 border-l border-line">
+      <a
+        href="/akun"
+        title="Dashboard Akun"
         className="flex items-center gap-2 rounded-full border border-line bg-surface py-1 pl-1.5 pr-3 text-sm font-semibold text-ink-secondary shadow-2xs transition-colors hover:border-emerald-400/60 hover:bg-accent-soft/40 hover:text-ink"
       >
         {user.image ? (
@@ -184,47 +157,8 @@ export default function UserMenu({
             {getInitials(user.name)}
           </span>
         )}
-        <span className="max-w-[110px] truncate">{user.name}</span>
-        <ChevronDown
-          className={`h-3.5 w-3.5 text-ink-subtle transition-transform ${
-            dropdownOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {dropdownOpen && (
-        <div
-          role="menu"
-          className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-line bg-surface p-1.5 shadow-lg"
-        >
-          <div className="border-b border-line-subtle px-3 py-2">
-            <p className="truncate text-sm font-bold text-ink">{user.name}</p>
-            <p className="truncate text-xs text-ink-subtle">{user.email}</p>
-          </div>
-
-          <div className="pt-1">
-            <a
-              href="/akun"
-              role="menuitem"
-              onClick={() => setDropdownOpen(false)}
-              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-ink-secondary transition-colors hover:bg-accent-soft hover:text-accent-text"
-            >
-              <User className="h-4 w-4 text-accent-strong" />
-              <span>Akun Saya</span>
-            </a>
-            <button
-              type="button"
-              role="menuitem"
-              onClick={handleSignOut}
-              disabled={isSigningOut}
-              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 transition-colors hover:bg-red-50 dark:hover:bg-red-950/40 disabled:opacity-60"
-            >
-              <LogOut className="h-4 w-4" />
-              <span>{isSigningOut ? "Keluar..." : "Keluar"}</span>
-            </button>
-          </div>
-        </div>
-      )}
+        <span className="max-w-[120px] truncate">{user.name}</span>
+      </a>
     </div>
   );
 }
