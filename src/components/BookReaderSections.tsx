@@ -403,21 +403,21 @@ export function MarkCompletedSection({
 }: MarkCompletedSectionProps) {
   return (
     <section
-      className={`mt-6 flex flex-col gap-5 rounded-2xl border-2 p-6 shadow-md transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-8 ${
+      className={`mt-5 flex flex-col gap-3.5 rounded-2xl border p-4 shadow-sm transition-colors sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 sm:py-4 ${
         isCompleted
-          ? "border-emerald-500/45 bg-emerald-500/10 shadow-emerald-950/5"
-          : "border-emerald-500/40 bg-gradient-to-br from-emerald-500/10 via-accent-soft/60 to-surface shadow-emerald-950/10"
+          ? "border-emerald-500/40 bg-emerald-500/10 shadow-emerald-950/5"
+          : "border-emerald-500/35 bg-gradient-to-br from-emerald-500/10 via-accent-soft/50 to-surface shadow-emerald-950/5"
       }`}
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3">
         <span
-          className={`mt-0.5 inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-sm ${
+          className={`mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl shadow-sm ${
             isCompleted
               ? "bg-emerald-600 text-white"
               : "bg-emerald-600/15 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300"
           }`}
         >
-          <CheckCircle2 className="h-6 w-6" />
+          <CheckCircle2 className="h-4.5 w-4.5" />
         </span>
         <div className="min-w-0">
           <span
@@ -425,12 +425,12 @@ export function MarkCompletedSection({
           >
             {isCompleted ? "Selesai Dibaca" : "Langkah Terakhir"}
           </span>
-          <h3 className={`mt-0.5 ${fs.sectionHeading} font-extrabold text-ink`}>
+          <h3 className={`mt-0.5 ${fs.lead} font-bold text-ink`}>
             {isCompleted
               ? "Bacaan Ini Sudah Selesai"
               : "Sudah selesai membaca ringkasan ini?"}
           </h3>
-          <p className={`mt-1 ${fs.subtext} leading-relaxed text-ink-muted`}>
+          <p className={`mt-0.5 ${fs.label} leading-relaxed text-ink-muted`}>
             {isCompleted
               ? "Buku ini sudah tercatat di daftar bacaan selesai Anda. Klik tombol untuk membatalkan jika perlu."
               : "Tandai buku ini selesai dibaca agar progres bacaan Anda tercatat rapi."}
@@ -444,19 +444,19 @@ export function MarkCompletedSection({
           onClick={onRequestUnmark}
           title="Klik untuk hapus tanda selesai dibaca"
           aria-label="Hapus tanda selesai dibaca"
-          className="group inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-5 py-3 text-sm font-bold text-emerald-700 transition hover:bg-emerald-500/25 active:scale-[0.98] dark:text-emerald-300 sm:w-auto"
+          className="group inline-flex w-full shrink-0 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-xs font-bold text-emerald-700 transition hover:bg-emerald-500/25 active:scale-[0.98] dark:text-emerald-300 sm:w-auto sm:text-sm"
         >
-          <CheckCircle2 className="h-5 w-5 shrink-0" />
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
           <span>Sudah Selesai Dibaca</span>
-          <X className="h-4 w-4 shrink-0 opacity-75 transition group-hover:opacity-100" />
+          <X className="h-3.5 w-3.5 shrink-0 opacity-75 transition group-hover:opacity-100" />
         </button>
       ) : (
         <button
           type="button"
           onClick={onMarkCompleted}
-          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-md shadow-emerald-600/25 transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto"
+          className="inline-flex w-full shrink-0 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto sm:text-sm"
         >
-          <CheckCircle2 className="h-5 w-5 shrink-0" />
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
           <span>Tandai Selesai Dibaca</span>
         </button>
       )}
@@ -482,7 +482,7 @@ export function KeyConceptsSection({
   const conceptsMatched = new Set<string>();
 
   return (
-    <section className="mt-8 rounded-2xl border-2 border-accent-line/70 bg-surface shadow-sm overflow-hidden">
+    <section className="rounded-b-2xl border border-line bg-surface shadow-sm overflow-hidden">
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -491,19 +491,12 @@ export function KeyConceptsSection({
         className="flex w-full items-center justify-between gap-4 p-6 sm:p-8 text-left transition-colors hover:bg-page/50"
       >
         <div className="min-w-0">
-          <div className="inline-flex items-center gap-2 text-accent-text">
-            <Layers className="h-5 w-5 shrink-0" />
-            <span className={`${fs.label} font-bold uppercase tracking-wider`}>
+          <div className="flex items-center gap-2 text-ink">
+            <Layers className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
+            <h2 className="text-base font-extrabold text-ink sm:text-lg">
               Konsep Kunci ({keyConcepts.length})
-            </span>
+            </h2>
           </div>
-          <h2 className={`mt-1 ${fs.blockHeading} font-extrabold text-ink`}>
-            Gagasan Utama yang Perlu Dibawa Pulang
-          </h2>
-          <p className={`mt-1 ${fs.subtext} text-ink-muted`}>
-            Rangkuman konsep inti dari buku ini dalam bahasa yang ringkas agar
-            mudah diingat kembali kapan saja.
-          </p>
         </div>
         <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-page text-ink-muted transition-colors">
           <ChevronDown
@@ -578,7 +571,7 @@ export function QuotesSection({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="mt-8 rounded-2xl border border-line bg-surface shadow-sm overflow-hidden">
+    <section className="rounded-b-2xl border border-line bg-surface shadow-sm overflow-hidden">
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -588,15 +581,11 @@ export function QuotesSection({
       >
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-ink">
-            <Quote className="h-5 w-5 shrink-0 text-accent-strong" />
-            <h2 className={`${fs.blockHeading} font-extrabold`}>
-              Kutipan Berkesan ({quotes.length})
+            <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
+            <h2 className="text-base font-extrabold text-ink sm:text-lg">
+              Kutipan Pilihan ({quotes.length})
             </h2>
           </div>
-          <p className={`mt-1 ${fs.subtext} text-ink-subtle`}>
-            Klik tombol salin untuk membagikan kutipan favoritmu ke WhatsApp atau
-            media sosial.
-          </p>
         </div>
         <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-page text-ink-muted transition-colors">
           <ChevronDown

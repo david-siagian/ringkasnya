@@ -381,10 +381,10 @@ export default function BookOpinionsSection({
       ref={sectionRef}
       id="opini-pembaca"
       aria-labelledby="opini-heading"
-      className="mx-auto mt-12 max-w-3xl"
+      className="mx-auto max-w-3xl"
     >
-      <div className="rounded-2xl border border-line bg-surface shadow-sm">
-        <div className="flex items-center justify-between gap-3 rounded-t-2xl px-4 pt-3.5 pb-1.5 sm:px-5">
+      <div className="rounded-b-2xl border border-line bg-surface shadow-sm">
+        <div className="flex items-center justify-between gap-3 px-4 pt-3.5 pb-1.5 sm:px-5">
           <div className="flex items-center gap-2">
             <MessageSquare className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
             <h2
