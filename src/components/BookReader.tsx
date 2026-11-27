@@ -357,6 +357,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   }, [readMode, hasStartedQuick, fontSize, book.slug]);
 
   const getReadingTopY = useCallback(() => {
+    if (!isIntroView) return 0;
     const area = readingAreaRef.current;
     if (!area) return 0;
     const stickyBottom =
@@ -365,7 +366,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       0,
       window.scrollY + area.getBoundingClientRect().top - stickyBottom - 16
     );
-  }, []);
+  }, [isIntroView]);
 
   // Jalankan smooth scroll tertunda setelah perpindahan mode atau halaman bab
   useEffect(() => {
@@ -465,9 +466,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       if (isLeavingView) return;
 
       const enterNextView = () => {
-        // Posisikan scroll instan saat layar masih opacity-0 agar tidak terlihat menggulir ke atas
+        // Posisikan scroll instan ke puncak halaman saat layar masih opacity-0 agar tidak
+        // terlihat menggulir dan tidak meleset ketika Banner Header di-unmount saat sesi baca dimulai
         window.scrollTo({
-          top: getReadingTopY(),
+          top: 0,
           behavior: "instant" as ScrollBehavior,
         });
         onReady();
@@ -488,7 +490,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         enterNextView();
       }, fadeOutMs);
     },
-    [isLeavingView, getReadingTopY]
+    [isLeavingView]
   );
 
   const transitionToDeepStep = useCallback(
