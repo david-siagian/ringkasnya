@@ -77,7 +77,7 @@ interface IntroSectionProps {
   onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
 
-/** Bagian pengantar reader: Sinopsis ringkas, akordeon target pembaca, dan akordeon Daftar Poin Inti. */
+/** Bagian pengantar reader: Sinopsis ringkas, akordeon target pembaca, dan Daftar Poin Inti. */
 export function IntroSection({
   book,
   fs,
@@ -88,11 +88,13 @@ export function IntroSection({
   onSelectArticleTerm,
 }: IntroSectionProps) {
   const synopsisMatched = new Set<string>();
-  const [isTakeawaysOpen, setIsTakeawaysOpen] = useState(!completed);
+  const [isTakeawaysOpen, setIsTakeawaysOpen] = useState(false);
 
   useEffect(() => {
-    setIsTakeawaysOpen(!completed);
+    setIsTakeawaysOpen(false);
   }, [completed]);
+
+  const showTakeawaysList = !completed || isTakeawaysOpen;
 
   return (
     <>
@@ -135,31 +137,44 @@ export function IntroSection({
         )}
       </div>
 
-      {/* Daftar Isi Poin Inti (Accordion: default terbuka jika belum selesai, tertutup jika sudah selesai) */}
+      {/* Daftar Isi Poin Inti: terbuka langsung tanpa akordean jika belum selesai, akordeon tertutup jika sudah selesai */}
       {book.keyTakeaways.length > 0 && (
         <div className="mt-6 rounded-2xl border border-line bg-surface shadow-sm">
-          <button
-            type="button"
-            aria-expanded={isTakeawaysOpen}
-            aria-controls="intro-takeaways-list"
-            onClick={() => setIsTakeawaysOpen((prev) => !prev)}
-            className={`flex w-full cursor-pointer items-center justify-between gap-2 px-5 py-4 sm:px-6 text-left ${fs.label} font-bold uppercase tracking-wider text-ink-subtle select-none`}
-          >
-            <span className="flex items-center gap-2">
+          {completed ? (
+            <button
+              type="button"
+              aria-expanded={isTakeawaysOpen}
+              aria-controls="intro-takeaways-list"
+              onClick={() => setIsTakeawaysOpen((prev) => !prev)}
+              className={`flex w-full cursor-pointer items-center justify-between gap-2 px-5 py-4 sm:px-6 text-left ${fs.label} font-bold uppercase tracking-wider text-ink-subtle select-none`}
+            >
+              <span className="flex items-center gap-2">
+                <Layers className="h-4 w-4 shrink-0 text-accent-strong" />
+                <span>Daftar Poin Inti ({book.keyTakeaways.length} Bab Ringkas)</span>
+              </span>
+              <ChevronDown
+                className={`h-4 w-4 shrink-0 text-ink-muted transition-transform duration-200 ${
+                  isTakeawaysOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+          ) : (
+            <h2
+              className={`flex items-center gap-2 px-5 pt-5 pb-3 sm:px-6 sm:pt-6 ${fs.label} font-bold uppercase tracking-wider text-ink-subtle`}
+            >
               <Layers className="h-4 w-4 shrink-0 text-accent-strong" />
               <span>Daftar Poin Inti ({book.keyTakeaways.length} Bab Ringkas)</span>
-            </span>
-            <ChevronDown
-              className={`h-4 w-4 shrink-0 text-ink-muted transition-transform duration-200 ${
-                isTakeawaysOpen ? "rotate-180" : ""
-              }`}
-            />
-          </button>
+            </h2>
+          )}
 
-          {isTakeawaysOpen && (
+          {showTakeawaysList && (
             <div
               id="intro-takeaways-list"
-              className="border-t border-line-subtle px-5 pb-5 pt-4 sm:px-6 sm:pb-6"
+              className={
+                completed
+                  ? "border-t border-line-subtle px-5 pb-5 pt-4 sm:px-6 sm:pb-6"
+                  : "px-5 pb-5 sm:px-6 sm:pb-6"
+              }
             >
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {book.keyTakeaways.map((item, idx) =>
