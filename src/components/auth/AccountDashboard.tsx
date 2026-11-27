@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   LogOut,
   BookOpen,
@@ -11,6 +12,7 @@ import {
   Bookmark,
   Clock,
   ArrowRight,
+  X,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useBookmarks } from "@/hooks/useBookmarks";
@@ -61,7 +63,26 @@ export default function AccountDashboard({
   initialProgressItems = [],
 }: AccountDashboardProps) {
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
   const [activeTab, setActiveTab] = useState<ProgressTab>("all");
+
+  useEffect(() => {
+    if (!showSignOutModal) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape" && !isSigningOut) {
+        setShowSignOutModal(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [showSignOutModal, isSigningOut]);
 
   const { isBookmarked, toggleBookmark, mounted: bookmarksMounted } =
     useBookmarks();
@@ -190,7 +211,7 @@ export default function AccountDashboard({
 
             <button
               type="button"
-              onClick={handleSignOut}
+              onClick={() => setShowSignOutModal(true)}
               disabled={isSigningOut}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-red-700 disabled:opacity-60"
             >
@@ -416,6 +437,80 @@ export default function AccountDashboard({
           </div>
         )}
       </section>
+
+      {showSignOutModal &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[80] overflow-y-auto bg-slate-900/45 backdrop-blur-md dark:bg-black/65"
+            onClick={() => {
+              if (!isSigningOut) setShowSignOutModal(false);
+            }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="signout-modal-title"
+          >
+            <div className="flex min-h-full items-center justify-center p-4 sm:p-6">
+              <div
+                className="animate-fade-slide relative w-full max-w-sm rounded-3xl border border-line bg-surface p-6 shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => setShowSignOutModal(false)}
+                  disabled={isSigningOut}
+                  aria-label="Tutup konfirmasi keluar"
+                  className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border border-line bg-page/80 text-ink-muted transition-colors hover:bg-page hover:text-ink disabled:opacity-50"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+
+                <div className="flex flex-col items-center text-center">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-500/15 text-red-600 dark:text-red-400">
+                    <LogOut className="h-6 w-6" />
+                  </div>
+                  <h2
+                    id="signout-modal-title"
+                    className="text-lg font-extrabold text-ink"
+                  >
+                    Keluar dari akun?
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-subtle">
+                    Progres baca dan buku tersimpan Anda tetap aman di akun ini.
+                    Anda dapat masuk kembali kapan saja.
+                  </p>
+                </div>
+
+                <div className="mt-6 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowSignOutModal(false)}
+                    disabled={isSigningOut}
+                    className="flex-1 rounded-xl border border-line bg-page px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-surface disabled:opacity-60"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    disabled={isSigningOut}
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-red-700 disabled:opacity-60"
+                  >
+                    {isSigningOut ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span>Keluar...</span>
+                      </>
+                    ) : (
+                      <span>Ya, Keluar</span>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
