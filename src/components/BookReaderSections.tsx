@@ -73,8 +73,6 @@ interface IntroSectionProps {
   fs: FontScale;
   mode: "quick" | "deep";
   onSelectTakeaway?: (takeawayNumber: number) => void;
-  onStartQuickReading?: () => void;
-  onStartDeepReading?: () => void;
   articleTerms?: readonly ArticleTermEntry[];
   onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
@@ -85,8 +83,6 @@ export function IntroSection({
   fs,
   mode,
   onSelectTakeaway,
-  onStartQuickReading,
-  onStartDeepReading,
   articleTerms = [],
   onSelectArticleTerm,
 }: IntroSectionProps) {
@@ -174,40 +170,70 @@ export function IntroSection({
             )
           )}
         </div>
-
-        {(onStartDeepReading || onStartQuickReading) && (
-          <div className="mt-6 flex flex-col items-center gap-3 border-t border-line-subtle pt-5">
-            <p className={`${fs.subtext} text-center text-ink-muted`}>
-              Pilih cara baca untuk memulai:
-            </p>
-            <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
-              {onStartQuickReading && (
-                <button
-                  type="button"
-                  onClick={onStartQuickReading}
-                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-sm font-bold text-white shadow-md shadow-amber-500/20 transition hover:bg-amber-600 active:scale-[0.98] sm:w-auto"
-                >
-                  <Zap className="h-4 w-4" />
-                  <span>Mulai Baca Kilat ({book.quickTimeMinutes} mnt)</span>
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              )}
-              {onStartDeepReading && (
-                <button
-                  type="button"
-                  onClick={onStartDeepReading}
-                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98] sm:w-auto"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  <span>Mulai Baca Mendalam ({book.readingTimeMinutes} mnt)</span>
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </>
+  );
+}
+
+interface IntroReadingBottomBarProps {
+  quickTimeMinutes: number;
+  readingTimeMinutes: number;
+  disabled?: boolean;
+  onStartQuickReading: () => void;
+  onStartDeepReading: () => void;
+}
+
+/** Bar aksi bawah fixed untuk halaman Pengantar buku (pilih Mode Kilat atau Mode Mendalam). */
+export function IntroReadingBottomBar({
+  quickTimeMinutes,
+  readingTimeMinutes,
+  disabled = false,
+  onStartQuickReading,
+  onStartDeepReading,
+}: IntroReadingBottomBarProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 backdrop-blur-md shadow-[0_-4px_20px_-6px_rgba(0,0,0,0.08)] dark:shadow-[0_-4px_20px_-6px_rgba(0,0,0,0.35)] pb-[env(safe-area-inset-bottom)]">
+      <div
+        role="region"
+        aria-label="Pilih mode baca"
+        className="mx-auto flex max-w-4xl items-center justify-center gap-2.5 px-3 py-2.5 sm:gap-3 sm:px-6 sm:py-3"
+      >
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={onStartQuickReading}
+          className="inline-flex flex-1 sm:flex-initial items-center justify-center gap-1.5 sm:gap-2 rounded-xl bg-amber-500 px-3 py-3 sm:px-6 text-xs sm:text-sm font-bold text-white shadow-md shadow-amber-500/20 transition hover:bg-amber-600 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
+        >
+          <Zap className="h-4 w-4 shrink-0" />
+          <span className="truncate">
+            <span className="hidden sm:inline">Mulai Baca </span>Kilat ({quickTimeMinutes} mnt)
+          </span>
+          <ArrowRight className="hidden sm:inline h-4 w-4 shrink-0" />
+        </button>
+
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={onStartDeepReading}
+          className="inline-flex flex-1 sm:flex-initial items-center justify-center gap-1.5 sm:gap-2 rounded-xl bg-emerald-600 px-3 py-3 sm:px-6 text-xs sm:text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
+        >
+          <BookOpen className="h-4 w-4 shrink-0" />
+          <span className="truncate">
+            <span className="hidden sm:inline">Mulai Baca </span>Mendalam ({readingTimeMinutes} mnt)
+          </span>
+          <ArrowRight className="hidden sm:inline h-4 w-4 shrink-0" />
+        </button>
+      </div>
+    </div>,
+    document.body
   );
 }
 

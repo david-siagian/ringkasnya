@@ -20,6 +20,7 @@ import {
   ConclusionSection,
   DeepReadingBottomBar,
   FONT_SCALES,
+  IntroReadingBottomBar,
   IntroSection,
   KeyConceptsSection,
   MarkCompletedSection,
@@ -759,7 +760,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   );
 
   return (
-    <div className="flex min-h-screen flex-col bg-page">
+    <div
+      className={`flex min-h-screen flex-col bg-page ${
+        isIntroView ? "pb-20 sm:pb-24" : ""
+      }`}
+    >
       {/* Banner Header Buku (tampil di halaman Pengantar saja agar sesi baca bersih) */}
       {isIntroView && (
         <div
@@ -976,31 +981,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 mode={readMode}
                 articleTerms={ARTICLE_TERMS}
                 onSelectArticleTerm={setActiveArticleTerm}
-                onStartDeepReading={() => {
-                  transitionAfterFadeOut(() => {
-                    setIsStartingSession(true);
-                    setReadMode("deep");
-                    setHasStartedQuick(false);
-                    setIsQuickDone(false);
-                    goToDeepStep(1, false);
-                  }, 380);
-                }}
-                onStartQuickReading={() => {
-                  transitionAfterFadeOut(() => {
-                    setIsStartingSession(true);
-                    setReadMode("quick");
-                    setIsQuickDone(false);
-                    const firstTakeaway = book.keyTakeaways[0];
-                    setPendingQuickStep(firstTakeaway ? 1 : finalStep);
-                    setHasStartedQuick(true);
-                    syncUrlHistory({
-                      mode: "quick",
-                      startedQuick: true,
-                      quickDone: false,
-                      deepStep: 0,
-                    });
-                  }, 380);
-                }}
                 onSelectTakeaway={(num) => {
                   cancelViewExit();
                   setIsStartingSession(false);
@@ -1196,6 +1176,39 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
       {showFooter && <Footer />}
 
+      {isIntroView && (
+        <IntroReadingBottomBar
+          quickTimeMinutes={book.quickTimeMinutes}
+          readingTimeMinutes={book.readingTimeMinutes}
+          disabled={isLeavingView}
+          onStartQuickReading={() => {
+            transitionAfterFadeOut(() => {
+              setIsStartingSession(true);
+              setReadMode("quick");
+              setIsQuickDone(false);
+              const firstTakeaway = book.keyTakeaways[0];
+              setPendingQuickStep(firstTakeaway ? 1 : finalStep);
+              setHasStartedQuick(true);
+              syncUrlHistory({
+                mode: "quick",
+                startedQuick: true,
+                quickDone: false,
+                deepStep: 0,
+              });
+            }, 380);
+          }}
+          onStartDeepReading={() => {
+            transitionAfterFadeOut(() => {
+              setIsStartingSession(true);
+              setReadMode("deep");
+              setHasStartedQuick(false);
+              setIsQuickDone(false);
+              goToDeepStep(1, false);
+            }, 380);
+          }}
+        />
+      )}
+
       {showDeepBottomBar && (
         <DeepReadingBottomBar
           currentStep={clampedDeepStep}
@@ -1231,7 +1244,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       <ReaderToast
         open={Boolean(unmarkToastMessage)}
         message={unmarkToastMessage ?? ""}
-        bottomOffsetClass={showDeepBottomBar ? "bottom-24" : "bottom-5"}
+        bottomOffsetClass={
+          showDeepBottomBar || isIntroView ? "bottom-24" : "bottom-5"
+        }
       />
 
       <QuoteCardModal
