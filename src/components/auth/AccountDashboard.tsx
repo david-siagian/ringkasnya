@@ -9,7 +9,6 @@ import {
   Loader2,
   Mail,
   Calendar,
-  Bookmark,
   Clock,
   ArrowRight,
   X,
@@ -47,7 +46,7 @@ interface AccountDashboardProps {
   initialProgressItems?: AccountProgressBookItem[];
 }
 
-type ProgressTab = "all" | "reading" | "bookmarked" | "completed";
+type ProgressTab = "all" | "reading" | "completed";
 
 function getInitials(name: string): string {
   return name
@@ -84,7 +83,7 @@ export default function AccountDashboard({
     };
   }, [showSignOutModal, isSigningOut]);
 
-  const { isBookmarked, toggleBookmark, mounted: bookmarksMounted } =
+  const { isBookmarked, mounted: bookmarksMounted } =
     useBookmarks();
   const { isCompleted, mounted: completedMounted } = useCompletedBooks();
 
@@ -127,7 +126,7 @@ export default function AccountDashboard({
     const completed = normalizedItems.filter((i) => i.isCompleted).length;
     return {
       all: normalizedItems.filter(
-        (i) => i.isBookmarked || i.progressPercent > 0
+        (i) => i.isCompleted || i.progressPercent > 0
       ).length,
       reading,
       bookmarked,
@@ -140,13 +139,10 @@ export default function AccountDashboard({
       if (activeTab === "reading") {
         return item.progressPercent > 0 && item.progressPercent < 100;
       }
-      if (activeTab === "bookmarked") {
-        return item.isBookmarked;
-      }
       if (activeTab === "completed") {
         return item.isCompleted;
       }
-      return item.isBookmarked || item.progressPercent > 0;
+      return item.isCompleted || item.progressPercent > 0;
     });
   }, [normalizedItems, activeTab]);
 
@@ -163,7 +159,6 @@ export default function AccountDashboard({
   const tabs: { id: ProgressTab; label: string; count: number }[] = [
     { id: "all", label: "Semua", count: counts.all },
     { id: "reading", label: "Sedang Dibaca", count: counts.reading },
-    { id: "bookmarked", label: "Disimpan", count: counts.bookmarked },
     { id: "completed", label: "Selesai", count: counts.completed },
   ];
 
@@ -268,7 +263,7 @@ export default function AccountDashboard({
               Aktivitas &amp; Progres Baca
             </h2>
             <p className="mt-0.5 text-sm text-ink-muted">
-              Bookmark dan progres bacaan Anda tersinkron otomatis lintas perangkat.
+              Progres bacaan Anda tersinkron otomatis lintas perangkat.
             </p>
           </div>
 
@@ -319,7 +314,7 @@ export default function AccountDashboard({
               Belum ada buku di kategori ini
             </p>
             <p className="mt-1 text-xs text-ink-muted">
-              Mulai membaca atau simpan buku favorit dari katalog untuk melihat progresnya di sini.
+              Mulai membaca buku dari katalog untuk melihat progresnya di sini.
             </p>
             <a
               href="/katalog"
@@ -370,26 +365,6 @@ export default function AccountDashboard({
                         >
                           {item.title}
                         </a>
-                        <button
-                          type="button"
-                          onClick={() => toggleBookmark(item.bookSlug)}
-                          aria-label={
-                            item.isBookmarked
-                              ? `Hapus bookmark ${item.title}`
-                              : `Simpan bookmark ${item.title}`
-                          }
-                          className={`relative z-10 shrink-0 rounded-lg p-1 transition-colors ${
-                            item.isBookmarked
-                              ? "text-amber-500 hover:bg-amber-500/10"
-                              : "text-ink-subtle hover:bg-surface hover:text-ink"
-                          }`}
-                        >
-                          <Bookmark
-                            className={`h-4 w-4 ${
-                              item.isBookmarked ? "fill-current" : ""
-                            }`}
-                          />
-                        </button>
                       </div>
                       <p className="line-clamp-1 text-xs text-ink-muted">
                         {item.author}
@@ -409,12 +384,10 @@ export default function AccountDashboard({
                             <CheckCircle2 className="h-3 w-3" />
                             Selesai
                           </span>
-                        ) : item.progressPercent > 0 ? (
+                        ) : (
                           <span className="font-bold text-accent-text">
                             Lanjutkan • {item.progressPercent}%
                           </span>
-                        ) : (
-                          <span className="text-ink-subtle">Tersimpan</span>
                         )}
                       </div>
 
