@@ -736,6 +736,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         onCopyQuote={handleCopyQuote}
         onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
         fs={fs}
+        isChildModalOpen={Boolean(activeQuoteForCard)}
       />
       <BookOpinionsSection bookSlug={book.slug} />
     </div>

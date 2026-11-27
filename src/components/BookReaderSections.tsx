@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { BookCatalogItem, BookSummary } from "@/types/book";
 import type { ArticleTermEntry } from "@/types/article";
@@ -551,137 +551,190 @@ interface QuotesSectionProps {
   onCopyQuote: (quote: string, index: number) => void;
   onOpenQuoteCard: (quote: string) => void;
   fs: FontScale;
+  isChildModalOpen?: boolean;
 }
 
-/** Daftar kutipan pilihan dengan tombol salin dan buat kartu PNG. */
+/** Kartu pemicu dan modal Kutipan Pilihan dengan dukungan tombol Back, salin, & buat kartu PNG. */
 export function QuotesSection({
   quotes,
   copyFeedback,
   onCopyQuote,
   onOpenQuoteCard,
   fs,
+  isChildModalOpen = false,
 }: QuotesSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const pushedHistoryRef = useRef(false);
 
-  const handleToggle = () => {
-    const willClose = isOpen;
-    setIsOpen((prev) => !prev);
-    if (willClose) {
-      requestAnimationFrame(() => {
-        const el = sectionRef.current;
-        if (!el) return;
-        const styles = getComputedStyle(document.documentElement);
-        const headerH = parseFloat(styles.getPropertyValue("--header-h")) || 0;
-        const toolbarH =
-          parseFloat(styles.getPropertyValue("--reader-toolbar-h")) || 0;
-        const topOffset = headerH + toolbarH + 16;
-        const rect = el.getBoundingClientRect();
-        if (rect.top < topOffset) {
-          window.scrollTo({
-            top: Math.max(0, window.scrollY + rect.top - topOffset),
-            behavior: "smooth",
-          });
-        }
-      });
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    if (pushedHistoryRef.current) {
+      pushedHistoryRef.current = false;
+      setIsOpen(false);
+      window.history.back();
+      return;
     }
-  };
+    setIsOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) {
+      pushedHistoryRef.current = false;
+      return;
+    }
+
+    if (!pushedHistoryRef.current) {
+      window.history.pushState(
+        { ...(window.history.state ?? {}), quotesModal: true },
+        ""
+      );
+      pushedHistoryRef.current = true;
+    }
+
+    const handlePopState = () => {
+      if (pushedHistoryRef.current) {
+        pushedHistoryRef.current = false;
+        setIsOpen(false);
+      }
+    };
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen || isChildModalOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, isChildModalOpen, handleClose]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="rounded-2xl border border-line bg-surface shadow-sm"
-    >
-      <button
-        type="button"
-        onClick={handleToggle}
-        aria-expanded={isOpen}
-        aria-controls="quotes-section-content"
-        style={
-          isOpen
-            ? {
-                top: "calc(var(--header-h, 0px) + var(--reader-toolbar-h, 0px))",
-              }
-            : undefined
-        }
-        className={`flex w-full items-center justify-between gap-3 bg-surface px-6 py-5 text-left transition-colors hover:bg-surface-subtle sm:px-8 sm:py-6 ${
-          isOpen
-            ? "sticky z-20 rounded-t-2xl border-b border-line/70"
-            : "rounded-2xl"
-        }`}
-      >
-        <div className="flex items-center gap-2 text-ink">
-          <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
-          <h2 className="text-base font-extrabold text-ink sm:text-lg">
-            Kutipan Pilihan ({quotes.length})
-          </h2>
-        </div>
-        <ChevronDown
-          className={`h-4.5 w-4.5 shrink-0 text-ink-muted transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {isOpen && (
-        <div
-          id="quotes-section-content"
-          className="rounded-b-2xl px-6 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-5"
+    <>
+      <section className="rounded-2xl border border-line bg-surface shadow-sm">
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          className="flex w-full items-center justify-between gap-3 rounded-2xl bg-surface px-6 py-5 text-left transition-colors hover:bg-surface-subtle sm:px-8 sm:py-6"
         >
-          <div className="divide-y divide-line-subtle">
-            {quotes.map((quote, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col justify-between gap-3 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-4"
-              >
-                <blockquote
-                  className={`${fs.lead} font-semibold italic text-ink`}
-                >
-                  &ldquo;{quote}&rdquo;
-                </blockquote>
-                <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:self-center">
-                  <button
-                    type="button"
-                    onClick={() => onCopyQuote(quote, idx)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
-                  >
-                    {copyFeedback?.index === idx &&
-                    copyFeedback.status === "success" ? (
-                      <>
-                        <Check className="h-3.5 w-3.5 text-accent-strong" />
-                        <span className="text-accent-text">Tersalin!</span>
-                      </>
-                    ) : copyFeedback?.index === idx &&
-                      copyFeedback.status === "error" ? (
-                      <>
-                        <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
-                        <span className="text-rose-600 dark:text-rose-400">
-                          Gagal menyalin
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-3.5 w-3.5" />
-                        <span>Salin Kutipan</span>
-                      </>
-                    )}
-                  </button>
+          <div className="flex items-center gap-2 text-ink">
+            <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
+            <h2 className="text-base font-extrabold text-ink sm:text-lg">
+              Kutipan Pilihan ({quotes.length})
+            </h2>
+          </div>
+          <ArrowRight className="h-4.5 w-4.5 shrink-0 text-ink-muted" />
+        </button>
+      </section>
 
-                  <button
-                    type="button"
-                    onClick={() => onOpenQuoteCard(quote)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
+      {mounted &&
+        isOpen &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-md dark:bg-black/75"
+            onClick={handleClose}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="quotes-modal-title"
+          >
+            <div
+              className="animate-fade-slide relative flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex shrink-0 items-center justify-between gap-3 border-b border-line/70 bg-surface px-5 py-4 sm:px-6">
+                <div className="flex items-center gap-2 text-ink">
+                  <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
+                  <h2
+                    id="quotes-modal-title"
+                    className="text-base font-extrabold text-ink sm:text-lg"
                   >
-                    <ImageDown className="h-3.5 w-3.5" />
-                    <span>Buat Kartu</span>
-                  </button>
+                    Kutipan Pilihan ({quotes.length})
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  aria-label="Tutup daftar kutipan"
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink-muted transition hover:bg-surface-subtle hover:text-ink"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="overflow-y-auto px-5 py-4 sm:px-6 sm:py-5">
+                <div className="divide-y divide-line-subtle">
+                  {quotes.map((quote, idx) => (
+                    <div
+                      key={idx}
+                      className="flex flex-col justify-between gap-3 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-4"
+                    >
+                      <blockquote
+                        className={`${fs.lead} font-semibold italic text-ink`}
+                      >
+                        &ldquo;{quote}&rdquo;
+                      </blockquote>
+                      <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:self-center">
+                        <button
+                          type="button"
+                          onClick={() => onCopyQuote(quote, idx)}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
+                        >
+                          {copyFeedback?.index === idx &&
+                          copyFeedback.status === "success" ? (
+                            <>
+                              <Check className="h-3.5 w-3.5 text-accent-strong" />
+                              <span className="text-accent-text">Tersalin!</span>
+                            </>
+                          ) : copyFeedback?.index === idx &&
+                            copyFeedback.status === "error" ? (
+                            <>
+                              <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
+                              <span className="text-rose-600 dark:text-rose-400">
+                                Gagal menyalin
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-3.5 w-3.5" />
+                              <span>Salin Kutipan</span>
+                            </>
+                          )}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => onOpenQuoteCard(quote)}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
+                        >
+                          <ImageDown className="h-3.5 w-3.5" />
+                          <span>Buat Kartu</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </section>
+            </div>
+          </div>,
+          document.body
+        )}
+    </>
   );
 }
 
