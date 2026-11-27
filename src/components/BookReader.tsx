@@ -162,6 +162,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   );
   const pendingScrollTargetRef = useRef<string | null>(null);
   const pendingScrollToReadingTopRef = useRef(false);
+  const pendingInstantTopRef = useRef(false);
+  const readerNavStateRef = useRef<ReaderNavState>({
+    mode: "quick",
+    startedQuick: false,
+    deepStep: 0,
+  });
   const pendingQuickStepRef = useRef<number | null>(null);
   const pendingQuickStepTimerRef = useRef<number | undefined>(undefined);
 
@@ -180,6 +186,11 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const totalTakeaways = book.keyTakeaways.length;
   const conclusionStep = totalTakeaways + 1;
   const clampedDeepStep = Math.max(0, Math.min(conclusionStep, deepStep));
+  readerNavStateRef.current = {
+    mode: readMode,
+    startedQuick: hasStartedQuick,
+    deepStep: clampedDeepStep,
+  };
   const isIntroView =
     (readMode === "quick" && !hasStartedQuick) ||
     (readMode === "deep" && clampedDeepStep === 0);
@@ -242,6 +253,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         window.location.search,
         conclusionStep
       );
+      const current = readerNavStateRef.current;
+      const hasNavChanged =
+        parsed.mode !== current.mode ||
+        parsed.startedQuick !== current.startedQuick ||
+        parsed.deepStep !== current.deepStep;
+
+      if (!hasNavChanged) return;
+
       cancelViewExit();
       setIsStartingSession(false);
       window.clearTimeout(pendingQuickStepTimerRef.current);
@@ -251,6 +270,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       setHasStartedQuick(parsed.startedQuick);
       setDeepStep(parsed.deepStep);
       setIsCompletionModalOpen(false);
+      pendingInstantTopRef.current = true;
       pendingScrollToReadingTopRef.current = true;
     };
 
@@ -334,19 +354,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     };
   }, [readMode, hasStartedQuick, fontSize, book.slug]);
 
-  const getReadingTopY = useCallback(() => {
-    if (!isIntroView) return 0;
-    const area = readingAreaRef.current;
-    if (!area) return 0;
-    const stickyBottom =
-      toolbarRef.current?.getBoundingClientRect().bottom ?? 0;
-    return Math.max(
-      0,
-      window.scrollY + area.getBoundingClientRect().top - stickyBottom - 16
-    );
-  }, [isIntroView]);
-
-  // Jalankan smooth scroll tertunda setelah perpindahan mode atau halaman bab
+  // Jalankan scroll tertunda setelah perpindahan mode, halaman bab, atau navigasi Back/Forward
   useEffect(() => {
     if (
       readMode === "quick" &&
@@ -362,11 +370,26 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     }
 
     if (pendingScrollToReadingTopRef.current) {
+      const useInstantTop = pendingInstantTopRef.current;
       pendingScrollToReadingTopRef.current = false;
+      pendingInstantTopRef.current = false;
       if (!readingAreaRef.current) return;
-      smoothScrollToY(getReadingTopY(), 420);
+
+      if (useInstantTop) {
+        const scrollToTop = () => {
+          window.scrollTo({
+            top: 0,
+            behavior: "instant" as ScrollBehavior,
+          });
+        };
+        scrollToTop();
+        const rafId = window.requestAnimationFrame(scrollToTop);
+        return () => window.cancelAnimationFrame(rafId);
+      }
+
+      smoothScrollToY(0, 420);
     }
-  }, [readMode, hasStartedQuick, clampedDeepStep, getReadingTopY]);
+  }, [readMode, hasStartedQuick, clampedDeepStep]);
 
   const handleCopyQuote = async (quote: string, index: number) => {
     const textToCopy = `"${quote}" — ${book.title} (${book.author}) via ringkasnya.com`;
