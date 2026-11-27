@@ -313,7 +313,9 @@ export default function AccountDashboard({
             {filteredItems.map((item) => {
               const targetHref =
                 item.progressPercent > 0 && item.progressPercent < 100
-                  ? `/buku/${item.bookSlug}?mode=${item.lastMode}`
+                  ? item.lastMode === "deep"
+                    ? `/buku/${item.bookSlug}?mode=deep&progress=${item.progressPercent}`
+                    : `/buku/${item.bookSlug}?mode=quick&read=1&progress=${item.progressPercent}`
                   : `/buku/${item.bookSlug}`;
 
               return (
@@ -389,7 +391,7 @@ export default function AccountDashboard({
                           </span>
                         ) : item.progressPercent > 0 ? (
                           <span className="font-bold text-accent-text">
-                            {item.progressPercent}%
+                            Lanjutkan • {item.progressPercent}%
                           </span>
                         ) : (
                           <span className="text-ink-subtle">Tersimpan</span>

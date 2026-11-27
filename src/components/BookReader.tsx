@@ -4,7 +4,13 @@ import type { ArticleTermEntry } from "@/types/article";
 import { ARTICLE_TERMS } from "@/data/article-terms";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
-import { syncBookProgressUpdate } from "@/lib/progress-sync";
+import {
+  ensureProgressSynced,
+  getCachedBookProgress,
+  PROGRESS_UPDATED_EVENT,
+  syncBookProgressUpdate,
+} from "@/lib/progress-sync";
+import type { UserBookProgressItem } from "@/lib/progress";
 import {
   applyReaderTheme,
   clearReaderTheme,
@@ -85,6 +91,14 @@ interface ReaderNavState {
   mode: "quick" | "deep";
   startedQuick: boolean;
   deepStep: number;
+  quickProgress?: number | null;
+}
+
+function parseProgressParam(raw: string | null): number | null {
+  if (!raw) return null;
+  const parsed = Number.parseInt(raw, 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) return null;
+  return Math.min(99, parsed);
 }
 
 function parseReaderStateFromSearch(
@@ -94,16 +108,31 @@ function parseReaderStateFromSearch(
   const params = new URLSearchParams(search);
   const modeParam = params.get("mode");
   if (modeParam === "deep") {
-    const rawStep = Number.parseInt(params.get("step") ?? "0", 10);
-    const deepStep = Number.isFinite(rawStep)
-      ? Math.max(0, Math.min(maxStep, rawStep))
-      : 0;
-    return { mode: "deep", startedQuick: false, deepStep };
+    const rawStep = params.get("step");
+    let deepStep = 0;
+    if (rawStep !== null) {
+      const parsedStep = Number.parseInt(rawStep, 10);
+      deepStep = Number.isFinite(parsedStep)
+        ? Math.max(0, Math.min(maxStep, parsedStep))
+        : 0;
+    } else {
+      const progressParam = parseProgressParam(params.get("progress"));
+      if (progressParam !== null && maxStep > 0) {
+        deepStep = Math.max(
+          1,
+          Math.min(maxStep, Math.round((progressParam / 100) * maxStep))
+        );
+      }
+    }
+    return { mode: "deep", startedQuick: false, deepStep, quickProgress: null };
   }
 
   const readParam = params.get("read");
   const startedQuick = readParam === "1";
-  return { mode: "quick", startedQuick, deepStep: 0 };
+  const quickProgress = startedQuick
+    ? parseProgressParam(params.get("progress"))
+    : null;
+  return { mode: "quick", startedQuick, deepStep: 0, quickProgress };
 }
 
 function buildReaderSearch(
@@ -112,6 +141,7 @@ function buildReaderSearch(
   maxStep: number
 ): string {
   const params = new URLSearchParams(currentSearch);
+  params.delete("progress");
   if (state.mode === "deep") {
     const clampedStep = Math.max(0, Math.min(maxStep, state.deepStep));
     params.set("mode", "deep");
@@ -189,6 +219,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     useState<ArticleTermEntry | null>(null);
   const [isLeavingView, setIsLeavingView] = useState(false);
   const [isStartingSession, setIsStartingSession] = useState(false);
+  const [savedProgress, setSavedProgress] =
+    useState<UserBookProgressItem | null>(null);
+  const [isResumeBannerDismissed, setIsResumeBannerDismissed] = useState(false);
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const viewExitTimerRef = useRef<number | undefined>(undefined);
@@ -209,6 +242,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   });
   const pendingQuickStepRef = useRef<number | null>(null);
   const pendingQuickStepTimerRef = useRef<number | undefined>(undefined);
+  const pendingQuickProgressRef = useRef<number | null>(null);
 
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const { isCompleted, markCompleted, unmarkCompleted } = useCompletedBooks();
@@ -365,7 +399,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setReadMode(initial.mode);
     setHasStartedQuick(initial.startedQuick);
     setDeepStep(initial.deepStep);
-    setScrollProgress(0);
+    setScrollProgress(initial.quickProgress ?? 0);
+    pendingQuickProgressRef.current = initial.quickProgress ?? null;
+    setIsResumeBannerDismissed(false);
     setIsCompletionModalOpen(false);
     setIsUnmarkConfirmOpen(false);
     setUnmarkToastMessage(null);
@@ -440,11 +476,27 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     };
   }, []);
 
+  // Muat progres baca tersimpan dari cache/D1 untuk Soft Resume Banner di halaman intro
+  useEffect(() => {
+    const refreshSavedProgress = () => {
+      setSavedProgress(getCachedBookProgress(book.slug) ?? null);
+    };
+
+    refreshSavedProgress();
+    void ensureProgressSynced().then(refreshSavedProgress);
+
+    window.addEventListener(PROGRESS_UPDATED_EVENT, refreshSavedProgress);
+    return () => {
+      window.removeEventListener(PROGRESS_UPDATED_EVENT, refreshSavedProgress);
+    };
+  }, [book.slug]);
+
   // Hitung progres membaca berbasis scroll saat berada di Mode Kilat (setelah klik Mulai)
   useEffect(() => {
     if (readMode !== "quick" || !hasStartedQuick) return;
 
     let rafId = 0;
+    let restoreTimerId = 0;
 
     const calculateProgress = () => {
       rafId = 0;
@@ -472,11 +524,32 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       rafId = window.requestAnimationFrame(calculateProgress);
     };
 
-    calculateProgress();
+    const pendingQuickProgress = pendingQuickProgressRef.current;
+    if (pendingQuickProgress !== null) {
+      pendingQuickProgressRef.current = null;
+      restoreTimerId = window.setTimeout(() => {
+        const area = readingAreaRef.current;
+        if (!area) return;
+        const rect = area.getBoundingClientRect();
+        const stickyBottom =
+          toolbarRef.current?.getBoundingClientRect().bottom ?? 0;
+        const startY = window.scrollY + rect.top - stickyBottom;
+        const endY = window.scrollY + rect.bottom - window.innerHeight;
+        if (endY > startY) {
+          const targetY =
+            startY + (pendingQuickProgress / 100) * (endY - startY);
+          smoothScrollToY(Math.max(0, targetY), 480);
+        }
+      }, 80);
+    } else {
+      calculateProgress();
+    }
+
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate, { passive: true });
 
     return () => {
+      window.clearTimeout(restoreTimerId);
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
       if (rafId) window.cancelAnimationFrame(rafId);
@@ -842,6 +915,53 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     </div>
   );
 
+  const resumeCandidate =
+    isIntroView &&
+    !completed &&
+    !isResumeBannerDismissed &&
+    savedProgress &&
+    savedProgress.progressPercent > 0 &&
+    savedProgress.progressPercent < 100
+      ? savedProgress
+      : null;
+
+  const resumeDeepStep =
+    resumeCandidate && resumeCandidate.lastMode === "deep" && conclusionStep > 0
+      ? Math.max(
+          1,
+          Math.min(
+            conclusionStep,
+            Math.round((resumeCandidate.progressPercent / 100) * conclusionStep)
+          )
+        )
+      : 1;
+
+  const handleResumeFromBanner = useCallback(() => {
+    if (!resumeCandidate) return;
+    cancelViewExit();
+    setIsStartingSession(true);
+    setIsResumeBannerDismissed(true);
+
+    if (resumeCandidate.lastMode === "deep") {
+      setReadMode("deep");
+      setHasStartedQuick(false);
+      setDeepStep(resumeDeepStep);
+      pendingScrollToReadingTopRef.current = true;
+      syncUrlHistory({
+        mode: "deep",
+        startedQuick: false,
+        deepStep: resumeDeepStep,
+      });
+      return;
+    }
+
+    pendingQuickProgressRef.current = resumeCandidate.progressPercent;
+    setScrollProgress(resumeCandidate.progressPercent);
+    setReadMode("quick");
+    setHasStartedQuick(true);
+    syncUrlHistory({ mode: "quick", startedQuick: true, deepStep: 0 });
+  }, [resumeCandidate, resumeDeepStep, cancelViewExit, syncUrlHistory]);
+
   return (
     <div className="flex min-h-screen flex-col bg-page">
       {/* Banner Header Buku (tampil di halaman Pengantar saja agar sesi baca bersih) */}
@@ -1121,6 +1241,48 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
               }`}
             >
+              {resumeCandidate && (
+                <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent-line bg-accent-soft/60 px-4 py-3.5 shadow-sm">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-surface text-accent-text shadow-xs">
+                      {resumeCandidate.lastMode === "deep" ? (
+                        <BookOpen className="h-4 w-4" />
+                      ) : (
+                        <Zap className="h-4 w-4 text-amber-500" />
+                      )}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-ink sm:text-sm">
+                        Lanjutkan bacaan Anda ({resumeCandidate.progressPercent}%)
+                      </p>
+                      <p className="truncate text-xs text-ink-muted">
+                        {resumeCandidate.lastMode === "deep"
+                          ? resumeDeepStep === conclusionStep
+                            ? "Terakhir di Mode Mendalam • Kesimpulan Akhir"
+                            : `Terakhir di Mode Mendalam • Poin Inti ${resumeDeepStep}`
+                          : "Terakhir di Mode Kilat"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleResumeFromBanner}
+                      className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-[0.98]"
+                    >
+                      <span>Lanjutkan Baca</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsResumeBannerDismissed(true)}
+                      aria-label="Tutup pengingat lanjutkan baca"
+                      className="rounded-xl p-1.5 text-ink-subtle transition hover:bg-surface hover:text-ink"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
               <IntroSection
                 book={book}
                 fs={fs}
