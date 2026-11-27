@@ -574,13 +574,13 @@ export function QuotesSection({
 
       <div
         id="quotes-section-content"
-        className="border-t border-line/70 px-6 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6"
+        className="border-t border-line/70 px-6 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-5"
       >
-        <div className="grid grid-cols-1 gap-4">
+        <div className="divide-y divide-line-subtle">
           {quotes.map((quote, idx) => (
             <div
               key={idx}
-              className="flex flex-col justify-between gap-4 rounded-xl border border-line-subtle bg-page p-5 sm:flex-row sm:items-center"
+              className="flex flex-col justify-between gap-3 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-4"
             >
               <blockquote
                 className={`${fs.lead} font-semibold italic text-ink`}
