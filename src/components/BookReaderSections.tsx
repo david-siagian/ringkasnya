@@ -562,60 +562,7 @@ export function QuotesSection({
   fs,
 }: QuotesSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [stickyRelease, setStickyRelease] = useState<{
-    offset: number;
-    headerHeight: number;
-  } | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setStickyRelease(null);
-      return;
-    }
-
-    const updateSticky = () => {
-      const el = sectionRef.current;
-      const headerEl = headerRef.current;
-      if (!el || !headerEl) return;
-
-      const styles = getComputedStyle(document.documentElement);
-      const headerH = parseFloat(styles.getPropertyValue("--header-h")) || 0;
-      const toolbarH =
-        parseFloat(styles.getPropertyValue("--reader-toolbar-h")) || 0;
-      const stickyTop = headerH + toolbarH;
-      const rect = el.getBoundingClientRect();
-      const maxOffset = Math.max(
-        0,
-        el.offsetHeight - (window.innerHeight - stickyTop)
-      );
-
-      if (
-        rect.top < stickyTop &&
-        rect.bottom <= window.innerHeight &&
-        maxOffset > 0
-      ) {
-        setStickyRelease((prev) =>
-          prev &&
-          prev.offset === maxOffset &&
-          prev.headerHeight === headerEl.offsetHeight
-            ? prev
-            : { offset: maxOffset, headerHeight: headerEl.offsetHeight }
-        );
-      } else {
-        setStickyRelease((prev) => (prev === null ? prev : null));
-      }
-    };
-
-    updateSticky();
-    window.addEventListener("scroll", updateSticky, { passive: true });
-    window.addEventListener("resize", updateSticky, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", updateSticky);
-      window.removeEventListener("resize", updateSticky);
-    };
-  }, [isOpen, quotes.length]);
 
   const handleToggle = () => {
     const willClose = isOpen;
@@ -643,34 +590,23 @@ export function QuotesSection({
   return (
     <section
       ref={sectionRef}
-      className="relative rounded-2xl border border-line bg-surface shadow-sm"
+      className="rounded-2xl border border-line bg-surface shadow-sm"
     >
-      {isOpen && stickyRelease && (
-        <div
-          style={{ height: stickyRelease.headerHeight }}
-          aria-hidden="true"
-        />
-      )}
       <button
-        ref={headerRef}
         type="button"
         onClick={handleToggle}
         aria-expanded={isOpen}
         aria-controls="quotes-section-content"
         style={
           isOpen
-            ? stickyRelease
-              ? { top: stickyRelease.offset }
-              : {
-                  top: "calc(var(--header-h, 0px) + var(--reader-toolbar-h, 0px))",
-                }
+            ? {
+                top: "calc(var(--header-h, 0px) + var(--reader-toolbar-h, 0px))",
+              }
             : undefined
         }
         className={`flex w-full items-center justify-between gap-3 bg-surface px-6 py-5 text-left transition-colors hover:bg-surface-subtle sm:px-8 sm:py-6 ${
           isOpen
-            ? stickyRelease
-              ? "absolute inset-x-0 z-20 border-y border-line/70"
-              : "sticky z-20 rounded-t-2xl border-b border-line/70"
+            ? "sticky z-20 rounded-t-2xl border-b border-line/70"
             : "rounded-2xl"
         }`}
       >
