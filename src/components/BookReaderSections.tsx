@@ -600,16 +600,7 @@ interface QuotesSectionProps {
   isChildModalOpen?: boolean;
 }
 
-type QuoteTriggerVariant = "pull-quote" | "pill" | "flat-row" | "inline-link";
-
-const QUOTE_TRIGGER_VARIANTS: { id: QuoteTriggerVariant; label: string }[] = [
-  { id: "pull-quote", label: "1. Pull-Quote" },
-  { id: "pill", label: "2. Pill" },
-  { id: "flat-row", label: "3. Flat Row" },
-  { id: "inline-link", label: "4. Inline Link" },
-];
-
-/** Kartu pemicu dan modal Kutipan Pilihan dengan dukungan tombol Back, salin, & buat kartu PNG. */
+/** Tampilan awal Pull-Quote dan modal Kutipan Pilihan dengan dukungan tombol Back, salin, & buat kartu PNG. */
 export function QuotesSection({
   quotes,
   copyFeedback,
@@ -620,8 +611,6 @@ export function QuotesSection({
 }: QuotesSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [triggerVariant, setTriggerVariant] =
-    useState<QuoteTriggerVariant>("pull-quote");
   const pushedHistoryRef = useRef(false);
 
   useEffect(() => {
@@ -684,108 +673,31 @@ export function QuotesSection({
 
   return (
     <>
-      <section aria-label="Kutipan Pilihan" className="space-y-3">
-        {/* Pemilih varian sementara untuk uji perbandingan */}
-        <div
-          role="group"
-          aria-label="Pilih gaya tampilan awal kutipan pilihan"
-          className="flex flex-wrap items-center gap-1.5"
-        >
-          <span className="mr-1 text-[11px] font-semibold text-ink-subtle">
-            Preview gaya:
-          </span>
-          {QUOTE_TRIGGER_VARIANTS.map((variant) => (
-            <button
-              key={variant.id}
-              type="button"
-              onClick={() => setTriggerVariant(variant.id)}
-              className={`rounded-full border px-2.5 py-0.5 text-[11px] font-semibold transition ${
-                triggerVariant === variant.id
-                  ? "border-accent-line bg-accent-soft text-accent-text"
-                  : "border-line bg-page/60 text-ink-muted hover:text-ink"
-              }`}
+      <section aria-label="Kutipan Pilihan">
+        <div className="border-l-2 border-accent-strong py-1 pl-4">
+          {spotlightQuote && (
+            <blockquote
+              className={`${fs.compact} italic leading-relaxed text-ink-secondary`}
             >
-              {variant.label}
-            </button>
-          ))}
-        </div>
-
-        {triggerVariant === "pull-quote" && (
-          <div className="border-l-2 border-accent-strong pl-4 py-1">
-            {spotlightQuote && (
-              <blockquote
-                className={`${fs.compact} italic leading-relaxed text-ink-secondary`}
-              >
-                &ldquo;{spotlightQuote}&rdquo;
-              </blockquote>
-            )}
-            <button
-              type="button"
-              onClick={() => setIsOpen(true)}
-              aria-haspopup="dialog"
-              aria-expanded={isOpen}
-              className="mt-2.5 inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-accent-text transition hover:underline"
-            >
-              <Quote className="h-3.5 w-3.5 shrink-0" />
-              <span>
-                {quotes.length > 1
-                  ? `Lihat semua (${quotes.length}) kutipan pilihan`
-                  : "Buka kutipan pilihan"}
-              </span>
-              <ArrowRight className="h-3.5 w-3.5 shrink-0" />
-            </button>
-          </div>
-        )}
-
-        {triggerVariant === "pill" && (
-          <div>
-            <button
-              type="button"
-              onClick={() => setIsOpen(true)}
-              aria-haspopup="dialog"
-              aria-expanded={isOpen}
-              className="inline-flex items-center gap-2 rounded-full border border-line bg-page/80 px-4 py-2 text-xs sm:text-sm font-semibold text-ink transition hover:border-accent-line hover:bg-accent-soft/60 hover:text-accent-text active:scale-[0.98]"
-            >
-              <Quote className="h-4 w-4 shrink-0 text-accent-text" />
-              <span>Kutipan Pilihan ({quotes.length})</span>
-              <ArrowRight className="h-3.5 w-3.5 shrink-0 text-ink-muted" />
-            </button>
-          </div>
-        )}
-
-        {triggerVariant === "flat-row" && (
+              &ldquo;{spotlightQuote}&rdquo;
+            </blockquote>
+          )}
           <button
             type="button"
             onClick={() => setIsOpen(true)}
             aria-haspopup="dialog"
             aria-expanded={isOpen}
-            className="flex w-full items-center justify-between gap-3 border-y border-line/70 px-1 py-3.5 text-left transition-colors hover:bg-page/50"
+            className="mt-2.5 inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-accent-text transition hover:underline"
           >
-            <div className="flex items-center gap-2 text-ink">
-              <Quote className="h-4 w-4 shrink-0 text-accent-text sm:h-4.5 sm:w-4.5" />
-              <span className="text-sm font-bold text-ink sm:text-base">
-                Kutipan Pilihan ({quotes.length})
-              </span>
-            </div>
-            <ArrowRight className="h-4 w-4 shrink-0 text-ink-muted" />
+            <Quote className="h-3.5 w-3.5 shrink-0" />
+            <span>
+              {quotes.length > 1
+                ? `Lihat semua (${quotes.length}) kutipan pilihan`
+                : "Buka kutipan pilihan"}
+            </span>
+            <ArrowRight className="h-3.5 w-3.5 shrink-0" />
           </button>
-        )}
-
-        {triggerVariant === "inline-link" && (
-          <div>
-            <button
-              type="button"
-              onClick={() => setIsOpen(true)}
-              aria-haspopup="dialog"
-              aria-expanded={isOpen}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-text transition hover:underline"
-            >
-              <Quote className="h-4 w-4 shrink-0" />
-              <span>Kutipan Pilihan ({quotes.length})</span>
-              <ArrowRight className="h-3.5 w-3.5 shrink-0" />
-            </button>
-          </div>
-        )}
+        </div>
       </section>
 
       {mounted &&
