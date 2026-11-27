@@ -192,7 +192,7 @@ export default function AccountDashboard({
               type="button"
               onClick={handleSignOut}
               disabled={isSigningOut}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur-xs transition-colors hover:bg-white/20 disabled:opacity-60"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-red-400/40 bg-red-500/25 px-4 py-2 text-sm font-semibold text-red-100 backdrop-blur-xs transition-colors hover:border-red-300/60 hover:bg-red-500/35 hover:text-white disabled:opacity-60"
             >
               {isSigningOut ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
