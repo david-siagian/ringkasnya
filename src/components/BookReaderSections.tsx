@@ -562,12 +562,39 @@ export function QuotesSection({
   fs,
 }: QuotesSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const handleToggle = () => {
+    const willClose = isOpen;
+    setIsOpen((prev) => !prev);
+    if (willClose) {
+      requestAnimationFrame(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+        const styles = getComputedStyle(document.documentElement);
+        const headerH = parseFloat(styles.getPropertyValue("--header-h")) || 0;
+        const toolbarH =
+          parseFloat(styles.getPropertyValue("--reader-toolbar-h")) || 0;
+        const topOffset = headerH + toolbarH + 16;
+        const rect = el.getBoundingClientRect();
+        if (rect.top < topOffset) {
+          window.scrollTo({
+            top: Math.max(0, window.scrollY + rect.top - topOffset),
+            behavior: "smooth",
+          });
+        }
+      });
+    }
+  };
 
   return (
-    <section className="rounded-2xl border border-line bg-surface shadow-sm">
+    <section
+      ref={sectionRef}
+      className="rounded-2xl border border-line bg-surface shadow-sm"
+    >
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={handleToggle}
         aria-expanded={isOpen}
         aria-controls="quotes-section-content"
         style={
