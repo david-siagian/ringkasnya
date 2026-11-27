@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-ai" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#070d1a"/>
+      <stop offset="55%" stop-color="#0c2238"/>
+      <stop offset="100%" stop-color="#171b45"/>
+    </linearGradient>
+    <radialGradient id="glow-ai" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#070d1a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="frontier-line" x1="28" y1="150" x2="212" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-ai)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-ai)"/>
+
+  <!-- Kisi Halus Latar -->
+  <g stroke="#38bdf8" stroke-opacity="0.1" stroke-width="1">
+    <path d="M40 52 H200 M40 96 H200 M40 140 H200 M40 184 H200"/>
+    <path d="M60 36 V204 M120 36 V204 M180 36 V204"/>
+  </g>
+
+  <!-- Sisi Kiri: Siluet Nalar Manusia / Bohlam Pikiran -->
+  <g transform="translate(24, 34)">
+    <circle cx="52" cy="56" r="28" fill="#0f172a" stroke="#fbbf24" stroke-width="2.5"/>
+    <path d="M42 52 C42 44 50 40 56 44 C61 47 61 55 56 58 C53 60 52 63 52 66" stroke="#fde68a" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="52" cy="73" r="2.2" fill="#fde68a"/>
+    <!-- Pancaran Fokus Nalar -->
+    <path d="M52 18 V24 M22 56 H28 M82 56 H76 M30 34 L34 38 M74 34 L70 38" stroke="#fbbf24" stroke-opacity="0.7" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Sisi Kanan: Jaringan Simpul AI -->
+  <g transform="translate(128, 36)">
+    <rect x="18" y="26" width="54" height="54" rx="14" fill="#0b1b30" stroke="#22d3ee" stroke-width="2.5"/>
+    <circle cx="35" cy="43" r="4" fill="#22d3ee"/>
+    <circle cx="55" cy="43" r="4" fill="#38bdf8"/>
+    <circle cx="45" cy="63" r="4.5" fill="#67e8f9"/>
+    <path d="M35 43 H55 M35 43 L45 63 L55 43" stroke="#38bdf8" stroke-width="1.8"/>
+    <!-- Jalur Pin Chip -->
+    <path d="M34 16 V26 M56 16 V26 M34 80 V90 M56 80 V90 M8 44 H18 M8 62 H18 M72 44 H82 M72 62 H82" stroke="#22d3ee" stroke-opacity="0.65" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Garis Perbatasan Bergerigi (Jagged Frontier) -->
+  <path
+    d="M28 164 L56 142 L78 168 L104 128 L128 156 L154 114 L178 148 L212 122"
+    stroke="url(#frontier-line)"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M28 164 L56 142 L78 168 L104 128 L128 156 L154 114 L178 148 L212 122 L212 198 L28 198 Z"
+    fill="url(#frontier-line)"
+    fill-opacity="0.12"
+  />
+
+  <!-- Titik Pengujian pada Batas Bergerigi -->
+  <circle cx="104" cy="128" r="5.5" fill="#0f172a" stroke="#22d3ee" stroke-width="2.5"/>
+  <circle cx="154" cy="114" r="5.5" fill="#0f172a" stroke="#fbbf24" stroke-width="2.5"/>
+  <circle cx="128" cy="156" r="4.5" fill="#f43f5e"/>
+
+  <!-- Kompas / Lensa Verifikasi di Bawah -->
+  <circle cx="120" cy="186" r="14" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+  <path d="M114 186 L118.5 190.5 L127 181.5" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

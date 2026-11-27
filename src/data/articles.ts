@@ -6,6 +6,8 @@ import { biasKonfirmasi } from "./articles/bias-konfirmasi";
 import { efekJangkar } from "./articles/efek-jangkar";
 import { adaptasiHedonis } from "./articles/adaptasi-hedonis";
 import { eksperimenInvisibleGorilla } from "./articles/eksperimen-invisible-gorilla";
+import { fomoAiDiDuniaKerja } from "./articles/fomo-ai-di-dunia-kerja";
+import { manusiaEgoisAtauKooperatif } from "./articles/manusia-egois-atau-kooperatif";
 
 const WORDS_PER_MINUTE = 200;
 
@@ -47,6 +49,8 @@ const RAW_ARTICLES: Article[] = [
   efekJangkar,
   adaptasiHedonis,
   eksperimenInvisibleGorilla,
+  fomoAiDiDuniaKerja,
+  manusiaEgoisAtauKooperatif,
 ];
 
 export const ARTICLES: Article[] = RAW_ARTICLES.map(withCalculatedReadingTime);

@@ -80,4 +80,36 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
       "Fenomena psikologi kognitif ketika seseorang gagal menyadari stimulus visual yang sangat jelas dan tak terduga tepat di hadapannya, semata-mata karena kapasitas perhatiannya sedang tersedot penuh pada tugas mental lain.",
     originLabel: "Christopher Chabris & Daniel Simons (1999)",
   },
+  {
+    slug: "fomo-ai-di-dunia-kerja",
+    term: "Perbatasan Bergerigi AI",
+    aliases: [
+      "Perbatasan Bergerigi",
+      "Jagged Frontier",
+      "Perbatasan Bergerigi AI",
+      "Co-Intelligence",
+    ],
+    category: "Teknologi & Masa Depan",
+    readingTimeMinutes: 5,
+    shortDefinition:
+      "Batas kemampuan kecerdasan buatan yang tidak rata: AI tampak sangat cerdas pada tugas rumit tertentu, namun mendadak keliru pada persoalan yang terlihat sepele bagi manusia sehingga menuntut pengujian dan pengawasan kritis.",
+    originLabel: "Ethan Mollick & Tim Riset BCG–Harvard (2023)",
+  },
+  {
+    slug: "manusia-egois-atau-kooperatif",
+    term: "Altruisme Timbal Balik",
+    aliases: [
+      "Altruisme Timbal Balik",
+      "Reciprocal Altruism",
+      "Gen yang Egois",
+      "Selfish Gene",
+      "Homo Puppy",
+    ],
+    category: "Sains & Alam Semesta",
+    readingTimeMinutes: 5,
+    shortDefinition:
+      "Mekanisme evolusi ketika individu membantu pihak lain yang bukan kerabat genetiknya dengan harapan bantuan serupa akan dibalas di kemudian hari, membentuk fondasi kerja sama dan kepercayaan sosial manusia.",
+    originLabel:
+      "Richard Dawkins (1976) · Yuval Noah Harari (2011) · Rutger Bregman (2019)",
+  },
 ];

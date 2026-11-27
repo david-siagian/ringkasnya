@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-coop" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#061311"/>
+      <stop offset="55%" stop-color="#0a2924"/>
+      <stop offset="100%" stop-color="#0f2f38"/>
+    </linearGradient>
+    <radialGradient id="glow-coop" cx="120" cy="116" r="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#061311" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-coop)"/>
+  <circle cx="120" cy="116" r="86" fill="url(#glow-coop)"/>
+
+  <!-- Lingkaran Jejaring Kerja Sama Skala Besar (Sapiens) -->
+  <circle cx="120" cy="120" r="82" stroke="#34d399" stroke-opacity="0.22" stroke-width="1.5" stroke-dasharray="4 5"/>
+  <circle cx="120" cy="120" r="56" stroke="#fbbf24" stroke-opacity="0.24" stroke-width="1.5"/>
+
+  <!-- Pilinan Ganda DNA di Tengah (The Selfish Gene) -->
+  <path
+    d="M92 42 C148 64 148 92 92 114 C148 136 148 164 92 198"
+    stroke="#34d399"
+    stroke-width="3.5"
+    stroke-linecap="round"
+  />
+  <path
+    d="M148 42 C92 64 92 92 148 114 C92 136 92 164 148 198"
+    stroke="#fbbf24"
+    stroke-width="3.5"
+    stroke-linecap="round"
+  />
+
+  <!-- Anak Tangga DNA -->
+  <g stroke="#a7f3d0" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round">
+    <line x1="103" y1="54" x2="137" y2="54"/>
+    <line x1="106" y1="78" x2="134" y2="78"/>
+    <line x1="106" y1="102" x2="134" y2="102"/>
+    <line x1="106" y1="126" x2="134" y2="126"/>
+    <line x1="106" y1="150" x2="134" y2="150"/>
+    <line x1="103" y1="176" x2="137" y2="176"/>
+  </g>
+
+  <!-- Jembatan Timbal Balik Antar-Individu (Humankind & Reciprocal Altruism) -->
+  <path d="M50 112 C72 86 96 86 112 106" stroke="#6ee7b7" stroke-width="2" stroke-dasharray="3 3"/>
+  <path d="M190 128 C168 154 144 154 128 134" stroke="#fcd34d" stroke-width="2" stroke-dasharray="3 3"/>
+
+  <!-- Simpul Individu Kiri -->
+  <circle cx="48" cy="118" r="16" fill="#0b221e" stroke="#34d399" stroke-width="2.5"/>
+  <circle cx="48" cy="113" r="4.5" fill="#6ee7b7"/>
+  <path d="M39 126 C41 121 55 121 57 126" stroke="#6ee7b7" stroke-width="2.2" stroke-linecap="round"/>
+
+  <!-- Simpul Individu Kanan -->
+  <circle cx="192" cy="118" r="16" fill="#0b221e" stroke="#fbbf24" stroke-width="2.5"/>
+  <circle cx="192" cy="113" r="4.5" fill="#fde68a"/>
+  <path d="M183 126 C185 121 199 121 201 126" stroke="#fde68a" stroke-width="2.2" stroke-linecap="round"/>
+
+  <!-- Titik Simpul Komunitas di Orbit Luar -->
+  <circle cx="120" cy="38" r="5" fill="#34d399"/>
+  <circle cx="120" cy="202" r="5" fill="#fbbf24"/>
+  <circle cx="62" cy="62" r="4" fill="#6ee7b7" fill-opacity="0.8"/>
+  <circle cx="178" cy="62" r="4" fill="#fde68a" fill-opacity="0.8"/>
+  <circle cx="62" cy="178" r="4" fill="#fde68a" fill-opacity="0.8"/>
+  <circle cx="178" cy="178" r="4" fill="#6ee7b7" fill-opacity="0.8"/>
+</svg>
