@@ -269,7 +269,7 @@ export default function AccountDashboard({
 
           <a
             href="/katalog"
-            className="inline-flex items-center gap-1.5 self-start rounded-xl border border-line bg-page px-3.5 py-2 text-xs font-semibold text-ink transition-colors hover:border-accent-line hover:text-accent-text"
+            className="inline-flex items-center gap-1.5 self-start rounded-xl border border-emerald-500/30 bg-emerald-500/15 px-3.5 py-2 text-xs font-semibold text-emerald-700 shadow-xs backdrop-blur-md transition-all hover:border-emerald-500/50 hover:bg-emerald-500/25 dark:border-emerald-400/30 dark:bg-emerald-500/20 dark:text-emerald-300 dark:hover:bg-emerald-500/30"
           >
             <BookOpen className="h-3.5 w-3.5" />
             <span>Jelajahi Katalog</span>
