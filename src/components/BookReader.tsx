@@ -820,6 +820,24 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     });
   };
 
+  const handleExitReadingMode = useCallback(() => {
+    if (readMode === "deep") {
+      transitionToDeepStep(0);
+      return;
+    }
+
+    transitionAfterFadeOut(() => {
+      setIsStartingSession(false);
+      setPendingQuickStep(null);
+      setHasStartedQuick(false);
+      syncUrlHistory({
+        mode: "quick",
+        startedQuick: false,
+        deepStep: 0,
+      });
+    });
+  }, [readMode, syncUrlHistory, transitionAfterFadeOut, transitionToDeepStep]);
+
   const handleFinishReading = useCallback(() => {
     markCompleted(book.slug);
     transitionAfterFadeOut(() => {
@@ -1202,6 +1220,17 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             >
               {readingProgress}%
             </span>
+
+            <button
+              type="button"
+              onClick={handleExitReadingMode}
+              disabled={isLeavingView}
+              aria-label="Keluar dari mode baca"
+              title="Kembali ke halaman pengantar"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition hover:border-accent-line hover:bg-page hover:text-ink active:scale-[0.98] disabled:opacity-50"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
         </div>
 
