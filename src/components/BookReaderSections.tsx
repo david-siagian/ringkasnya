@@ -654,15 +654,15 @@ export function QuotesSection({
             aria-labelledby="quotes-modal-title"
           >
             <div
-              className="animate-fade-slide relative flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl"
+              className="animate-fade-slide relative flex max-h-[82vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl"
               onClick={(event) => event.stopPropagation()}
             >
-              <div className="flex shrink-0 items-center justify-between gap-3 border-b border-line/70 bg-surface px-5 py-4 sm:px-6">
+              <div className="flex shrink-0 items-center justify-between gap-3 border-b border-line/70 bg-surface px-4 py-3.5 sm:px-5 sm:py-4">
                 <div className="flex items-center gap-2 text-ink">
-                  <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
+                  <Quote className="h-4 w-4 shrink-0 text-accent-text" />
                   <h2
                     id="quotes-modal-title"
-                    className="text-base font-extrabold text-ink sm:text-lg"
+                    className="text-sm font-extrabold text-ink sm:text-base"
                   >
                     Kutipan Pilihan ({quotes.length})
                   </h2>
@@ -671,47 +671,47 @@ export function QuotesSection({
                   type="button"
                   onClick={handleClose}
                   aria-label="Tutup daftar kutipan"
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink-muted transition hover:bg-surface-subtle hover:text-ink"
+                  className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink-muted transition hover:bg-surface-subtle hover:text-ink"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3.5 w-3.5" />
                 </button>
               </div>
 
-              <div className="overflow-y-auto px-5 py-4 sm:px-6 sm:py-5">
+              <div className="overflow-y-auto px-4 py-3.5 sm:px-5 sm:py-4">
                 <div className="divide-y divide-line-subtle">
                   {quotes.map((quote, idx) => (
                     <div
                       key={idx}
-                      className="flex flex-col justify-between gap-3 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-4"
+                      className="flex flex-col justify-between gap-2.5 py-3 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-3.5"
                     >
                       <blockquote
-                        className={`${fs.lead} font-semibold italic text-ink`}
+                        className={`${fs.compact} leading-relaxed font-semibold italic text-ink`}
                       >
                         &ldquo;{quote}&rdquo;
                       </blockquote>
-                      <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:self-center">
+                      <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5 sm:self-center">
                         <button
                           type="button"
                           onClick={() => onCopyQuote(quote, idx)}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
+                          className="inline-flex items-center gap-1 rounded-lg border border-line bg-surface px-2.5 py-1 text-[11px] font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
                         >
                           {copyFeedback?.index === idx &&
                           copyFeedback.status === "success" ? (
                             <>
-                              <Check className="h-3.5 w-3.5 text-accent-strong" />
+                              <Check className="h-3 w-3 text-accent-strong" />
                               <span className="text-accent-text">Tersalin!</span>
                             </>
                           ) : copyFeedback?.index === idx &&
                             copyFeedback.status === "error" ? (
                             <>
-                              <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
+                              <AlertCircle className="h-3 w-3 text-rose-500" />
                               <span className="text-rose-600 dark:text-rose-400">
                                 Gagal menyalin
                               </span>
                             </>
                           ) : (
                             <>
-                              <Copy className="h-3.5 w-3.5" />
+                              <Copy className="h-3 w-3" />
                               <span>Salin Kutipan</span>
                             </>
                           )}
@@ -720,9 +720,9 @@ export function QuotesSection({
                         <button
                           type="button"
                           onClick={() => onOpenQuoteCard(quote)}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
+                          className="inline-flex items-center gap-1 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
                         >
-                          <ImageDown className="h-3.5 w-3.5" />
+                          <ImageDown className="h-3 w-3" />
                           <span>Buat Kartu</span>
                         </button>
                       </div>
