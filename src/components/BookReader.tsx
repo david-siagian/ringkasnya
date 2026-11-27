@@ -34,7 +34,6 @@ import {
   BookOpen,
   CheckCircle2,
   Clock,
-  Layers,
   List,
   MessageSquare,
   Quote,
@@ -156,8 +155,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     useState<ArticleTermEntry | null>(null);
   const [isLeavingView, setIsLeavingView] = useState(false);
   const [isStartingSession, setIsStartingSession] = useState(false);
-  const [penutupTab, setPenutupTab] = useState<"concepts" | "quotes" | "opinions">(
-    "concepts"
+  const [penutupTab, setPenutupTab] = useState<"quotes" | "opinions">(
+    "quotes"
   );
 
   const copyTimerRef = useRef<number | undefined>(undefined);
@@ -734,24 +733,8 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       <div
         role="tablist"
         aria-label="Eksplorasi setelah membaca"
-        className="grid grid-cols-3 gap-1.5 rounded-t-2xl border border-b-0 border-line bg-surface-subtle p-1.5"
+        className="grid grid-cols-2 gap-1.5 rounded-t-2xl border border-b-0 border-line bg-surface-subtle p-1.5"
       >
-        <button
-          type="button"
-          role="tab"
-          aria-selected={penutupTab === "concepts"}
-          onClick={() => setPenutupTab("concepts")}
-          className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
-            penutupTab === "concepts"
-              ? "bg-surface text-ink shadow-sm"
-              : "text-ink-muted hover:text-ink"
-          }`}
-        >
-          <Layers className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-          <span className="truncate">
-            Konsep ({book.keyConcepts.length})
-          </span>
-        </button>
         <button
           type="button"
           role="tab"
@@ -785,14 +768,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       </div>
 
       <div role="tabpanel">
-        {penutupTab === "concepts" ? (
-          <KeyConceptsSection
-            keyConcepts={book.keyConcepts}
-            fs={fs}
-            articleTerms={ARTICLE_TERMS}
-            onSelectArticleTerm={setActiveArticleTerm}
-          />
-        ) : penutupTab === "quotes" ? (
+        {penutupTab === "quotes" ? (
           <QuotesSection
             quotes={book.quotes}
             copyFeedback={copyFeedback}
@@ -816,7 +792,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         fs={fs}
       />
 
-      {/* Tab Eksplorasi Penutup: Konsep Kunci, Kutipan, & Opini */}
+      {/* Tab Eksplorasi Penutup: Kutipan & Opini */}
       {explorationTabsSection}
 
       <RelatedBooksSection relatedBooks={recommendedBooks} />
@@ -1167,7 +1143,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     ))}
                   </div>
 
-                  <div className="mt-8">
+                  <div className="mt-8 space-y-6">
                     <ConclusionSection
                       conclusion={book.conclusion}
                       fs={fs}
@@ -1175,6 +1151,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       articleTerms={ARTICLE_TERMS}
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
+                    {book.keyConcepts.length > 0 && (
+                      <KeyConceptsSection
+                        keyConcepts={book.keyConcepts}
+                        fs={fs}
+                        articleTerms={ARTICLE_TERMS}
+                        onSelectArticleTerm={setActiveArticleTerm}
+                      />
+                    )}
                   </div>
 
                   <div className="mt-6 flex items-center justify-between gap-3">
@@ -1226,12 +1210,22 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
                   ) : clampedDeepStep === conclusionStep ? (
-                    <ConclusionSection
-                      conclusion={book.conclusion}
-                      fs={fs}
-                      articleTerms={ARTICLE_TERMS}
-                      onSelectArticleTerm={setActiveArticleTerm}
-                    />
+                    <div className="space-y-6">
+                      <ConclusionSection
+                        conclusion={book.conclusion}
+                        fs={fs}
+                        articleTerms={ARTICLE_TERMS}
+                        onSelectArticleTerm={setActiveArticleTerm}
+                      />
+                      {book.keyConcepts.length > 0 && (
+                        <KeyConceptsSection
+                          keyConcepts={book.keyConcepts}
+                          fs={fs}
+                          articleTerms={ARTICLE_TERMS}
+                          onSelectArticleTerm={setActiveArticleTerm}
+                        />
+                      )}
+                    </div>
                   ) : (
                     penutupExplorerContent
                   )}

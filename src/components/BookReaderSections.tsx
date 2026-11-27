@@ -481,7 +481,7 @@ export function KeyConceptsSection({
   const conceptsMatched = new Set<string>();
 
   return (
-    <section className="rounded-b-2xl border border-line bg-surface shadow-sm overflow-hidden">
+    <section className="rounded-2xl border border-line bg-surface shadow-sm overflow-hidden">
       <div className="px-6 py-5 sm:px-8 sm:py-6">
         <div className="flex items-center gap-2 text-ink">
           <Layers className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
@@ -551,7 +551,7 @@ export function QuotesSection({
   fs,
 }: QuotesSectionProps) {
   return (
-    <section className="rounded-b-2xl border border-line bg-surface shadow-sm overflow-hidden">
+    <section className="rounded-2xl border border-line bg-surface shadow-sm overflow-hidden">
       <div className="px-6 py-5 sm:px-8 sm:py-6">
         <div className="flex items-center gap-2 text-ink">
           <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
@@ -952,7 +952,7 @@ export function DeepReadingBottomBar({
                     <Sparkles className="h-3.5 w-3.5" />
                   </span>
                   <span className="flex-1 truncate">
-                    Penutup: Konsep, Kutipan &amp; Opini
+                    Penutup: Kutipan &amp; Opini
                   </span>
                   {currentStep === finalStep && (
                     <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
