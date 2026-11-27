@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { ArrowRight, LogOut, LogIn } from "lucide-react";
-import { authClient, useSession } from "@/lib/auth-client";
+import { ArrowRight, LogIn } from "lucide-react";
+import { useSession } from "@/lib/auth-client";
 import { openAuthModal } from "@/lib/auth-modal";
 
 interface UserMenuProps {
@@ -23,18 +22,6 @@ export default function UserMenu({
   onNavigate,
 }: UserMenuProps) {
   const { data: session, isPending } = useSession();
-  const [isSigningOut, setIsSigningOut] = useState(false);
-
-  async function handleSignOut() {
-    setIsSigningOut(true);
-    try {
-      await authClient.signOut();
-      onNavigate?.();
-      window.location.href = "/";
-    } catch {
-      setIsSigningOut(false);
-    }
-  }
 
   const user = session?.user;
 
@@ -97,16 +84,6 @@ export default function UserMenu({
           </div>
           <ArrowRight className="h-3.5 w-3.5 shrink-0 text-ink-faint" />
         </a>
-
-        <button
-          type="button"
-          onClick={handleSignOut}
-          disabled={isSigningOut}
-          className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-red-600 dark:text-red-400 transition-colors hover:bg-red-50 dark:hover:bg-red-950/40 disabled:opacity-60"
-        >
-          <LogOut className="h-4 w-4" />
-          <span>{isSigningOut ? "Keluar..." : "Keluar"}</span>
-        </button>
       </div>
     );
   }
