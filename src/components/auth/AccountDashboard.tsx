@@ -321,10 +321,9 @@ export default function AccountDashboard({
               return (
                 <div
                   key={item.bookSlug}
-                  className="group flex gap-3.5 rounded-xl border border-line-subtle bg-page/60 p-3.5 transition-all hover:border-accent-line hover:bg-surface"
+                  className="group relative flex gap-3.5 rounded-xl border border-line-subtle bg-page/60 p-3.5 transition-all hover:border-accent-line hover:bg-surface"
                 >
-                  <a
-                    href={targetHref}
+                  <div
                     className={`relative h-24 w-18 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br ${item.coverGradient} shadow-xs`}
                   >
                     {item.coverImage ? (
@@ -339,14 +338,14 @@ export default function AccountDashboard({
                         {item.title}
                       </div>
                     )}
-                  </a>
+                  </div>
 
                   <div className="flex min-w-0 flex-1 flex-col justify-between">
                     <div>
                       <div className="flex items-start justify-between gap-2">
                         <a
                           href={targetHref}
-                          className="line-clamp-1 text-sm font-bold text-ink transition-colors group-hover:text-accent-text"
+                          className="line-clamp-1 text-sm font-bold text-ink transition-colors group-hover:text-accent-text after:absolute after:inset-0 after:z-0 after:rounded-xl focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent-strong"
                         >
                           {item.title}
                         </a>
@@ -358,7 +357,7 @@ export default function AccountDashboard({
                               ? `Hapus bookmark ${item.title}`
                               : `Simpan bookmark ${item.title}`
                           }
-                          className={`shrink-0 rounded-lg p-1 transition-colors ${
+                          className={`relative z-10 shrink-0 rounded-lg p-1 transition-colors ${
                             item.isBookmarked
                               ? "text-amber-500 hover:bg-amber-500/10"
                               : "text-ink-subtle hover:bg-surface hover:text-ink"

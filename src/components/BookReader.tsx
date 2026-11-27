@@ -221,7 +221,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [isStartingSession, setIsStartingSession] = useState(false);
   const [savedProgress, setSavedProgress] =
     useState<UserBookProgressItem | null>(null);
-  const [isResumeBannerDismissed, setIsResumeBannerDismissed] = useState(false);
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const viewExitTimerRef = useRef<number | undefined>(undefined);
@@ -401,7 +400,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setDeepStep(initial.deepStep);
     setScrollProgress(initial.quickProgress ?? 0);
     pendingQuickProgressRef.current = initial.quickProgress ?? null;
-    setIsResumeBannerDismissed(false);
     setIsCompletionModalOpen(false);
     setIsUnmarkConfirmOpen(false);
     setUnmarkToastMessage(null);
@@ -918,7 +916,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const resumeCandidate =
     isIntroView &&
     !completed &&
-    !isResumeBannerDismissed &&
     savedProgress &&
     savedProgress.progressPercent > 0 &&
     savedProgress.progressPercent < 100
@@ -940,7 +937,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     if (!resumeCandidate) return;
     cancelViewExit();
     setIsStartingSession(true);
-    setIsResumeBannerDismissed(true);
 
     if (resumeCandidate.lastMode === "deep") {
       setReadMode("deep");
@@ -1242,45 +1238,35 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               }`}
             >
               {resumeCandidate && (
-                <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent-line bg-accent-soft/60 px-4 py-3.5 shadow-sm">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-surface text-accent-text shadow-xs">
+                <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-accent-line bg-accent-soft/60 px-3.5 py-3 shadow-sm sm:px-4 sm:py-3.5">
+                  <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-surface text-accent-text shadow-xs sm:h-9 sm:w-9">
                       {resumeCandidate.lastMode === "deep" ? (
                         <BookOpen className="h-4 w-4" />
                       ) : (
                         <Zap className="h-4 w-4 text-amber-500" />
                       )}
                     </span>
-                    <div className="min-w-0">
-                      <p className="text-xs font-bold text-ink sm:text-sm">
-                        Lanjutkan bacaan Anda ({resumeCandidate.progressPercent}%)
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-xs font-bold text-ink sm:text-sm">
+                        Lanjutkan bacaan ({resumeCandidate.progressPercent}%)
                       </p>
-                      <p className="truncate text-xs text-ink-muted">
+                      <p className="truncate text-[11px] text-ink-muted sm:text-xs">
                         {resumeCandidate.lastMode === "deep"
                           ? resumeDeepStep === conclusionStep
-                            ? "Terakhir di Mode Mendalam • Kesimpulan Akhir"
-                            : `Terakhir di Mode Mendalam • Poin Inti ${resumeDeepStep}`
-                          : "Terakhir di Mode Kilat"}
+                            ? "Mode Mendalam • Kesimpulan Akhir"
+                            : `Mode Mendalam • Poin Inti ${resumeDeepStep}`
+                          : "Mode Kilat"}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={handleResumeFromBanner}
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-[0.98]"
-                    >
-                      <span>Lanjutkan Baca</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsResumeBannerDismissed(true)}
-                      aria-label="Tutup pengingat lanjutkan baca"
-                      className="rounded-xl p-1.5 text-ink-subtle transition hover:bg-surface hover:text-ink"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={handleResumeFromBanner}
+                    className="shrink-0 whitespace-nowrap rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-[0.98] sm:px-3.5"
+                  >
+                    Lanjut Baca
+                  </button>
                 </div>
               )}
               <IntroSection
