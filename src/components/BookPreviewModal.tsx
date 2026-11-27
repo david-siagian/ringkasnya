@@ -95,7 +95,7 @@ export default function BookPreviewModal({
           <X className="h-4 w-4" />
         </button>
 
-        <div className="overflow-y-auto">
+        <div className="min-h-0 flex-1 overflow-y-auto">
           {/* Header Preview: Buku beserta background gradasinya */}
         <div
           className={`bg-slate-900 bg-gradient-to-br ${book.coverGradient} p-6 sm:p-8 text-white`}
@@ -149,7 +149,7 @@ export default function BookPreviewModal({
           </div>
         </div>
 
-        {/* Sinopsis & Tombol Baca */}
+        {/* Sinopsis & Target Pembaca */}
         <div className="p-6 sm:p-8">
           <h3 className="text-xs font-bold uppercase tracking-wider text-accent-strong">
             Sinopsis Buku
@@ -176,17 +176,19 @@ export default function BookPreviewModal({
             </ul>
           </div>
 
-          <div className="mt-7 flex justify-center border-t border-line-subtle pt-6">
-            <a
-              href={`/buku/${book.slug}`}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-8 py-3.5 text-sm sm:text-base font-bold text-white shadow-md shadow-emerald-600/20 transition-all duration-200 hover:bg-emerald-700 active:scale-[0.98]"
-            >
-              <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span>Baca</span>
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
         </div>
+        </div>
+
+        {/* Footer Sticky: Tombol Baca selalu terlihat tanpa perlu scroll */}
+        <div className="flex shrink-0 justify-center border-t border-line-subtle bg-surface px-6 py-4 sm:px-8 sm:py-5">
+          <a
+            href={`/buku/${book.slug}`}
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-8 py-3.5 text-sm sm:text-base font-bold text-white shadow-md shadow-emerald-600/20 transition-all duration-200 hover:bg-emerald-700 active:scale-[0.98]"
+          >
+            <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span>Baca</span>
+            <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
       </div>
     </div>,
