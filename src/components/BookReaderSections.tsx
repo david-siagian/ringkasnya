@@ -478,58 +478,72 @@ export function KeyConceptsSection({
   articleTerms = [],
   onSelectArticleTerm,
 }: KeyConceptsSectionProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const conceptsMatched = new Set<string>();
 
   return (
     <section className="rounded-2xl border border-line bg-surface shadow-sm overflow-hidden">
-      <div className="px-6 py-5 sm:px-8 sm:py-6">
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+        aria-controls="key-concepts-content"
+        className="flex w-full items-center justify-between gap-3 px-6 py-5 text-left transition-colors hover:bg-page/50 sm:px-8 sm:py-6"
+      >
         <div className="flex items-center gap-2 text-ink">
           <Layers className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
           <h2 className="text-base font-extrabold text-ink sm:text-lg">
             Konsep Kunci ({keyConcepts.length})
           </h2>
         </div>
-      </div>
+        <ChevronDown
+          className={`h-4.5 w-4.5 shrink-0 text-ink-muted transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
 
-      <div
-        id="key-concepts-content"
-        className="border-t border-line/70 px-6 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6"
-      >
-        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-          {keyConcepts.map((concept, idx) => (
-            <div
-              key={idx}
-              className="rounded-xl border border-line bg-page/70 p-4 sm:p-5 transition-colors hover:border-accent-line"
-            >
-              <div className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-xs font-bold text-white">
-                  {idx + 1}
-                </span>
-                <div className="min-w-0">
-                  <h3 className={`${fs.lead} font-extrabold text-ink`}>
-                    <RichBookText
-                      text={concept.title}
-                      terms={articleTerms}
-                      onSelectTerm={onSelectArticleTerm}
-                      matchedSlugs={conceptsMatched}
-                    />
-                  </h3>
-                  <p
-                    className={`mt-1.5 ${fs.compact} leading-relaxed text-ink-secondary`}
-                  >
-                    <RichBookText
-                      text={concept.explanation}
-                      terms={articleTerms}
-                      onSelectTerm={onSelectArticleTerm}
-                      matchedSlugs={conceptsMatched}
-                    />
-                  </p>
+      {isOpen && (
+        <div
+          id="key-concepts-content"
+          className="border-t border-line/70 px-6 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6"
+        >
+          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+            {keyConcepts.map((concept, idx) => (
+              <div
+                key={idx}
+                className="rounded-xl border border-line bg-page/70 p-4 sm:p-5 transition-colors hover:border-accent-line"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-xs font-bold text-white">
+                    {idx + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className={`${fs.lead} font-extrabold text-ink`}>
+                      <RichBookText
+                        text={concept.title}
+                        terms={articleTerms}
+                        onSelectTerm={onSelectArticleTerm}
+                        matchedSlugs={conceptsMatched}
+                      />
+                    </h3>
+                    <p
+                      className={`mt-1.5 ${fs.compact} leading-relaxed text-ink-secondary`}
+                    >
+                      <RichBookText
+                        text={concept.explanation}
+                        terms={articleTerms}
+                        onSelectTerm={onSelectArticleTerm}
+                        matchedSlugs={conceptsMatched}
+                      />
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
