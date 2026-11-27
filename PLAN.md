@@ -16,8 +16,9 @@ Dokumen ini menyimpan rencana pengembangan **Fase 3** untuk `ringkasnya.com`, me
 | **2. Fase 3.3 — Payment & Keanggotaan** | **Pending** | Tabel `subscriptions` siap; payment gateway & webhook belum dibuat |
 | **2. Admin CMS (`/admin`)** | **Pending** | Dashboard & API admin (CRUD ringkasan, publish, hitung durasi) belum dibuat |
 | **3. Opini Pembaca** | **Selesai** | Fitur *Opini* aktif di `BookReader`, D1 (`0024`), wajib login untuk kirim & apresiasi *Bermanfaat* |
-| **4. Artikel — Gelombang 1 (MVP)** | **Selesai** | 6 artikel Bedah Istilah Ilmiah aktif di `src/pages/artikel/` |
-| **4. Artikel — Gelombang Berikutnya** | **Pending** | Backlog editorial (istilah baru & format esai/roadmap/eksperimen) |
+| **4. Artikel — Gelombang 1 (MVP)** | **Selesai** | 7 artikel aktif di `src/pages/artikel/` (`bedah-istilah` & `kisah-eksperimen`) |
+| **4. Artikel — Gelombang Berikutnya** | **Pending** | Backlog editorial (istilah baru & format esai/roadmap/sains aktual) |
+| **4B. Migrasi Konten Artikel ke D1** | **Pending** | Skema 2 tabel D1 (`articles` + `article_contents`), `articles-repository.ts`, SSR caching, & pembersihan file statis |
 | **5. Ekspansi Katalog 100 Buku** | **Selesai** | **100 / 100 buku** (Fase 1 + Batch 1–5) lengkap di Cloudflare D1 |
 
 ---
@@ -99,6 +100,54 @@ Selain **Bedah Istilah**, rubrik Artikel ke depannya dapat diperluas ke format e
 2. **Kacamata Sains untuk Fenomena Aktual (*Real-World Lens*)**: Membedah fenomena sehari-hari atau isu di Indonesia menggunakan kerangka sains & psikologi dari buku-buku Ringkasnya.
 3. **Peta Belajar / Panduan Membaca (*Reading Roadmap*)**: Urutan bacaan terkurasi untuk pembaca baru yang ingin mendalami satu tema besar (mis. jalur belajar evolusi & sejarah manusia).
 4. **Kisah di Balik Eksperimen & Pemikir Klasik**: Cerita naratif di balik eksperimen terkenal atau kolaborasi ilmuwan besar yang sering dirujuk lintas buku (mis. Kahneman & Tversky).
+
+### D. Rencana Migrasi Konten Artikel ke Cloudflare D1 (Database) — Pending
+
+Mengikuti keberhasilan migrasi 100 buku ke Cloudflare D1, konten editorial artikel yang saat ini berada di file TypeScript statis (`src/data/articles/*.ts`) direncanakan untuk dimigrasikan ke database **Cloudflare D1** (`ringkasnya-db`) demi mendukung editorial tanpa deploy ulang (*zero-redeploy*), pemisahan payload bacaan berat dari metadata kartu feed (*vertical partitioning*), serta persiapan fondasi antarmuka **Admin CMS (`/admin`)**.
+
+#### 1. Skema Database D1 (Vertical Partitioning)
+- **Tabel `articles` (Metadata Ringan untuk Feed, Home, dan Popover Terms)**:
+  - `slug TEXT PRIMARY KEY`: Identifier unik artikel (kebab-case).
+  - `title TEXT NOT NULL`, `subtitle TEXT NOT NULL`.
+  - `term TEXT NOT NULL`, `aliases_json TEXT NOT NULL`: Istilah dan variasi alias untuk pencocokan otomatis di `BookReader`.
+  - `format TEXT NOT NULL CHECK (format IN ('bedah-istilah', 'lintas-buku', 'sains-aktual', 'kisah-eksperimen'))`.
+  - `category TEXT NOT NULL` (11 kategori resmi).
+  - `reading_time_minutes INTEGER NOT NULL` (200 kata/menit).
+  - `short_definition TEXT NOT NULL`, `origin_label TEXT NOT NULL`.
+  - `cover_gradient TEXT NOT NULL`, `cover_image TEXT`, `accent_badge TEXT NOT NULL`.
+  - `published_at TEXT NOT NULL` (ISO `YYYY-MM-DD`).
+  - `related_book_slugs_json TEXT NOT NULL` (JSON array slug buku terkait).
+  - `is_published INTEGER NOT NULL DEFAULT 1 CHECK (is_published IN (0, 1))`.
+  - `created_at TEXT NOT NULL DEFAULT (datetime('now'))`, `updated_at TEXT NOT NULL DEFAULT (datetime('now'))`.
+  - *Indeks*: `idx_articles_feed` (`is_published`, `published_at DESC`), `idx_articles_category` (`is_published`, `category`).
+- **Tabel `article_contents` (Payload Bacaan Penuh)**:
+  - `article_slug TEXT PRIMARY KEY REFERENCES articles(slug) ON DELETE CASCADE`.
+  - `lead_paragraph TEXT NOT NULL`.
+  - `sections_json TEXT NOT NULL` (Array objek seksi: `heading`, `paragraphs: string[]`, `highlightBox?: { label, text }`).
+  - `key_takeaways_json TEXT NOT NULL` (Array string poin kesimpulan).
+  - `updated_at TEXT NOT NULL DEFAULT (datetime('now'))`.
+
+#### 2. Data Access Layer (`src/lib/articles-repository.ts`)
+- Pola seragam dengan `books-repository.ts`: cache memory per-isolate Cloudflare Worker untuk efisiensi request D1, dipadu header `Cache-Control: public, s-maxage=300, stale-while-revalidate=3600`.
+- Fungsi:
+  - `getArticleFeed(db?: D1Database): Promise<ArticleFeedItem[]>`
+  - `getArticleBySlug(slug: string, db?: D1Database): Promise<Article | null>`
+  - `getArticlesForBook(bookSlug: string, db?: D1Database): Promise<ArticleFeedItem[]>`
+  - `getArticleTerms(db?: D1Database): Promise<ArticleTermEntry[]>`
+  - `getRecentArticles(limit: number, db?: D1Database): Promise<ArticleFeedItem[]>`
+
+#### 3. Integrasi Halaman & Komponen
+- `src/pages/artikel/index.astro`: panggil `getArticleFeed()`, teruskan ke `<ArticleFeed client:load items={articleItems} />`.
+- `src/pages/artikel/[slug].astro`: panggil `getArticleBySlug()`, 404 guard jika unpublished/tidak ditemukan.
+- `src/pages/index.astro`: panggil `getRecentArticles(4)` untuk `HomeArticlesSection`.
+- `src/pages/buku/[slug].astro` & `BookReader.tsx`: teruskan `articleTerms` hasil query D1 via props sehingga `BookReader` bebas dari impor file statis `article-terms.ts`.
+
+#### 4. Tahapan Eksekusi
+1. **Migrasi SQL**: Buat skema `migrations/0025_create_articles_tables.sql` dan seed `migrations/0026_seed_initial_articles.sql` untuk 7 artikel awal.
+2. **Repository Layer**: Implementasikan `src/lib/articles-repository.ts`.
+3. **Refaktor Astro SSR**: Hubungkan halaman-halaman ke repository D1.
+4. **Verifikasi & Smoke Test**: Jalankan `npm run typecheck`, cek rendering feed, detail artikel, dan popover reader.
+5. **Pembersihan**: Hapus file statis di `src/data/articles/` dan jadikan D1 sebagai *single source of truth*.
 
 ---
 
