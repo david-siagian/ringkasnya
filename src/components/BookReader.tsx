@@ -957,7 +957,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
           {/* Kontrol Tampilan Baca (Popover Aa: Ukuran Huruf & Warna Latar) + Progres */}
           <div className="flex items-center gap-2">
-            <div ref={appearanceMenuRef} className="relative">
+            <div ref={appearanceMenuRef} className="sm:relative">
               <button
                 type="button"
                 onClick={() => setIsAppearanceOpen((prev) => !prev)}
@@ -985,7 +985,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 <div
                   role="dialog"
                   aria-label="Pengaturan tampilan baca"
-                  className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-line bg-surface p-4 shadow-xl"
+                  className="absolute inset-x-4 top-full z-50 mt-2 rounded-2xl border border-line bg-surface p-4 shadow-xl sm:inset-x-auto sm:right-0 sm:w-64"
                 >
                   <div>
                     <p className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle">
