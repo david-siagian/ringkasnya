@@ -3,9 +3,11 @@ import { createPortal } from "react-dom";
 import {
   AlertCircle,
   Check,
+  CheckCircle2,
   Copy,
   ImageDown,
   Layers,
+  LayoutGrid,
   Quote,
   X,
 } from "lucide-react";
@@ -249,6 +251,101 @@ export function QuickQuotesModal({
             </div>
           </div>
         ))}
+      </div>
+    </ReaderModalShell>
+  );
+}
+
+interface BookCompletedModalProps {
+  open: boolean;
+  onClose: () => void;
+  bookTitle: string;
+  onExploreQuotesAndOpinions: () => void;
+  onRequestUnmark: () => void;
+}
+
+/** Modal selebrasi sesaat setelah pembaca menekan tombol Selesai di akhir sesi baca. */
+export function BookCompletedModal({
+  open,
+  onClose,
+  bookTitle,
+  onExploreQuotesAndOpinions,
+  onRequestUnmark,
+}: BookCompletedModalProps) {
+  return (
+    <ReaderModalShell
+      open={open}
+      onClose={onClose}
+      titleId="book-completed-modal-title"
+      maxWidthClass="max-w-md"
+    >
+      <div className="relative px-6 pb-6 pt-7 text-center sm:px-7">
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Tutup modal buku selesai dibaca"
+          className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full bg-surface-subtle text-ink-muted transition hover:bg-page hover:text-ink"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-600/15 text-emerald-600 ring-1 ring-emerald-500/25 dark:bg-emerald-400/15 dark:text-emerald-400">
+          <CheckCircle2 className="h-7 w-7" />
+        </div>
+
+        <span className="mt-4 inline-block text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
+          Selesai Dibaca
+        </span>
+        <h2
+          id="book-completed-modal-title"
+          className="mt-1 text-xl font-extrabold tracking-tight text-ink"
+        >
+          Buku Ini Telah Selesai Dibaca!
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+          Selamat, Anda telah menuntaskan ringkasan{" "}
+          <span className="font-semibold text-ink">{bookTitle}</span>. Progres
+          bacaan Anda sudah tersimpan.
+        </p>
+
+        <div className="mt-6 flex flex-col gap-2.5">
+          <a
+            href="/katalog"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
+          >
+            <LayoutGrid className="h-4 w-4 shrink-0" />
+            <span>Jelajahi Katalog Buku</span>
+          </a>
+
+          <button
+            type="button"
+            onClick={onExploreQuotesAndOpinions}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-page px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-accent-line hover:bg-surface-subtle active:scale-[0.98]"
+          >
+            <Quote className="h-4 w-4 shrink-0 text-accent-strong" />
+            <span>Lihat Kutipan &amp; Opini</span>
+          </button>
+        </div>
+
+        <div className="mt-4 flex items-center justify-center gap-4 text-xs">
+          <button
+            type="button"
+            onClick={onClose}
+            className="font-semibold text-ink-muted transition hover:text-ink"
+          >
+            Tutup
+          </button>
+          <span className="text-line" aria-hidden="true">
+            •
+          </span>
+          <button
+            type="button"
+            onClick={onRequestUnmark}
+            className="font-medium text-ink-subtle transition hover:text-rose-600 dark:hover:text-rose-400"
+          >
+            Batalkan tanda selesai
+          </button>
+        </div>
       </div>
     </ReaderModalShell>
   );

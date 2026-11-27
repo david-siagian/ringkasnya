@@ -8,6 +8,7 @@ import QuoteCardModal from "./QuoteCardModal";
 import BookOpinionsSection from "./BookOpinionsSection";
 import { ArticleTermPopover } from "./ArticleTermPopover";
 import {
+  BookCompletedModal,
   ConfirmUnmarkCompletedModal,
   ReaderToast,
 } from "./BookReaderModals";
@@ -22,7 +23,6 @@ import {
   IntroReadingBottomBar,
   IntroSection,
   KeyConceptsSection,
-  MarkCompletedSection,
   QuotesSection,
   RelatedBooksSection,
   TakeawayCard,
@@ -49,38 +49,36 @@ interface BookReaderProps {
 interface ReaderNavState {
   mode: "quick" | "deep";
   startedQuick: boolean;
-  quickDone?: boolean;
   deepStep: number;
 }
 
 function parseReaderStateFromSearch(
   search: string,
-  finalStep: number
+  maxStep: number
 ): ReaderNavState {
   const params = new URLSearchParams(search);
   const modeParam = params.get("mode");
   if (modeParam === "deep") {
     const rawStep = Number.parseInt(params.get("step") ?? "0", 10);
     const deepStep = Number.isFinite(rawStep)
-      ? Math.max(0, Math.min(finalStep, rawStep))
+      ? Math.max(0, Math.min(maxStep, rawStep))
       : 0;
-    return { mode: "deep", startedQuick: false, quickDone: false, deepStep };
+    return { mode: "deep", startedQuick: false, deepStep };
   }
 
   const readParam = params.get("read");
-  const startedQuick = readParam === "1" || readParam === "done";
-  const quickDone = readParam === "done";
-  return { mode: "quick", startedQuick, quickDone, deepStep: 0 };
+  const startedQuick = readParam === "1";
+  return { mode: "quick", startedQuick, deepStep: 0 };
 }
 
 function buildReaderSearch(
   state: ReaderNavState,
   currentSearch: string,
-  finalStep: number
+  maxStep: number
 ): string {
   const params = new URLSearchParams(currentSearch);
   if (state.mode === "deep") {
-    const clampedStep = Math.max(0, Math.min(finalStep, state.deepStep));
+    const clampedStep = Math.max(0, Math.min(maxStep, state.deepStep));
     params.set("mode", "deep");
     params.delete("read");
     if (clampedStep > 0) {
@@ -90,7 +88,7 @@ function buildReaderSearch(
     }
   } else if (state.startedQuick) {
     params.set("mode", "quick");
-    params.set("read", state.quickDone ? "done" : "1");
+    params.set("read", "1");
     params.delete("step");
   } else {
     params.delete("mode");
@@ -137,7 +135,6 @@ async function copyTextToClipboard(text: string): Promise<boolean> {
 export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [readMode, setReadMode] = useState<"quick" | "deep">("quick");
   const [hasStartedQuick, setHasStartedQuick] = useState(false);
-  const [isQuickDone, setIsQuickDone] = useState(false);
   const [deepStep, setDeepStep] = useState(0);
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
@@ -145,6 +142,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [activeQuoteForCard, setActiveQuoteForCard] = useState<string | null>(
     null
   );
+  const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false);
   const [isUnmarkConfirmOpen, setIsUnmarkConfirmOpen] = useState(false);
   const [unmarkToastMessage, setUnmarkToastMessage] = useState<string | null>(
     null
@@ -181,8 +179,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   const totalTakeaways = book.keyTakeaways.length;
   const conclusionStep = totalTakeaways + 1;
-  const finalStep = totalTakeaways + 2;
-  const clampedDeepStep = Math.max(0, Math.min(finalStep, deepStep));
+  const clampedDeepStep = Math.max(0, Math.min(conclusionStep, deepStep));
   const isIntroView =
     (readMode === "quick" && !hasStartedQuick) ||
     (readMode === "deep" && clampedDeepStep === 0);
@@ -206,11 +203,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   const readingProgress =
     readMode === "deep"
-      ? Math.round((clampedDeepStep / Math.max(1, finalStep)) * 100)
+      ? Math.round((clampedDeepStep / Math.max(1, conclusionStep)) * 100)
       : hasStartedQuick
-        ? isQuickDone
-          ? 100
-          : scrollProgress
+        ? scrollProgress
         : 0;
 
   const cancelViewExit = useCallback(() => {
@@ -222,30 +217,30 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   useEffect(() => {
     const initial =
       typeof window !== "undefined"
-        ? parseReaderStateFromSearch(window.location.search, finalStep)
+        ? parseReaderStateFromSearch(window.location.search, conclusionStep)
         : { mode: "quick" as const, startedQuick: false, deepStep: 0 };
 
     cancelViewExit();
     setIsStartingSession(false);
     setReadMode(initial.mode);
     setHasStartedQuick(initial.startedQuick);
-    setIsQuickDone(Boolean(initial.quickDone));
     setDeepStep(initial.deepStep);
     setScrollProgress(0);
+    setIsCompletionModalOpen(false);
     setIsUnmarkConfirmOpen(false);
     setUnmarkToastMessage(null);
     window.clearTimeout(unmarkToastTimerRef.current);
     setActiveArticleTerm(null);
     pendingQuickStepRef.current = null;
     window.clearTimeout(pendingQuickStepTimerRef.current);
-  }, [book.slug, finalStep, cancelViewExit]);
+  }, [book.slug, conclusionStep, cancelViewExit]);
 
   // Pulihkan state reader saat tombol Back/Forward browser ditekan
   useEffect(() => {
     const handlePopState = () => {
       const parsed = parseReaderStateFromSearch(
         window.location.search,
-        finalStep
+        conclusionStep
       );
       cancelViewExit();
       setIsStartingSession(false);
@@ -254,25 +249,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       pendingScrollTargetRef.current = null;
       setReadMode(parsed.mode);
       setHasStartedQuick(parsed.startedQuick);
-      setIsQuickDone(Boolean(parsed.quickDone));
       setDeepStep(parsed.deepStep);
+      setIsCompletionModalOpen(false);
       pendingScrollToReadingTopRef.current = true;
     };
 
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, [finalStep, cancelViewExit]);
-
-  const handleMarkCompleted = useCallback(() => {
-    markCompleted(book.slug);
-    setUnmarkToastMessage(
-      `Buku "${book.title}" ditandai selesai dibaca.`
-    );
-    window.clearTimeout(unmarkToastTimerRef.current);
-    unmarkToastTimerRef.current = window.setTimeout(() => {
-      setUnmarkToastMessage(null);
-    }, 3000);
-  }, [book.slug, book.title, markCompleted]);
+  }, [conclusionStep, cancelViewExit]);
 
   // Sinkronkan tinggi toolbar sticky (bisa 2 baris di mobile) ke CSS var `--reader-toolbar-h`
   useEffect(() => {
@@ -427,33 +411,39 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       (conclusionEl && conclusionEl.getBoundingClientRect().top <= anchorY) ||
       scrollProgress >= 95
     ) {
-      detectedStep = finalStep;
+      detectedStep = conclusionStep;
     }
 
     return detectedStep;
   };
 
-  const syncUrlHistory = (nextState: ReaderNavState) => {
-    if (typeof window === "undefined") return;
-    const nextSearch = buildReaderSearch(
-      nextState,
-      window.location.search,
-      finalStep
-    );
-    if (nextSearch === window.location.search) return;
-    const nextUrl = `${window.location.pathname}${nextSearch}${window.location.hash}`;
-    window.history.pushState(null, "", nextUrl);
-  };
+  const syncUrlHistory = useCallback(
+    (nextState: ReaderNavState) => {
+      if (typeof window === "undefined") return;
+      const nextSearch = buildReaderSearch(
+        nextState,
+        window.location.search,
+        conclusionStep
+      );
+      if (nextSearch === window.location.search) return;
+      const nextUrl = `${window.location.pathname}${nextSearch}${window.location.hash}`;
+      window.history.pushState(null, "", nextUrl);
+    },
+    [conclusionStep]
+  );
 
-  const goToDeepStep = (nextStep: number, scrollAfter = true) => {
-    cancelViewExit();
-    const target = Math.max(0, Math.min(finalStep, nextStep));
-    setDeepStep(target);
-    if (scrollAfter) {
-      pendingScrollToReadingTopRef.current = true;
-    }
-    syncUrlHistory({ mode: "deep", startedQuick: false, deepStep: target });
-  };
+  const goToDeepStep = useCallback(
+    (nextStep: number, scrollAfter = true) => {
+      cancelViewExit();
+      const target = Math.max(0, Math.min(conclusionStep, nextStep));
+      setDeepStep(target);
+      if (scrollAfter) {
+        pendingScrollToReadingTopRef.current = true;
+      }
+      syncUrlHistory({ mode: "deep", startedQuick: false, deepStep: target });
+    },
+    [cancelViewExit, conclusionStep, syncUrlHistory]
+  );
 
   const transitionAfterFadeOut = useCallback(
     (onReady: () => void, fadeOutMs = 200) => {
@@ -489,30 +479,21 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   const transitionToDeepStep = useCallback(
     (nextStep: number) => {
-      const target = Math.max(0, Math.min(finalStep, nextStep));
+      const target = Math.max(0, Math.min(conclusionStep, nextStep));
       if (target === clampedDeepStep) return;
-      if (clampedDeepStep === conclusionStep && target === finalStep) {
-        markCompleted(book.slug);
-      }
       transitionAfterFadeOut(() => {
         setIsStartingSession(false);
         goToDeepStep(target, false);
       });
     },
-    [
-      clampedDeepStep,
-      conclusionStep,
-      finalStep,
-      book.slug,
-      markCompleted,
-      transitionAfterFadeOut,
-    ]
+    [clampedDeepStep, conclusionStep, goToDeepStep, transitionAfterFadeOut]
   );
 
   // Navigasi keyboard (ArrowLeft / ArrowRight) di Mode Mendalam
   useEffect(() => {
     if (!showDeepBottomBar) return;
     const isAnyModalOpen =
+      isCompletionModalOpen ||
       isUnmarkConfirmOpen ||
       Boolean(activeQuoteForCard) ||
       Boolean(activeArticleTerm);
@@ -536,7 +517,10 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       if (event.key === "ArrowLeft" && clampedDeepStep > 0) {
         event.preventDefault();
         transitionToDeepStep(clampedDeepStep - 1);
-      } else if (event.key === "ArrowRight" && clampedDeepStep < finalStep) {
+      } else if (
+        event.key === "ArrowRight" &&
+        clampedDeepStep < conclusionStep
+      ) {
         event.preventDefault();
         transitionToDeepStep(clampedDeepStep + 1);
       }
@@ -546,11 +530,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [
     showDeepBottomBar,
+    isCompletionModalOpen,
     isUnmarkConfirmOpen,
     activeQuoteForCard,
     activeArticleTerm,
     clampedDeepStep,
-    finalStep,
+    conclusionStep,
     transitionToDeepStep,
   ]);
 
@@ -579,7 +564,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     const dt = Date.now() - start.time;
 
     if (dt < 600 && Math.abs(dx) > 64 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      if (dx < 0 && clampedDeepStep < finalStep) {
+      if (dx < 0 && clampedDeepStep < conclusionStep) {
         transitionToDeepStep(clampedDeepStep + 1);
       } else if (dx > 0 && clampedDeepStep > 0) {
         transitionToDeepStep(clampedDeepStep - 1);
@@ -604,46 +589,30 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     setIsStartingSession(false);
     setPendingQuickStep(null);
     setHasStartedQuick(false);
-    setIsQuickDone(false);
     pendingScrollToReadingTopRef.current = true;
     syncUrlHistory({
       mode: "quick",
       startedQuick: false,
-      quickDone: false,
       deepStep: 0,
     });
   };
 
-  const handleQuickComplete = () => {
+  const handleFinishReading = useCallback(() => {
     markCompleted(book.slug);
     transitionAfterFadeOut(() => {
       setIsStartingSession(false);
       setPendingQuickStep(null);
-      setIsQuickDone(true);
-      pendingScrollToReadingTopRef.current = true;
+      setReadMode("quick");
+      setHasStartedQuick(false);
+      setDeepStep(0);
+      setIsCompletionModalOpen(true);
       syncUrlHistory({
         mode: "quick",
-        startedQuick: true,
-        quickDone: true,
+        startedQuick: false,
         deepStep: 0,
       });
     });
-  };
-
-  const backToQuickReading = () => {
-    transitionAfterFadeOut(() => {
-      setIsStartingSession(false);
-      setPendingQuickStep(null);
-      setIsQuickDone(false);
-      pendingScrollToReadingTopRef.current = true;
-      syncUrlHistory({
-        mode: "quick",
-        startedQuick: true,
-        quickDone: false,
-        deepStep: 0,
-      });
-    });
-  };
+  }, [book.slug, markCompleted, syncUrlHistory, transitionAfterFadeOut]);
 
   const handleModeChange = (nextMode: "quick" | "deep") => {
     if (nextMode === readMode) return;
@@ -652,7 +621,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
     if (nextMode === "quick") {
       let nextStartedQuick = false;
-      let nextQuickDone = false;
       if (activeTakeaway) {
         nextStartedQuick = true;
         pendingScrollTargetRef.current = `poin-${activeTakeaway.number}`;
@@ -661,33 +629,21 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         nextStartedQuick = true;
         pendingScrollTargetRef.current = "kesimpulan-akhir";
         setPendingQuickStep(conclusionStep);
-      } else if (clampedDeepStep === finalStep) {
-        nextStartedQuick = true;
-        nextQuickDone = true;
-        pendingScrollToReadingTopRef.current = true;
-        setPendingQuickStep(null);
       } else {
         setPendingQuickStep(0);
       }
       setHasStartedQuick(nextStartedQuick);
-      setIsQuickDone(nextQuickDone);
       setReadMode("quick");
       syncUrlHistory({
         mode: "quick",
         startedQuick: nextStartedQuick,
-        quickDone: nextQuickDone,
         deepStep: 0,
       });
       return;
     }
 
-    const targetStep = isQuickDone
-      ? finalStep
-      : hasStartedQuick
-        ? detectActiveQuickStep()
-        : 0;
+    const targetStep = hasStartedQuick ? detectActiveQuickStep() : 0;
     setPendingQuickStep(null);
-    setIsQuickDone(false);
     setDeepStep(targetStep);
     if (targetStep > 0) {
       pendingScrollToReadingTopRef.current = true;
@@ -707,22 +663,17 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       ? book.keyTakeaways[clampedDeepStep] ?? null
       : null;
 
-  const prevLabel =
-    clampedDeepStep === finalStep
-      ? "Kesimpulan Akhir"
-      : prevTakeaway
-        ? `Poin Inti ${prevTakeaway.number}`
-        : "Pengantar";
+  const prevLabel = prevTakeaway
+    ? `Poin Inti ${prevTakeaway.number}`
+    : "Pengantar";
   const prevTitle = prevTakeaway?.title ?? null;
 
   const nextLabel =
     clampedDeepStep === conclusionStep
       ? "Selesai"
-      : clampedDeepStep === finalStep
-        ? "Pengantar"
-        : nextTakeaway
-          ? `Poin Inti ${nextTakeaway.number}`
-          : "Kesimpulan Akhir";
+      : nextTakeaway
+        ? `Poin Inti ${nextTakeaway.number}`
+        : "Kesimpulan Akhir";
   const nextTitle = nextTakeaway?.title ?? null;
 
   const explorationTabsSection = (
@@ -737,22 +688,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       />
       <BookOpinionsSection bookSlug={book.slug} />
     </div>
-  );
-
-  const penutupExplorerContent = (
-    <>
-      <MarkCompletedSection
-        isCompleted={completed}
-        onMarkCompleted={handleMarkCompleted}
-        onRequestUnmark={() => setIsUnmarkConfirmOpen(true)}
-        fs={fs}
-      />
-
-      {/* Tab Eksplorasi Penutup: Kutipan & Opini */}
-      {explorationTabsSection}
-
-      <RelatedBooksSection relatedBooks={recommendedBooks} />
-    </>
   );
 
   return (
@@ -993,129 +928,106 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                   });
                 }}
               />
-              {completed && explorationTabsSection}
+              {completed && (
+                <div
+                  id="eksplorasi-buku"
+                  style={{
+                    scrollMarginTop: "calc(var(--header-h, 73px) + 16px)",
+                  }}
+                >
+                  {explorationTabsSection}
+                  <RelatedBooksSection relatedBooks={recommendedBooks} />
+                </div>
+              )}
             </div>
           ) : readMode === "quick" ? (
-            isQuickDone ? (
-              /* MODE KILAT: Halaman Penutup (setelah tombol Selesai) */
+            /* MODE KILAT: Halaman Baca Vertikal Penuh (setelah Mulai) */
+            <div
+              className={`transition-opacity duration-200 ease-out ${
+                isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
+              }`}
+            >
               <div
-                className={`transition-opacity duration-200 ease-out ${
-                  isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
-                }`}
+                className={
+                  isStartingSession
+                    ? "animate-reader-start-fade-in"
+                    : "animate-reader-fade-in"
+                }
+                key="quick-reading-view"
               >
-                <div className="animate-reader-fade-in" key="quick-done-view">
-                  <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
-                    <button
-                      type="button"
-                      onClick={backToQuickReading}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
-                    >
-                      <ArrowLeft className="h-4 w-4" />
-                      <span>Kembali ke Bacaan</span>
-                    </button>
+                {/* Bar Navigasi Atas Mode Kilat */}
+                <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
+                  <button
+                    type="button"
+                    onClick={backToQuickIntro}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
+                  >
+                    <List className="h-4 w-4" />
+                    <span>Daftar Poin</span>
+                  </button>
 
-                    <button
-                      type="button"
-                      onClick={backToQuickIntro}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-text transition hover:underline"
-                    >
-                      <span>Pengantar</span>
-                      <RotateCcw className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-
-                  {penutupExplorerContent}
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                    <Zap className="h-3.5 w-3.5" />
+                    <span>Mode Kilat • {book.keyTakeaways.length} Poin Inti</span>
+                  </span>
                 </div>
-              </div>
-            ) : (
-              /* MODE KILAT: Halaman Baca Vertikal Penuh (setelah Mulai) */
-              <div
-                className={`transition-opacity duration-200 ease-out ${
-                  isLeavingView ? "pointer-events-none opacity-0" : "opacity-100"
-                }`}
-              >
-                <div
-                  className={
-                    isStartingSession
-                      ? "animate-reader-start-fade-in"
-                      : "animate-reader-fade-in"
-                  }
-                  key="quick-reading-view"
-                >
-                  {/* Bar Navigasi Atas Mode Kilat */}
-                  <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 shadow-sm">
-                    <button
-                      type="button"
-                      onClick={backToQuickIntro}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted transition hover:text-accent-text"
-                    >
-                      <List className="h-4 w-4" />
-                      <span>Daftar Poin</span>
-                    </button>
 
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
-                      <Zap className="h-3.5 w-3.5" />
-                      <span>Mode Kilat • {book.keyTakeaways.length} Poin Inti</span>
-                    </span>
-                  </div>
-
-                  <div className="space-y-6">
-                    {book.keyTakeaways.map((takeaway, idx) => (
-                      <TakeawayCard
-                        key={takeaway.number}
-                        takeaway={takeaway}
-                        fs={fs}
-                        showDeepContent={false}
-                        scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
-                        onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
-                        articleTerms={ARTICLE_TERMS}
-                        onSelectArticleTerm={setActiveArticleTerm}
-                      />
-                    ))}
-                  </div>
-
-                  <div className="mt-8 space-y-6">
-                    <ConclusionSection
-                      conclusion={book.conclusion}
+                <div className="space-y-6">
+                  {book.keyTakeaways.map((takeaway, idx) => (
+                    <TakeawayCard
+                      key={takeaway.number}
+                      takeaway={takeaway}
                       fs={fs}
+                      showDeepContent={false}
                       scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                      onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
                       articleTerms={ARTICLE_TERMS}
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
-                    {book.keyConcepts.length > 0 && (
-                      <KeyConceptsSection
-                        keyConcepts={book.keyConcepts}
-                        fs={fs}
-                        articleTerms={ARTICLE_TERMS}
-                        onSelectArticleTerm={setActiveArticleTerm}
-                      />
-                    )}
-                  </div>
+                  ))}
+                </div>
 
-                  <div className="mt-6 flex items-center justify-between gap-3">
-                    <button
-                      type="button"
-                      onClick={backToQuickIntro}
-                      className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-page active:scale-[0.98]"
-                    >
-                      <RotateCcw className="h-4 w-4 shrink-0 text-ink-muted" />
-                      <span>Pengantar</span>
-                    </button>
+                <div className="mt-8 space-y-6">
+                  <ConclusionSection
+                    conclusion={book.conclusion}
+                    fs={fs}
+                    scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
+                    articleTerms={ARTICLE_TERMS}
+                    onSelectArticleTerm={setActiveArticleTerm}
+                  />
+                  {book.keyConcepts.length > 0 && (
+                    <KeyConceptsSection
+                      keyConcepts={book.keyConcepts}
+                      fs={fs}
+                      articleTerms={ARTICLE_TERMS}
+                      onSelectArticleTerm={setActiveArticleTerm}
+                    />
+                  )}
+                </div>
 
-                    <button
-                      type="button"
-                      onClick={handleQuickComplete}
-                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
-                    >
-                      <span>Selesai</span>
-                      <CheckCircle2 className="h-4 w-4 shrink-0" />
-                    </button>
-                  </div>
+                <div className="mt-6 flex items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={backToQuickIntro}
+                    className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink shadow-sm transition hover:border-accent-line hover:bg-page active:scale-[0.98]"
+                  >
+                    <RotateCcw className="h-4 w-4 shrink-0 text-ink-muted" />
+                    <span>Pengantar</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleFinishReading}
+                    className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
+                  >
+                    <span>Selesai</span>
+                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                  </button>
                 </div>
               </div>
-            )
+            </div>
           ) : (
-            /* MODE MENDALAM: Alur Halaman Per Halaman (Poin Inti 1..N -> Penutup) */
+            /* MODE MENDALAM: Alur Halaman Per Halaman (Poin Inti 1..N -> Kesimpulan Akhir) */
             <div
               onTouchStart={handleDeepTouchStart}
               onTouchEnd={handleDeepTouchEnd}
@@ -1131,35 +1043,33 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 }
                 key={`deep-step-${clampedDeepStep}`}
               >
-                  {/* Konten Halaman Aktif */}
-                  {activeTakeaway ? (
-                    <TakeawayCard
-                      takeaway={activeTakeaway}
+                {/* Konten Halaman Aktif */}
+                {activeTakeaway ? (
+                  <TakeawayCard
+                    takeaway={activeTakeaway}
+                    fs={fs}
+                    showDeepContent={true}
+                    articleTerms={ARTICLE_TERMS}
+                    onSelectArticleTerm={setActiveArticleTerm}
+                  />
+                ) : (
+                  <div className="space-y-6">
+                    <ConclusionSection
+                      conclusion={book.conclusion}
                       fs={fs}
-                      showDeepContent={true}
                       articleTerms={ARTICLE_TERMS}
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
-                  ) : clampedDeepStep === conclusionStep ? (
-                    <div className="space-y-6">
-                      <ConclusionSection
-                        conclusion={book.conclusion}
+                    {book.keyConcepts.length > 0 && (
+                      <KeyConceptsSection
+                        keyConcepts={book.keyConcepts}
                         fs={fs}
                         articleTerms={ARTICLE_TERMS}
                         onSelectArticleTerm={setActiveArticleTerm}
                       />
-                      {book.keyConcepts.length > 0 && (
-                        <KeyConceptsSection
-                          keyConcepts={book.keyConcepts}
-                          fs={fs}
-                          articleTerms={ARTICLE_TERMS}
-                          onSelectArticleTerm={setActiveArticleTerm}
-                        />
-                      )}
-                    </div>
-                  ) : (
-                    penutupExplorerContent
-                  )}
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -1175,14 +1085,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             transitionAfterFadeOut(() => {
               setIsStartingSession(true);
               setReadMode("quick");
-              setIsQuickDone(false);
               const firstTakeaway = book.keyTakeaways[0];
-              setPendingQuickStep(firstTakeaway ? 1 : finalStep);
+              setPendingQuickStep(firstTakeaway ? 1 : conclusionStep);
               setHasStartedQuick(true);
               syncUrlHistory({
                 mode: "quick",
                 startedQuick: true,
-                quickDone: false,
                 deepStep: 0,
               });
             }, 380);
@@ -1192,7 +1100,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               setIsStartingSession(true);
               setReadMode("deep");
               setHasStartedQuick(false);
-              setIsQuickDone(false);
               goToDeepStep(1, false);
             }, 380);
           }}
@@ -1204,15 +1111,31 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           currentStep={clampedDeepStep}
           keyTakeaways={book.keyTakeaways}
           conclusionStep={conclusionStep}
-          finalStep={finalStep}
           readingTimeMinutes={book.readingTimeMinutes}
           prevLabel={prevLabel}
           prevTitle={prevTitle}
           nextLabel={nextLabel}
           nextTitle={nextTitle}
           onSelectStep={transitionToDeepStep}
+          onComplete={handleFinishReading}
         />
       )}
+
+      <BookCompletedModal
+        open={isCompletionModalOpen}
+        onClose={() => setIsCompletionModalOpen(false)}
+        bookTitle={book.title}
+        onExploreQuotesAndOpinions={() => {
+          setIsCompletionModalOpen(false);
+          window.setTimeout(() => {
+            smoothScrollToElement("eksplorasi-buku", 520);
+          }, 80);
+        }}
+        onRequestUnmark={() => {
+          setIsCompletionModalOpen(false);
+          setIsUnmarkConfirmOpen(true);
+        }}
+      />
 
       <ConfirmUnmarkCompletedModal
         open={isUnmarkConfirmOpen}
