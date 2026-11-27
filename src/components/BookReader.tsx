@@ -4,6 +4,14 @@ import type { ArticleTermEntry } from "@/types/article";
 import { ARTICLE_TERMS } from "@/data/article-terms";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
+import {
+  applyReaderTheme,
+  clearReaderTheme,
+  getGlobalTheme,
+  getInitialReaderTheme,
+  getStoredReaderTheme,
+  type ReaderThemeMode,
+} from "@/lib/theme";
 import QuoteCardModal from "./QuoteCardModal";
 import BookOpinionsSection from "./BookOpinionsSection";
 import { ArticleTermPopover } from "./ArticleTermPopover";
@@ -32,14 +40,40 @@ import {
   ArrowLeft,
   Bookmark,
   BookOpen,
+  Check,
   CheckCircle2,
   Clock,
   List,
   RotateCcw,
-  Type,
   X,
   Zap,
 } from "lucide-react";
+
+const READER_THEME_OPTIONS: ReadonlyArray<{
+  value: ReaderThemeMode;
+  label: string;
+  swatchClass: string;
+  checkClass: string;
+}> = [
+  {
+    value: "light",
+    label: "Putih",
+    swatchClass: "bg-white border-slate-300",
+    checkClass: "text-slate-800",
+  },
+  {
+    value: "sepia",
+    label: "Sepia",
+    swatchClass: "bg-[#F4ECDD] border-[#C9B9A0]",
+    checkClass: "text-[#3B2F25]",
+  },
+  {
+    value: "dark",
+    label: "Gelap",
+    swatchClass: "bg-[#121214] border-zinc-600",
+    checkClass: "text-zinc-100",
+  },
+];
 
 interface BookReaderProps {
   book: BookSummary;
@@ -137,6 +171,9 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [hasStartedQuick, setHasStartedQuick] = useState(false);
   const [deepStep, setDeepStep] = useState(0);
   const [fontSize, setFontSize] = useState<"sm" | "base" | "lg">("base");
+  const [readerTheme, setReaderTheme] = useState<ReaderThemeMode>("light");
+  const [hasHydratedReaderTheme, setHasHydratedReaderTheme] = useState(false);
+  const [isAppearanceOpen, setIsAppearanceOpen] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeQuoteForCard, setActiveQuoteForCard] = useState<string | null>(
@@ -156,6 +193,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const viewExitTimerRef = useRef<number | undefined>(undefined);
   const unmarkToastTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
+  const appearanceMenuRef = useRef<HTMLDivElement>(null);
   const readingAreaRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(
     null
@@ -211,6 +249,75 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       );
     };
   }, [isIntroView]);
+
+  // Baca preferensi warna latar baca sekali saat mount di sisi klien
+  useEffect(() => {
+    setReaderTheme(getInitialReaderTheme());
+    setHasHydratedReaderTheme(true);
+  }, []);
+
+  // Terapkan tema baca khusus saat berada di dalam mode baca; pulihkan tema global saat keluar
+  useEffect(() => {
+    if (!hasHydratedReaderTheme) return;
+    if (!isIntroView) {
+      if (!getStoredReaderTheme()) {
+        const globalTheme = getGlobalTheme();
+        if (globalTheme !== readerTheme) {
+          setReaderTheme(globalTheme);
+          applyReaderTheme(globalTheme, false);
+          return;
+        }
+      }
+      applyReaderTheme(readerTheme, false);
+    } else {
+      clearReaderTheme();
+    }
+  }, [isIntroView, readerTheme, hasHydratedReaderTheme]);
+
+  // Pulihkan tema global ketika komponen reader di-unmount (pindah halaman)
+  useEffect(() => {
+    return () => {
+      clearReaderTheme();
+    };
+  }, []);
+
+  // Tutup popover tampilan baca saat keluar mode baca, klik di luar, atau tekan Escape
+  useEffect(() => {
+    if (isIntroView) {
+      setIsAppearanceOpen(false);
+    }
+  }, [isIntroView]);
+
+  useEffect(() => {
+    if (!isAppearanceOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (
+        appearanceMenuRef.current &&
+        !appearanceMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsAppearanceOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsAppearanceOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isAppearanceOpen]);
+
+  const handleSelectReaderTheme = useCallback((nextTheme: ReaderThemeMode) => {
+    setReaderTheme(nextTheme);
+    applyReaderTheme(nextTheme, true);
+  }, []);
 
   const readingProgress =
     readMode === "deep"
@@ -848,44 +955,111 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             </button>
           </div>
 
-          {/* Kontrol Ukuran Teks */}
-          <div className="flex items-center gap-1.5">
-            <Type className="h-4 w-4 text-ink-faint mr-1 hidden sm:inline" />
-            <button
-              type="button"
-              onClick={() => setFontSize("sm")}
-              className={`rounded-lg px-2.5 py-1 text-xs font-semibold border ${
-                fontSize === "sm"
-                  ? "border-accent-strong bg-accent-soft text-accent-text"
-                  : "border-line text-ink-muted hover:bg-page"
-              }`}
-            >
-              A-
-            </button>
-            <button
-              type="button"
-              onClick={() => setFontSize("base")}
-              className={`rounded-lg px-2.5 py-1 text-xs font-semibold border ${
-                fontSize === "base"
-                  ? "border-accent-strong bg-accent-soft text-accent-text"
-                  : "border-line text-ink-muted hover:bg-page"
-              }`}
-            >
-              A
-            </button>
-            <button
-              type="button"
-              onClick={() => setFontSize("lg")}
-              className={`rounded-lg px-2.5 py-1 text-xs font-semibold border ${
-                fontSize === "lg"
-                  ? "border-accent-strong bg-accent-soft text-accent-text"
-                  : "border-line text-ink-muted hover:bg-page"
-              }`}
-            >
-              A+
-            </button>
+          {/* Kontrol Tampilan Baca (Popover Aa: Ukuran Huruf & Warna Latar) + Progres */}
+          <div className="flex items-center gap-2">
+            <div ref={appearanceMenuRef} className="relative">
+              <button
+                type="button"
+                onClick={() => setIsAppearanceOpen((prev) => !prev)}
+                aria-expanded={isAppearanceOpen}
+                aria-haspopup="dialog"
+                aria-label="Pengaturan tampilan baca"
+                title="Ukuran huruf & warna latar baca"
+                className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs sm:text-sm font-semibold transition ${
+                  isAppearanceOpen
+                    ? "border-accent-strong bg-accent-soft text-accent-text"
+                    : "border-line bg-surface text-ink hover:bg-page"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`h-2.5 w-2.5 rounded-full border ${
+                    READER_THEME_OPTIONS.find((opt) => opt.value === readerTheme)
+                      ?.swatchClass ?? "bg-white border-slate-300"
+                  }`}
+                />
+                <span>Aa</span>
+              </button>
+
+              {isAppearanceOpen && (
+                <div
+                  role="dialog"
+                  aria-label="Pengaturan tampilan baca"
+                  className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-line bg-surface p-4 shadow-xl"
+                >
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle">
+                      Ukuran Huruf
+                    </p>
+                    <div className="mt-2 grid grid-cols-3 gap-1.5">
+                      {(
+                        [
+                          { value: "sm", label: "A-" },
+                          { value: "base", label: "A" },
+                          { value: "lg", label: "A+" },
+                        ] as const
+                      ).map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => setFontSize(opt.value)}
+                          aria-pressed={fontSize === opt.value}
+                          className={`rounded-xl border py-1.5 text-xs font-semibold transition ${
+                            fontSize === opt.value
+                              ? "border-accent-strong bg-accent-soft text-accent-text"
+                              : "border-line bg-page/50 text-ink-muted hover:bg-page hover:text-ink"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 border-t border-line-subtle pt-3.5">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle">
+                      Warna Latar
+                    </p>
+                    <div className="mt-2 grid grid-cols-3 gap-2">
+                      {READER_THEME_OPTIONS.map((opt) => {
+                        const isActive = readerTheme === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => handleSelectReaderTheme(opt.value)}
+                            aria-pressed={isActive}
+                            className={`flex flex-col items-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-semibold transition ${
+                              isActive
+                                ? "border-accent-strong bg-accent-soft text-accent-text"
+                                : "border-line bg-page/50 text-ink-muted hover:bg-page hover:text-ink"
+                            }`}
+                          >
+                            <span
+                              className={`flex h-7 w-7 items-center justify-center rounded-full border shadow-sm ${opt.swatchClass} ${
+                                isActive
+                                  ? "ring-2 ring-accent-strong ring-offset-1 ring-offset-[rgb(var(--color-bg-surface))]"
+                                  : ""
+                              }`}
+                            >
+                              {isActive && (
+                                <Check
+                                  className={`h-3.5 w-3.5 stroke-[2.5] ${opt.checkClass}`}
+                                />
+                              )}
+                            </span>
+                            <span>{opt.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <span
-              className="ml-1.5 min-w-[2.5rem] text-right text-xs font-semibold tabular-nums text-ink-muted"
+              className="min-w-[2.5rem] text-right text-xs font-semibold tabular-nums text-ink-muted"
               title="Progres membaca"
             >
               {readingProgress}%
