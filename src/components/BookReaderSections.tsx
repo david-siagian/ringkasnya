@@ -506,14 +506,11 @@ export function KeyConceptsSection({
       {isOpen && (
         <div
           id="key-concepts-content"
-          className="border-t border-line/70 px-6 pb-6 pt-5 sm:px-8 sm:pb-8 sm:pt-6"
+          className="border-t border-line/70 px-6 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-5"
         >
-          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+          <div className="divide-y divide-line-subtle">
             {keyConcepts.map((concept, idx) => (
-              <div
-                key={idx}
-                className="rounded-xl border border-line bg-page/70 p-4 sm:p-5 transition-colors hover:border-accent-line"
-              >
+              <div key={idx} className="py-3.5 first:pt-0 last:pb-0">
                 <div className="flex items-start gap-3">
                   <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-xs font-bold text-white">
                     {idx + 1}
@@ -528,7 +525,7 @@ export function KeyConceptsSection({
                       />
                     </h3>
                     <p
-                      className={`mt-1.5 ${fs.compact} leading-relaxed text-ink-secondary`}
+                      className={`mt-1 ${fs.compact} leading-relaxed text-ink-secondary`}
                     >
                       <RichBookText
                         text={concept.explanation}
