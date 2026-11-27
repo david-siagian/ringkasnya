@@ -277,7 +277,7 @@ export default function AccountDashboard({
         </div>
 
         {/* Filter Tabs */}
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-5 flex flex-nowrap items-center gap-1.5 overflow-x-auto sm:flex-wrap sm:gap-2">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -285,7 +285,7 @@ export default function AccountDashboard({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[11px] font-semibold transition-colors sm:gap-1.5 sm:px-3.5 sm:text-xs ${
                   isActive
                     ? "bg-emerald-600 text-white shadow-xs"
                     : "border border-line bg-page text-ink-muted hover:border-accent-line hover:text-ink"
@@ -293,7 +293,7 @@ export default function AccountDashboard({
               >
                 <span>{tab.label}</span>
                 <span
-                  className={`rounded-full px-1.5 py-0.2 text-[11px] font-bold ${
+                  className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold sm:text-[11px] ${
                     isActive
                       ? "bg-white/20 text-white"
                       : "bg-surface text-ink-subtle"
