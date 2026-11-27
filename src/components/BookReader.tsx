@@ -929,6 +929,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 book={book}
                 fs={fs}
                 mode={readMode}
+                completed={completed}
                 articleTerms={ARTICLE_TERMS}
                 onSelectArticleTerm={setActiveArticleTerm}
                 onSelectTakeaway={(num) => {

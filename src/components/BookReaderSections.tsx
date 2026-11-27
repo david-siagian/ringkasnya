@@ -71,6 +71,7 @@ interface IntroSectionProps {
   book: BookSummary;
   fs: FontScale;
   mode: "quick" | "deep";
+  completed?: boolean;
   onSelectTakeaway?: (takeawayNumber: number) => void;
   articleTerms?: readonly ArticleTermEntry[];
   onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
@@ -81,11 +82,17 @@ export function IntroSection({
   book,
   fs,
   mode,
+  completed = false,
   onSelectTakeaway,
   articleTerms = [],
   onSelectArticleTerm,
 }: IntroSectionProps) {
   const synopsisMatched = new Set<string>();
+  const [isTakeawaysOpen, setIsTakeawaysOpen] = useState(!completed);
+
+  useEffect(() => {
+    setIsTakeawaysOpen(!completed);
+  }, [completed]);
 
   return (
     <>
@@ -128,55 +135,68 @@ export function IntroSection({
         )}
       </div>
 
-      {/* Daftar Isi Poin Inti (Accordion default tertutup) */}
+      {/* Daftar Isi Poin Inti (Accordion: default terbuka jika belum selesai, tertutup jika sudah selesai) */}
       {book.keyTakeaways.length > 0 && (
-        <details className="group mt-6 rounded-2xl border border-line bg-surface shadow-sm">
-          <summary
-            className={`flex cursor-pointer list-none items-center justify-between gap-2 px-5 py-4 sm:px-6 ${fs.label} font-bold uppercase tracking-wider text-ink-subtle select-none [&::-webkit-details-marker]:hidden`}
+        <div className="mt-6 rounded-2xl border border-line bg-surface shadow-sm">
+          <button
+            type="button"
+            aria-expanded={isTakeawaysOpen}
+            aria-controls="intro-takeaways-list"
+            onClick={() => setIsTakeawaysOpen((prev) => !prev)}
+            className={`flex w-full cursor-pointer items-center justify-between gap-2 px-5 py-4 sm:px-6 text-left ${fs.label} font-bold uppercase tracking-wider text-ink-subtle select-none`}
           >
             <span className="flex items-center gap-2">
               <Layers className="h-4 w-4 shrink-0 text-accent-strong" />
               <span>Daftar Poin Inti ({book.keyTakeaways.length} Bab Ringkas)</span>
             </span>
-            <ChevronDown className="h-4 w-4 shrink-0 text-ink-muted transition-transform duration-200 group-open:rotate-180" />
-          </summary>
+            <ChevronDown
+              className={`h-4 w-4 shrink-0 text-ink-muted transition-transform duration-200 ${
+                isTakeawaysOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
 
-          <div className="border-t border-line-subtle px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {book.keyTakeaways.map((item, idx) =>
-                mode === "deep" && onSelectTakeaway ? (
-                  <button
-                    key={item.number}
-                    type="button"
-                    onClick={() => onSelectTakeaway(idx + 1)}
-                    className={`flex w-full items-start gap-2.5 rounded-xl border border-line-subtle bg-page/70 px-3.5 py-2.5 text-left ${fs.subtext} font-medium text-ink-secondary transition hover:border-accent-line hover:bg-accent-soft/70 hover:text-accent-text`}
-                  >
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
-                      {item.number}
-                    </span>
-                    <span className="flex-1">{item.title}</span>
-                  </button>
-                ) : (
-                  <a
-                    key={item.number}
-                    href={`#poin-${item.number}`}
-                    onClick={(event) => {
-                      if (!onSelectTakeaway) return;
-                      event.preventDefault();
-                      onSelectTakeaway(item.number);
-                    }}
-                    className={`flex items-start gap-2.5 rounded-xl border border-line-subtle bg-page/70 px-3.5 py-2.5 ${fs.subtext} font-medium text-ink-secondary transition hover:border-accent-line hover:bg-accent-soft/70 hover:text-accent-text`}
-                  >
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
-                      {item.number}
-                    </span>
-                    <span>{item.title}</span>
-                  </a>
-                )
-              )}
+          {isTakeawaysOpen && (
+            <div
+              id="intro-takeaways-list"
+              className="border-t border-line-subtle px-5 pb-5 pt-4 sm:px-6 sm:pb-6"
+            >
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {book.keyTakeaways.map((item, idx) =>
+                  mode === "deep" && onSelectTakeaway ? (
+                    <button
+                      key={item.number}
+                      type="button"
+                      onClick={() => onSelectTakeaway(idx + 1)}
+                      className={`flex w-full items-start gap-2.5 rounded-xl border border-line-subtle bg-page/70 px-3.5 py-2.5 text-left ${fs.subtext} font-medium text-ink-secondary transition hover:border-accent-line hover:bg-accent-soft/70 hover:text-accent-text`}
+                    >
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
+                        {item.number}
+                      </span>
+                      <span className="flex-1">{item.title}</span>
+                    </button>
+                  ) : (
+                    <a
+                      key={item.number}
+                      href={`#poin-${item.number}`}
+                      onClick={(event) => {
+                        if (!onSelectTakeaway) return;
+                        event.preventDefault();
+                        onSelectTakeaway(item.number);
+                      }}
+                      className={`flex items-start gap-2.5 rounded-xl border border-line-subtle bg-page/70 px-3.5 py-2.5 ${fs.subtext} font-medium text-ink-secondary transition hover:border-accent-line hover:bg-accent-soft/70 hover:text-accent-text`}
+                    >
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
+                        {item.number}
+                      </span>
+                      <span>{item.title}</span>
+                    </a>
+                  )
+                )}
+              </div>
             </div>
-          </div>
-        </details>
+          )}
+        </div>
       )}
     </>
   );
