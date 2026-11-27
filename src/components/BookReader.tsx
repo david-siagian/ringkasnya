@@ -35,8 +35,6 @@ import {
   CheckCircle2,
   Clock,
   List,
-  MessageSquare,
-  Quote,
   RotateCcw,
   Type,
   X,
@@ -155,9 +153,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     useState<ArticleTermEntry | null>(null);
   const [isLeavingView, setIsLeavingView] = useState(false);
   const [isStartingSession, setIsStartingSession] = useState(false);
-  const [penutupTab, setPenutupTab] = useState<"quotes" | "opinions">(
-    "quotes"
-  );
 
   const copyTimerRef = useRef<number | undefined>(undefined);
   const viewExitTimerRef = useRef<number | undefined>(undefined);
@@ -286,10 +281,15 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
   // Sinkronkan tinggi toolbar sticky (bisa 2 baris di mobile) ke CSS var `--reader-toolbar-h`
   useEffect(() => {
-    const toolbar = toolbarRef.current;
-    if (!toolbar) return;
-
     const root = document.documentElement;
+    const toolbar = toolbarRef.current;
+    if (!toolbar) {
+      root.style.setProperty("--reader-toolbar-h", "0px");
+      return () => {
+        root.style.removeProperty("--reader-toolbar-h");
+      };
+    }
+
     const updateToolbarHeight = () => {
       root.style.setProperty("--reader-toolbar-h", `${toolbar.offsetHeight}px`);
     };
@@ -301,7 +301,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       observer.disconnect();
       root.style.removeProperty("--reader-toolbar-h");
     };
-  }, []);
+  }, [isIntroView]);
 
   useEffect(() => {
     return () => {
@@ -729,57 +729,15 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const nextTitle = nextTakeaway?.title ?? null;
 
   const explorationTabsSection = (
-    <div className="mt-8">
-      <div
-        role="tablist"
-        aria-label="Eksplorasi setelah membaca"
-        className="grid grid-cols-2 gap-1.5 rounded-t-2xl border border-b-0 border-line bg-surface-subtle p-1.5"
-      >
-        <button
-          type="button"
-          role="tab"
-          aria-selected={penutupTab === "quotes"}
-          onClick={() => setPenutupTab("quotes")}
-          className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
-            penutupTab === "quotes"
-              ? "bg-surface text-ink shadow-sm"
-              : "text-ink-muted hover:text-ink"
-          }`}
-        >
-          <Quote className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-          <span className="truncate">
-            Kutipan ({book.quotes.length})
-          </span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={penutupTab === "opinions"}
-          onClick={() => setPenutupTab("opinions")}
-          className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold transition ${
-            penutupTab === "opinions"
-              ? "bg-surface text-ink shadow-sm"
-              : "text-ink-muted hover:text-ink"
-          }`}
-        >
-          <MessageSquare className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
-          <span className="truncate">Opini</span>
-        </button>
-      </div>
-
-      <div role="tabpanel">
-        {penutupTab === "quotes" ? (
-          <QuotesSection
-            quotes={book.quotes}
-            copyFeedback={copyFeedback}
-            onCopyQuote={handleCopyQuote}
-            onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
-            fs={fs}
-          />
-        ) : (
-          <BookOpinionsSection bookSlug={book.slug} />
-        )}
-      </div>
+    <div className="mt-8 space-y-6">
+      <QuotesSection
+        quotes={book.quotes}
+        copyFeedback={copyFeedback}
+        onCopyQuote={handleCopyQuote}
+        onOpenQuoteCard={(quote) => setActiveQuoteForCard(quote)}
+        fs={fs}
+      />
+      <BookOpinionsSection bookSlug={book.slug} />
     </div>
   );
 

@@ -561,73 +561,99 @@ export function QuotesSection({
   onOpenQuoteCard,
   fs,
 }: QuotesSectionProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <section className="rounded-2xl border border-line bg-surface shadow-sm overflow-hidden">
-      <div className="px-6 py-5 sm:px-8 sm:py-6">
+    <section className="rounded-2xl border border-line bg-surface shadow-sm">
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+        aria-controls="quotes-section-content"
+        style={
+          isOpen
+            ? {
+                top: "calc(var(--header-h, 0px) + var(--reader-toolbar-h, 0px))",
+              }
+            : undefined
+        }
+        className={`flex w-full items-center justify-between gap-3 px-6 py-5 text-left transition-colors hover:bg-page/50 sm:px-8 sm:py-6 ${
+          isOpen
+            ? "sticky z-20 rounded-t-2xl border-b border-line/70 bg-surface/95 backdrop-blur-sm"
+            : "rounded-2xl"
+        }`}
+      >
         <div className="flex items-center gap-2 text-ink">
           <Quote className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
           <h2 className="text-base font-extrabold text-ink sm:text-lg">
             Kutipan Pilihan ({quotes.length})
           </h2>
         </div>
-      </div>
+        <ChevronDown
+          className={`h-4.5 w-4.5 shrink-0 text-ink-muted transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
 
-      <div
-        id="quotes-section-content"
-        className="border-t border-line/70 px-6 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-5"
-      >
-        <div className="divide-y divide-line-subtle">
-          {quotes.map((quote, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col justify-between gap-3 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-4"
-            >
-              <blockquote
-                className={`${fs.lead} font-semibold italic text-ink`}
+      {isOpen && (
+        <div
+          id="quotes-section-content"
+          className="rounded-b-2xl px-6 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-5"
+        >
+          <div className="divide-y divide-line-subtle">
+            {quotes.map((quote, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col justify-between gap-3 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-4"
               >
-                &ldquo;{quote}&rdquo;
-              </blockquote>
-              <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:self-center">
-                <button
-                  type="button"
-                  onClick={() => onCopyQuote(quote, idx)}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
+                <blockquote
+                  className={`${fs.lead} font-semibold italic text-ink`}
                 >
-                  {copyFeedback?.index === idx &&
-                  copyFeedback.status === "success" ? (
-                    <>
-                      <Check className="h-3.5 w-3.5 text-accent-strong" />
-                      <span className="text-accent-text">Tersalin!</span>
-                    </>
-                  ) : copyFeedback?.index === idx &&
-                    copyFeedback.status === "error" ? (
-                    <>
-                      <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
-                      <span className="text-rose-600 dark:text-rose-400">
-                        Gagal menyalin
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-3.5 w-3.5" />
-                      <span>Salin Kutipan</span>
-                    </>
-                  )}
-                </button>
+                  &ldquo;{quote}&rdquo;
+                </blockquote>
+                <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:self-center">
+                  <button
+                    type="button"
+                    onClick={() => onCopyQuote(quote, idx)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary shadow-sm transition hover:border-accent-strong hover:text-accent-text"
+                  >
+                    {copyFeedback?.index === idx &&
+                    copyFeedback.status === "success" ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-accent-strong" />
+                        <span className="text-accent-text">Tersalin!</span>
+                      </>
+                    ) : copyFeedback?.index === idx &&
+                      copyFeedback.status === "error" ? (
+                      <>
+                        <AlertCircle className="h-3.5 w-3.5 text-rose-500" />
+                        <span className="text-rose-600 dark:text-rose-400">
+                          Gagal menyalin
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        <span>Salin Kutipan</span>
+                      </>
+                    )}
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => onOpenQuoteCard(quote)}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
-                >
-                  <ImageDown className="h-3.5 w-3.5" />
-                  <span>Buat Kartu</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => onOpenQuoteCard(quote)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white"
+                  >
+                    <ImageDown className="h-3.5 w-3.5" />
+                    <span>Buat Kartu</span>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
