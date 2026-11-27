@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import AccountDashboard from "@/components/auth/AccountDashboard";
+import AccountDashboard, {
+  type AccountProgressBookItem,
+} from "@/components/auth/AccountDashboard";
 
 export const prerender = false;
 
@@ -22,6 +24,65 @@ const serializedUser = {
       ? user.createdAt.toISOString()
       : String(user.createdAt),
 };
+
+let progressItems: AccountProgressBookItem[] = [];
+const db = Astro.locals.runtime?.env?.DB;
+if (db) {
+  try {
+    const result = await db
+      .prepare(
+        `SELECT
+          p.book_slug,
+          p.is_bookmarked,
+          p.last_mode,
+          p.progress_percent,
+          p.updated_at,
+          b.title,
+          b.author,
+          b.category,
+          b.cover_gradient,
+          b.cover_image,
+          b.quick_time_minutes,
+          b.reading_time_minutes
+        FROM user_book_progress p
+        INNER JOIN books b ON b.slug = p.book_slug
+        WHERE p.user_id = ? AND b.is_published = 1
+        ORDER BY p.updated_at DESC`
+      )
+      .bind(user.id)
+      .all<{
+        book_slug: string;
+        is_bookmarked: number;
+        last_mode: string;
+        progress_percent: number;
+        updated_at: number;
+        title: string;
+        author: string;
+        category: string;
+        cover_gradient: string;
+        cover_image: string | null;
+        quick_time_minutes: number;
+        reading_time_minutes: number;
+      }>();
+
+    progressItems = (result.results ?? []).map((row) => ({
+      bookSlug: row.book_slug,
+      isBookmarked: Boolean(row.is_bookmarked),
+      lastMode: row.last_mode === "deep" ? "deep" : "quick",
+      progressPercent: row.progress_percent,
+      updatedAt: Number(row.updated_at),
+      title: row.title,
+      author: row.author,
+      category: row.category,
+      coverGradient: row.cover_gradient,
+      coverImage: row.cover_image,
+      quickTimeMinutes: row.quick_time_minutes,
+      readingTimeMinutes: row.reading_time_minutes,
+    }));
+  } catch (error) {
+    console.error("[/akun] Gagal memuat progres baca:", error);
+  }
+}
 ---
 
 <BaseLayout
@@ -29,6 +90,10 @@ const serializedUser = {
   description="Kelola profil dan status akun Ringkasnya Anda."
 >
   <main class="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-12">
-    <AccountDashboard client:load user={serializedUser} />
+    <AccountDashboard
+      client:load
+      user={serializedUser}
+      initialProgressItems={progressItems}
+    />
   </main>
 </BaseLayout>

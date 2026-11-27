@@ -12,7 +12,7 @@ Dokumen ini menyimpan rencana pengembangan **Fase 3** untuk `ringkasnya.com`, me
 | **1. Cloudflare KV (`SESSION_KV`)** | **Selesai** | Production & Preview (`SESSION_KV_preview`) aktif sebagai `secondaryStorage` Better Auth |
 | **1B. Migrasi Konten Statis ke D1** | **Selesai** | 58 buku awal dimigrasikan ke D1; `src/data/books/` dibersihkan |
 | **2. Fase 3.1 — Auth Dasar & Akun** | **Selesai** | Better Auth + Drizzle ORM (`0004`), `/masuk`, `/daftar`, `/akun`, `UserMenu` |
-| **2. Fase 3.2 — Progres Baca & Bookmark** | **Pending** | Tabel `user_book_progress` siap; API & integrasi UI belum dibuat |
+| **2. Fase 3.2 — Progres Baca & Bookmark** | **Selesai** | Sinkronisasi bookmark, status selesai, mode baca, & progres via `/api/progress` ke D1 dan `/akun` |
 | **2. Fase 3.3 — Payment & Keanggotaan** | **Pending** | Tabel `subscriptions` siap; payment gateway & webhook belum dibuat |
 | **2. Admin CMS (`/admin`)** | **Pending** | Dashboard & API admin (CRUD ringkasan, publish, hitung durasi) belum dibuat |
 | **3. Opini Pembaca** | **Selesai** | Fitur *Opini* aktif di `BookReader`, D1 (`0024`), wajib login untuk kirim & apresiasi *Bermanfaat* |
@@ -38,8 +38,8 @@ Mengaktifkan binding yang sudah disiapkan di `wrangler.jsonc`:
   - Setiap branch baru yang di-push ke GitHub otomatis memicu **Cloudflare Workers Builds** dengan format URL preview: `https://<slug-branch>-app.ringkasnya.workers.dev` (karakter `/` pada nama branch diubah menjadi `-`, misalnya branch `dev` → `https://dev-app.ringkasnya.workers.dev`, branch `fix/contoh` → `https://fix-contoh-app.ringkasnya.workers.dev`).
   - Saat melaporkan hasil pengerjaan branch baru sebelum merge ke `dev`, **selalu berikan URL preview build Cloudflare** tersebut (bukan URL GitHub/PR).
 - **API Routes (`src/pages/api/`) — Sebagian Aktif**:
-  - **Aktif**: `/api/health` dan `/api/auth/[...all]`.
-  - **Pending**: endpoint progres baca/bookmark, endpoint Admin CMS, webhook pembayaran, dan fitur komunitas.
+  - **Aktif**: `/api/health`, `/api/auth/[...all]`, `/api/opinions/*`, dan `/api/progress/*`.
+  - **Pending**: endpoint Admin CMS dan webhook pembayaran.
 
 ---
 
@@ -56,8 +56,8 @@ Seluruh **58 buku awal** telah dipindahkan dari file TypeScript statis (`src/dat
   - **Migrasi SQL**: `migrations/0004_create_auth_tables.sql` mencakup 6 tabel: `users`, `sessions`, `accounts`, `verifications`, `user_book_progress` (persiapan Fase 3.2), dan `subscriptions` (persiapan Fase 3.3).
   - **Keamanan Workers-Native**: Hashing kata sandi menggunakan Web Crypto API `PBKDF2-SHA256` (`src/lib/password.ts`), cookie sesi `HttpOnly`/`SameSite=Lax`, per-request factory `createAuth(env)` (`src/lib/auth.ts`), dan proteksi route `/akun` via Astro SSR middleware (`src/middleware.ts`).
   - **Halaman & UI**: `/masuk`, `/daftar`, `/akun` (`prerender = false`), endpoint `/api/auth/[...all]`, dan integrasi `UserMenu` di `Navbar.tsx` (desktop dropdown & mobile drawer) dengan dukungan Email/Password + Google OAuth opsional via `.dev.vars` / Cloudflare Secrets.
-- **Tahap 2: Sinkronisasi Progres Baca & Bookmark — Pending**
-  - Memanfaatkan tabel `user_book_progress` untuk menyimpan progres poin inti & bookmark lintas perangkat per akun pembaca.
+- **Tahap 2: Sinkronisasi Progres Baca & Bookmark — Selesai**
+  - Memanfaatkan tabel `user_book_progress` melalui `/api/progress`, `/api/progress/sync`, dan `/api/progress/[slug]` untuk menyimpan bookmark, status selesai, mode baca terakhir, dan progres poin inti lintas perangkat (dengan *merge* otomatis dari `localStorage` saat login dan ringkasan di `/akun`).
 - **Tahap 3: Admin CMS (`/admin`) — Pending**
   - Dashboard khusus admin (terlindungi autentikasi & role `admin` server-side) untuk menambah, mengedit konten ringkasan, mengubah status `is_published` (draft/publish), menandai `is_premium`, serta otomatis menghitung ulang durasi baca (`quick_time_minutes` & `reading_time_minutes`) langsung ke Cloudflare D1 tanpa perlu deploy ulang.
 - **Tahap 4: Payment Gateway & Keanggotaan — Pending**

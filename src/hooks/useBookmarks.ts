@@ -1,30 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
+import {
+  BOOKMARKS_EVENT,
+  BOOKMARKS_STORAGE_KEY,
+  ensureProgressSynced,
+  readStoredSlugList,
+  syncBookProgressUpdate,
+  writeStoredSlugList,
+} from "@/lib/progress-sync";
 
-export const BOOKMARKS_STORAGE_KEY = "ringkasnya_bookmarks";
-const BOOKMARKS_EVENT = "ringkasnya:bookmarks-changed";
-
-function readStoredBookmarks(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(BOOKMARKS_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((item): item is string => typeof item === "string");
-  } catch {
-    return [];
-  }
-}
-
-function writeStoredBookmarks(slugs: string[]): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(BOOKMARKS_STORAGE_KEY, JSON.stringify(slugs));
-    window.dispatchEvent(new CustomEvent(BOOKMARKS_EVENT, { detail: slugs }));
-  } catch {
-    // Abaikan jika localStorage penuh atau diblokir
-  }
-}
+export { BOOKMARKS_STORAGE_KEY };
 
 /** Hook terpusat untuk menyimpan, membaca, dan menyinkronkan daftar bookmark buku. */
 export function useBookmarks() {
@@ -32,12 +16,13 @@ export function useBookmarks() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setBookmarkedSlugs(readStoredBookmarks());
+    setBookmarkedSlugs(readStoredSlugList(BOOKMARKS_STORAGE_KEY));
     setMounted(true);
+    void ensureProgressSynced();
 
     const handleStorage = (e: StorageEvent) => {
       if (e.key === BOOKMARKS_STORAGE_KEY) {
-        setBookmarkedSlugs(readStoredBookmarks());
+        setBookmarkedSlugs(readStoredSlugList(BOOKMARKS_STORAGE_KEY));
       }
     };
 
@@ -46,7 +31,7 @@ export function useBookmarks() {
       if (Array.isArray(customEvent.detail)) {
         setBookmarkedSlugs(customEvent.detail);
       } else {
-        setBookmarkedSlugs(readStoredBookmarks());
+        setBookmarkedSlugs(readStoredSlugList(BOOKMARKS_STORAGE_KEY));
       }
     };
 
@@ -67,7 +52,8 @@ export function useBookmarks() {
     setBookmarkedSlugs((prev) => {
       const exists = prev.includes(slug);
       const next = exists ? prev.filter((s) => s !== slug) : [slug, ...prev];
-      writeStoredBookmarks(next);
+      writeStoredSlugList(BOOKMARKS_STORAGE_KEY, BOOKMARKS_EVENT, next);
+      void syncBookProgressUpdate(slug, { isBookmarked: !exists });
       return next;
     });
   }, []);

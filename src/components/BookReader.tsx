@@ -4,6 +4,7 @@ import type { ArticleTermEntry } from "@/types/article";
 import { ARTICLE_TERMS } from "@/data/article-terms";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
+import { syncBookProgressUpdate } from "@/lib/progress-sync";
 import {
   applyReaderTheme,
   clearReaderTheme,
@@ -325,6 +326,27 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       : hasStartedQuick
         ? scrollProgress
         : 0;
+
+  // Sinkronkan progres baca (mode terakhir & persentase) ke D1 secara debounced saat sesi baca aktif
+  useEffect(() => {
+    if (isIntroView) return;
+    const targetPercent = completed
+      ? 100
+      : readMode === "deep"
+        ? Math.max(1, Math.min(99, readingProgress))
+        : Math.max(5, Math.min(99, Math.round(scrollProgress)));
+
+    const timer = window.setTimeout(() => {
+      void syncBookProgressUpdate(book.slug, {
+        lastMode: readMode,
+        progressPercent: targetPercent,
+      });
+    }, 1500);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [book.slug, completed, isIntroView, readMode, readingProgress, scrollProgress]);
 
   const cancelViewExit = useCallback(() => {
     window.clearTimeout(viewExitTimerRef.current);

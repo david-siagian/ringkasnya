@@ -1,35 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
+import {
+  COMPLETED_BOOKS_EVENT,
+  COMPLETED_BOOKS_STORAGE_KEY,
+  ensureProgressSynced,
+  readStoredSlugList,
+  syncBookProgressUpdate,
+  writeStoredSlugList,
+} from "@/lib/progress-sync";
 
-export const COMPLETED_BOOKS_STORAGE_KEY = "ringkasnya_completed_books";
-const COMPLETED_BOOKS_EVENT = "ringkasnya:completed-books-changed";
-
-function readStoredCompleted(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(COMPLETED_BOOKS_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((item): item is string => typeof item === "string");
-  } catch {
-    return [];
-  }
-}
-
-function writeStoredCompleted(slugs: string[]): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(
-      COMPLETED_BOOKS_STORAGE_KEY,
-      JSON.stringify(slugs)
-    );
-    window.dispatchEvent(
-      new CustomEvent(COMPLETED_BOOKS_EVENT, { detail: slugs })
-    );
-  } catch {
-    // Abaikan jika localStorage penuh atau diblokir
-  }
-}
+export { COMPLETED_BOOKS_STORAGE_KEY };
 
 /** Hook terpusat untuk menyimpan, membaca, dan menyinkronkan daftar buku yang sudah selesai dibaca. */
 export function useCompletedBooks() {
@@ -37,12 +16,13 @@ export function useCompletedBooks() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setCompletedSlugs(readStoredCompleted());
+    setCompletedSlugs(readStoredSlugList(COMPLETED_BOOKS_STORAGE_KEY));
     setMounted(true);
+    void ensureProgressSynced();
 
     const handleStorage = (e: StorageEvent) => {
       if (e.key === COMPLETED_BOOKS_STORAGE_KEY) {
-        setCompletedSlugs(readStoredCompleted());
+        setCompletedSlugs(readStoredSlugList(COMPLETED_BOOKS_STORAGE_KEY));
       }
     };
 
@@ -51,7 +31,7 @@ export function useCompletedBooks() {
       if (Array.isArray(customEvent.detail)) {
         setCompletedSlugs(customEvent.detail);
       } else {
-        setCompletedSlugs(readStoredCompleted());
+        setCompletedSlugs(readStoredSlugList(COMPLETED_BOOKS_STORAGE_KEY));
       }
     };
 
@@ -72,7 +52,12 @@ export function useCompletedBooks() {
     setCompletedSlugs((prev) => {
       if (prev.includes(slug)) return prev;
       const next = [slug, ...prev];
-      writeStoredCompleted(next);
+      writeStoredSlugList(
+        COMPLETED_BOOKS_STORAGE_KEY,
+        COMPLETED_BOOKS_EVENT,
+        next
+      );
+      void syncBookProgressUpdate(slug, { progressPercent: 100 });
       return next;
     });
   }, []);
@@ -81,7 +66,12 @@ export function useCompletedBooks() {
     setCompletedSlugs((prev) => {
       if (!prev.includes(slug)) return prev;
       const next = prev.filter((s) => s !== slug);
-      writeStoredCompleted(next);
+      writeStoredSlugList(
+        COMPLETED_BOOKS_STORAGE_KEY,
+        COMPLETED_BOOKS_EVENT,
+        next
+      );
+      void syncBookProgressUpdate(slug, { progressPercent: 0 });
       return next;
     });
   }, []);
