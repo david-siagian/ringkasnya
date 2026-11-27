@@ -6,7 +6,6 @@ import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
 import QuoteCardModal from "./QuoteCardModal";
 import BookOpinionsSection from "./BookOpinionsSection";
-import Footer from "./Footer";
 import { ArticleTermPopover } from "./ArticleTermPopover";
 import {
   ConfirmUnmarkCompletedModal,
@@ -188,11 +187,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     (readMode === "quick" && !hasStartedQuick) ||
     (readMode === "deep" && clampedDeepStep === 0);
   const showDeepBottomBar = readMode === "deep" && !isIntroView;
-  const isEndOfBookView =
-    readMode === "quick"
-      ? hasStartedQuick && isQuickDone
-      : clampedDeepStep === finalStep;
-  const showFooter = isIntroView || isEndOfBookView;
 
   // Sembunyikan navbar utama saat sesi baca dimulai agar tampilan reader lebih bersih
   useEffect(() => {
@@ -762,11 +756,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   );
 
   return (
-    <div
-      className={`flex min-h-screen flex-col bg-page ${
-        isIntroView ? "pb-20 sm:pb-24" : ""
-      }`}
-    >
+    <div className="flex min-h-screen flex-col bg-page">
       {/* Banner Header Buku (tampil di halaman Pengantar saja agar sesi baca bersih) */}
       {isIntroView && (
         <div
@@ -967,7 +957,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       {/* Konten Utama Ringkasan */}
       <main
         className={`mx-auto w-full max-w-4xl flex-1 px-4 pt-8 sm:px-6 ${
-          showDeepBottomBar ? "pb-28" : "pb-20"
+          showDeepBottomBar || isIntroView ? "pb-28" : "pb-20"
         }`}
       >
         <div ref={readingAreaRef}>
@@ -1175,8 +1165,6 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
           )}
         </div>
       </main>
-
-      {showFooter && <Footer />}
 
       {isIntroView && (
         <IntroReadingBottomBar
