@@ -471,6 +471,16 @@ interface KeyConceptsSectionProps {
   onSelectArticleTerm?: (entry: ArticleTermEntry) => void;
 }
 
+function getStickyTopOffset(): number {
+  if (typeof window === "undefined") return 73;
+  const styles = getComputedStyle(document.documentElement);
+  const parsedHeaderH = parseFloat(styles.getPropertyValue("--header-h"));
+  const headerH = Number.isFinite(parsedHeaderH) ? parsedHeaderH : 73;
+  const toolbarH =
+    parseFloat(styles.getPropertyValue("--reader-toolbar-h")) || 0;
+  return headerH + toolbarH;
+}
+
 /** Daftar kartu Konsep Kunci sebagai rangkuman gagasan utama buku. */
 export function KeyConceptsSection({
   keyConcepts,
@@ -479,16 +489,52 @@ export function KeyConceptsSection({
   onSelectArticleTerm,
 }: KeyConceptsSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
   const conceptsMatched = new Set<string>();
 
+  const handleToggle = () => {
+    if (isOpen) {
+      setIsOpen(false);
+      requestAnimationFrame(() => {
+        const section = sectionRef.current;
+        if (!section) return;
+        const stickyTop = getStickyTopOffset();
+        if (section.getBoundingClientRect().top < stickyTop) {
+          const targetY =
+            window.scrollY +
+            section.getBoundingClientRect().top -
+            stickyTop -
+            16;
+          window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+        }
+      });
+    } else {
+      setIsOpen(true);
+    }
+  };
+
   return (
-    <section className="rounded-2xl border border-line bg-surface shadow-sm overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="rounded-2xl border border-line bg-surface shadow-sm"
+    >
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={handleToggle}
         aria-expanded={isOpen}
         aria-controls="key-concepts-content"
-        className="flex w-full items-center justify-between gap-3 px-6 py-5 text-left transition-colors hover:bg-page/50 sm:px-8 sm:py-6"
+        style={
+          isOpen
+            ? {
+                top: "calc(var(--header-h, 73px) + var(--reader-toolbar-h, 0px))",
+              }
+            : undefined
+        }
+        className={`flex w-full items-center justify-between gap-3 px-6 py-5 text-left transition-colors hover:bg-page/50 sm:px-8 sm:py-6 ${
+          isOpen
+            ? "sticky z-30 rounded-t-2xl border-b border-line/70 bg-surface/95 backdrop-blur-sm"
+            : "rounded-2xl"
+        }`}
       >
         <div className="flex items-center gap-2 text-ink">
           <Layers className="h-4.5 w-4.5 shrink-0 text-accent-text sm:h-5 sm:w-5" />
@@ -506,7 +552,7 @@ export function KeyConceptsSection({
       {isOpen && (
         <div
           id="key-concepts-content"
-          className="border-t border-line/70 px-6 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-5"
+          className="rounded-b-2xl px-6 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-5"
         >
           <div className="divide-y divide-line-subtle">
             {keyConcepts.map((concept, idx) => (
