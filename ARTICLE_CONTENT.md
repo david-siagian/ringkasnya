@@ -37,7 +37,7 @@ Durasi baca artikel dihitung otomatis melalui `withCalculatedReadingTime` di `sr
 
 | Komponen (`Article`) | Jumlah / Format | Rentang Kata | Pedoman Penulisan |
 |---|---|---|---|
-| **`title`** | 1 judul | **3–8 kata** | Ringkas, tajam, mudah dipindai pada kartu feed maupun beranda. |
+| **`title`** | 1 judul | **3–8 kata** | Ringkas, tajam, mudah dipindai pada kartu feed maupun beranda. Khusus rubrik `bedah-istilah`, wajib memakai pola **`Istilah Utama: Hook Singkat`** (mis. `Residu Atensi: Harga Mahal Multitasking`) agar konsisten dan memberi konteks tanpa mengulang `subtitle`. |
 | **`subtitle`** | 1 kalimat | **10–20 kata** | Menjelaskan sudut pandang menarik atau paradoks utama artikel tanpa mengulang judul. |
 | **`leadParagraph`** | 1 paragraf pembuka | **65–110 kata** | Pengait cerita, skenario keseharian, atau pertanyaan tajam yang langsung menarik pembaca masuk. |
 | **`sections`** | **3–5 subbagian** (ideal **4**) | — | Tiap subbagian memiliki `heading` ringkas (**4–10 kata**) yang menggambarkan alur logis cerita. |
