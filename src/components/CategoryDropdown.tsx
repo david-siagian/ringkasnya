@@ -5,7 +5,7 @@ import { Check, ChevronDown } from "lucide-react";
 export interface CategoryOption {
   value: BookCategory | "Semua";
   label: string;
-  count: number;
+  count?: number;
 }
 
 interface CategoryDropdownProps {
@@ -153,12 +153,7 @@ export default function CategoryDropdown({
         }`}
       >
         {selectedOption ? (
-          <span className="flex min-w-0 items-center gap-2">
-            <span className="truncate">{selectedOption.label}</span>
-            <span className="shrink-0 rounded-full bg-surface-subtle px-2 py-0.5 text-[11px] font-semibold text-ink-subtle">
-              {selectedOption.count}
-            </span>
-          </span>
+          <span className="truncate">{selectedOption.label}</span>
         ) : (
           <span className="truncate text-ink-muted">Pilih Kategori...</span>
         )}
@@ -201,20 +196,9 @@ export default function CategoryDropdown({
                   }`}
                 >
                   <span className="truncate">{option.label}</span>
-                  <span className="flex shrink-0 items-center gap-1.5">
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
-                        isSelected
-                          ? "bg-accent-tint/80 text-accent-text"
-                          : "bg-surface-subtle text-ink-subtle"
-                      }`}
-                    >
-                      {option.count}
-                    </span>
-                    {isSelected && (
-                      <Check className="h-3.5 w-3.5 text-accent-strong" />
-                    )}
-                  </span>
+                  {isSelected && (
+                    <Check className="h-3.5 w-3.5 shrink-0 text-accent-strong" />
+                  )}
                 </button>
               );
             })}

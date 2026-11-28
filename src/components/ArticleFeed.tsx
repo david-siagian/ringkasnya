@@ -258,8 +258,9 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
       {/* Daftar Artikel atau Empty State "Akan Segera Hadir" */}
       {filteredItems.length > 0 ? (
         <section
+          key={`${selectedCategory}-${selectedFormat}-${shuffleSeed ?? "default"}`}
           aria-label="Daftar Artikel"
-          className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
+          className="animate-fade-slide mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
         >
           {filteredItems.map((article) => (
             <a
