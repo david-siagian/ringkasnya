@@ -76,6 +76,7 @@ Seluruh **58 buku awal** telah dipindahkan dari file TypeScript statis (`src/dat
 - **Tahap 2B: Akses Baca Buku, Bookmark, Tandai Selesai & Progres Wajib Login — Pending**
   - **Memulai Bacaan Buku Wajib Login**: Pengguna harus masuk (login) akun terlebih dahulu untuk dapat memulai/membaca ringkasan buku.
   - **Bookmark, Tandai Selesai & Progres Bacaan Wajib Login**: Karena proses membaca buku memerlukan akun, seluruh aksi terkait seperti mem-bookmark buku, menandai bacaan selesai, serta melihat riwayat/progres bacaan juga diwajibkan dalam keadaan login (mengarahkan/menampilkan prompt login bagi pengguna yang belum masuk).
+  - **Diskusi Lanjutan Cakupan Login**: Ke depannya, selain hal-hal di atas, perlu didiskusikan lebih lanjut fitur atau hal apa saja yang perlu diwajibkan login user.
 - **Tahap 3: Admin CMS (`/admin`) — Pending**
   - Dashboard khusus admin (terlindungi autentikasi & role `admin` server-side) untuk menambah, mengedit konten ringkasan, mengubah status `is_published` (draft/publish), menandai `is_premium`, serta otomatis menghitung ulang durasi baca (`quick_time_minutes` & `reading_time_minutes`) langsung ke Cloudflare D1 tanpa perlu deploy ulang.
 - **Tahap 4: Payment Gateway & Keanggotaan — Pending**
