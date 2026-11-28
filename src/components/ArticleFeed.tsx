@@ -121,10 +121,7 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
     const query = searchQuery.toLowerCase().trim();
     if (!query) return orderedItems;
     return orderedItems.filter((item) =>
-      [item.title, item.subtitle, item.accentBadge, item.originLabel]
-        .join(" ")
-        .toLowerCase()
-        .includes(query)
+      item.title.toLowerCase().includes(query)
     );
   }, [orderedItems, searchQuery]);
 
@@ -195,7 +192,7 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari judul, istilah, atau topik..."
+                placeholder="Cari judul artikel..."
                 aria-label="Cari artikel"
                 className="w-full rounded-xl border border-line bg-surface py-2 pl-10 pr-9 text-sm text-ink placeholder:text-ink-faint focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
               />
