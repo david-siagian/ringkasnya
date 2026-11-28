@@ -1587,9 +1587,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
 
       <ReaderToast
         open={Boolean(modeToast) && !isIntroView}
-        message={
-          modeToast === "quick" ? "Masuk Mode Kilat" : "Masuk Mode Mendalam"
-        }
+        message={modeToast === "quick" ? "Mode Kilat" : "Mode Mendalam"}
         bottomOffsetClass="top-[calc(var(--header-h)+var(--reader-toolbar-h)+12px)]"
         compact
         icon={
