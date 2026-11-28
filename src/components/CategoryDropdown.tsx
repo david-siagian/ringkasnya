@@ -12,12 +12,16 @@ interface CategoryDropdownProps {
   options: CategoryOption[];
   selectedValue: BookCategory | "Semua" | "Tersimpan";
   onSelect: (value: BookCategory | "Semua") => void;
+  listboxAriaLabel?: string;
+  className?: string;
 }
 
 export default function CategoryDropdown({
   options,
   selectedValue,
   onSelect,
+  listboxAriaLabel = "Daftar kategori buku",
+  className = "min-w-0 flex-1 sm:flex-initial sm:min-w-[260px]",
 }: CategoryDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -128,7 +132,7 @@ export default function CategoryDropdown({
     <div
       ref={containerRef}
       onKeyDown={handleKeyDown}
-      className="relative min-w-0 flex-1 sm:flex-initial sm:min-w-[260px]"
+      className={`relative ${className}`}
     >
       <button
         ref={buttonRef}
@@ -169,7 +173,7 @@ export default function CategoryDropdown({
         <div
           id={listboxId}
           role="listbox"
-          aria-label="Daftar kategori buku"
+          aria-label={listboxAriaLabel}
           className="animate-fade-slide absolute left-0 top-full z-40 mt-2 w-full min-w-[260px] overflow-hidden rounded-xl border border-line bg-surface p-1.5 shadow-xl shadow-slate-900/10 dark:shadow-black/40"
         >
           <div className="max-h-72 space-y-0.5 overflow-y-auto">

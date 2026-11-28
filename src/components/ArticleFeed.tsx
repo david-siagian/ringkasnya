@@ -1,35 +1,107 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ArrowRight, Calendar, Sparkles } from "lucide-react";
+import { CATEGORIES } from "@/lib/book-constants";
+import type { BookCategory } from "@/types/book";
 import {
   ARTICLE_FORMATS,
   formatArticlePublishedDate,
   type ArticleFeedItem,
   type ArticleFormat,
 } from "@/types/article";
+import CategoryDropdown, { type CategoryOption } from "./CategoryDropdown";
 
 interface ArticleFeedProps {
   items: ArticleFeedItem[];
 }
 
-type FilterValue = "semua" | ArticleFormat;
+type FormatFilterValue = "semua" | ArticleFormat;
+type CategoryFilterValue = "Semua" | BookCategory;
 
 export default function ArticleFeed({ items }: ArticleFeedProps) {
-  const [selectedFormat, setSelectedFormat] = useState<FilterValue>("semua");
+  const [selectedFormat, setSelectedFormat] =
+    useState<FormatFilterValue>("semua");
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryFilterValue>("Semua");
 
-  const filteredItems =
-    selectedFormat === "semua"
-      ? items
-      : items.filter((item) => item.format === selectedFormat);
+  const itemsMatchingCategory = useMemo(
+    () =>
+      selectedCategory === "Semua"
+        ? items
+        : items.filter((item) => item.category === selectedCategory),
+    [items, selectedCategory]
+  );
+
+  const itemsMatchingFormat = useMemo(
+    () =>
+      selectedFormat === "semua"
+        ? items
+        : items.filter((item) => item.format === selectedFormat),
+    [items, selectedFormat]
+  );
+
+  const filteredItems = useMemo(
+    () =>
+      itemsMatchingFormat.filter(
+        (item) =>
+          selectedCategory === "Semua" || item.category === selectedCategory
+      ),
+    [itemsMatchingFormat, selectedCategory]
+  );
 
   const activeFormatMeta =
     selectedFormat === "semua"
       ? undefined
       : ARTICLE_FORMATS.find((format) => format.id === selectedFormat);
 
-  const availableFormats = ARTICLE_FORMATS.map((format) => ({
-    ...format,
-    count: items.filter((item) => item.format === format.id).length,
-  })).filter((format) => format.count > 0);
+  const availableFormats = useMemo(
+    () =>
+      ARTICLE_FORMATS.map((format) => ({
+        ...format,
+        count: itemsMatchingCategory.filter((item) => item.format === format.id)
+          .length,
+        totalCount: items.filter((item) => item.format === format.id).length,
+      })).filter((format) => format.totalCount > 0),
+    [items, itemsMatchingCategory]
+  );
+
+  const categoryOptions = useMemo<CategoryOption[]>(() => {
+    const totalByCategory = new Map<BookCategory, number>();
+    const filteredByCategory = new Map<BookCategory, number>();
+
+    for (const item of items) {
+      totalByCategory.set(
+        item.category,
+        (totalByCategory.get(item.category) ?? 0) + 1
+      );
+    }
+
+    for (const item of itemsMatchingFormat) {
+      filteredByCategory.set(
+        item.category,
+        (filteredByCategory.get(item.category) ?? 0) + 1
+      );
+    }
+
+    return [
+      {
+        value: "Semua",
+        label: "Semua Kategori",
+        count: itemsMatchingFormat.length,
+      },
+      ...CATEGORIES.filter((category) => (totalByCategory.get(category) ?? 0) > 0).map(
+        (category) => ({
+          value: category,
+          label: category,
+          count: filteredByCategory.get(category) ?? 0,
+        })
+      ),
+    ];
+  }, [items, itemsMatchingFormat]);
+
+  const resetFilters = () => {
+    setSelectedFormat("semua");
+    setSelectedCategory("Semua");
+  };
 
   const pillBaseClass =
     "inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40";
@@ -40,8 +112,21 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
 
   return (
     <div className="mt-6">
-      {/* Filter Pills Rubrik */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      {/* Filter Kategori & Rubrik */}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <CategoryDropdown
+            options={categoryOptions}
+            selectedValue={selectedCategory}
+            onSelect={setSelectedCategory}
+            listboxAriaLabel="Daftar kategori artikel"
+            className="min-w-0 flex-1 sm:w-[260px] sm:flex-initial"
+          />
+          <p className="shrink-0 text-right text-xs text-ink-subtle">
+            {filteredItems.length} artikel
+          </p>
+        </div>
+
         <div
           role="tablist"
           aria-label="Filter rubrik artikel"
@@ -62,7 +147,7 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
                 selectedFormat === "semua" ? "text-white/80" : "text-ink-subtle"
               }`}
             >
-              {items.length}
+              {itemsMatchingCategory.length}
             </span>
           </button>
 
@@ -91,10 +176,6 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
             );
           })}
         </div>
-
-        <p className="hidden shrink-0 text-right text-xs text-ink-subtle sm:block">
-          {filteredItems.length} artikel
-        </p>
       </div>
 
       {/* Daftar Artikel atau Empty State "Akan Segera Hadir" */}
@@ -160,17 +241,21 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
             <Sparkles className="h-4 w-4" />
           </div>
           <h2 className="mt-3.5 text-base font-bold tracking-tight text-ink sm:text-lg">
-            {activeFormatMeta
-              ? `${activeFormatMeta.label} Akan Segera Hadir`
-              : "Artikel Akan Segera Hadir"}
+            {selectedCategory !== "Semua"
+              ? "Belum Ada Artikel yang Cocok"
+              : activeFormatMeta
+                ? `${activeFormatMeta.label} Akan Segera Hadir`
+                : "Artikel Akan Segera Hadir"}
           </h2>
           <p className="mx-auto mt-1.5 max-w-md text-xs leading-relaxed text-ink-muted sm:text-sm">
-            {activeFormatMeta?.comingSoonDescription ??
-              "Artikel untuk rubrik ini sedang kami siapkan."}
+            {selectedCategory !== "Semua"
+              ? `Belum ada artikel untuk kombinasi ${activeFormatMeta ? `rubrik ${activeFormatMeta.label} dan ` : ""}kategori ${selectedCategory}.`
+              : (activeFormatMeta?.comingSoonDescription ??
+                "Artikel untuk rubrik ini sedang kami siapkan.")}
           </p>
           <button
             type="button"
-            onClick={() => setSelectedFormat("semua")}
+            onClick={resetFilters}
             className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-accent-line bg-accent-soft px-3.5 py-1.5 text-xs font-semibold text-accent-text transition hover:border-accent-strong hover:bg-accent-strong hover:text-white"
           >
             <span>Lihat Artikel yang Tersedia</span>
