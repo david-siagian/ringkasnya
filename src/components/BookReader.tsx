@@ -1,7 +1,6 @@
 import { useCallback, useState, useEffect, useRef } from "react";
 import type { BookCatalogItem, BookSummary } from "@/types/book";
 import type { ArticleTermEntry } from "@/types/article";
-import { ARTICLE_TERMS } from "@/data/article-terms";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
 import {
@@ -86,6 +85,7 @@ const READER_THEME_OPTIONS: ReadonlyArray<{
 interface BookReaderProps {
   book: BookSummary;
   relatedBooks: BookCatalogItem[];
+  articleTerms?: readonly ArticleTermEntry[];
 }
 
 interface ReaderNavState {
@@ -198,7 +198,11 @@ async function copyTextToClipboard(text: string): Promise<boolean> {
   }
 }
 
-export default function BookReader({ book, relatedBooks }: BookReaderProps) {
+export default function BookReader({
+  book,
+  relatedBooks,
+  articleTerms = [],
+}: BookReaderProps) {
   const [readMode, setReadMode] = useState<"quick" | "deep">("quick");
   const [hasStartedQuick, setHasStartedQuick] = useState(false);
   const [deepStep, setDeepStep] = useState(0);
@@ -1329,7 +1333,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 fs={fs}
                 mode={readMode}
                 completed={completed}
-                articleTerms={ARTICLE_TERMS}
+                articleTerms={articleTerms}
                 onSelectArticleTerm={setActiveArticleTerm}
                 onSelectTakeaway={(num) => {
                   cancelViewExit();
@@ -1404,7 +1408,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                       showDeepContent={false}
                       scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
                       onReadDeep={() => handleReadTakeawayDeep(idx + 1)}
-                      articleTerms={ARTICLE_TERMS}
+                      articleTerms={articleTerms}
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
                   ))}
@@ -1415,14 +1419,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     conclusion={book.conclusion}
                     fs={fs}
                     scrollMarginTop={TAKEAWAY_SCROLL_MARGIN}
-                    articleTerms={ARTICLE_TERMS}
+                    articleTerms={articleTerms}
                     onSelectArticleTerm={setActiveArticleTerm}
                   />
                   {book.keyConcepts.length > 0 && (
                     <KeyConceptsSection
                       keyConcepts={book.keyConcepts}
                       fs={fs}
-                      articleTerms={ARTICLE_TERMS}
+                      articleTerms={articleTerms}
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
                   )}
@@ -1472,7 +1476,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     takeaway={activeTakeaway}
                     fs={fs}
                     showDeepContent={true}
-                    articleTerms={ARTICLE_TERMS}
+                    articleTerms={articleTerms}
                     onSelectArticleTerm={setActiveArticleTerm}
                   />
                 ) : (
@@ -1480,14 +1484,14 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                     <ConclusionSection
                       conclusion={book.conclusion}
                       fs={fs}
-                      articleTerms={ARTICLE_TERMS}
+                      articleTerms={articleTerms}
                       onSelectArticleTerm={setActiveArticleTerm}
                     />
                     {book.keyConcepts.length > 0 && (
                       <KeyConceptsSection
                         keyConcepts={book.keyConcepts}
                         fs={fs}
-                        articleTerms={ARTICLE_TERMS}
+                        articleTerms={articleTerms}
                         onSelectArticleTerm={setActiveArticleTerm}
                       />
                     )}

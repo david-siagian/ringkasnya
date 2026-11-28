@@ -7,7 +7,7 @@ import {
 } from "@/lib/books-repository";
 import { getDb, schema } from "@/lib/db";
 import { getDailySeed, shuffleWithSeed } from "@/lib/shuffle";
-import { ARTICLES } from "@/data/articles";
+import { getArticleFeed } from "@/lib/articles-repository";
 import CatalogSection from "@/components/CatalogSection";
 import HomeArticlesSection from "@/components/HomeArticlesSection.astro";
 import {
@@ -24,10 +24,13 @@ const MIN_ENGAGED_BOOKS_FOR_HOME_SHUFFLE = 5;
 
 const dbBinding = Astro.locals.runtime?.env?.DB;
 const currentUser = Astro.locals.user;
-const bookCatalog = await getBookCatalog(dbBinding);
+const [bookCatalog, articleFeed] = await Promise.all([
+  getBookCatalog(dbBinding),
+  getArticleFeed(dbBinding),
+]);
 
 let homeBooks = bookCatalog;
-let homeArticles = ARTICLES;
+let homeArticles = articleFeed;
 let cacheControl = PUBLIC_PAGE_CACHE_CONTROL;
 
 if (currentUser) {
@@ -68,7 +71,7 @@ if (currentUser) {
         );
 
         homeBooks = [...uncompletedBooks, ...completedBooks];
-        homeArticles = shuffleWithSeed(ARTICLES, `articles:${userDailySeed}`);
+        homeArticles = shuffleWithSeed(articleFeed, `articles:${userDailySeed}`);
       }
     } catch (error) {
       console.error("[index] Gagal memuat progres user untuk rotasi beranda:", error);

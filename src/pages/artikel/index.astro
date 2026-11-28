@@ -1,25 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ArticleFeed from "@/components/ArticleFeed";
-import { ARTICLES } from "@/data/articles";
+import { getArticleFeed } from "@/lib/articles-repository";
 import { PUBLIC_PAGE_CACHE_CONTROL } from "@/lib/books-repository";
-import type { ArticleFeedItem } from "@/types/article";
 
 export const prerender = false;
 
 Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
 
-const articleItems: ArticleFeedItem[] = ARTICLES.map((article) => ({
-  slug: article.slug,
-  title: article.title,
-  subtitle: article.subtitle,
-  format: article.format,
-  publishedAt: article.publishedAt,
-  coverImage: article.coverImage,
-  coverGradient: article.coverGradient,
-  accentBadge: article.accentBadge,
-  originLabel: article.originLabel,
-}));
+const articleItems = await getArticleFeed(Astro.locals.runtime?.env?.DB);
 
 const pageTitle = "Artikel & Gagasan Ilmiah — Ringkasnya";
 const pageDescription =

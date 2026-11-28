@@ -5,15 +5,17 @@ import {
   getBookCatalog,
   PUBLIC_PAGE_CACHE_CONTROL,
 } from "@/lib/books-repository";
+import { getArticleTerms } from "@/lib/articles-repository";
 import BookReader from "@/components/BookReader";
 
 export const prerender = false;
 
 const db = Astro.locals.runtime?.env?.DB;
 const { slug } = Astro.params;
-const [book, bookCatalog] = await Promise.all([
+const [book, bookCatalog, articleTerms] = await Promise.all([
   slug ? getBookBySlug(db, slug) : Promise.resolve(null),
   getBookCatalog(db),
+  getArticleTerms(db),
 ]);
 
 if (!book) {
@@ -28,5 +30,10 @@ const pageDescription = `${book.tagline} Baca ringkasan ${book.title} dalam ${bo
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription} hideFooter={true}>
-  <BookReader client:load book={book} relatedBooks={relatedBooks} />
+  <BookReader
+    client:load
+    book={book}
+    relatedBooks={relatedBooks}
+    articleTerms={articleTerms}
+  />
 </BaseLayout>

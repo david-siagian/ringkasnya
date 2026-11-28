@@ -1,9 +1,9 @@
 ---
-import { formatArticlePublishedDate, type Article } from "@/types/article";
+import { formatArticlePublishedDate, type ArticleFeedItem } from "@/types/article";
 import { ArrowRight, Calendar } from "lucide-react";
 
 interface Props {
-  articles: Article[];
+  articles: ArticleFeedItem[];
 }
 
 const { articles } = Astro.props;

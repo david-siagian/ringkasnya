@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { ARTICLES, getArticleBySlug } from "@/data/articles";
+import { getArticleBySlug, getArticleFeed } from "@/lib/articles-repository";
 import { formatArticlePublishedDate } from "@/types/article";
 import {
   getBookCatalog,
@@ -21,14 +21,18 @@ import {
 
 export const prerender = false;
 
+const db = Astro.locals.runtime?.env?.DB;
 const { slug } = Astro.params;
-const article = slug ? getArticleBySlug(slug) : undefined;
+const [article, bookCatalog, articleFeed] = await Promise.all([
+  slug ? getArticleBySlug(db, slug) : Promise.resolve(null),
+  getBookCatalog(db),
+  getArticleFeed(db),
+]);
 
 if (!article) {
   return Astro.redirect("/404");
 }
 
-const bookCatalog = await getBookCatalog(Astro.locals.runtime?.env?.DB);
 Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
 
 const fromBookSlug = Astro.url.searchParams.get("from");
@@ -40,10 +44,9 @@ const relatedBooks = article.relatedBookSlugs
   .map((bookSlug) => bookCatalog.find((book) => book.slug === bookSlug))
   .filter((book): book is (typeof bookCatalog)[number] => Boolean(book));
 
-const otherArticles = ARTICLES.filter((other) => other.slug !== article.slug).slice(
-  0,
-  3
-);
+const otherArticles = articleFeed
+  .filter((other) => other.slug !== article.slug)
+  .slice(0, 3);
 
 const pageTitle = `${article.title} — Artikel Ringkasnya`;
 const pageDescription = `${article.shortDefinition} Baca penjelasan lengkapnya dalam ${article.readingTimeMinutes} menit di Ringkasnya.`;
