@@ -46,7 +46,7 @@ const relatedBooks = article.relatedBookSlugs
 
 const otherArticles = articleFeed
   .filter((other) => other.slug !== article.slug)
-  .slice(0, 3);
+  .slice(0, 4);
 
 const pageTitle = `${article.title} — Artikel Ringkasnya`;
 const pageDescription = `${article.shortDefinition} Baca penjelasan lengkapnya dalam ${article.readingTimeMinutes} menit di Ringkasnya.`;
