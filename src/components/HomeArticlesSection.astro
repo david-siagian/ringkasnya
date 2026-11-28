@@ -41,7 +41,7 @@ const displayedArticles = articles.slice(0, 4);
           {displayedArticles.map((article) => (
             <a
               href={`/artikel/${article.slug}`}
-              class="group flex h-full min-h-[120px] items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md sm:min-h-[144px]"
+              class="group flex h-full min-h-[120px] items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md sm:min-h-[136px]"
             >
               {article.coverImage && (
                 <div class="w-24 shrink-0 overflow-hidden border-r border-line/60 bg-slate-950 sm:w-28 md:w-32">
@@ -66,10 +66,16 @@ const displayedArticles = articles.slice(0, 4);
                     </span>
                   </div>
 
-                  <h3 class="mt-1 min-h-[2.5em] line-clamp-2 text-[13px] font-bold leading-tight text-ink transition-colors group-hover:text-accent-text sm:text-sm">
+                  <h3
+                    data-article-title
+                    class="mt-1 line-clamp-2 text-[13px] font-bold leading-tight text-ink transition-colors group-hover:text-accent-text sm:text-sm"
+                  >
                     {article.title}
                   </h3>
-                  <p class="mt-1 min-h-[1.375em] line-clamp-1 text-[11px] leading-snug text-ink-muted sm:min-h-[2.75em] sm:line-clamp-2 sm:text-xs">
+                  <p
+                    data-article-subtitle
+                    class="mt-1 line-clamp-1 text-[11px] leading-snug text-ink-muted sm:text-xs"
+                  >
                     {article.subtitle}
                   </p>
                 </div>
@@ -86,3 +92,30 @@ const displayedArticles = articles.slice(0, 4);
     </section>
   )
 }
+
+<script>
+  const syncArticleSubtitles = () => {
+    const titles = document.querySelectorAll<HTMLElement>("[data-article-title]");
+    for (const titleEl of titles) {
+      const card = titleEl.closest("a");
+      const subtitleEl = card?.querySelector<HTMLElement>("[data-article-subtitle]");
+      if (!subtitleEl) continue;
+
+      const update = () => {
+        const lineHeight = parseFloat(window.getComputedStyle(titleEl).lineHeight);
+        if (!Number.isFinite(lineHeight) || lineHeight <= 0) return;
+        const isMultiLine = titleEl.getBoundingClientRect().height > lineHeight * 1.5;
+        subtitleEl.classList.toggle("line-clamp-1", isMultiLine);
+        subtitleEl.classList.toggle("line-clamp-2", !isMultiLine);
+      };
+
+      update();
+      if ("ResizeObserver" in window) {
+        const observer = new ResizeObserver(update);
+        observer.observe(titleEl);
+      }
+    }
+  };
+
+  syncArticleSubtitles();
+</script>

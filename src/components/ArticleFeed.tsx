@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Calendar, Shuffle, Sparkles } from "lucide-react";
 import { CATEGORIES } from "@/lib/book-constants";
 import {
@@ -21,6 +21,83 @@ interface ArticleFeedProps {
 type FormatFilterValue = "semua" | ArticleFormat;
 type CategoryFilterValue = "Semua" | BookCategory;
 const ARTICLE_SHUFFLE_SEED_KEY = "ringkasnya:article-shuffle-seed";
+
+function ArticleCardItem({ article }: { article: ArticleFeedItem }) {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const [isMultiLineTitle, setIsMultiLineTitle] = useState(true);
+
+  useEffect(() => {
+    const el = titleRef.current;
+    if (!el) return;
+
+    const updateLineCount = () => {
+      const lineHeight = parseFloat(window.getComputedStyle(el).lineHeight);
+      if (!Number.isFinite(lineHeight) || lineHeight <= 0) return;
+      setIsMultiLineTitle(el.getBoundingClientRect().height > lineHeight * 1.5);
+    };
+
+    updateLineCount();
+    if (typeof ResizeObserver === "undefined") return;
+
+    const observer = new ResizeObserver(updateLineCount);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [article.title]);
+
+  return (
+    <a
+      href={`/artikel/${article.slug}`}
+      className="group flex h-full min-h-[120px] items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 sm:min-h-[136px]"
+    >
+      {article.coverImage && (
+        <div className="w-24 shrink-0 overflow-hidden border-r border-line/60 bg-slate-950 sm:w-28 md:w-32">
+          <img
+            src={article.coverImage}
+            alt={`Ilustrasi ${article.title}`}
+            className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+        </div>
+      )}
+
+      <div className="flex min-w-0 flex-1 flex-col justify-between px-3.5 py-2.5 sm:px-4 sm:py-3">
+        <div>
+          <div className="flex items-center gap-2 text-[10px] sm:text-[11px]">
+            <span className="truncate font-semibold text-accent-text">
+              {article.accentBadge}
+            </span>
+            <span aria-hidden="true" className="text-ink-faint">
+              &middot;
+            </span>
+            <span className="inline-flex shrink-0 items-center gap-1 text-ink-subtle">
+              <Calendar className="h-3 w-3 text-ink-faint" />
+              {formatArticlePublishedDate(article.publishedAt)}
+            </span>
+          </div>
+
+          <h2
+            ref={titleRef}
+            className="mt-1 line-clamp-2 text-[13px] font-bold leading-tight text-ink transition-colors group-hover:text-accent-text sm:text-sm"
+          >
+            {article.title}
+          </h2>
+          <p
+            className={`mt-1 text-[11px] leading-snug text-ink-muted sm:text-xs ${
+              isMultiLineTitle ? "line-clamp-1" : "line-clamp-2"
+            }`}
+          >
+            {article.subtitle}
+          </p>
+        </div>
+
+        <div className="mt-2 flex items-center justify-between border-t border-line-subtle pt-1.5 text-[11px] font-semibold text-accent-strong group-hover:text-accent-text">
+          <span>Baca Artikel</span>
+          <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 sm:h-3.5 sm:w-3.5" />
+        </div>
+      </div>
+    </a>
+  );
+}
 
 export default function ArticleFeed({ items }: ArticleFeedProps) {
   const [selectedFormat, setSelectedFormat] =
@@ -263,51 +340,7 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
           className="animate-fade-slide mt-6 grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
         >
           {filteredItems.map((article) => (
-            <a
-              key={article.slug}
-              href={`/artikel/${article.slug}`}
-              className="group flex h-full min-h-[120px] items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 sm:min-h-[144px]"
-            >
-              {article.coverImage && (
-                <div className="w-24 shrink-0 overflow-hidden border-r border-line/60 bg-slate-950 sm:w-28 md:w-32">
-                  <img
-                    src={article.coverImage}
-                    alt={`Ilustrasi ${article.title}`}
-                    className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-              )}
-
-              <div className="flex min-w-0 flex-1 flex-col justify-between px-3.5 py-2.5 sm:px-4 sm:py-3">
-                <div>
-                  <div className="flex items-center gap-2 text-[10px] sm:text-[11px]">
-                    <span className="truncate font-semibold text-accent-text">
-                      {article.accentBadge}
-                    </span>
-                    <span aria-hidden="true" className="text-ink-faint">
-                      &middot;
-                    </span>
-                    <span className="inline-flex shrink-0 items-center gap-1 text-ink-subtle">
-                      <Calendar className="h-3 w-3 text-ink-faint" />
-                      {formatArticlePublishedDate(article.publishedAt)}
-                    </span>
-                  </div>
-
-                  <h2 className="mt-1 min-h-[2.5em] line-clamp-2 text-[13px] font-bold leading-tight text-ink transition-colors group-hover:text-accent-text sm:text-sm">
-                    {article.title}
-                  </h2>
-                  <p className="mt-1 min-h-[1.375em] line-clamp-1 text-[11px] leading-snug text-ink-muted sm:min-h-[2.75em] sm:line-clamp-2 sm:text-xs">
-                    {article.subtitle}
-                  </p>
-                </div>
-
-                <div className="mt-2 flex items-center justify-between border-t border-line-subtle pt-1.5 text-[11px] font-semibold text-accent-strong group-hover:text-accent-text">
-                  <span>Baca Artikel</span>
-                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 sm:h-3.5 sm:w-3.5" />
-                </div>
-              </div>
-            </a>
+            <ArticleCardItem key={article.slug} article={article} />
           ))}
         </section>
       ) : (
