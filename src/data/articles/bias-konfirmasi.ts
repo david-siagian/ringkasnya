@@ -2,7 +2,7 @@ import type { Article } from "@/types/article";
 
 export const biasKonfirmasi: Article = {
   slug: "bias-konfirmasi",
-  title: "Bias Konfirmasi",
+  title: "Bias Konfirmasi: Ilusi Objektivitas Pikiran",
   subtitle:
     "Mengapa otak kita lebih gemar mencari pembenaran daripada kebenaran—dan bagaimana cara melatih diri agar tetap jernih.",
   term: "Bias Konfirmasi",

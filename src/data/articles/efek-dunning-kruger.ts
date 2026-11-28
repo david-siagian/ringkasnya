@@ -2,7 +2,7 @@ import type { Article } from "@/types/article";
 
 export const efekDunningKruger: Article = {
   slug: "efek-dunning-kruger",
-  title: "Efek Dunning-Kruger",
+  title: "Efek Dunning-Kruger: Jebakan Percaya Diri Berlebih",
   subtitle:
     "Mengapa orang yang baru tahu sedikit justru sering merasa paling yakin, sementara para ahli cenderung lebih berhati-hati.",
   term: "Efek Dunning-Kruger",

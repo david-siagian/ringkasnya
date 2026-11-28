@@ -2,7 +2,7 @@ import type { Article } from "@/types/article";
 
 export const destruksiKreatif: Article = {
   slug: "destruksi-kreatif",
-  title: "Destruksi Kreatif",
+  title: "Destruksi Kreatif: Mesin Kejam Kemajuan Ekonomi",
   subtitle:
     "Bagaimana inovasi baru meruntuhkan cara lama untuk melahirkan kemakmuran—dan mengapa perubahan ini selalu memicu perlawanan.",
   term: "Destruksi Kreatif",

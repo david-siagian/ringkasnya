@@ -2,7 +2,7 @@ import type { Article } from "@/types/article";
 
 export const prinsipAnnaKarenina: Article = {
   slug: "prinsip-anna-karenina",
-  title: "Prinsip Anna Karenina",
+  title: "Prinsip Anna Karenina: Rapuhnya Sebuah Keberhasilan",
   subtitle:
     "Mengapa keberhasilan sebuah sistem butuh semua syarat terpenuhi sekaligus, sementara kegagalan cukup dipicu oleh satu celah saja.",
   term: "Prinsip Anna Karenina",

@@ -2,7 +2,7 @@ import type { Article } from "@/types/article";
 
 export const efekJangkar: Article = {
   slug: "efek-jangkar",
-  title: "Efek Jangkar",
+  title: "Efek Jangkar: Terperangkap Kesan Pertama",
   subtitle:
     "Bagaimana satu angka pertama yang bahkan tak masuk akal bisa diam-diam membajak penilaian dan keputusan finansial kita.",
   term: "Efek Jangkar",

@@ -2,7 +2,7 @@ import type { Article } from "@/types/article";
 
 export const adaptasiHedonis: Article = {
   slug: "adaptasi-hedonis",
-  title: "Adaptasi Hedonis",
+  title: "Adaptasi Hedonis: Jebakan Treadmill Kebahagiaan",
   subtitle:
     "Mengapa kenaikan gaji, gawai baru, atau pencapaian besar hanya membuat kita bahagia sebentar sebelum terasa biasa saja.",
   term: "Adaptasi Hedonis",
