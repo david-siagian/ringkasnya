@@ -41,7 +41,6 @@ interface CatalogSectionProps {
 const MAX_PREVIEW_OTHER_BOOKS = 6;
 const DEFAULT_PREVIEW_COLS = 5;
 const DEFAULT_ITEMS_PER_PAGE = 20;
-const CATALOG_SHUFFLE_SEED_KEY = "ringkasnya:catalog-shuffle-seed";
 
 type CatalogStatusFilter = "Semua" | "Tersimpan" | "Proses" | "Selesai";
 type CatalogSortOption = "terpopuler" | "terbaru";
@@ -150,14 +149,17 @@ export default function CatalogSection({
       setCurrentPage(pageParam);
     }
 
-    try {
-      const savedSeed = window.sessionStorage.getItem(CATALOG_SHUFFLE_SEED_KEY);
-      if (savedSeed) {
-        setShuffleSeed(savedSeed);
+  }, [isFull]);
+
+  useEffect(() => {
+    if (!isFull) return;
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        setShuffleSeed(null);
       }
-    } catch {
-      // Abaikan jika sessionStorage tidak tersedia
-    }
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
   }, [isFull]);
 
   const categoryOptions = useMemo<CategoryOption[]>(() => {
@@ -343,11 +345,6 @@ export default function CatalogSection({
     setShuffleSeed(null);
     setCurrentPage(1);
     syncCatalogUrl(1, selectedCategory, selectedStatus, nextSort);
-    try {
-      window.sessionStorage.removeItem(CATALOG_SHUFFLE_SEED_KEY);
-    } catch {
-      // Abaikan jika sessionStorage tidak tersedia
-    }
   };
 
   const handleSearchChange = (value: string) => {
@@ -365,15 +362,9 @@ export default function CatalogSection({
   };
 
   const handleShuffleBooks = () => {
-    const nextSeed = createRandomSeed();
-    setShuffleSeed(nextSeed);
+    setShuffleSeed(createRandomSeed());
     setCurrentPage(1);
     syncCatalogUrl(1);
-    try {
-      window.sessionStorage.setItem(CATALOG_SHUFFLE_SEED_KEY, nextSeed);
-    } catch {
-      // Abaikan jika sessionStorage tidak tersedia
-    }
   };
 
   const startItem = filteredBooks.length === 0 ? 0 : (safePage - 1) * itemsPerPage + 1;

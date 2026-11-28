@@ -16,7 +16,6 @@ interface ArticleFeedProps {
 }
 
 type FormatFilterValue = "semua" | ArticleFormat;
-const ARTICLE_SHUFFLE_SEED_KEY = "ringkasnya:article-shuffle-seed";
 
 function ArticleCardItem({ article }: { article: ArticleFeedItem }) {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -102,14 +101,13 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
   const [shuffleSeed, setShuffleSeed] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const savedSeed = window.sessionStorage.getItem(ARTICLE_SHUFFLE_SEED_KEY);
-      if (savedSeed) {
-        setShuffleSeed(savedSeed);
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        setShuffleSeed(null);
       }
-    } catch {
-      // Abaikan jika sessionStorage tidak tersedia
-    }
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
   }, []);
 
   const orderedItems = useMemo(
@@ -155,22 +153,11 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
   };
 
   const handleShuffleArticles = () => {
-    const nextSeed = createRandomSeed();
-    setShuffleSeed(nextSeed);
-    try {
-      window.sessionStorage.setItem(ARTICLE_SHUFFLE_SEED_KEY, nextSeed);
-    } catch {
-      // Abaikan jika sessionStorage tidak tersedia
-    }
+    setShuffleSeed(createRandomSeed());
   };
 
   const handleResetShuffle = () => {
     setShuffleSeed(null);
-    try {
-      window.sessionStorage.removeItem(ARTICLE_SHUFFLE_SEED_KEY);
-    } catch {
-      // Abaikan jika sessionStorage tidak tersedia
-    }
   };
 
   const pillBaseClass =
