@@ -262,10 +262,6 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
               </button>
             </div>
           </div>
-
-          <p className="shrink-0 text-right text-xs text-ink-subtle">
-            {filteredItems.length} artikel
-          </p>
         </div>
 
         <div
