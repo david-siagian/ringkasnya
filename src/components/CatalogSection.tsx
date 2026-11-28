@@ -110,8 +110,8 @@ export default function CatalogSection({
   const [previewCols, setPreviewCols] = useState(DEFAULT_PREVIEW_COLS);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const previewGridRef = useRef<HTMLDivElement>(null);
-  const { bookmarkedCount, isBookmarked } = useBookmarks();
-  const { completedCount, isCompleted } = useCompletedBooks();
+  const { isBookmarked } = useBookmarks();
+  const { isCompleted } = useCompletedBooks();
   const { getProgressPercent, isLoggedIn } = useReadingProgress();
 
   useEffect(() => {
@@ -177,17 +177,6 @@ export default function CatalogSection({
     ];
   }, [books]);
 
-  const inProgressCount = useMemo(() => {
-    if (!isLoggedIn) return 0;
-    let count = 0;
-    for (const book of books) {
-      if (isCompleted(book.slug)) continue;
-      const pct = getProgressPercent(book.slug);
-      if (pct > 0 && pct < 100) count++;
-    }
-    return count;
-  }, [books, isLoggedIn, isCompleted, getProgressPercent]);
-
   const orderedBooks = useMemo(() => {
     if (isFull && shuffleSeed) {
       return shuffleWithSeed(books, shuffleSeed);
@@ -202,40 +191,58 @@ export default function CatalogSection({
     return books;
   }, [books, isFull, shuffleSeed, sortBy]);
 
-  const filteredBooks = useMemo(() => {
+  const baseFilteredBooks = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
     return orderedBooks.filter((book) => {
       const matchesCategory =
         selectedCategory === "Semua" || book.category === selectedCategory;
-
-      let matchesStatus = true;
-      if (isFull && selectedStatus !== "Semua") {
-        if (selectedStatus === "Tersimpan") {
-          matchesStatus = isBookmarked(book.slug);
-        } else if (selectedStatus === "Selesai") {
-          matchesStatus = isCompleted(book.slug);
-        } else if (selectedStatus === "Proses") {
-          const pct = getProgressPercent(book.slug);
-          matchesStatus =
-            isLoggedIn && !isCompleted(book.slug) && pct > 0 && pct < 100;
-        }
-      }
-
-      const query = searchQuery.toLowerCase().trim();
       const matchesQuery =
         !query ||
         book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query) ||
         book.tagline.toLowerCase().includes(query) ||
         book.category.toLowerCase().includes(query);
+      return matchesCategory && matchesQuery;
+    });
+  }, [orderedBooks, selectedCategory, searchQuery]);
 
-      return matchesCategory && matchesStatus && matchesQuery;
+  const statusCounts = useMemo(() => {
+    let saved = 0;
+    let inProgress = 0;
+    let completed = 0;
+    for (const book of baseFilteredBooks) {
+      if (isBookmarked(book.slug)) saved++;
+      if (isCompleted(book.slug)) {
+        completed++;
+      } else if (isLoggedIn) {
+        const pct = getProgressPercent(book.slug);
+        if (pct > 0 && pct < 100) inProgress++;
+      }
+    }
+    return {
+      all: baseFilteredBooks.length,
+      saved,
+      inProgress,
+      completed,
+    };
+  }, [baseFilteredBooks, isBookmarked, isCompleted, isLoggedIn, getProgressPercent]);
+
+  const filteredBooks = useMemo(() => {
+    if (!isFull || selectedStatus === "Semua") return baseFilteredBooks;
+    return baseFilteredBooks.filter((book) => {
+      if (selectedStatus === "Tersimpan") {
+        return isBookmarked(book.slug);
+      }
+      if (selectedStatus === "Selesai") {
+        return isCompleted(book.slug);
+      }
+      const pct = getProgressPercent(book.slug);
+      return isLoggedIn && !isCompleted(book.slug) && pct > 0 && pct < 100;
     });
   }, [
-    orderedBooks,
+    baseFilteredBooks,
     isFull,
-    selectedCategory,
     selectedStatus,
-    searchQuery,
     isBookmarked,
     isCompleted,
     getProgressPercent,
@@ -561,25 +568,25 @@ export default function CatalogSection({
                 {
                   value: "Semua",
                   label: "Semua",
-                  count: books.length,
+                  count: statusCounts.all,
                   icon: null,
                 },
                 {
                   value: "Tersimpan",
                   label: "Tersimpan",
-                  count: bookmarkedCount,
+                  count: statusCounts.saved,
                   icon: Bookmark,
                 },
                 {
                   value: "Proses",
                   label: "Proses",
-                  count: inProgressCount,
+                  count: statusCounts.inProgress,
                   icon: BookOpen,
                 },
                 {
                   value: "Selesai",
                   label: "Selesai",
-                  count: completedCount,
+                  count: statusCounts.completed,
                   icon: CheckCircle2,
                 },
               ] as const
@@ -738,13 +745,13 @@ export default function CatalogSection({
       ) : (
         <div className="mt-10 rounded-2xl border border-dashed border-line-strong bg-surface p-12 text-center">
           <p className="text-base font-semibold text-ink">
-            {selectedStatus === "Tersimpan" && bookmarkedCount === 0
+            {selectedStatus === "Tersimpan" && statusCounts.saved === 0
               ? "Belum ada buku yang disimpan"
-              : selectedStatus === "Proses" && inProgressCount === 0
+              : selectedStatus === "Proses" && statusCounts.inProgress === 0
                 ? isLoggedIn
                   ? "Belum ada buku yang sedang dibaca"
                   : "Masuk untuk memantau progres baca"
-                : selectedStatus === "Selesai" && completedCount === 0
+                : selectedStatus === "Selesai" && statusCounts.completed === 0
                   ? "Belum ada buku yang selesai dibaca"
                   : selectedCategory !== "Semua" &&
                       selectedStatus === "Semua" &&
@@ -753,13 +760,13 @@ export default function CatalogSection({
                     : "Buku yang kamu cari belum ditemukan"}
           </p>
           <p className="mt-1 text-sm text-ink-subtle">
-            {selectedStatus === "Tersimpan" && bookmarkedCount === 0
+            {selectedStatus === "Tersimpan" && statusCounts.saved === 0
               ? "Klik ikon bookmark pada kartu buku untuk menyimpannya di sini."
-              : selectedStatus === "Proses" && inProgressCount === 0
+              : selectedStatus === "Proses" && statusCounts.inProgress === 0
                 ? isLoggedIn
                   ? "Mulai baca ringkasan buku dan progresmu akan muncul otomatis di sini."
                   : "Filter Proses aktif untuk pengguna yang sudah masuk agar progres baca tersinkronisasi."
-                : selectedStatus === "Selesai" && completedCount === 0
+                : selectedStatus === "Selesai" && statusCounts.completed === 0
                   ? "Tandai buku sebagai selesai di halaman pembaca untuk melihatnya di sini."
                   : selectedCategory !== "Semua" &&
                       selectedStatus === "Semua" &&
