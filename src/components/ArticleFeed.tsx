@@ -191,11 +191,8 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
       </nav>
 
       <div>
-        <span className="text-xs font-bold uppercase tracking-wider text-accent-strong">
+        <h1 className="text-xl font-extrabold uppercase tracking-wider text-accent-strong sm:text-2xl">
           Artikel
-        </span>
-        <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
-          Artikel &amp; Gagasan Ilmiah
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm text-ink-muted">
           Catatan singkat 4–6 menit seputar istilah ilmiah, eksperimen klasik, dan konsep penting di balik buku-buku Ringkasnya.
