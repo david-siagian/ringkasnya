@@ -20,6 +20,8 @@ import {
   isValidEmailFormat,
   validateUsername,
 } from "@/lib/auth-helpers";
+import { useUsernameAvailability } from "@/hooks/useUsernameAvailability";
+import UsernameStatusHint from "@/components/auth/UsernameStatusHint";
 
 interface RegisterFormProps {
   googleEnabled: boolean;
@@ -72,6 +74,9 @@ export default function RegisterForm({
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const usernameCheck = useUsernameAvailability(username, {
+    enabled: step === "form",
+  });
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -515,6 +520,10 @@ export default function RegisterForm({
               className="w-full rounded-xl border border-line bg-page/70 py-2.5 pl-10 pr-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             />
           </div>
+          <UsernameStatusHint
+            status={usernameCheck.status}
+            message={usernameCheck.message}
+          />
         </div>
 
         <div>
@@ -605,7 +614,12 @@ export default function RegisterForm({
 
         <button
           type="submit"
-          disabled={isLoading || isGoogleLoading}
+          disabled={
+            isLoading ||
+            isGoogleLoading ||
+            usernameCheck.status === "taken" ||
+            usernameCheck.status === "invalid"
+          }
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isLoading ? (

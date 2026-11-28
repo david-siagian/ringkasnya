@@ -25,6 +25,8 @@ import {
 } from "@/lib/auth-helpers";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
+import { useUsernameAvailability } from "@/hooks/useUsernameAvailability";
+import UsernameStatusHint from "@/components/auth/UsernameStatusHint";
 
 export interface AccountProgressBookItem {
   bookSlug: string;
@@ -91,6 +93,10 @@ export default function AccountDashboard({
   const [isSavingUsername, setIsSavingUsername] = useState(false);
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [usernameSuccess, setUsernameSuccess] = useState<string | null>(null);
+  const usernameAvailability = useUsernameAvailability(usernameInput, {
+    enabled: editingUsername,
+    currentUsername,
+  });
 
   const [currentEmail, setCurrentEmail] = useState(user.email);
   const [isEmailVerified, setIsEmailVerified] = useState(user.emailVerified);
@@ -515,10 +521,18 @@ export default function AccountDashboard({
                     className="w-full rounded-lg border border-line bg-surface py-2 pl-8 pr-3 text-sm text-ink focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   />
                 </div>
+                <UsernameStatusHint
+                  status={usernameAvailability.status}
+                  message={usernameAvailability.message}
+                />
                 <div className="flex items-center gap-2">
                   <button
                     type="submit"
-                    disabled={isSavingUsername}
+                    disabled={
+                      isSavingUsername ||
+                      usernameAvailability.status === "taken" ||
+                      usernameAvailability.status === "invalid"
+                    }
                     className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
                   >
                     {isSavingUsername && <Loader2 className="h-3.5 w-3.5 animate-spin" />}

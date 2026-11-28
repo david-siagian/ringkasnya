@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import { AtSign, AlertCircle, ArrowRight, Loader2, Sparkles } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { suggestUsernameFromName, validateUsername } from "@/lib/auth-helpers";
+import { useUsernameAvailability } from "@/hooks/useUsernameAvailability";
+import UsernameStatusHint from "@/components/auth/UsernameStatusHint";
 
 export default function UsernameOnboardingModal() {
   const { data: session, isPending } = useSession();
@@ -24,6 +26,9 @@ export default function UsernameOnboardingModal() {
   const needsUsername = Boolean(
     mounted && !isPending && rawUser && !rawUser.username && !completed
   );
+  const usernameCheck = useUsernameAvailability(username, {
+    enabled: needsUsername,
+  });
 
   useEffect(() => {
     if (needsUsername && !initializedSuggestion && rawUser?.name) {
@@ -138,14 +143,20 @@ export default function UsernameOnboardingModal() {
                   className="w-full rounded-xl border border-line bg-page/70 py-2.5 pl-10 pr-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                 />
               </div>
-              <p className="mt-1.5 text-xs text-ink-subtle">
-                3–24 karakter: huruf, angka, titik (.), atau garis bawah (_).
-              </p>
+              <UsernameStatusHint
+                status={usernameCheck.status}
+                message={usernameCheck.message}
+                fallbackHint="3–24 karakter: huruf, angka, titik (.), atau garis bawah (_)."
+              />
             </div>
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={
+                isSubmitting ||
+                usernameCheck.status === "taken" ||
+                usernameCheck.status === "invalid"
+              }
               className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? (
