@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-spesialis" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#110c05"/>
+      <stop offset="55%" stop-color="#3b2308"/>
+      <stop offset="100%" stop-color="#2e1806"/>
+    </linearGradient>
+    <radialGradient id="glow-spesialis" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#110c05" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-spesialis)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-spesialis)"/>
+
+  <!-- Sisi Kiri: Jalur Spesialis (Satu Panah Tajam ke Atas) -->
+  <path d="M68 184 V56" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+  <path d="M56 70 L68 52 L80 70" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="68" cy="184" r="6" fill="#fde68a"/>
+
+  <!-- Garis Pemisah Tengah -->
+  <path d="M114 48 V192" stroke="#f59e0b" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Sisi Kanan: Jalur Generalis (Jejaring Cabang Terhubung) -->
+  <circle cx="164" cy="176" r="6" fill="#38bdf8"/>
+  <circle cx="140" cy="134" r="7" fill="#fb923c"/>
+  <circle cx="188" cy="134" r="7" fill="#34d399"/>
+  <circle cx="144" cy="84" r="7" fill="#fde68a"/>
+  <circle cx="186" cy="78" r="8" fill="#38bdf8"/>
+  <circle cx="164" cy="54" r="6" fill="#fbbf24"/>
+
+  <path d="M164 176 L140 134 M164 176 L188 134 M140 134 L188 134 M140 134 L144 84 M188 134 L186 78 M144 84 L186 78 M144 84 L164 54 M186 78 L164 54" stroke="#fed7aa" stroke-opacity="0.75" stroke-width="2" stroke-linecap="round"/>
+</svg>

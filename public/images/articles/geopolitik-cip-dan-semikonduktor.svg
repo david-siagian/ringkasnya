@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-cip" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#06101e"/>
+      <stop offset="55%" stop-color="#0b2847"/>
+      <stop offset="100%" stop-color="#083344"/>
+    </linearGradient>
+    <radialGradient id="glow-cip" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#06101e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-cip)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-cip)"/>
+
+  <!-- Garis Garis Bola Dunia -->
+  <circle cx="120" cy="120" r="76" stroke="#0284c7" stroke-opacity="0.35" stroke-width="1.5"/>
+  <ellipse cx="120" cy="120" rx="38" ry="76" stroke="#0284c7" stroke-opacity="0.3" stroke-width="1.5"/>
+  <path d="M44 120 H196 M56 86 H184 M56 154 H184" stroke="#0284c7" stroke-opacity="0.3" stroke-width="1.5"/>
+
+  <!-- Die Cip Semikonduktor di Pusat -->
+  <rect x="82" y="82" width="76" height="76" rx="14" fill="#0b1b30" stroke="#38bdf8" stroke-width="2.5"/>
+  <rect x="98" y="98" width="44" height="44" rx="8" fill="#082f49" stroke="#22d3ee" stroke-width="2"/>
+  <circle cx="120" cy="120" r="8" fill="#fbbf24"/>
+
+  <!-- Pin Konektor 4 Sisi -->
+  <path d="M98 70 V82 M120 70 V82 M142 70 V82 M98 158 V170 M120 158 V170 M142 158 V170" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M70 98 H82 M70 120 H82 M70 142 H82 M158 98 H170 M158 120 H170 M158 142 H170" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Simpul Rantai Pasok Global -->
+  <circle cx="52" cy="64" r="5" fill="#fbbf24"/>
+  <circle cx="188" cy="64" r="5" fill="#22d3ee"/>
+  <circle cx="188" cy="176" r="5" fill="#fbbf24"/>
+  <path d="M56 68 L82 88 M184 68 L158 88 M184 172 L158 152" stroke="#7dd3fc" stroke-opacity="0.7" stroke-width="1.8" stroke-dasharray="4 3"/>
+</svg>

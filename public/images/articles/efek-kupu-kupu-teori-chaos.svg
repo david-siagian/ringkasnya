@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-chaos" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#06101f"/>
+      <stop offset="55%" stop-color="#0c264a"/>
+      <stop offset="100%" stop-color="#083344"/>
+    </linearGradient>
+    <radialGradient id="glow-chaos" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#06101f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-chaos)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-chaos)"/>
+
+  <!-- Lorenz Attractor (Sayap Kupu-Kupu Matematika) -->
+  <path
+    d="M120 122 C98 84 52 72 52 114 C52 152 96 156 120 122 C144 88 188 92 188 130 C188 168 142 158 120 122 Z"
+    stroke="#38bdf8"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+  <path
+    d="M120 122 C104 94 68 86 68 116 C68 142 100 146 120 122 C140 98 172 102 172 128 C172 154 136 146 120 122 Z"
+    stroke="#2dd4bf"
+    stroke-width="2"
+    stroke-opacity="0.85"
+    stroke-linecap="round"
+  />
+
+  <!-- Titik Kecil Desimal 0.506 vs 0.506127 -->
+  <circle cx="120" cy="122" r="5" fill="#fbbf24"/>
+  <circle cx="52" cy="114" r="4" fill="#7dd3fc"/>
+  <circle cx="188" cy="130" r="4" fill="#5eead4"/>
+</svg>

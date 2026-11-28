@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-overton" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c081f"/>
+      <stop offset="55%" stop-color="#281654"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <radialGradient id="glow-overton" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0c081f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-overton)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-overton)"/>
+
+  <!-- Spektrum Wacana Vertikal -->
+  <rect x="108" y="40" width="24" height="160" rx="12" fill="#1e1b4b" stroke="#6d28d9" stroke-width="2"/>
+  <circle cx="120" cy="58" r="5" fill="#64748b"/>
+  <circle cx="120" cy="88" r="5" fill="#a78bfa"/>
+  <circle cx="120" cy="120" r="6" fill="#fbbf24"/>
+  <circle cx="120" cy="152" r="5" fill="#a78bfa"/>
+  <circle cx="120" cy="182" r="5" fill="#64748b"/>
+
+  <!-- Bingkai Jendela yang Bergeser -->
+  <rect x="66" y="84" width="108" height="72" rx="12" fill="#a78bfa" fill-opacity="0.12" stroke="#c4b5fd" stroke-width="3"/>
+
+  <!-- Panah Pergeseran Jendela -->
+  <path d="M46 134 V104 M40 110 L46 102 L52 110" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M194 134 V104 M188 110 L194 102 L200 110" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

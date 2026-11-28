@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-moral" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#12071c"/>
+      <stop offset="55%" stop-color="#32104f"/>
+      <stop offset="100%" stop-color="#3b0764"/>
+    </linearGradient>
+    <radialGradient id="glow-moral" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#e879f9" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#12071c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-moral)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-moral)"/>
+
+  <!-- Dua Prisma Sudut Pandang yang Bertemu -->
+  <circle cx="92" cy="118" r="46" fill="#3b82f6" fill-opacity="0.18" stroke="#60a5fa" stroke-width="2.5"/>
+  <circle cx="148" cy="118" r="46" fill="#f43f5e" fill-opacity="0.18" stroke="#fb7185" stroke-width="2.5"/>
+
+  <!-- Area Irisan Nilai Bersama di Tengah -->
+  <path d="M120 82 C131 94 137 106 137 118 C137 130 131 142 120 154 C109 142 103 130 103 118 C103 106 109 94 120 82 Z" fill="#e879f9" fill-opacity="0.35" stroke="#f5d0fe" stroke-width="2"/>
+
+  <!-- Titik Pilar Moralitas di Bawah -->
+  <circle cx="72" cy="184" r="5" fill="#60a5fa"/>
+  <circle cx="96" cy="184" r="5" fill="#a78bfa"/>
+  <circle cx="120" cy="184" r="5" fill="#f0abfc"/>
+  <circle cx="144" cy="184" r="5" fill="#f472b6"/>
+  <circle cx="168" cy="184" r="5" fill="#fb7185"/>
+</svg>

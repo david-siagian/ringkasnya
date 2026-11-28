@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-troli" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#170808"/>
+      <stop offset="55%" stop-color="#451010"/>
+      <stop offset="100%" stop-color="#3b1608"/>
+    </linearGradient>
+    <radialGradient id="glow-troli" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f97316" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#170808" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-troli)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-troli)"/>
+
+  <!-- Rel Utama -->
+  <path d="M36 146 H204" stroke="#fca5a5" stroke-width="3" stroke-linecap="round"/>
+  <!-- Rel Cabang -->
+  <path d="M96 146 C126 146 138 90 198 90" stroke="#fdba74" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Tuas Pengalih di Persimpangan -->
+  <circle cx="96" cy="146" r="7" fill="#fbbf24"/>
+  <path d="M96 146 L76 112" stroke="#fde68a" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="74" cy="109" r="5" fill="#f97316"/>
+
+  <!-- Siluet Troli -->
+  <rect x="44" y="122" width="32" height="20" rx="5" fill="#7f1d1d" stroke="#fca5a5" stroke-width="2"/>
+  <circle cx="52" cy="146" r="4" fill="#fef2f2"/>
+  <circle cx="68" cy="146" r="4" fill="#fef2f2"/>
+
+  <!-- Lima Titik di Rel Utama vs Satu Titik di Rel Cabang -->
+  <circle cx="152" cy="136" r="4.5" fill="#f87171"/>
+  <circle cx="164" cy="136" r="4.5" fill="#f87171"/>
+  <circle cx="176" cy="136" r="4.5" fill="#f87171"/>
+  <circle cx="188" cy="136" r="4.5" fill="#f87171"/>
+  <circle cx="200" cy="136" r="4.5" fill="#f87171"/>
+
+  <circle cx="182" cy="80" r="5.5" fill="#fbbf24"/>
+</svg>

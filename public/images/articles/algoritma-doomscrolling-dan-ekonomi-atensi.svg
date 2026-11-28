@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-doom" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f0714"/>
+      <stop offset="55%" stop-color="#3b0d24"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <radialGradient id="glow-doom" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#0f0714" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-doom)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-doom)"/>
+
+  <!-- Bingkai Ponsel -->
+  <rect x="74" y="34" width="92" height="172" rx="18" fill="#140c1c" stroke="#fb7185" stroke-width="2.5"/>
+  <rect x="104" y="42" width="32" height="4" rx="2" fill="#881337"/>
+
+  <!-- Kartu Feed Tanpa Ujung -->
+  <rect x="86" y="58" width="68" height="30" rx="6" fill="#2a1226" stroke="#f43f5e" stroke-opacity="0.7" stroke-width="1.5"/>
+  <circle cx="98" cy="73" r="6" fill="#fb7185"/>
+  <path d="M110 69 H144 M110 77 H134" stroke="#fda4af" stroke-width="2" stroke-linecap="round"/>
+
+  <rect x="86" y="96" width="68" height="30" rx="6" fill="#2a1226" stroke="#f43f5e" stroke-opacity="0.7" stroke-width="1.5"/>
+  <circle cx="98" cy="111" r="6" fill="#fbbf24"/>
+  <path d="M110 107 H144 M110 115 H138" stroke="#fde68a" stroke-width="2" stroke-linecap="round"/>
+
+  <rect x="86" y="134" width="68" height="30" rx="6" fill="#2a1226" stroke="#f43f5e" stroke-opacity="0.7" stroke-width="1.5"/>
+  <circle cx="98" cy="149" r="6" fill="#fb7185"/>
+  <path d="M110 145 H144 M110 153 H130" stroke="#fda4af" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Panah Loop Tak Berujung di Bawah -->
+  <path d="M108 182 C108 176 118 176 120 182 C122 188 132 188 132 182 C132 176 122 176 120 182 C118 188 108 188 108 182 Z" stroke="#fda4af" stroke-width="2.2" stroke-linecap="round"/>
+
+  <!-- Percikan Magnet Atensi di Luar Layar -->
+  <path d="M46 92 C58 92 64 102 68 108 M46 148 C58 148 64 138 68 132" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 4"/>
+  <path d="M194 92 C182 92 176 102 172 108 M194 148 C182 148 176 138 172 132" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 4"/>
+</svg>

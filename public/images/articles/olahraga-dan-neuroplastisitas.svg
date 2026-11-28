@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-neuro" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#051314"/>
+      <stop offset="55%" stop-color="#0b3634"/>
+      <stop offset="100%" stop-color="#06283d"/>
+    </linearGradient>
+    <radialGradient id="glow-neuro" cx="120" cy="116" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#051314" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-neuro)"/>
+  <circle cx="120" cy="116" r="88" fill="url(#glow-neuro)"/>
+
+  <!-- Gelombang Detak Gerak di Bawah -->
+  <path
+    d="M36 176 H76 L90 150 L108 192 L126 142 L144 176 H204"
+    stroke="#34d399"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Jaringan Sinapsis Otak yang Tumbuh (BDNF) -->
+  <circle cx="120" cy="96" r="38" fill="#082423" stroke="#6ee7b7" stroke-width="2.2"/>
+  <circle cx="104" cy="92" r="5" fill="#fbbf24"/>
+  <circle cx="136" cy="88" r="5" fill="#38bdf8"/>
+  <circle cx="120" cy="112" r="5.5" fill="#34d399"/>
+  <circle cx="120" cy="76" r="4.5" fill="#fde68a"/>
+
+  <path d="M104 92 L120 76 L136 88 M104 92 L120 112 L136 88 M120 76 V112" stroke="#a7f3d0" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Percikan Pertumbuhan di Luar Lingkaran -->
+  <circle cx="74" cy="64" r="4" fill="#34d399"/>
+  <circle cx="168" cy="66" r="4" fill="#38bdf8"/>
+  <path d="M78 68 L94 82 M164 70 L146 82" stroke="#6ee7b7" stroke-opacity="0.7" stroke-width="1.8" stroke-dasharray="3 3"/>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-stanford" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0d0d0f"/>
+      <stop offset="55%" stop-color="#1f1f24"/>
+      <stop offset="100%" stop-color="#1c1917"/>
+    </linearGradient>
+    <radialGradient id="glow-stanford" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#0d0d0f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-stanford)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-stanford)"/>
+
+  <!-- Bingkai Panggung / Jeruji Ilusi -->
+  <rect x="52" y="48" width="136" height="144" rx="14" fill="#18181b" stroke="#71717a" stroke-width="2.5"/>
+  <path d="M84 48 V192 M120 48 V192 M156 48 V192" stroke="#52525b" stroke-width="3"/>
+
+  <!-- Sorotan Lampu Teater / Arsip Rekaman -->
+  <path d="M120 48 L72 192 H168 Z" fill="#fbbf24" fill-opacity="0.1"/>
+
+  <!-- Dua Topeng Peran (Sipir vs Tahanan / Realitas vs Teater) -->
+  <circle cx="96" cy="116" r="18" fill="#27272a" stroke="#fbbf24" stroke-width="2.2"/>
+  <path d="M89 114 H93 M99 114 H103" stroke="#fde68a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M90 123 Q96 119 102 123" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+
+  <circle cx="144" cy="116" r="18" fill="#27272a" stroke="#a1a1aa" stroke-width="2.2"/>
+  <path d="M137 114 H141 M147 114 H151" stroke="#e4e4e7" stroke-width="2" stroke-linecap="round"/>
+  <path d="M138 122 Q144 126 150 122" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+</svg>

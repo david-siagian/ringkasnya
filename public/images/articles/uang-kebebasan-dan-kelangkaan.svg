@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-uang" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#051410"/>
+      <stop offset="55%" stop-color="#063729"/>
+      <stop offset="100%" stop-color="#052e16"/>
+    </linearGradient>
+    <radialGradient id="glow-uang" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#051410" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-uang)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-uang)"/>
+
+  <!-- Neraca Keseimbangan Uang & Waktu -->
+  <path d="M120 52 V176" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"/>
+  <path d="M88 176 H152" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"/>
+  <path d="M58 92 L182 76" stroke="#a7f3d0" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Piringan Kiri: Koin (Uang) -->
+  <path d="M58 92 L44 134 M58 92 L72 134" stroke="#6ee7b7" stroke-width="1.8"/>
+  <path d="M40 134 H76" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="58" cy="122" r="10" fill="#fbbf24"/>
+
+  <!-- Piringan Kanan: Jam Pasir (Kebebasan Waktu) -->
+  <path d="M182 76 L168 118 M182 76 L196 118" stroke="#6ee7b7" stroke-width="1.8"/>
+  <path d="M164 118 H200" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+  <path d="M174 96 H190 L182 106 L190 116 H174 L182 106 Z" fill="#a7f3d0" stroke="#10b981" stroke-width="1.5"/>
+
+  <!-- Lingkaran Titik Pusat -->
+  <circle cx="120" cy="84" r="6" fill="#fbbf24"/>
+</svg>

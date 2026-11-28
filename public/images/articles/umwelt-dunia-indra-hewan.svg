@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-umwelt" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#041517"/>
+      <stop offset="55%" stop-color="#0a3338"/>
+      <stop offset="100%" stop-color="#082f49"/>
+    </linearGradient>
+    <radialGradient id="glow-umwelt" cx="120" cy="120" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#041517" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-umwelt)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#glow-umwelt)"/>
+
+  <!-- Gelombang Persepsi (Gelembung Indra Berlapis) -->
+  <circle cx="120" cy="120" r="72" stroke="#14b8a6" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="6 4"/>
+  <circle cx="120" cy="120" r="50" stroke="#22d3ee" stroke-opacity="0.6" stroke-width="2"/>
+  <circle cx="120" cy="120" r="28" fill="#0f292e" stroke="#5eead4" stroke-width="2.5"/>
+
+  <!-- Mata / Sensor di Pusat -->
+  <ellipse cx="120" cy="120" rx="14" ry="8" stroke="#ccfbf1" stroke-width="2.2"/>
+  <circle cx="120" cy="120" r="4" fill="#fbbf24"/>
+
+  <!-- Sinyal Indra Berbeda (Sonar, UV, Magnetik) -->
+  <circle cx="70" cy="70" r="6" fill="#f472b6"/>
+  <circle cx="176" cy="74" r="6" fill="#fbbf24"/>
+  <circle cx="168" cy="172" r="6" fill="#38bdf8"/>
+</svg>
