@@ -190,81 +190,80 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
         <span className="font-semibold text-ink-secondary">Artikel</span>
       </nav>
 
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-accent-strong">
-            Artikel
-          </span>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
-            Artikel &amp; Gagasan Ilmiah
-          </h1>
-          <p className="mt-1.5 text-sm text-ink-muted">
-            Catatan singkat 4–6 menit seputar istilah ilmiah, eksperimen klasik, dan konsep penting di balik buku-buku Ringkasnya.
-          </p>
-        </div>
-
-        {/* Kolom Pencarian */}
-        <div className="relative w-full md:w-80">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari judul artikel..."
-            aria-label="Cari artikel"
-            className="w-full rounded-xl border border-line bg-surface py-2.5 pl-10 pr-9 text-sm text-ink placeholder:text-ink-faint focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink-muted"
-              aria-label="Hapus pencarian"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
+      <div>
+        <span className="text-xs font-bold uppercase tracking-wider text-accent-strong">
+          Artikel
+        </span>
+        <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
+          Artikel &amp; Gagasan Ilmiah
+        </h1>
+        <p className="mt-1.5 max-w-2xl text-sm text-ink-muted">
+          Catatan singkat 4–6 menit seputar istilah ilmiah, eksperimen klasik, dan konsep penting di balik buku-buku Ringkasnya.
+        </p>
       </div>
 
-      {/* Urutan (Terbaru/Acak) & Rubrik */}
+      {/* Pencarian, Urutan (Terbaru/Acak), & Rubrik */}
       <div className="mt-6 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2.5">
-          <div
-            role="group"
-            aria-label="Urutkan artikel"
-            className="inline-flex shrink-0 items-center rounded-xl border border-line bg-surface p-1 text-xs font-semibold"
-          >
-            <span className="hidden sm:inline-flex items-center gap-1 px-2 text-ink-subtle">
-              <ArrowUpDown className="h-3.5 w-3.5" />
-              Urutkan:
-            </span>
-            <button
-              type="button"
-              onClick={handleResetShuffle}
-              aria-pressed={!shuffleSeed}
-              className={`rounded-lg px-3 py-1.5 transition-all ${
-                !shuffleSeed
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "text-ink-muted hover:text-ink"
-              }`}
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2.5 sm:flex-initial">
+            <div className="relative min-w-0 flex-1 sm:w-[280px] sm:flex-initial">
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Cari judul artikel..."
+                aria-label="Cari artikel"
+                className="w-full rounded-xl border border-line bg-surface py-2 pl-10 pr-9 text-sm text-ink placeholder:text-ink-faint focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink-muted"
+                  aria-label="Hapus pencarian"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            <div
+              role="group"
+              aria-label="Urutkan artikel"
+              className="inline-flex shrink-0 items-center rounded-xl border border-line bg-surface p-1 text-xs font-semibold"
             >
-              Terbaru
-            </button>
-            <button
-              type="button"
-              onClick={handleShuffleArticles}
-              aria-pressed={Boolean(shuffleSeed)}
-              aria-label={shuffleSeed ? "Acak ulang urutan artikel" : "Acak urutan artikel"}
-              title={shuffleSeed ? "Klik lagi untuk acak ulang" : "Acak urutan artikel"}
-              className={`inline-flex items-center justify-center rounded-lg px-2.5 py-1.5 transition-all ${
-                shuffleSeed
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "text-ink-muted hover:text-ink"
-              }`}
-            >
-              <Shuffle className="h-3.5 w-3.5" />
-            </button>
+              <span className="hidden sm:inline-flex items-center gap-1 px-2 text-ink-subtle">
+                <ArrowUpDown className="h-3.5 w-3.5" />
+                Urutkan:
+              </span>
+              <button
+                type="button"
+                onClick={handleResetShuffle}
+                aria-pressed={!shuffleSeed}
+                className={`rounded-lg px-3 py-1.5 transition-all ${
+                  !shuffleSeed
+                    ? "bg-emerald-600 text-white shadow-sm"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                Terbaru
+              </button>
+              <button
+                type="button"
+                onClick={handleShuffleArticles}
+                aria-pressed={Boolean(shuffleSeed)}
+                aria-label={shuffleSeed ? "Acak ulang urutan artikel" : "Acak urutan artikel"}
+                title={shuffleSeed ? "Klik lagi untuk acak ulang" : "Acak urutan artikel"}
+                className={`inline-flex items-center justify-center rounded-lg px-2.5 py-1.5 transition-all ${
+                  shuffleSeed
+                    ? "bg-emerald-600 text-white shadow-sm"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                <Shuffle className="h-3.5 w-3.5" />
+              </button>
+            </div>
           </div>
 
           <p className="shrink-0 text-right text-xs text-ink-subtle">
