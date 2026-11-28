@@ -309,22 +309,22 @@ export function BookCompletedModal({
         </p>
 
         <div className="mt-6 flex flex-col gap-2.5">
-          <a
-            href="/katalog"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
-          >
-            <LayoutGrid className="h-4 w-4 shrink-0" />
-            <span>Jelajahi Katalog Buku</span>
-          </a>
-
           <button
             type="button"
             onClick={onExploreQuotesAndOpinions}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-page px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-accent-line hover:bg-surface-subtle active:scale-[0.98]"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-[0.98]"
           >
-            <Quote className="h-4 w-4 shrink-0 text-accent-strong" />
+            <Quote className="h-4 w-4 shrink-0" />
             <span>Lihat Kutipan &amp; Opini</span>
           </button>
+
+          <a
+            href="/katalog"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-page px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-accent-line hover:bg-surface-subtle active:scale-[0.98]"
+          >
+            <LayoutGrid className="h-4 w-4 shrink-0 text-ink-muted" />
+            <span>Jelajahi Katalog Buku</span>
+          </a>
         </div>
 
         <div className="mt-4 flex items-center justify-center gap-4 text-xs">
