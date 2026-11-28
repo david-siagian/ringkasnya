@@ -347,75 +347,79 @@ export default function CatalogSection({
         )}
       </div>
 
-      {/* Filter Kategori */}
+      {/* Filter Kategori & Kontrol Acak */}
       {isFull && (
-        <div className="mt-6 flex flex-wrap items-center gap-2.5">
-          <CategoryDropdown
-            options={categoryOptions}
-            selectedValue={selectedCategory}
-            onSelect={handleCategoryChange}
-          />
-
-          <button
-            type="button"
-            onClick={() =>
-              handleCategoryChange(
-                selectedCategory === "Tersimpan" ? "Semua" : "Tersimpan"
-              )
-            }
-            aria-pressed={selectedCategory === "Tersimpan"}
-            className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
-              selectedCategory === "Tersimpan"
-                ? "bg-emerald-600 text-white shadow-sm"
-                : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
-            }`}
-          >
-            <Bookmark
-              className={`h-3.5 w-3.5 ${
-                selectedCategory === "Tersimpan" ? "fill-current" : ""
-              }`}
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2.5">
+            <CategoryDropdown
+              options={categoryOptions}
+              selectedValue={selectedCategory}
+              onSelect={handleCategoryChange}
             />
-            Tersimpan ({bookmarkedCount})
-          </button>
 
-          <div className="flex items-center gap-1.5">
             <button
               type="button"
-              onClick={handleShuffleBooks}
-              aria-pressed={Boolean(shuffleSeed)}
-              className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
-                shuffleSeed
-                  ? "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
+              onClick={() =>
+                handleCategoryChange(
+                  selectedCategory === "Tersimpan" ? "Semua" : "Tersimpan"
+                )
+              }
+              aria-pressed={selectedCategory === "Tersimpan"}
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
+                selectedCategory === "Tersimpan"
+                  ? "bg-emerald-600 text-white shadow-sm"
                   : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
               }`}
             >
-              <Shuffle className="h-3.5 w-3.5" />
-              <span>{shuffleSeed ? "Acak Lagi" : "Acak Urutan"}</span>
+              <Bookmark
+                className={`h-3.5 w-3.5 ${
+                  selectedCategory === "Tersimpan" ? "fill-current" : ""
+                }`}
+              />
+              Tersimpan ({bookmarkedCount})
             </button>
+          </div>
 
-            {shuffleSeed && (
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <button
                 type="button"
-                onClick={handleResetShuffle}
-                title="Kembalikan urutan awal"
-                aria-label="Kembalikan urutan awal"
-                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition-colors hover:border-line-strong hover:bg-page hover:text-ink sm:h-10 sm:w-10"
+                onClick={handleShuffleBooks}
+                aria-pressed={Boolean(shuffleSeed)}
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs sm:py-2.5 sm:text-sm font-semibold transition-all ${
+                  shuffleSeed
+                    ? "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
+                    : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
+                }`}
               >
-                <X className="h-4 w-4" />
+                <Shuffle className="h-3.5 w-3.5" />
+                <span>{shuffleSeed ? "Acak Lagi" : "Acak Urutan"}</span>
+              </button>
+
+              {shuffleSeed && (
+                <button
+                  type="button"
+                  onClick={handleResetShuffle}
+                  title="Kembalikan urutan awal"
+                  aria-label="Kembalikan urutan awal"
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition-colors hover:border-line-strong hover:bg-page hover:text-ink sm:h-10 sm:w-10"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            {books.length > 0 && (
+              <button
+                type="button"
+                onClick={handleOpenRandomBook}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2 text-xs sm:py-2.5 sm:text-sm font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white"
+              >
+                <Dices className="h-3.5 w-3.5" />
+                <span>Baca Acak</span>
               </button>
             )}
           </div>
-
-          {books.length > 0 && (
-            <button
-              type="button"
-              onClick={handleOpenRandomBook}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white"
-            >
-              <Dices className="h-3.5 w-3.5" />
-              <span>Baca Acak</span>
-            </button>
-          )}
         </div>
       )}
 

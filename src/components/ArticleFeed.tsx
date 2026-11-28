@@ -164,56 +164,14 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
     <div className="mt-6">
       {/* Filter Kategori & Rubrik */}
       <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-2.5">
-          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-            <CategoryDropdown
-              options={categoryOptions}
-              selectedValue={selectedCategory}
-              onSelect={setSelectedCategory}
-              listboxAriaLabel="Daftar kategori artikel"
-              className="min-w-0 flex-1 sm:w-[260px] sm:flex-initial"
-            />
-
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={handleShuffleArticles}
-                aria-pressed={Boolean(shuffleSeed)}
-                className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
-                  shuffleSeed
-                    ? "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
-                    : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
-                }`}
-              >
-                <Shuffle className="h-3.5 w-3.5" />
-                <span>{shuffleSeed ? "Acak Lagi" : "Acak Urutan"}</span>
-              </button>
-
-              {shuffleSeed && (
-                <button
-                  type="button"
-                  onClick={handleResetShuffle}
-                  title="Kembalikan urutan awal"
-                  aria-label="Kembalikan urutan awal"
-                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition-colors hover:border-line-strong hover:bg-page hover:text-ink sm:h-10 sm:w-10"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-
-            {items.length > 0 && (
-              <button
-                type="button"
-                onClick={handleOpenRandomArticle}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white"
-              >
-                <Dices className="h-3.5 w-3.5" />
-                <span>Baca Acak</span>
-              </button>
-            )}
-          </div>
-
+        <div className="flex items-center justify-between gap-3">
+          <CategoryDropdown
+            options={categoryOptions}
+            selectedValue={selectedCategory}
+            onSelect={setSelectedCategory}
+            listboxAriaLabel="Daftar kategori artikel"
+            className="min-w-0 flex-1 sm:w-[260px] sm:flex-initial"
+          />
           <p className="shrink-0 text-right text-xs text-ink-subtle">
             {filteredItems.length} artikel
           </p>
@@ -267,6 +225,48 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
               </button>
             );
           })}
+        </div>
+
+        {/* Ruang Terpisah untuk Kontrol Acak & Baca Acak */}
+        <div className="flex flex-wrap items-center gap-2 pt-0.5">
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handleShuffleArticles}
+              aria-pressed={Boolean(shuffleSeed)}
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-semibold transition-all ${
+                shuffleSeed
+                  ? "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
+                  : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
+              }`}
+            >
+              <Shuffle className="h-3.5 w-3.5" />
+              <span>{shuffleSeed ? "Acak Lagi" : "Acak Urutan"}</span>
+            </button>
+
+            {shuffleSeed && (
+              <button
+                type="button"
+                onClick={handleResetShuffle}
+                title="Kembalikan urutan awal"
+                aria-label="Kembalikan urutan awal"
+                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition-colors hover:border-line-strong hover:bg-page hover:text-ink sm:h-9 sm:w-9"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          {items.length > 0 && (
+            <button
+              type="button"
+              onClick={handleOpenRandomArticle}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2 text-xs sm:text-sm font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white"
+            >
+              <Dices className="h-3.5 w-3.5" />
+              <span>Baca Acak</span>
+            </button>
+          )}
         </div>
       </div>
 
