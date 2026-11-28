@@ -112,8 +112,21 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
 
   return (
     <div className="mt-6">
-      {/* Filter Rubrik & Kategori */}
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+      {/* Filter Kategori & Rubrik */}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <CategoryDropdown
+            options={categoryOptions}
+            selectedValue={selectedCategory}
+            onSelect={setSelectedCategory}
+            listboxAriaLabel="Daftar kategori artikel"
+            className="min-w-0 flex-1 sm:w-[260px] sm:flex-initial"
+          />
+          <p className="shrink-0 text-right text-xs text-ink-subtle">
+            {filteredItems.length} artikel
+          </p>
+        </div>
+
         <div
           role="tablist"
           aria-label="Filter rubrik artikel"
@@ -162,19 +175,6 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
               </button>
             );
           })}
-        </div>
-
-        <div className="flex items-center justify-between gap-3 lg:shrink-0 lg:justify-end">
-          <CategoryDropdown
-            options={categoryOptions}
-            selectedValue={selectedCategory}
-            onSelect={setSelectedCategory}
-            listboxAriaLabel="Daftar kategori artikel"
-            className="min-w-0 flex-1 sm:w-[240px] sm:flex-initial"
-          />
-          <p className="shrink-0 text-right text-xs text-ink-subtle">
-            {filteredItems.length} artikel
-          </p>
         </div>
       </div>
 
