@@ -23,7 +23,7 @@ Dokumen ini mencatat seluruh **100 buku** dalam katalog Ringkasnya (`ringkasnya.
 | 1 | *A Brief History of Time* | Stephen Hawking | `Sains & Alam Semesta` | ~212 | 5 | 4 mnt | 15 mnt | `a-brief-history-of-time` |
 | 2 | *A Guide to the Good Life* | William B. Irvine | `Filsafat & Kebijaksanaan` | ~326 | 6 | 5 mnt | 15 mnt | `a-guide-to-the-good-life` |
 | 3 | *Atomic Habits* | James Clear | `Produktivitas & Pengembangan Diri` | ~320 | 6 | 5 mnt | 15 mnt | `atomic-habits` |
-| 4 | *Barking Up the Wrong Tree* | Eric Barker | `Karier & Budaya Kerja` | ~304 | 6 | 5 mnt | 15 mnt | `barking-up-the-wrong-tree` |
+| 4 | *Barking Up the Wrong Tree* | Eric Barker | `Produktivitas & Pengembangan Diri` | ~304 | 6 | 5 mnt | 15 mnt | `barking-up-the-wrong-tree` |
 | 5 | *Deep Work* | Cal Newport | `Produktivitas & Pengembangan Diri` | ~296 | 6 | 5 mnt | 15 mnt | `deep-work` |
 | 6 | *Digital Minimalism* | Cal Newport | `Psikologi & Perilaku` | ~302 | 6 | 5 mnt | 17 mnt | `digital-minimalism` |
 | 7 | *Enlightenment Now* | Steven Pinker | `Nalar & Berpikir Kritis` | ~556 | 9 | 7 mnt | 20 mnt | `enlightenment-now` |
@@ -33,7 +33,7 @@ Dokumen ini mencatat seluruh **100 buku** dalam katalog Ringkasnya (`ringkasnya.
 | 11 | *Freakonomics* | Steven D. Levitt & Stephen J. Dubner | `Ekonomi & Keuangan` | ~315 | 6 | 5 mnt | 16 mnt | `freakonomics` |
 | 12 | *Getting Things Done* | David Allen | `Produktivitas & Pengembangan Diri` | ~352 | 6 | 5 mnt | 15 mnt | `getting-things-done` |
 | 13 | *Good to Great* | Jim Collins | `Organisasi & Bisnis` | ~320 | 6 | 5 mnt | 15 mnt | `good-to-great` |
-| 14 | *Great at Work* | Morten T. Hansen | `Karier & Budaya Kerja` | ~320 | 6 | 5 mnt | 15 mnt | `great-at-work` |
+| 14 | *Great at Work* | Morten T. Hansen | `Produktivitas & Pengembangan Diri` | ~320 | 6 | 5 mnt | 15 mnt | `great-at-work` |
 | 15 | *Grit* | Angela Duckworth | `Psikologi & Perilaku` | ~352 | 6 | 5 mnt | 15 mnt | `grit` |
 | 16 | *Guns, Germs, and Steel* | Jared Diamond | `Sejarah & Peradaban` | ~480 | 8 | 6 mnt | 20 mnt | `guns-germs-and-steel` |
 | 17 | *Hidden Potential* | Adam Grant | `Psikologi & Perilaku` | ~304 | 6 | 5 mnt | 15 mnt | `hidden-potential` |
@@ -44,22 +44,22 @@ Dokumen ini mencatat seluruh **100 buku** dalam katalog Ringkasnya (`ringkasnya.
 | 22 | *Man's Search for Meaning* | Viktor E. Frankl | `Psikologi & Perilaku` | ~184 | 5 | 5 mnt | 15 mnt | `mans-search-for-meaning` |
 | 23 | *Meditations* | Marcus Aurelius | `Filsafat & Kebijaksanaan` | ~256 | 6 | 5 mnt | 15 mnt | `meditations` |
 | 24 | *Mindset: The New Psychology of Success* | Carol S. Dweck | `Psikologi & Perilaku` | ~276 | 6 | 5 mnt | 15 mnt | `mindset` |
-| 25 | *Never Split the Difference* | Chris Voss | `Karier & Budaya Kerja` | ~288 | 6 | 5 mnt | 15 mnt | `never-split-the-difference` |
+| 25 | *Never Split the Difference* | Chris Voss | `Produktivitas & Pengembangan Diri` | ~288 | 6 | 5 mnt | 15 mnt | `never-split-the-difference` |
 | 26 | *Nudge* | Richard H. Thaler & Cass R. Sunstein | `Ekonomi & Keuangan` | ~293 | 6 | 5 mnt | 16 mnt | `nudge` |
 | 27 | *Origins: Fourteen Billion Years of Cosmic Evolution* | Neil deGrasse Tyson & Donald Goldsmith | `Sains & Alam Semesta` | ~352 | 6 | 5 mnt | 15 mnt | `origins` |
-| 28 | *Outliers* | Malcolm Gladwell | `Karier & Budaya Kerja` | ~309 | 6 | 5 mnt | 15 mnt | `outliers` |
+| 28 | *Outliers* | Malcolm Gladwell | `Produktivitas & Pengembangan Diri` | ~309 | 6 | 5 mnt | 15 mnt | `outliers` |
 | 29 | *Outlive: The Science and Art of Longevity* | Peter Attia & Bill Gifford | `Tubuh & Kesehatan` | ~496 | 8 | 6 mnt | 18 mnt | `outlive` |
 | 30 | *Predictably Irrational* | Dan Ariely | `Psikologi & Perilaku` | ~304 | 6 | 5 mnt | 15 mnt | `predictably-irrational` |
 | 31 | *The Psychology of Money* | Morgan Housel | `Ekonomi & Keuangan` | ~256 | 6 | 5 mnt | 15 mnt | `psychology-of-money` |
 | 32 | *Quiet: The Power of Introverts in a World That Can't Stop Talking* | Susan Cain | `Psikologi & Perilaku` | ~352 | 6 | 5 mnt | 15 mnt | `quiet` |
-| 33 | *Range* | David Epstein | `Karier & Budaya Kerja` | ~352 | 6 | 5 mnt | 16 mnt | `range` |
+| 33 | *Range* | David Epstein | `Produktivitas & Pengembangan Diri` | ~352 | 6 | 5 mnt | 16 mnt | `range` |
 | 34 | *Rich Dad Poor Dad* | Robert T. Kiyosaki | `Ekonomi & Keuangan` | ~336 | 6 | 5 mnt | 15 mnt | `rich-dad-poor-dad` |
 | 35 | *Sapiens: A Brief History of Humankind* | Yuval Noah Harari | `Sejarah & Peradaban` | ~443 | 8 | 6 mnt | 20 mnt | `sapiens` |
 | 36 | *Shadows of Forgotten Ancestors* | Carl Sagan & Ann Druyan | `Sains & Alam Semesta` | ~505 | 8 | 6 mnt | 18 mnt | `shadows-of-forgotten-ancestors` |
 | 37 | *Show Your Work!* | Austin Kleon | `Produktivitas & Pengembangan Diri` | ~215 | 5 | 4 mnt | 15 mnt | `show-your-work` |
 | 38 | *Start with Why* | Simon Sinek | `Organisasi & Bisnis` | ~256 | 6 | 5 mnt | 15 mnt | `start-with-why` |
 | 39 | *Steal Like an Artist* | Austin Kleon | `Produktivitas & Pengembangan Diri` | ~160 | 5 | 4 mnt | 15 mnt | `steal-like-an-artist` |
-| 40 | *The 7 Habits of Highly Effective People* | Stephen R. Covey | `Karier & Budaya Kerja` | ~381 | 7 | 6 mnt | 19 mnt | `the-7-habits-of-highly-effective-people` |
+| 40 | *The 7 Habits of Highly Effective People* | Stephen R. Covey | `Produktivitas & Pengembangan Diri` | ~381 | 7 | 6 mnt | 19 mnt | `the-7-habits-of-highly-effective-people` |
 | 41 | *The Almanack of Naval Ravikant* | Eric Jorgenson | `Ekonomi & Keuangan` | ~242 | 6 | 5 mnt | 15 mnt | `the-almanack-of-naval-ravikant` |
 | 42 | *The Death of Expertise* | Tom Nichols | `Nalar & Berpikir Kritis` | ~272 | 6 | 5 mnt | 15 mnt | `the-death-of-expertise` |
 | 43 | *The Demon-Haunted World* | Carl Sagan | `Nalar & Berpikir Kritis` | ~457 | 8 | 6 mnt | 20 mnt | `the-demon-haunted-world` |
@@ -147,5 +147,5 @@ Dokumen ini mencatat seluruh **100 buku** dalam katalog Ringkasnya (`ringkasnya.
 
 | No | Judul | Penulis | Kategori | Est. Hal | Poin | Kilat | Mendalam | Slug |
 |---:|---|---|---|---:|---:|---|---|---|
-| 99 | *The Design of Everyday Things* | Don Norman | `Karier & Budaya Kerja` | ~368 | 6 | 5 mnt | 16 mnt | `the-design-of-everyday-things` |
+| 99 | *The Design of Everyday Things* | Don Norman | `Psikologi & Perilaku` | ~368 | 6 | 5 mnt | 16 mnt | `the-design-of-everyday-things` |
 | 100 | *Four Thousand Weeks* | Oliver Burkeman | `Produktivitas & Pengembangan Diri` | ~288 | 6 | 5 mnt | 16 mnt | `four-thousand-weeks` |

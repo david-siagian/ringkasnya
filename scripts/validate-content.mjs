@@ -28,14 +28,12 @@ const VALID_CATEGORIES = new Set([
   "Filsafat & Kebijaksanaan",
   "Ekonomi & Keuangan",
   "Organisasi & Bisnis",
-  "Karier & Budaya Kerja",
   "Tubuh & Kesehatan",
   "Produktivitas & Pengembangan Diri",
 ]);
 
 const SECONDARY_CATEGORIES = new Set([
   "Organisasi & Bisnis",
-  "Karier & Budaya Kerja",
   "Produktivitas & Pengembangan Diri",
 ]);
 

@@ -7,7 +7,6 @@ export type BookCategory =
   | "Filsafat & Kebijaksanaan"
   | "Ekonomi & Keuangan"
   | "Organisasi & Bisnis"
-  | "Karier & Budaya Kerja"
   | "Tubuh & Kesehatan"
   | "Produktivitas & Pengembangan Diri";
 

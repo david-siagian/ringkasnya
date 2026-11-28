@@ -14,14 +14,12 @@ export const CATEGORIES: BookCategory[] = [
   "Filsafat & Kebijaksanaan",
   "Ekonomi & Keuangan",
   "Organisasi & Bisnis",
-  "Karier & Budaya Kerja",
   "Tubuh & Kesehatan",
   "Produktivitas & Pengembangan Diri",
 ];
 
 export const SECONDARY_CATALOG_CATEGORIES: ReadonlySet<BookCategory> = new Set([
   "Organisasi & Bisnis",
-  "Karier & Budaya Kerja",
   "Produktivitas & Pengembangan Diri",
 ]);
 
