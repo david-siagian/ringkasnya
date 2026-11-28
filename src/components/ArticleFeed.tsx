@@ -1,25 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, Calendar, Shuffle, Sparkles } from "lucide-react";
-import { CATEGORIES } from "@/lib/book-constants";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, Calendar, Search, Shuffle, Sparkles, X } from "lucide-react";
 import {
   createRandomSeed,
   shuffleWithSeed,
 } from "@/lib/shuffle";
-import type { BookCategory } from "@/types/book";
 import {
   ARTICLE_FORMATS,
   formatArticlePublishedDate,
   type ArticleFeedItem,
   type ArticleFormat,
 } from "@/types/article";
-import CategoryDropdown, { type CategoryOption } from "./CategoryDropdown";
 
 interface ArticleFeedProps {
   items: ArticleFeedItem[];
 }
 
 type FormatFilterValue = "semua" | ArticleFormat;
-type CategoryFilterValue = "Semua" | BookCategory;
 const ARTICLE_SHUFFLE_SEED_KEY = "ringkasnya:article-shuffle-seed";
 
 function ArticleCardItem({ article }: { article: ArticleFeedItem }) {
@@ -102,8 +98,7 @@ function ArticleCardItem({ article }: { article: ArticleFeedItem }) {
 export default function ArticleFeed({ items }: ArticleFeedProps) {
   const [selectedFormat, setSelectedFormat] =
     useState<FormatFilterValue>("semua");
-  const [selectedCategory, setSelectedCategory] =
-    useState<CategoryFilterValue>("Semua");
+  const [searchQuery, setSearchQuery] = useState("");
   const [shuffleSeed, setShuffleSeed] = useState<string | null>(null);
 
   useEffect(() => {
@@ -122,29 +117,23 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
     [items, shuffleSeed]
   );
 
-  const itemsMatchingCategory = useMemo(
-    () =>
-      selectedCategory === "Semua"
-        ? orderedItems
-        : orderedItems.filter((item) => item.category === selectedCategory),
-    [orderedItems, selectedCategory]
-  );
-
-  const itemsMatchingFormat = useMemo(
-    () =>
-      selectedFormat === "semua"
-        ? orderedItems
-        : orderedItems.filter((item) => item.format === selectedFormat),
-    [orderedItems, selectedFormat]
-  );
+  const itemsMatchingSearch = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+    if (!query) return orderedItems;
+    return orderedItems.filter((item) =>
+      [item.title, item.subtitle, item.accentBadge, item.originLabel]
+        .join(" ")
+        .toLowerCase()
+        .includes(query)
+    );
+  }, [orderedItems, searchQuery]);
 
   const filteredItems = useMemo(
     () =>
-      itemsMatchingFormat.filter(
-        (item) =>
-          selectedCategory === "Semua" || item.category === selectedCategory
-      ),
-    [itemsMatchingFormat, selectedCategory]
+      selectedFormat === "semua"
+        ? itemsMatchingSearch
+        : itemsMatchingSearch.filter((item) => item.format === selectedFormat),
+    [itemsMatchingSearch, selectedFormat]
   );
 
   const activeFormatMeta =
@@ -156,50 +145,16 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
     () =>
       ARTICLE_FORMATS.map((format) => ({
         ...format,
-        count: itemsMatchingCategory.filter((item) => item.format === format.id)
+        count: itemsMatchingSearch.filter((item) => item.format === format.id)
           .length,
         totalCount: items.filter((item) => item.format === format.id).length,
       })).filter((format) => format.totalCount > 0),
-    [items, itemsMatchingCategory]
+    [items, itemsMatchingSearch]
   );
-
-  const categoryOptions = useMemo<CategoryOption[]>(() => {
-    const totalByCategory = new Map<BookCategory, number>();
-    const filteredByCategory = new Map<BookCategory, number>();
-
-    for (const item of items) {
-      totalByCategory.set(
-        item.category,
-        (totalByCategory.get(item.category) ?? 0) + 1
-      );
-    }
-
-    for (const item of itemsMatchingFormat) {
-      filteredByCategory.set(
-        item.category,
-        (filteredByCategory.get(item.category) ?? 0) + 1
-      );
-    }
-
-    return [
-      {
-        value: "Semua",
-        label: "Semua Kategori",
-        count: itemsMatchingFormat.length,
-      },
-      ...CATEGORIES.filter((category) => (totalByCategory.get(category) ?? 0) > 0).map(
-        (category) => ({
-          value: category,
-          label: category,
-          count: filteredByCategory.get(category) ?? 0,
-        })
-      ),
-    ];
-  }, [items, itemsMatchingFormat]);
 
   const resetFilters = () => {
     setSelectedFormat("semua");
-    setSelectedCategory("Semua");
+    setSearchQuery("");
   };
 
   const handleShuffleArticles = () => {
@@ -230,17 +185,31 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
 
   return (
     <div className="mt-6">
-      {/* Filter Kategori, Urutan (Terbaru/Acak), & Rubrik */}
+      {/* Pencarian, Urutan (Terbaru/Acak), & Rubrik */}
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-2.5">
           <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2.5 sm:flex-initial">
-            <CategoryDropdown
-              options={categoryOptions}
-              selectedValue={selectedCategory}
-              onSelect={setSelectedCategory}
-              listboxAriaLabel="Daftar kategori artikel"
-              className="min-w-0 flex-1 sm:w-[240px] sm:flex-initial"
-            />
+            <div className="relative min-w-0 flex-1 sm:w-[280px] sm:flex-initial">
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Cari judul, istilah, atau topik..."
+                aria-label="Cari artikel"
+                className="w-full rounded-xl border border-line bg-surface py-2 pl-10 pr-9 text-sm text-ink placeholder:text-ink-faint focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink-muted"
+                  aria-label="Hapus pencarian"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
 
             <div
               role="group"
@@ -301,7 +270,7 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
                 selectedFormat === "semua" ? "text-white/80" : "text-ink-subtle"
               }`}
             >
-              {itemsMatchingCategory.length}
+              {itemsMatchingSearch.length}
             </span>
           </button>
 
@@ -335,7 +304,7 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
       {/* Daftar Artikel atau Empty State "Akan Segera Hadir" */}
       {filteredItems.length > 0 ? (
         <section
-          key={`${selectedCategory}-${selectedFormat}-${shuffleSeed ?? "default"}`}
+          key={`${searchQuery}-${selectedFormat}-${shuffleSeed ?? "default"}`}
           aria-label="Daftar Artikel"
           className="animate-fade-slide mt-6 grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
         >
@@ -352,15 +321,15 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
             <Sparkles className="h-4 w-4" />
           </div>
           <h2 className="mt-3.5 text-base font-bold tracking-tight text-ink sm:text-lg">
-            {selectedCategory !== "Semua"
-              ? "Belum Ada Artikel yang Cocok"
+            {searchQuery.trim()
+              ? "Artikel Tidak Ditemukan"
               : activeFormatMeta
                 ? `${activeFormatMeta.label} Akan Segera Hadir`
                 : "Artikel Akan Segera Hadir"}
           </h2>
           <p className="mx-auto mt-1.5 max-w-md text-xs leading-relaxed text-ink-muted sm:text-sm">
-            {selectedCategory !== "Semua"
-              ? `Belum ada artikel untuk kombinasi ${activeFormatMeta ? `rubrik ${activeFormatMeta.label} dan ` : ""}kategori ${selectedCategory}.`
+            {searchQuery.trim()
+              ? `Tidak ada artikel yang cocok dengan "${searchQuery.trim()}"${activeFormatMeta ? ` di rubrik ${activeFormatMeta.label}` : ""}.`
               : (activeFormatMeta?.comingSoonDescription ??
                 "Artikel untuk rubrik ini sedang kami siapkan.")}
           </p>
