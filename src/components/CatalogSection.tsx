@@ -387,22 +387,12 @@ export default function CatalogSection({
         isFull ? "max-w-7xl py-10 sm:py-14" : "max-w-6xl py-14"
       }`}
     >
-      {isFull && (
-        <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-2 text-xs text-ink-subtle">
-          <a href="/" className="hover:text-accent-strong transition-colors">
-            Beranda
-          </a>
-          <span>/</span>
-          <span className="font-semibold text-ink-secondary">Katalog Buku</span>
-        </nav>
-      )}
-
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           {isFull ? (
             <>
               <h1 className="text-xl font-extrabold uppercase tracking-wider text-accent-strong sm:text-2xl">
-                Katalog Lengkap
+                Katalog Buku
               </h1>
               <p className="mt-1.5 text-sm text-ink-muted">
                 Dirangkum dengan metode poin inti &amp; konsep kunci dalam Bahasa Indonesia yang mudah dipahami.
