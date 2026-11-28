@@ -843,7 +843,7 @@ export function RelatedBooksSection({
               <ArrowRight className="h-3.5 w-3.5" />
             </a>
           </div>
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {relatedBooks.map((other) => (
               <a
                 key={other.slug}
@@ -853,9 +853,9 @@ export function RelatedBooksSection({
                   e.preventDefault();
                   setPreviewBook(other);
                 }}
-                className="group flex min-w-0 items-start gap-4 rounded-2xl border border-line bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md sm:p-5"
+                className="group flex min-w-0 items-start gap-3 rounded-xl border border-line bg-surface p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md sm:p-3.5"
               >
-                <div className="relative aspect-[3/4] w-20 shrink-0 overflow-hidden rounded-xl shadow-sm ring-1 ring-line/70 sm:w-24">
+                <div className="relative aspect-[3/4] w-16 shrink-0 overflow-hidden rounded-lg shadow-sm ring-1 ring-line/70 sm:w-[72px]">
                   {other.coverImage ? (
                     <img
                       src={other.coverImage}
@@ -866,29 +866,29 @@ export function RelatedBooksSection({
                     <div
                       className={`flex h-full w-full items-center justify-center bg-slate-900 bg-gradient-to-br ${other.coverGradient} p-2 text-white`}
                     >
-                      <BookOpen className="h-6 w-6 opacity-85" />
+                      <BookOpen className="h-5 w-5 opacity-85" />
                     </div>
                   )}
                 </div>
 
                 <div className="flex min-w-0 flex-1 flex-col justify-between self-stretch">
                   <div>
-                    <span className="text-[11px] font-bold text-accent-strong">
+                    <span className="text-[10px] font-bold text-accent-strong">
                       {other.category}
                     </span>
-                    <h3 className="mt-1 line-clamp-2 text-base font-extrabold leading-snug text-ink group-hover:text-accent-strong sm:text-lg">
+                    <h3 className="mt-0.5 line-clamp-2 text-sm font-extrabold leading-snug text-ink group-hover:text-accent-strong sm:text-base">
                       {other.title}
                     </h3>
-                    <p className="mt-0.5 truncate text-xs text-ink-subtle">
+                    <p className="mt-0.5 truncate text-[11px] text-ink-subtle">
                       {other.author} • {other.readingTimeMinutes} menit baca
                     </p>
-                    <p className="mt-2 line-clamp-2 text-xs text-ink-muted">
+                    <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-ink-muted">
                       {other.tagline}
                     </p>
                   </div>
-                  <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-accent-text group-hover:text-accent-strong">
+                  <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-accent-text group-hover:text-accent-strong">
                     <span>Baca Ringkasan</span>
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
               </a>
