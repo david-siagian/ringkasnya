@@ -1103,7 +1103,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             </span>
 
             <span
-              className="min-w-0 truncate text-xs font-semibold text-ink sm:text-sm"
+              className="min-w-0 truncate text-sm font-bold text-ink sm:text-base"
               title={book.title}
             >
               {book.title}
