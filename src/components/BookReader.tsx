@@ -52,6 +52,7 @@ import {
   Clock,
   List,
   RotateCcw,
+  Settings,
   X,
   Zap,
 } from "lucide-react";
@@ -1102,28 +1103,41 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
             </span>
 
             <span
-              className="hidden min-w-0 truncate text-xs font-semibold text-ink sm:block sm:text-sm"
+              className="min-w-0 truncate text-xs font-semibold text-ink sm:text-sm"
               title={book.title}
             >
               {book.title}
             </span>
           </div>
 
-          {/* Kanan: Bookmark, Pengaturan Tampilan (Aa), & Toggle Mode Baca (Logo + Menit) */}
+          {/* Kanan: Toggle Mode (1 ikon), Pengaturan Tampilan (Gerigi), & Bookmark (paling kanan) */}
           <div className="flex shrink-0 items-center justify-end gap-2">
             <button
               type="button"
-              onClick={() => toggleBookmark(book.slug)}
-              aria-pressed={saved}
-              aria-label={saved ? "Hapus dari tersimpan" : "Simpan buku"}
-              title={saved ? "Tersimpan" : "Simpan buku"}
+              onClick={() =>
+                handleModeChange(readMode === "quick" ? "deep" : "quick")
+              }
+              aria-label={
+                readMode === "quick"
+                  ? `Mode Kilat (${book.quickTimeMinutes} mnt) — Klik untuk pindah ke Mode Mendalam`
+                  : `Mode Mendalam (${book.readingTimeMinutes} mnt) — Klik untuk pindah ke Mode Kilat`
+              }
+              title={
+                readMode === "quick"
+                  ? `Mode Kilat (${book.quickTimeMinutes} mnt) • Klik untuk Mode Mendalam`
+                  : `Mode Mendalam (${book.readingTimeMinutes} mnt) • Klik untuk Mode Kilat`
+              }
               className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border transition active:scale-[0.98] ${
-                saved
-                  ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-                  : "border-line bg-surface text-ink-muted hover:bg-page hover:text-ink"
+                readMode === "quick"
+                  ? "border-amber-500/40 bg-amber-500/15 text-amber-500 hover:bg-amber-500/20"
+                  : "border-accent-line bg-accent-soft text-accent-strong hover:bg-accent-soft/80"
               }`}
             >
-              <Bookmark className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
+              {readMode === "quick" ? (
+                <Zap className="h-4 w-4" />
+              ) : (
+                <BookOpen className="h-4 w-4" />
+              )}
             </button>
 
             <div ref={appearanceMenuRef} className="sm:relative">
@@ -1134,20 +1148,13 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 aria-haspopup="dialog"
                 aria-label="Pengaturan tampilan baca"
                 title="Ukuran huruf & warna latar baca"
-                className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs sm:text-sm font-semibold transition ${
+                className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border transition active:scale-[0.98] ${
                   isAppearanceOpen
                     ? "border-accent-strong bg-accent-soft text-accent-text"
-                    : "border-line bg-surface text-ink hover:bg-page"
+                    : "border-line bg-surface text-ink-muted hover:bg-page hover:text-ink"
                 }`}
               >
-                <span
-                  aria-hidden="true"
-                  className={`h-2.5 w-2.5 rounded-full border ${
-                    READER_THEME_OPTIONS.find((opt) => opt.value === readerTheme)
-                      ?.swatchClass ?? "bg-white border-slate-300"
-                  }`}
-                />
-                <span>Aa</span>
+                <Settings className="h-4 w-4" />
               </button>
 
               {isAppearanceOpen && (
@@ -1227,38 +1234,20 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
               )}
             </div>
 
-            <div className="flex items-center rounded-xl bg-surface-subtle p-1">
-              <button
-                type="button"
-                onClick={() => handleModeChange("quick")}
-                aria-pressed={readMode === "quick"}
-                aria-label={`Kilat (${book.quickTimeMinutes} mnt)`}
-                title={`Mode Kilat (${book.quickTimeMinutes} menit)`}
-                className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
-                  readMode === "quick"
-                    ? "bg-amber-500 text-white shadow-sm"
-                    : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                <Zap className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                <span>{book.quickTimeMinutes} mnt</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleModeChange("deep")}
-                aria-pressed={readMode === "deep"}
-                aria-label={`Mendalam (${book.readingTimeMinutes} mnt)`}
-                title={`Mode Mendalam (${book.readingTimeMinutes} menit)`}
-                className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
-                  readMode === "deep"
-                    ? "bg-surface text-ink shadow-sm"
-                    : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent-strong" />
-                <span>{book.readingTimeMinutes} mnt</span>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => toggleBookmark(book.slug)}
+              aria-pressed={saved}
+              aria-label={saved ? "Hapus dari tersimpan" : "Simpan buku"}
+              title={saved ? "Tersimpan" : "Simpan buku"}
+              className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border transition active:scale-[0.98] ${
+                saved
+                  ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
+                  : "border-line bg-surface text-ink-muted hover:bg-page hover:text-ink"
+              }`}
+            >
+              <Bookmark className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
+            </button>
           </div>
         </div>
 
