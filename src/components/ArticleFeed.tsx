@@ -125,20 +125,21 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
     setSelectedCategory("Semua");
   };
 
-  const handleShuffleArticles = () => {
+  const handleToggleShuffleArticles = () => {
+    if (shuffleSeed) {
+      setShuffleSeed(null);
+      try {
+        window.sessionStorage.removeItem(ARTICLE_SHUFFLE_SEED_KEY);
+      } catch {
+        // Abaikan jika sessionStorage tidak tersedia
+      }
+      return;
+    }
+
     const nextSeed = createRandomSeed();
     setShuffleSeed(nextSeed);
     try {
       window.sessionStorage.setItem(ARTICLE_SHUFFLE_SEED_KEY, nextSeed);
-    } catch {
-      // Abaikan jika sessionStorage tidak tersedia
-    }
-  };
-
-  const handleResetShuffle = () => {
-    setShuffleSeed(null);
-    try {
-      window.sessionStorage.removeItem(ARTICLE_SHUFFLE_SEED_KEY);
     } catch {
       // Abaikan jika sessionStorage tidak tersedia
     }
@@ -153,55 +154,36 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
 
   return (
     <div className="mt-6">
-      {/* Filter Kategori, Urutan (Terbaru/Acak), & Rubrik */}
+      {/* Filter Kategori, Tombol Acak Kecil, & Rubrik */}
       <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-2.5">
-          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2.5 sm:flex-initial">
-            <CategoryDropdown
-              options={categoryOptions}
-              selectedValue={selectedCategory}
-              onSelect={setSelectedCategory}
-              listboxAriaLabel="Daftar kategori artikel"
-              className="min-w-0 flex-1 sm:w-[240px] sm:flex-initial"
-            />
+        <div className="flex items-center justify-between gap-2.5">
+          <CategoryDropdown
+            options={categoryOptions}
+            selectedValue={selectedCategory}
+            onSelect={setSelectedCategory}
+            listboxAriaLabel="Daftar kategori artikel"
+            className="min-w-0 flex-1 sm:w-[260px] sm:flex-initial"
+          />
 
-            <div
-              role="group"
-              aria-label="Urutkan artikel"
-              className="inline-flex shrink-0 items-center rounded-xl border border-line bg-surface p-1 text-xs font-semibold"
+          <div className="flex shrink-0 items-center gap-2.5">
+            <p className="text-right text-xs text-ink-subtle">
+              {filteredItems.length} artikel
+            </p>
+            <button
+              type="button"
+              onClick={handleToggleShuffleArticles}
+              aria-pressed={Boolean(shuffleSeed)}
+              aria-label={shuffleSeed ? "Kembalikan urutan artikel terbaru" : "Acak urutan artikel"}
+              title={shuffleSeed ? "Klik untuk kembali ke urutan terbaru" : "Acak urutan artikel"}
+              className={`inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-xl border transition-all ${
+                shuffleSeed
+                  ? "border-emerald-600 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
+                  : "border-line bg-surface text-ink-muted hover:border-line-strong hover:text-ink"
+              }`}
             >
-              <button
-                type="button"
-                onClick={handleResetShuffle}
-                aria-pressed={!shuffleSeed}
-                className={`rounded-lg px-2.5 py-1.5 transition-all ${
-                  !shuffleSeed
-                    ? "bg-emerald-600 text-white shadow-sm"
-                    : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                Terbaru
-              </button>
-              <button
-                type="button"
-                onClick={handleShuffleArticles}
-                aria-pressed={Boolean(shuffleSeed)}
-                title={shuffleSeed ? "Klik lagi untuk acak ulang" : "Acak urutan artikel"}
-                className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 transition-all ${
-                  shuffleSeed
-                    ? "bg-emerald-600 text-white shadow-sm"
-                    : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                <Shuffle className="h-3 w-3" />
-                <span>Acak</span>
-              </button>
-            </div>
+              <Shuffle className="h-4 w-4" />
+            </button>
           </div>
-
-          <p className="hidden shrink-0 text-right text-xs text-ink-subtle sm:block">
-            {filteredItems.length} artikel
-          </p>
         </div>
 
         <div
