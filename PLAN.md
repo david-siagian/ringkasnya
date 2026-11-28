@@ -15,6 +15,7 @@ Dokumen ini menyimpan rencana pengembangan **Fase 3** untuk `ringkasnya.com`, me
 | **2. Fase 3.1 — Auth Dasar & Akun** | **Selesai** | Better Auth + Drizzle ORM (`0004`), `/masuk`, `/daftar`, `/akun`, `UserMenu` |
 | **2. Fase 3.1B — Auth Username, Email Opsional & Cloudflare Email** | **Paused (Siap di Branch)** | Kode selesai di branch `feat/auth-username-otp` (termasuk *live check* username); menunggu domain pribadi untuk Cloudflare Email Sending sebelum merge ke `dev` |
 | **2. Fase 3.2 — Progres Baca & Bookmark** | **Selesai** | Sinkronisasi bookmark, status selesai, mode baca, & progres via `/api/progress` ke D1 dan `/akun` |
+| **2. Fase 3.2B — Baca Buku, Bookmark & Progres Wajib Login** | **Pending** | Untuk memulai bacaan suatu buku wajib login; fitur bookmark, tandai bacaan selesai, dan lihat progres bacaan juga memerlukan login |
 | **2. Fase 3.3 — Payment & Keanggotaan** | **Pending** | Tabel `subscriptions` siap; payment gateway & webhook belum dibuat |
 | **2. Admin CMS (`/admin`)** | **Pending** | Dashboard & API admin (CRUD ringkasan, publish, hitung durasi) belum dibuat |
 | **3. Opini Pembaca** | **Selesai** | Fitur *Opini* aktif di `BookReader`, D1 (`0024`), wajib login untuk kirim & apresiasi *Bermanfaat* |
@@ -72,6 +73,9 @@ Seluruh **58 buku awal** telah dipindahkan dari file TypeScript statis (`src/dat
     4. Uji pengiriman OTP sungguhan pada branch `feat/auth-username-otp`, lalu merge `feat/auth-username-otp` ke `dev` (dan rilis ke `main`).
 - **Tahap 2: Sinkronisasi Progres Baca & Bookmark — Selesai**
   - Memanfaatkan tabel `user_book_progress` melalui `/api/progress`, `/api/progress/sync`, dan `/api/progress/[slug]` untuk menyimpan bookmark, status selesai, mode baca terakhir, dan progres poin inti lintas perangkat (dengan *merge* otomatis dari `localStorage` saat login dan ringkasan di `/akun`).
+- **Tahap 2B: Akses Baca Buku, Bookmark, Tandai Selesai & Progres Wajib Login — Pending**
+  - **Memulai Bacaan Buku Wajib Login**: Pengguna harus masuk (login) akun terlebih dahulu untuk dapat memulai/membaca ringkasan buku.
+  - **Bookmark, Tandai Selesai & Progres Bacaan Wajib Login**: Karena proses membaca buku memerlukan akun, seluruh aksi terkait seperti mem-bookmark buku, menandai bacaan selesai, serta melihat riwayat/progres bacaan juga diwajibkan dalam keadaan login (mengarahkan/menampilkan prompt login bagi pengguna yang belum masuk).
 - **Tahap 3: Admin CMS (`/admin`) — Pending**
   - Dashboard khusus admin (terlindungi autentikasi & role `admin` server-side) untuk menambah, mengedit konten ringkasan, mengubah status `is_published` (draft/publish), menandai `is_premium`, serta otomatis menghitung ulang durasi baca (`quick_time_minutes` & `reading_time_minutes`) langsung ke Cloudflare D1 tanpa perlu deploy ulang.
 - **Tahap 4: Payment Gateway & Keanggotaan — Pending**
