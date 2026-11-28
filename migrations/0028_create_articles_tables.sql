@@ -1,4 +1,4 @@
--- Migrasi 0027: Skema 2 tabel (vertical partitioning) untuk katalog dan konten artikel Ringkasnya
+-- Migrasi 0028: Skema 2 tabel (vertical partitioning) untuk katalog dan konten artikel Ringkasnya
 -- Tabel `articles` menyimpan metadata ringan untuk beranda (/), /artikel, dan popover istilah di BookReader.
 -- Tabel `article_contents` menyimpan payload baca panjang yang hanya di-JOIN pada halaman /artikel/[slug].
 

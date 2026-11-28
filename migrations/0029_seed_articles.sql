@@ -1,4 +1,4 @@
--- Migrasi 0028: Seed 12 artikel awal Ringkasnya dari src/data/articles/
+-- Migrasi 0029: Seed 12 artikel awal Ringkasnya dari src/data/articles/
 
 INSERT OR REPLACE INTO articles (
   slug, title, subtitle, term, aliases_json, format,
