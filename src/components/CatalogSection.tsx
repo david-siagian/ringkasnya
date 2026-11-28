@@ -21,7 +21,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
-  Dices,
   Layers,
   Search,
   Shuffle,
@@ -30,7 +29,6 @@ import {
 } from "lucide-react";
 import {
   createRandomSeed,
-  pickRandomItem,
   shuffleWithSeed,
 } from "@/lib/shuffle";
 
@@ -378,17 +376,6 @@ export default function CatalogSection({
     }
   };
 
-  const handleOpenRandomBook = () => {
-    const pool = filteredBooks.length > 0 ? filteredBooks : books;
-    const picked = pickRandomItem(
-      pool,
-      previewBook ? (book) => book.slug === previewBook.slug : undefined
-    );
-    if (picked) {
-      setPreviewBook(picked);
-    }
-  };
-
   const startItem = filteredBooks.length === 0 ? 0 : (safePage - 1) * itemsPerPage + 1;
   const endItem = Math.min(safePage * itemsPerPage, filteredBooks.length);
   const pageNumbers = getPageNumbers(safePage, totalPages);
@@ -591,40 +578,12 @@ export default function CatalogSection({
         </div>
       )}
 
-      {/* Banner Discovery In-Feed: Baca Acak */}
-      {isFull && books.length > 0 && (
-        <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-accent-line/70 bg-gradient-to-r from-accent-soft/70 via-surface to-warm-soft/40 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-accent-line bg-surface text-accent-strong shadow-xs">
-              <Dices className="h-4 w-4" />
-            </span>
-            <div className="min-w-0">
-              <p className="text-xs font-bold text-ink sm:text-sm">
-                Bingung mau mulai baca buku apa?
-              </p>
-              <p className="text-[11px] text-ink-muted sm:text-xs">
-                Biar kami pilihkan satu ringkasan secara acak untukmu.
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={handleOpenRandomBook}
-            className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-xl border border-accent-line bg-surface px-3.5 py-2 text-xs font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white sm:self-auto sm:text-sm"
-          >
-            <Dices className="h-3.5 w-3.5" />
-            <span>Baca Acak</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </button>
-        </div>
-      )}
-
       {/* Daftar Buku */}
       {displayedBooks.length > 0 ? (
         isFull ? (
           <div
             key={`${selectedCategory}-${selectedStatus}-${sortBy}-${searchQuery}-${safePage}-${shuffleSeed ?? "default"}`}
-            className="animate-fade-slide mt-6 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
+            className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
           >
             {displayedBooks.map((book) => (
               <BookCard key={book.slug} book={book} onSelect={setPreviewBook} />

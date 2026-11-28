@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Calendar, Dices, Shuffle, Sparkles } from "lucide-react";
+import { ArrowRight, Calendar, Shuffle, Sparkles } from "lucide-react";
 import { CATEGORIES } from "@/lib/book-constants";
 import {
   createRandomSeed,
-  pickRandomItem,
   shuffleWithSeed,
 } from "@/lib/shuffle";
 import type { BookCategory } from "@/types/book";
@@ -145,14 +144,6 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
     }
   };
 
-  const handleOpenRandomArticle = () => {
-    const pool = filteredItems.length > 0 ? filteredItems : items;
-    const picked = pickRandomItem(pool);
-    if (picked) {
-      window.location.assign(`/artikel/${picked.slug}`);
-    }
-  };
-
   const pillBaseClass =
     "inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40";
   const pillActiveClass =
@@ -264,39 +255,11 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
         </div>
       </div>
 
-      {/* Banner Discovery In-Feed: Baca Acak */}
-      {items.length > 0 && (
-        <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-accent-line/70 bg-gradient-to-r from-accent-soft/70 via-surface to-warm-soft/40 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-accent-line bg-surface text-accent-strong shadow-xs">
-              <Dices className="h-4 w-4" />
-            </span>
-            <div className="min-w-0">
-              <p className="text-xs font-bold text-ink sm:text-sm">
-                Bingung mau baca artikel yang mana?
-              </p>
-              <p className="text-[11px] text-ink-muted sm:text-xs">
-                Biar kami pilihkan satu gagasan menarik secara acak untukmu.
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={handleOpenRandomArticle}
-            className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-xl border border-accent-line bg-surface px-3.5 py-2 text-xs font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white sm:self-auto sm:text-sm"
-          >
-            <Dices className="h-3.5 w-3.5" />
-            <span>Baca Acak</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </button>
-        </div>
-      )}
-
       {/* Daftar Artikel atau Empty State "Akan Segera Hadir" */}
       {filteredItems.length > 0 ? (
         <section
           aria-label="Daftar Artikel"
-          className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
+          className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
         >
           {filteredItems.map((article) => (
             <a
