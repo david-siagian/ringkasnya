@@ -53,7 +53,17 @@ const RAW_ARTICLES: Article[] = [
   manusiaEgoisAtauKooperatif,
 ];
 
-export const ARTICLES: Article[] = RAW_ARTICLES.map(withCalculatedReadingTime);
+export const ARTICLES: Article[] = RAW_ARTICLES.map((article, index) => ({
+  article: withCalculatedReadingTime(article),
+  index,
+}))
+  .sort((a, b) => {
+    if (a.article.publishedAt !== b.article.publishedAt) {
+      return b.article.publishedAt.localeCompare(a.article.publishedAt);
+    }
+    return b.index - a.index;
+  })
+  .map(({ article }) => article);
 
 export function getArticleBySlug(slug: string): Article | undefined {
   return ARTICLES.find((article) => article.slug === slug);
