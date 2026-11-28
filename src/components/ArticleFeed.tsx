@@ -260,13 +260,13 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
         <section
           key={`${selectedCategory}-${selectedFormat}-${shuffleSeed ?? "default"}`}
           aria-label="Daftar Artikel"
-          className="animate-fade-slide mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
+          className="animate-fade-slide mt-6 grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
         >
           {filteredItems.map((article) => (
             <a
               key={article.slug}
               href={`/artikel/${article.slug}`}
-              className="group flex items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+              className="group flex h-full min-h-[120px] items-stretch overflow-hidden rounded-2xl border border-line/80 bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-line hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 sm:min-h-[144px]"
             >
               {article.coverImage && (
                 <div className="w-24 shrink-0 overflow-hidden border-r border-line/60 bg-slate-950 sm:w-28 md:w-32">
@@ -294,10 +294,10 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
                     </span>
                   </div>
 
-                  <h2 className="mt-1 line-clamp-2 text-[13px] font-bold leading-tight text-ink transition-colors group-hover:text-accent-text sm:text-sm">
+                  <h2 className="mt-1 min-h-[2.5em] line-clamp-2 text-[13px] font-bold leading-tight text-ink transition-colors group-hover:text-accent-text sm:text-sm">
                     {article.title}
                   </h2>
-                  <p className="mt-1 line-clamp-1 text-[11px] leading-snug text-ink-muted sm:line-clamp-2 sm:text-xs">
+                  <p className="mt-1 min-h-[1.375em] line-clamp-1 text-[11px] leading-snug text-ink-muted sm:min-h-[2.75em] sm:line-clamp-2 sm:text-xs">
                     {article.subtitle}
                   </p>
                 </div>
