@@ -29,7 +29,7 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
     slug: "destruksi-kreatif",
     term: "Destruksi Kreatif",
     aliases: ["Destruksi Kreatif", "Creative Destruction"],
-    category: "Ekonomi & Keuangan",
+    category: "Sejarah & Peradaban",
     readingTimeMinutes: 4,
     shortDefinition:
       "Proses pembaruan ekonomi ketika inovasi teknologi atau model bisnis baru menggantikan cara lama yang sudah mapan, sekaligus menciptakan peluang pertumbuhan baru dan menggeser pemain lama yang enggan beradaptasi.",
