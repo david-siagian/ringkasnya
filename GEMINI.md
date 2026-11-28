@@ -16,7 +16,7 @@
 
 ## Standar Konten & Durasi Baca
 - **Konten Buku (`BOOK_CONTENT.md`)**: Setiap kali akan men-generate buku baru, memperbarui, atau menyunting konten maupun metadata buku di Ringkasnya, **WAJIB** membaca dan mematuhi seluruh standar di [`BOOK_CONTENT.md`](./BOOK_CONTENT.md) (serta menjaga sinkronisasi katalog di [`BOOKS_LIST.md`](./BOOKS_LIST.md)).
-- **Konten Artikel (`ARTICLE_CONTENT.md`)**: Setiap kali akan men-generate atau menyunting artikel di Ringkasnya, **WAJIB** membaca dan mematuhi seluruh standar di [`ARTICLE_CONTENT.md`](./ARTICLE_CONTENT.md) (rubrik resmi, durasi baca 4–6 menit, struktur bagian & paragraf, integrasi `article-terms.ts`, serta ilustrasi SVG `240×240`).
+- **Konten Artikel (`ARTICLE_CONTENT.md`)**: Setiap kali akan men-generate atau menyunting artikel di Ringkasnya, **WAJIB** membaca dan mematuhi seluruh standar di [`ARTICLE_CONTENT.md`](./ARTICLE_CONTENT.md) (rubrik resmi, durasi baca 4–6 menit, struktur bagian & paragraf, integrasi `article-terms.ts`, serta ilustrasi SVG `240×240`), sekaligus menjaga sinkronisasi katalog di [`ARTICLES_LIST.md`](./ARTICLES_LIST.md).
 - **Validasi Wajib Sebelum Migrasi Buku**: Jalankan `npm run validate:content -- migrations/<nama_file>.sql` untuk memastikan seluruh perubahan konten buku lolos aturan [`BOOK_CONTENT.md`](./BOOK_CONTENT.md) sebelum di-commit dan di-push.
 
 ## Operasional CLI (Windows)
