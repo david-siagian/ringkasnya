@@ -67,7 +67,7 @@ Artikel di Ringkasnya terhubung langsung ke pembaca buku melalui fitur *auto-hig
 ## 5. Keterkaitan Katalog Buku & Standar Visual
 
 - **`slug`:** Huruf kecil `kebab-case` yang ringkas (mis. `eksperimen-invisible-gorilla`).
-- **`category`:** Wajib memilih salah satu dari 11 kategori resmi `BookCategory` (`src/lib/book-constants.ts`).
+- **`category`:** Wajib memilih salah satu dari 10 kategori resmi `BookCategory` (`src/lib/book-constants.ts`).
 - **`publishedAt`:** Format tanggal ISO `YYYY-MM-DD` (mis. `2026-11-24`), diformat otomatis menjadi `24 Nov 2026` di UI.
 - **`relatedBookSlugs`:** Wajib mencantumkan **2–4 `slug` buku** yang benar-benar tersedia di katalog Ringkasnya ([`BOOKS_LIST.md`](./BOOKS_LIST.md)) dan relevan dengan isi artikel.
 - **`coverGradient`:** Gradien Tailwind bernuansa gelap (`800`–`950`, mis. `from-slate-950 via-amber-950 to-slate-900`) yang serasi dengan palet ilustrasi SVG agar teks putih di header selalu kontras.

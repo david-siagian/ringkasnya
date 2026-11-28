@@ -111,7 +111,7 @@ Mengikuti keberhasilan migrasi 100 buku ke Cloudflare D1, konten editorial artik
   - `title TEXT NOT NULL`, `subtitle TEXT NOT NULL`.
   - `term TEXT NOT NULL`, `aliases_json TEXT NOT NULL`: Istilah dan variasi alias untuk pencocokan otomatis di `BookReader`.
   - `format TEXT NOT NULL CHECK (format IN ('bedah-istilah', 'lintas-buku', 'sains-aktual', 'kisah-eksperimen'))`.
-  - `category TEXT NOT NULL` (11 kategori resmi).
+  - `category TEXT NOT NULL` (10 kategori resmi).
   - `reading_time_minutes INTEGER NOT NULL` (200 kata/menit).
   - `short_definition TEXT NOT NULL`, `origin_label TEXT NOT NULL`.
   - `cover_gradient TEXT NOT NULL`, `cover_image TEXT`, `accent_badge TEXT NOT NULL`.
