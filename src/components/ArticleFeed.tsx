@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, Calendar, Search, Shuffle, Sparkles, X } from "lucide-react";
+import { ArrowRight, ArrowUpDown, Calendar, Search, Shuffle, Sparkles, X } from "lucide-react";
 import {
   createRandomSeed,
   shuffleWithSeed,
@@ -168,9 +168,18 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
     "border-line bg-surface text-ink-secondary hover:border-accent-line hover:text-accent-text";
 
   return (
-    <div className="mt-6">
+    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+      <div>
+        <h1 className="text-xl font-extrabold uppercase tracking-wider text-accent-strong sm:text-2xl">
+          Artikel
+        </h1>
+        <p className="mt-1.5 max-w-2xl text-sm text-ink-muted">
+          Catatan singkat 4–6 menit seputar istilah ilmiah, eksperimen klasik, dan konsep penting di balik buku-buku Ringkasnya.
+        </p>
+      </div>
+
       {/* Pencarian, Urutan (Terbaru/Acak), & Rubrik */}
-      <div className="flex flex-col gap-3">
+      <div className="mt-6 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2.5">
           <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2.5 sm:flex-initial">
             <div className="relative min-w-0 flex-1 sm:w-[280px] sm:flex-initial">
@@ -200,11 +209,15 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
               aria-label="Urutkan artikel"
               className="inline-flex shrink-0 items-center rounded-xl border border-line bg-surface p-1 text-xs font-semibold"
             >
+              <span className="hidden sm:inline-flex items-center gap-1 px-2 text-ink-subtle">
+                <ArrowUpDown className="h-3.5 w-3.5" />
+                Urutkan:
+              </span>
               <button
                 type="button"
                 onClick={handleResetShuffle}
                 aria-pressed={!shuffleSeed}
-                className={`rounded-lg px-2.5 py-1.5 transition-all ${
+                className={`rounded-lg px-3 py-1.5 transition-all ${
                   !shuffleSeed
                     ? "bg-emerald-600 text-white shadow-sm"
                     : "text-ink-muted hover:text-ink"
@@ -228,10 +241,6 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
               </button>
             </div>
           </div>
-
-          <p className="hidden shrink-0 text-right text-xs text-ink-subtle sm:block">
-            {filteredItems.length} artikel
-          </p>
         </div>
 
         <div
@@ -327,6 +336,6 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
           </button>
         </section>
       )}
-    </div>
+    </section>
   );
 }

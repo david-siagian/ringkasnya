@@ -378,34 +378,26 @@ export default function CatalogSection({
         isFull ? "max-w-7xl py-10 sm:py-14" : "max-w-6xl py-14"
       }`}
     >
-      {isFull && (
-        <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-2 text-xs text-ink-subtle">
-          <a href="/" className="hover:text-accent-strong transition-colors">
-            Beranda
-          </a>
-          <span>/</span>
-          <span className="font-semibold text-ink-secondary">Katalog Buku</span>
-        </nav>
-      )}
-
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-accent-strong">
-            {isFull ? "Katalog Lengkap" : "Perpustakaan Kurasi"}
-          </span>
           {isFull ? (
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
-              Daftar Semua Buku
-            </h1>
+            <>
+              <h1 className="text-xl font-extrabold uppercase tracking-wider text-accent-strong sm:text-2xl">
+                Katalog Buku
+              </h1>
+              <p className="mt-1.5 text-sm text-ink-muted">
+                Dirangkum dengan metode poin inti &amp; konsep kunci dalam Bahasa Indonesia yang mudah dipahami.
+              </p>
+            </>
           ) : (
-            <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
-              Mulai dari Buku-Buku Pilihan
-            </h2>
-          )}
-          {isFull && (
-            <p className="mt-1.5 text-sm text-ink-muted">
-              Dirangkum dengan metode poin inti &amp; konsep kunci dalam Bahasa Indonesia yang mudah dipahami.
-            </p>
+            <>
+              <span className="text-xs font-bold uppercase tracking-wider text-accent-strong">
+                Perpustakaan Kurasi
+              </span>
+              <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
+                Mulai dari Buku-Buku Pilihan
+              </h2>
+            </>
           )}
         </div>
 
