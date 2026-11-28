@@ -853,9 +853,9 @@ export function RelatedBooksSection({
                   e.preventDefault();
                   setPreviewBook(other);
                 }}
-                className="group flex min-w-0 items-start gap-3 rounded-xl border border-line bg-surface p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md sm:p-3.5"
+                className="group flex min-w-0 items-start gap-2.5 rounded-xl border border-line bg-surface p-2.5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-strong hover:shadow-md sm:gap-3 sm:p-3"
               >
-                <div className="relative aspect-[3/4] w-16 shrink-0 overflow-hidden rounded-lg shadow-sm ring-1 ring-line/70 sm:w-[72px]">
+                <div className="relative aspect-[3/4] w-14 shrink-0 overflow-hidden rounded-lg shadow-sm ring-1 ring-line/70 sm:w-16">
                   {other.coverImage ? (
                     <img
                       src={other.coverImage}
@@ -866,27 +866,27 @@ export function RelatedBooksSection({
                     <div
                       className={`flex h-full w-full items-center justify-center bg-slate-900 bg-gradient-to-br ${other.coverGradient} p-2 text-white`}
                     >
-                      <BookOpen className="h-5 w-5 opacity-85" />
+                      <BookOpen className="h-4 w-4 opacity-85" />
                     </div>
                   )}
                 </div>
 
                 <div className="flex min-w-0 flex-1 flex-col justify-between self-stretch">
                   <div>
-                    <span className="text-[10px] font-bold text-accent-strong">
+                    <span className="text-[10px] font-bold leading-none text-accent-strong">
                       {other.category}
                     </span>
-                    <h3 className="mt-0.5 line-clamp-2 text-sm font-extrabold leading-snug text-ink group-hover:text-accent-strong sm:text-base">
+                    <h3 className="mt-0.5 line-clamp-2 text-sm font-bold leading-tight text-ink group-hover:text-accent-strong">
                       {other.title}
                     </h3>
                     <p className="mt-0.5 truncate text-[11px] text-ink-subtle">
                       {other.author} • {other.readingTimeMinutes} menit baca
                     </p>
-                    <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-ink-muted">
+                    <p className="mt-1 line-clamp-1 text-[11px] text-ink-muted">
                       {other.tagline}
                     </p>
                   </div>
-                  <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-accent-text group-hover:text-accent-strong">
+                  <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-accent-text group-hover:text-accent-strong">
                     <span>Baca Ringkasan</span>
                     <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                   </span>
