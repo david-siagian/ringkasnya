@@ -30,6 +30,7 @@ interface BookRow {
   synopsis: string;
   who_is_it_for_json: string;
   takeaways_count: number;
+  created_at?: string;
 }
 
 interface BookFullRow extends BookRow {
@@ -81,6 +82,9 @@ function mapRowToCatalogItem(row: BookRow): BookCatalogItem {
   if (row.cover_image) {
     item.coverImage = row.cover_image;
   }
+  if (row.created_at) {
+    item.createdAt = row.created_at;
+  }
 
   return item;
 }
@@ -117,7 +121,8 @@ const CATALOG_SELECT_COLUMNS = `
   tagline,
   synopsis,
   who_is_it_for_json,
-  takeaways_count
+  takeaways_count,
+  created_at
 `;
 
 export async function getBookCatalog(

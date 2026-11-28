@@ -10,9 +10,14 @@ import BookPreviewModal from "./BookPreviewModal";
 import CategoryDropdown, { type CategoryOption } from "./CategoryDropdown";
 import { smoothScrollToElement } from "./SmoothNavigation";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import { useCompletedBooks } from "@/hooks/useCompletedBooks";
+import { useReadingProgress } from "@/hooks/useReadingProgress";
 import {
   ArrowRight,
+  ArrowUpDown,
+  BookOpen,
   Bookmark,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -40,6 +45,33 @@ const DEFAULT_PREVIEW_COLS = 5;
 const DEFAULT_ITEMS_PER_PAGE = 20;
 const CATALOG_SHUFFLE_SEED_KEY = "ringkasnya:catalog-shuffle-seed";
 
+type CatalogStatusFilter = "Semua" | "Tersimpan" | "Proses" | "Selesai";
+type CatalogSortOption = "terpopuler" | "terbaru";
+
+const STATUS_URL_MAP: Record<CatalogStatusFilter, string | null> = {
+  Semua: null,
+  Tersimpan: "tersimpan",
+  Proses: "proses",
+  Selesai: "selesai",
+};
+
+function parseStatusParam(raw: string | null): CatalogStatusFilter | null {
+  if (!raw) return null;
+  const normalized = raw.trim().toLowerCase();
+  if (normalized === "tersimpan") return "Tersimpan";
+  if (normalized === "proses") return "Proses";
+  if (normalized === "selesai") return "Selesai";
+  if (normalized === "semua") return "Semua";
+  return null;
+}
+
+function parseCreatedAtMs(raw?: string): number {
+  if (!raw) return 0;
+  const normalized = raw.includes("T") ? raw : raw.replace(" ", "T") + "Z";
+  const ms = Date.parse(normalized);
+  return Number.isFinite(ms) ? ms : 0;
+}
+
 function getPageNumbers(currentPage: number, totalPages: number): (number | "ellipsis")[] {
   if (totalPages <= 7) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -66,8 +98,11 @@ export default function CatalogSection({
 }: CatalogSectionProps) {
   const isFull = mode === "full";
   const [selectedCategory, setSelectedCategory] = useState<
-    BookCategory | "Semua" | "Tersimpan"
+    BookCategory | "Semua"
   >("Semua");
+  const [selectedStatus, setSelectedStatus] =
+    useState<CatalogStatusFilter>("Semua");
+  const [sortBy, setSortBy] = useState<CatalogSortOption>("terpopuler");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [shuffleSeed, setShuffleSeed] = useState<string | null>(null);
@@ -76,6 +111,8 @@ export default function CatalogSection({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const previewGridRef = useRef<HTMLDivElement>(null);
   const { bookmarkedCount, isBookmarked } = useBookmarks();
+  const { completedCount, isCompleted } = useCompletedBooks();
+  const { getProgressPercent, isLoggedIn } = useReadingProgress();
 
   useEffect(() => {
     if (!isFull) return;
@@ -94,12 +131,20 @@ export default function CatalogSection({
     }
 
     const categoryParam = params.get("kategori");
-    if (
-      categoryParam &&
-      (CATEGORIES.includes(categoryParam as BookCategory) ||
-        categoryParam === "Tersimpan")
-    ) {
-      setSelectedCategory(categoryParam as BookCategory | "Tersimpan");
+    if (categoryParam && CATEGORIES.includes(categoryParam as BookCategory)) {
+      setSelectedCategory(categoryParam as BookCategory);
+    }
+
+    const statusParam = parseStatusParam(params.get("status"));
+    if (statusParam) {
+      setSelectedStatus(statusParam);
+    } else if (categoryParam === "Tersimpan") {
+      setSelectedStatus("Tersimpan");
+    }
+
+    const sortParam = params.get("urut")?.trim().toLowerCase();
+    if (sortParam === "terbaru" || sortParam === "terpopuler") {
+      setSortBy(sortParam);
     }
 
     const pageParam = Number(params.get("page"));
@@ -132,18 +177,49 @@ export default function CatalogSection({
     ];
   }, [books]);
 
+  const inProgressCount = useMemo(() => {
+    if (!isLoggedIn) return 0;
+    let count = 0;
+    for (const book of books) {
+      if (isCompleted(book.slug)) continue;
+      const pct = getProgressPercent(book.slug);
+      if (pct > 0 && pct < 100) count++;
+    }
+    return count;
+  }, [books, isLoggedIn, isCompleted, getProgressPercent]);
+
   const orderedBooks = useMemo(() => {
-    if (!isFull || !shuffleSeed) return books;
-    return shuffleWithSeed(books, shuffleSeed);
-  }, [books, isFull, shuffleSeed]);
+    if (isFull && shuffleSeed) {
+      return shuffleWithSeed(books, shuffleSeed);
+    }
+    if (isFull && sortBy === "terbaru") {
+      return [...books].sort((a, b) => {
+        const diff = parseCreatedAtMs(b.createdAt) - parseCreatedAtMs(a.createdAt);
+        if (diff !== 0) return diff;
+        return b.year - a.year;
+      });
+    }
+    return books;
+  }, [books, isFull, shuffleSeed, sortBy]);
 
   const filteredBooks = useMemo(() => {
     return orderedBooks.filter((book) => {
       const matchesCategory =
-        selectedCategory === "Semua" ||
-        (selectedCategory === "Tersimpan"
-          ? isBookmarked(book.slug)
-          : book.category === selectedCategory);
+        selectedCategory === "Semua" || book.category === selectedCategory;
+
+      let matchesStatus = true;
+      if (isFull && selectedStatus !== "Semua") {
+        if (selectedStatus === "Tersimpan") {
+          matchesStatus = isBookmarked(book.slug);
+        } else if (selectedStatus === "Selesai") {
+          matchesStatus = isCompleted(book.slug);
+        } else if (selectedStatus === "Proses") {
+          const pct = getProgressPercent(book.slug);
+          matchesStatus =
+            isLoggedIn && !isCompleted(book.slug) && pct > 0 && pct < 100;
+        }
+      }
+
       const query = searchQuery.toLowerCase().trim();
       const matchesQuery =
         !query ||
@@ -152,9 +228,19 @@ export default function CatalogSection({
         book.tagline.toLowerCase().includes(query) ||
         book.category.toLowerCase().includes(query);
 
-      return matchesCategory && matchesQuery;
+      return matchesCategory && matchesStatus && matchesQuery;
     });
-  }, [orderedBooks, selectedCategory, searchQuery, isBookmarked]);
+  }, [
+    orderedBooks,
+    isFull,
+    selectedCategory,
+    selectedStatus,
+    searchQuery,
+    isBookmarked,
+    isCompleted,
+    getProgressPercent,
+    isLoggedIn,
+  ]);
 
   const hasPreviewOtherBooks = !isFull && filteredBooks.length > 1;
 
@@ -205,7 +291,9 @@ export default function CatalogSection({
 
   const syncCatalogUrl = (
     page: number,
-    category: BookCategory | "Semua" | "Tersimpan" = selectedCategory
+    category: BookCategory | "Semua" = selectedCategory,
+    status: CatalogStatusFilter = selectedStatus,
+    sort: CatalogSortOption = sortBy
   ) => {
     if (!isFull || typeof window === "undefined") return;
     const url = new URL(window.location.href);
@@ -219,15 +307,42 @@ export default function CatalogSection({
     } else {
       url.searchParams.set("kategori", category);
     }
+    const statusParam = STATUS_URL_MAP[status];
+    if (!statusParam) {
+      url.searchParams.delete("status");
+    } else {
+      url.searchParams.set("status", statusParam);
+    }
+    if (sort === "terpopuler") {
+      url.searchParams.delete("urut");
+    } else {
+      url.searchParams.set("urut", sort);
+    }
     window.history.replaceState(null, "", url.pathname + url.search);
   };
 
-  const handleCategoryChange = (
-    category: BookCategory | "Semua" | "Tersimpan"
-  ) => {
+  const handleCategoryChange = (category: BookCategory | "Semua") => {
     setSelectedCategory(category);
     setCurrentPage(1);
-    syncCatalogUrl(1, category);
+    syncCatalogUrl(1, category, selectedStatus, sortBy);
+  };
+
+  const handleStatusChange = (status: CatalogStatusFilter) => {
+    setSelectedStatus(status);
+    setCurrentPage(1);
+    syncCatalogUrl(1, selectedCategory, status, sortBy);
+  };
+
+  const handleSortChange = (nextSort: CatalogSortOption) => {
+    setSortBy(nextSort);
+    setShuffleSeed(null);
+    setCurrentPage(1);
+    syncCatalogUrl(1, selectedCategory, selectedStatus, nextSort);
+    try {
+      window.sessionStorage.removeItem(CATALOG_SHUFFLE_SEED_KEY);
+    } catch {
+      // Abaikan jika sessionStorage tidak tersedia
+    }
   };
 
   const handleSearchChange = (value: string) => {
@@ -347,40 +462,53 @@ export default function CatalogSection({
         )}
       </div>
 
-      {/* Filter Kategori & Kontrol Acak */}
+      {/* Filter Kategori, Urutan, Status, & Kontrol Acak */}
       {isFull && (
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2.5">
-            <CategoryDropdown
-              options={categoryOptions}
-              selectedValue={selectedCategory}
-              onSelect={handleCategoryChange}
-            />
-
-            <button
-              type="button"
-              onClick={() =>
-                handleCategoryChange(
-                  selectedCategory === "Tersimpan" ? "Semua" : "Tersimpan"
-                )
-              }
-              aria-pressed={selectedCategory === "Tersimpan"}
-              className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
-                selectedCategory === "Tersimpan"
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
-              }`}
-            >
-              <Bookmark
-                className={`h-3.5 w-3.5 ${
-                  selectedCategory === "Tersimpan" ? "fill-current" : ""
-                }`}
+        <div className="mt-6 space-y-3">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <CategoryDropdown
+                options={categoryOptions}
+                selectedValue={selectedCategory}
+                onSelect={handleCategoryChange}
               />
-              Tersimpan ({bookmarkedCount})
-            </button>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+              <div
+                role="group"
+                aria-label="Urutkan buku"
+                className="inline-flex items-center rounded-xl border border-line bg-surface p-1 text-xs font-semibold"
+              >
+                <span className="hidden sm:inline-flex items-center gap-1 px-2 text-ink-subtle">
+                  <ArrowUpDown className="h-3.5 w-3.5" />
+                  Urutkan:
+                </span>
+                {(
+                  [
+                    { value: "terpopuler", label: "Terpopuler" },
+                    { value: "terbaru", label: "Terbaru" },
+                  ] as const
+                ).map((option) => {
+                  const active = !shuffleSeed && sortBy === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => handleSortChange(option.value)}
+                      aria-pressed={active}
+                      className={`rounded-lg px-3 py-1.5 transition-all ${
+                        active
+                          ? "bg-emerald-600 text-white shadow-sm"
+                          : "text-ink-muted hover:text-ink"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-1.5">
               <button
                 type="button"
@@ -420,6 +548,77 @@ export default function CatalogSection({
               </button>
             )}
           </div>
+          </div>
+
+          {/* Segmented Pills Status Baca */}
+          <div
+            role="group"
+            aria-label="Filter status baca"
+            className="flex items-center gap-2 overflow-x-auto pb-1"
+          >
+            {(
+              [
+                {
+                  value: "Semua",
+                  label: "Semua",
+                  count: books.length,
+                  icon: null,
+                },
+                {
+                  value: "Tersimpan",
+                  label: "Tersimpan",
+                  count: bookmarkedCount,
+                  icon: Bookmark,
+                },
+                {
+                  value: "Proses",
+                  label: "Proses",
+                  count: inProgressCount,
+                  icon: BookOpen,
+                },
+                {
+                  value: "Selesai",
+                  label: "Selesai",
+                  count: completedCount,
+                  icon: CheckCircle2,
+                },
+              ] as const
+            ).map((pill) => {
+              const active = selectedStatus === pill.value;
+              const Icon = pill.icon;
+              return (
+                <button
+                  key={pill.value}
+                  type="button"
+                  onClick={() => handleStatusChange(pill.value)}
+                  aria-pressed={active}
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
+                    active
+                      ? "bg-emerald-600 text-white shadow-sm"
+                      : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
+                  }`}
+                >
+                  {Icon && (
+                    <Icon
+                      className={`h-3.5 w-3.5 ${
+                        active && pill.value === "Tersimpan" ? "fill-current" : ""
+                      }`}
+                    />
+                  )}
+                  <span>{pill.label}</span>
+                  <span
+                    className={`rounded-full px-1.5 py-0.5 text-[11px] leading-none ${
+                      active
+                        ? "bg-white/20 text-white"
+                        : "bg-surface-subtle text-ink-subtle"
+                    }`}
+                  >
+                    {pill.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       )}
 
@@ -427,7 +626,7 @@ export default function CatalogSection({
       {displayedBooks.length > 0 ? (
         isFull ? (
           <div
-            key={`${selectedCategory}-${searchQuery}-${safePage}-${shuffleSeed ?? "default"}`}
+            key={`${selectedCategory}-${selectedStatus}-${sortBy}-${searchQuery}-${safePage}-${shuffleSeed ?? "default"}`}
             className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
           >
             {displayedBooks.map((book) => (
@@ -539,37 +738,50 @@ export default function CatalogSection({
       ) : (
         <div className="mt-10 rounded-2xl border border-dashed border-line-strong bg-surface p-12 text-center">
           <p className="text-base font-semibold text-ink">
-            {selectedCategory === "Tersimpan" && bookmarkedCount === 0
+            {selectedStatus === "Tersimpan" && bookmarkedCount === 0
               ? "Belum ada buku yang disimpan"
-              : selectedCategory !== "Semua" &&
-                  selectedCategory !== "Tersimpan" &&
-                  !searchQuery.trim()
-                ? `Belum ada buku di kategori ${selectedCategory}`
-                : "Buku yang kamu cari belum ditemukan"}
+              : selectedStatus === "Proses" && inProgressCount === 0
+                ? isLoggedIn
+                  ? "Belum ada buku yang sedang dibaca"
+                  : "Masuk untuk memantau progres baca"
+                : selectedStatus === "Selesai" && completedCount === 0
+                  ? "Belum ada buku yang selesai dibaca"
+                  : selectedCategory !== "Semua" &&
+                      selectedStatus === "Semua" &&
+                      !searchQuery.trim()
+                    ? `Belum ada buku di kategori ${selectedCategory}`
+                    : "Buku yang kamu cari belum ditemukan"}
           </p>
           <p className="mt-1 text-sm text-ink-subtle">
-            {selectedCategory === "Tersimpan" && bookmarkedCount === 0
+            {selectedStatus === "Tersimpan" && bookmarkedCount === 0
               ? "Klik ikon bookmark pada kartu buku untuk menyimpannya di sini."
-              : selectedCategory !== "Semua" &&
-                  selectedCategory !== "Tersimpan" &&
-                  !searchQuery.trim()
-                ? "Ringkasan buku untuk kategori ini sedang disiapkan dan akan segera hadir."
-                : isFull
-                  ? 'Coba gunakan kata kunci lain atau pilih kategori "Semua".'
-                  : "Coba gunakan kata kunci lain."}
+              : selectedStatus === "Proses" && inProgressCount === 0
+                ? isLoggedIn
+                  ? "Mulai baca ringkasan buku dan progresmu akan muncul otomatis di sini."
+                  : "Filter Proses aktif untuk pengguna yang sudah masuk agar progres baca tersinkronisasi."
+                : selectedStatus === "Selesai" && completedCount === 0
+                  ? "Tandai buku sebagai selesai di halaman pembaca untuk melihatnya di sini."
+                  : selectedCategory !== "Semua" &&
+                      selectedStatus === "Semua" &&
+                      !searchQuery.trim()
+                    ? "Ringkasan buku untuk kategori ini sedang disiapkan dan akan segera hadir."
+                    : isFull
+                      ? 'Coba ubah filter kategori/status atau gunakan kata kunci lain.'
+                      : "Coba gunakan kata kunci lain."}
           </p>
           <button
             type="button"
             onClick={() => {
-              handleCategoryChange("Semua");
-              handleSearchChange("");
+              setSelectedCategory("Semua");
+              setSelectedStatus("Semua");
+              setSearchQuery("");
+              setCurrentPage(1);
+              syncCatalogUrl(1, "Semua", "Semua", sortBy);
             }}
             className="mt-4 inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
           >
-            {selectedCategory !== "Semua" &&
-            selectedCategory !== "Tersimpan" &&
-            !searchQuery.trim()
-              ? "Lihat Semua Buku"
+            {selectedCategory !== "Semua" || selectedStatus !== "Semua"
+              ? "Reset Filter"
               : "Reset Pencarian"}
           </button>
         </div>

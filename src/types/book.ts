@@ -44,6 +44,7 @@ export interface BookSummary {
   tagline: string;
   synopsis: string;
   whoIsItFor: string[];
+  createdAt?: string;
   keyTakeaways: BookTakeaway[];
   keyConcepts: BookKeyConcept[];
   quotes: string[];

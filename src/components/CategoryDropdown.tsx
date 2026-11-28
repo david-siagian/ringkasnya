@@ -10,7 +10,7 @@ export interface CategoryOption {
 
 interface CategoryDropdownProps {
   options: CategoryOption[];
-  selectedValue: BookCategory | "Semua" | "Tersimpan";
+  selectedValue: BookCategory | "Semua";
   onSelect: (value: BookCategory | "Semua") => void;
   listboxAriaLabel?: string;
   className?: string;
@@ -30,7 +30,7 @@ export default function CategoryDropdown({
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const listboxId = useId();
 
-  const isPlaceholder = selectedValue === "Tersimpan";
+  const isPlaceholder = false;
   const selectedIndex = options.findIndex((opt) => opt.value === selectedValue);
   const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : null;
 

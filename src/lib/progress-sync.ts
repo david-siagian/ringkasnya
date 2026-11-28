@@ -169,6 +169,13 @@ export async function syncBookProgressUpdate(
     const data = (await response.json()) as { item?: UserBookProgressItem };
     if (data.item) {
       progressMap.set(slug, data.item);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent(PROGRESS_UPDATED_EVENT, {
+            detail: Array.from(progressMap.values()),
+          })
+        );
+      }
     }
   } catch {
     // Abaikan kegagalan jaringan sementara; localStorage tetap menyimpan state
@@ -179,4 +186,13 @@ export function getCachedBookProgress(
   slug: string
 ): UserBookProgressItem | undefined {
   return progressMap.get(slug);
+}
+
+export function getAllCachedBookProgress(): UserBookProgressItem[] {
+  return Array.from(progressMap.values());
+}
+
+export function getProgressSyncUserId(): Promise<string | null> {
+  if (typeof window === "undefined") return Promise.resolve(null);
+  return resolveSessionUserId();
 }

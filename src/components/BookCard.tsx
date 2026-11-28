@@ -1,7 +1,8 @@
 import type { BookCatalogItem } from "@/types/book";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useCompletedBooks } from "@/hooks/useCompletedBooks";
-import { ArrowRight, Bookmark, CheckCircle2, Clock, Layers, Zap } from "lucide-react";
+import { useReadingProgress } from "@/hooks/useReadingProgress";
+import { ArrowRight, BookOpen, Bookmark, CheckCircle2, Clock, Layers, Zap } from "lucide-react";
 
 interface BookCardProps {
   book: BookCatalogItem;
@@ -16,8 +17,11 @@ export default function BookCard({
 }: BookCardProps) {
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const { isCompleted } = useCompletedBooks();
+  const { getProgressPercent } = useReadingProgress();
   const saved = isBookmarked(book.slug);
   const completed = isCompleted(book.slug);
+  const progressPercent = getProgressPercent(book.slug);
+  const inProgress = !completed && progressPercent > 0 && progressPercent < 100;
   return (
     <a
       href={`/buku/${book.slug}`}
@@ -39,12 +43,17 @@ export default function BookCard({
               alt={`Ilustrasi sampul buku ${book.title}`}
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            {completed && (
+            {completed ? (
               <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-emerald-600/90 px-2 py-1 text-[10px] font-bold text-white shadow-sm backdrop-blur-md">
                 <CheckCircle2 className="h-3 w-3" />
                 <span>Selesai</span>
               </span>
-            )}
+            ) : inProgress ? (
+              <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-amber-600/90 px-2 py-1 text-[10px] font-bold text-white shadow-sm backdrop-blur-md">
+                <BookOpen className="h-3 w-3" />
+                <span>Proses • {progressPercent}%</span>
+              </span>
+            ) : null}
             <button
               type="button"
               onClick={(e) => {
