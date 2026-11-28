@@ -1,9 +1,11 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { and, eq, gt } from "drizzle-orm";
 import {
   getBookCatalog,
   PUBLIC_PAGE_CACHE_CONTROL,
 } from "@/lib/books-repository";
+import { getDb, schema } from "@/lib/db";
 import { getDailySeed, shuffleWithSeed } from "@/lib/shuffle";
 import { ARTICLES } from "@/data/articles";
 import CatalogSection from "@/components/CatalogSection";
@@ -18,12 +20,63 @@ import {
 
 export const prerender = false;
 
-const bookCatalog = await getBookCatalog(Astro.locals.runtime?.env?.DB);
-const dailySeed = getDailySeed();
-const homeBooks = shuffleWithSeed(bookCatalog, `books:${dailySeed}`);
-const homeArticles = shuffleWithSeed(ARTICLES, `articles:${dailySeed}`);
+const MIN_ENGAGED_BOOKS_FOR_HOME_SHUFFLE = 5;
 
-Astro.response.headers.set("Cache-Control", PUBLIC_PAGE_CACHE_CONTROL);
+const dbBinding = Astro.locals.runtime?.env?.DB;
+const currentUser = Astro.locals.user;
+const bookCatalog = await getBookCatalog(dbBinding);
+
+let homeBooks = bookCatalog;
+let homeArticles = ARTICLES;
+let cacheControl = PUBLIC_PAGE_CACHE_CONTROL;
+
+if (currentUser) {
+  cacheControl = "private, no-store";
+
+  if (dbBinding) {
+    try {
+      const db = getDb(dbBinding);
+      const engagedRows = await db
+        .select({
+          bookSlug: schema.userBookProgress.bookSlug,
+          progressPercent: schema.userBookProgress.progressPercent,
+        })
+        .from(schema.userBookProgress)
+        .where(
+          and(
+            eq(schema.userBookProgress.userId, currentUser.id),
+            gt(schema.userBookProgress.progressPercent, 0)
+          )
+        );
+
+      if (engagedRows.length >= MIN_ENGAGED_BOOKS_FOR_HOME_SHUFFLE) {
+        const userDailySeed = `${getDailySeed()}:${currentUser.id}`;
+        const completedSlugs = new Set(
+          engagedRows
+            .filter((row) => row.progressPercent >= 100)
+            .map((row) => row.bookSlug)
+        );
+        const shuffledBooks = shuffleWithSeed(
+          bookCatalog,
+          `books:${userDailySeed}`
+        );
+        const uncompletedBooks = shuffledBooks.filter(
+          (book) => !completedSlugs.has(book.slug)
+        );
+        const completedBooks = shuffledBooks.filter((book) =>
+          completedSlugs.has(book.slug)
+        );
+
+        homeBooks = [...uncompletedBooks, ...completedBooks];
+        homeArticles = shuffleWithSeed(ARTICLES, `articles:${userDailySeed}`);
+      }
+    } catch (error) {
+      console.error("[index] Gagal memuat progres user untuk rotasi beranda:", error);
+    }
+  }
+}
+
+Astro.response.headers.set("Cache-Control", cacheControl);
 ---
 
 <BaseLayout>
