@@ -28,21 +28,7 @@ const pageDescription =
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
-  <div class="min-h-screen bg-page py-10 sm:py-12">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6">
-      <div class="max-w-2xl text-center sm:text-left">
-        <h1
-          class="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl"
-        >
-          Artikel &amp; Gagasan Ilmiah
-        </h1>
-        <p class="mt-2 text-sm leading-relaxed text-ink-muted">
-          Catatan singkat 4–6 menit seputar istilah ilmiah, eksperimen klasik,
-          dan konsep penting di balik buku-buku Ringkasnya.
-        </p>
-      </div>
-
-      <ArticleFeed client:load items={articleItems} />
-    </div>
+  <div class="min-h-screen bg-page">
+    <ArticleFeed client:load items={articleItems} />
   </div>
 </BaseLayout>
