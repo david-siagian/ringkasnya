@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#090D16" />
+      <stop offset="55%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#020617" flood-opacity="0.7" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.05 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+
+  <!-- Decentralized Network of Teams (Mesh vs Hierarchy) -->
+  <g transform="translate(300, 460)">
+    <!-- Mesh Links -->
+    <g stroke="#38BDF8" stroke-width="2" opacity="0.45">
+      <line x1="0" y1="-110" x2="-115" y2="-25" />
+      <line x1="0" y1="-110" x2="115" y2="-25" />
+      <line x1="-115" y1="-25" x2="115" y2="-25" />
+      <line x1="-115" y1="-25" x2="-75" y2="105" />
+      <line x1="115" y1="-25" x2="75" y2="105" />
+      <line x1="-75" y1="105" x2="75" y2="105" />
+      <line x1="0" y1="-110" x2="0" y2="5" />
+      <line x1="-115" y1="-25" x2="0" y2="5" />
+      <line x1="115" y1="-25" x2="0" y2="5" />
+      <line x1="-75" y1="105" x2="0" y2="5" />
+      <line x1="75" y1="105" x2="0" y2="5" />
+    </g>
+    <!-- Team Nodes -->
+    <circle cx="0" cy="-110" r="24" fill="#0F172A" stroke="#F59E0B" stroke-width="3.5" />
+    <circle cx="-115" cy="-25" r="24" fill="#0F172A" stroke="#38BDF8" stroke-width="3.5" />
+    <circle cx="115" cy="-25" r="24" fill="#0F172A" stroke="#38BDF8" stroke-width="3.5" />
+    <circle cx="-75" cy="105" r="24" fill="#0F172A" stroke="#38BDF8" stroke-width="3.5" />
+    <circle cx="75" cy="105" r="24" fill="#0F172A" stroke="#38BDF8" stroke-width="3.5" />
+    <circle cx="0" cy="5" r="30" fill="#F59E0B" />
+    <!-- Inner Dots -->
+    <circle cx="0" cy="-110" r="8" fill="#F59E0B" />
+    <circle cx="-115" cy="-25" r="8" fill="#38BDF8" />
+    <circle cx="115" cy="-25" r="8" fill="#38BDF8" />
+    <circle cx="-75" cy="105" r="8" fill="#38BDF8" />
+    <circle cx="75" cy="105" r="8" fill="#38BDF8" />
+    <circle cx="0" cy="5" r="10" fill="#0F172A" />
+  </g>
+
+  <!-- Title & Author -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="135" fill="#FFFFFF" font-size="62" font-weight="900" letter-spacing="1.5">TEAM OF TEAMS</text>
+    <line x1="175" y1="162" x2="425" y2="162" stroke="#F59E0B" stroke-width="3" opacity="0.85" />
+    <text x="300" y="196" fill="#CBD5E1" font-size="15" font-weight="600" letter-spacing="1.8">NEW RULES OF ENGAGEMENT</text>
+    <text x="300" y="220" fill="#CBD5E1" font-size="15" font-weight="600" letter-spacing="1.8">FOR A COMPLEX WORLD</text>
+    <text x="300" y="725" fill="#F8FAFC" font-size="21" font-weight="800" letter-spacing="3.5">GEN. STANLEY MCCHRYSTAL</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.3" style="mix-blend-mode: overlay;" />
+</svg>

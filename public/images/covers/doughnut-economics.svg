@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#064E3B" />
+      <stop offset="52%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#022C22" flood-opacity="0.65" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+
+  <!-- The Ecological & Social Doughnut Ring -->
+  <g transform="translate(300, 485)">
+    <circle cx="0" cy="0" r="165" fill="none" stroke="#EF4444" stroke-width="10" stroke-dasharray="14 8" opacity="0.65" />
+    <circle cx="0" cy="0" r="118" fill="none" stroke="#34D399" stroke-width="64" opacity="0.92" />
+    <circle cx="0" cy="0" r="84" fill="none" stroke="#FBBF24" stroke-width="6" opacity="0.85" />
+    <circle cx="0" cy="0" r="56" fill="#064E3B" />
+  </g>
+
+  <!-- Title, Subtitle & Author -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, sans-serif">
+    <text x="300" y="128" fill="#ECFDF5" font-size="60" font-weight="900" letter-spacing="1">DOUGHNUT</text>
+    <text x="300" y="188" fill="#6EE7B7" font-size="52" font-weight="900" letter-spacing="3">ECONOMICS</text>
+    <line x1="180" y1="214" x2="420" y2="214" stroke="#34D399" stroke-width="2" opacity="0.8" />
+    <text x="300" y="248" fill="#D1FAE5" font-size="16" font-weight="600" letter-spacing="1.4">SEVEN WAYS TO THINK LIKE A</text>
+    <text x="300" y="272" fill="#D1FAE5" font-size="16" font-weight="600" letter-spacing="1.4">21ST-CENTURY ECONOMIST</text>
+    <text x="300" y="742" fill="#ECFDF5" font-size="24" font-weight="800" letter-spacing="5">KATE RAWORTH</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.3" style="mix-blend-mode: overlay;" />
+</svg>

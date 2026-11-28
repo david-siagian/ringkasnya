@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1C1917" />
+      <stop offset="48%" stop-color="#451A03" />
+      <stop offset="100%" stop-color="#9A3412" />
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="50%" cy="62%" r="42%">
+      <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.85" />
+      <stop offset="55%" stop-color="#EA580C" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#451A03" stop-opacity="0" />
+    </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0C0A09" flood-opacity="0.65" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <circle cx="300" cy="495" r="240" fill="url(#sunGlow)" />
+
+  <!-- Warm Sun & Horizon -->
+  <circle cx="300" cy="495" r="108" fill="#F59E0B" opacity="0.92" />
+  <circle cx="300" cy="495" r="76" fill="#FDE68A" opacity="0.88" />
+  <path d="M0 545 L600 545 L600 800 L0 800 Z" fill="#1C1917" opacity="0.92" />
+
+  <!-- Train / Migration Tracks Leading North -->
+  <g stroke="#F59E0B" stroke-linecap="round" opacity="0.72">
+    <line x1="255" y1="545" x2="120" y2="795" stroke-width="4" />
+    <line x1="345" y1="545" x2="480" y2="795" stroke-width="4" />
+    <line x1="230" y1="585" x2="370" y2="585" stroke-width="3" />
+    <line x1="205" y1="625" x2="395" y2="625" stroke-width="3.5" />
+    <line x1="175" y1="670" x2="425" y2="670" stroke-width="4" />
+    <line x1="145" y1="720" x2="455" y2="720" stroke-width="4.5" />
+  </g>
+
+  <!-- Three Silhouettes Carrying Suitcases (Ida Mae, George, Robert) -->
+  <g fill="#0C0A09" opacity="0.95">
+    <circle cx="230" cy="488" r="13" />
+    <path d="M214 545 L218 504 L242 504 L246 545 Z" />
+    <rect x="247" y="523" width="16" height="20" rx="2" />
+
+    <circle cx="300" cy="478" r="15" />
+    <path d="M282 545 L286 496 L314 496 L318 545 Z" />
+    <rect x="320" y="520" width="18" height="23" rx="2" />
+
+    <circle cx="372" cy="490" r="13" />
+    <path d="M357 545 L361 506 L383 506 L387 545 Z" />
+  </g>
+
+  <!-- Title, Subtitle & Author -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Georgia', 'Times New Roman', serif">
+    <text x="300" y="102" fill="#FDE68A" font-size="22" font-weight="700" letter-spacing="4">THE WARMTH OF</text>
+    <text x="300" y="168" fill="#FFFBEB" font-size="68" font-weight="900" letter-spacing="1">OTHER SUNS</text>
+    <line x1="170" y1="195" x2="430" y2="195" stroke="#F59E0B" stroke-width="2" opacity="0.8" />
+    <text x="300" y="232" fill="#FCD34D" font-size="18" font-weight="600" font-family="'Inter', system-ui, sans-serif" letter-spacing="1.5">THE EPIC STORY OF AMERICA'S</text>
+    <text x="300" y="256" fill="#FCD34D" font-size="18" font-weight="600" font-family="'Inter', system-ui, sans-serif" letter-spacing="1.5">GREAT MIGRATION</text>
+    <text x="300" y="756" fill="#FEF3C7" font-size="24" font-weight="800" font-family="'Inter', system-ui, sans-serif" letter-spacing="5">ISABEL WILKERSON</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.3" style="mix-blend-mode: overlay;" />
+</svg>

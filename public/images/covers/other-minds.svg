@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#042F2E" />
+      <stop offset="55%" stop-color="#0F4C5C" />
+      <stop offset="100%" stop-color="#061A2B" />
+    </linearGradient>
+    <radialGradient id="bioGlow" cx="50%" cy="50%" r="45%">
+      <stop offset="0%" stop-color="#2DD4BF" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#042F2E" stop-opacity="0" />
+    </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#02181A" flood-opacity="0.65" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.05 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <circle cx="300" cy="460" r="240" fill="url(#bioGlow)" />
+
+  <!-- Stylized Octopus Mantle & Tentacles -->
+  <g transform="translate(300, 440)">
+    <!-- Tentacles -->
+    <path d="M-25 30 C-95 75 -165 40 -175 115 C-182 165 -115 170 -105 130" fill="none" stroke="#FB7185" stroke-width="14" stroke-linecap="round" opacity="0.9" />
+    <path d="M-15 40 C-55 115 -115 135 -85 195 C-65 230 -20 205 -35 165" fill="none" stroke="#F43F5E" stroke-width="12" stroke-linecap="round" opacity="0.85" />
+    <path d="M25 30 C95 75 165 40 175 115 C182 165 115 170 105 130" fill="none" stroke="#FB7185" stroke-width="14" stroke-linecap="round" opacity="0.9" />
+    <path d="M15 40 C55 115 115 135 85 195 C65 230 20 205 35 165" fill="none" stroke="#F43F5E" stroke-width="12" stroke-linecap="round" opacity="0.85" />
+    <path d="M-40 15 C-120 -10 -170 -65 -140 -110" fill="none" stroke="#FDA4AF" stroke-width="10" stroke-linecap="round" opacity="0.7" />
+    <path d="M40 15 C120 -10 170 -65 140 -110" fill="none" stroke="#FDA4AF" stroke-width="10" stroke-linecap="round" opacity="0.7" />
+
+    <!-- Mantle / Head -->
+    <path d="M0 -110 C55 -110 78 -50 55 10 C42 40 -42 40 -55 10 C-78 -50 -55 -110 0 -110 Z" fill="#FB7185" />
+    <path d="M0 -95 C38 -95 54 -48 38 0 C28 24 -28 24 -38 0 C-54 -48 -38 -95 0 -95 Z" fill="#FDA4AF" opacity="0.35" />
+
+    <!-- Eyes & Neural Nodes -->
+    <circle cx="-24" cy="-10" r="8" fill="#042F2E" />
+    <circle cx="24" cy="-10" r="8" fill="#042F2E" />
+    <circle cx="-22" cy="-12" r="3" fill="#CCFBF1" />
+    <circle cx="26" cy="-12" r="3" fill="#CCFBF1" />
+
+    <!-- Bioluminescent Neural Network Dots -->
+    <circle cx="-130" cy="88" r="5" fill="#5EEAD4" />
+    <circle cx="130" cy="88" r="5" fill="#5EEAD4" />
+    <circle cx="-68" cy="175" r="4" fill="#5EEAD4" />
+    <circle cx="68" cy="175" r="4" fill="#5EEAD4" />
+    <circle cx="0" cy="-65" r="6" fill="#CCFBF1" opacity="0.85" />
+  </g>
+
+  <!-- Title & Author -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="132" fill="#F0FDFA" font-size="70" font-weight="900" letter-spacing="-1.5">Other Minds</text>
+    <text x="300" y="176" fill="#99F6E4" font-size="14" font-weight="600" letter-spacing="1.8">THE OCTOPUS, THE SEA, AND THE DEEP ORIGINS</text>
+    <text x="300" y="198" fill="#99F6E4" font-size="14" font-weight="600" letter-spacing="1.8">OF CONSCIOUSNESS</text>
+    <line x1="205" y1="222" x2="395" y2="222" stroke="#2DD4BF" stroke-width="2.5" opacity="0.75" />
+    <text x="300" y="730" fill="#CCFBF1" font-size="22" font-weight="800" letter-spacing="4.5">PETER GODFREY-SMITH</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.3" style="mix-blend-mode: overlay;" />
+</svg>

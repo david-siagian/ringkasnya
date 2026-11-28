@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#090D16" />
+      <stop offset="50%" stop-color="#2E1065" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <radialGradient id="timeGlow" cx="50%" cy="54%" r="42%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.34" />
+      <stop offset="65%" stop-color="#A855F7" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#090D16" stop-opacity="0" />
+    </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#050510" flood-opacity="0.7" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.05 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <circle cx="300" cy="465" r="245" fill="url(#timeGlow)" />
+
+  <!-- Cosmic Hourglass & Entropy Particles -->
+  <g transform="translate(300, 465)">
+    <circle cx="0" cy="0" r="170" fill="none" stroke="#A855F7" stroke-width="1.5" opacity="0.28" stroke-dasharray="8 8" />
+    <circle cx="0" cy="0" r="130" fill="none" stroke="#FBBF24" stroke-width="1.5" opacity="0.22" />
+
+    <!-- Hourglass Frame -->
+    <line x1="-90" y1="-130" x2="90" y2="-130" stroke="#FDE68A" stroke-width="5" stroke-linecap="round" />
+    <line x1="-90" y1="130" x2="90" y2="130" stroke="#FDE68A" stroke-width="5" stroke-linecap="round" />
+    <path d="M-76 -125 C-76 -45 -10 -18 -8 0 C-10 18 -76 45 -76 125" fill="none" stroke="#E9D5FF" stroke-width="3" opacity="0.85" />
+    <path d="M76 -125 C76 -45 10 -18 8 0 C10 18 76 45 76 125" fill="none" stroke="#E9D5FF" stroke-width="3" opacity="0.85" />
+
+    <!-- Upper Matter & Lower Starlight -->
+    <path d="M-48 -75 Q0 -60 48 -75 Q18 -25 0 -6 Q-18 -25 -48 -75 Z" fill="#F59E0B" opacity="0.8" />
+    <line x1="0" y1="0" x2="0" y2="95" stroke="#FDE68A" stroke-width="2.5" stroke-dasharray="4 5" />
+    <path d="M-64 122 Q0 72 64 122 Z" fill="#C084FC" opacity="0.7" />
+
+    <!-- Dissolving Entropy Particles -->
+    <circle cx="-115" cy="-55" r="3" fill="#FDE68A" opacity="0.75" />
+    <circle cx="122" cy="-38" r="2.5" fill="#E9D5FF" opacity="0.7" />
+    <circle cx="-132" cy="45" r="2.5" fill="#C084FC" opacity="0.65" />
+    <circle cx="118" cy="68" r="3.5" fill="#FBBF24" opacity="0.8" />
+  </g>
+
+  <!-- Title & Author -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="114" fill="#FAF5FF" font-size="48" font-weight="900" letter-spacing="-1">Until the End</text>
+    <text x="300" y="166" fill="#FAF5FF" font-size="48" font-weight="900" letter-spacing="-1">of Time</text>
+    <text x="300" y="206" fill="#DDD6FE" font-size="14" font-weight="600" letter-spacing="1.6">MIND, MATTER, AND OUR SEARCH FOR MEANING</text>
+    <text x="300" y="226" fill="#DDD6FE" font-size="14" font-weight="600" letter-spacing="1.6">IN AN EVOLVING UNIVERSE</text>
+    <line x1="205" y1="248" x2="395" y2="248" stroke="#F59E0B" stroke-width="2.5" opacity="0.75" />
+    <text x="300" y="730" fill="#FDE68A" font-size="24" font-weight="800" letter-spacing="6">BRIAN GREENE</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.3" style="mix-blend-mode: overlay;" />
+</svg>

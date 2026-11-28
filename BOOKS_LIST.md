@@ -1,6 +1,6 @@
-# Daftar Katalog 110 Buku — Ringkasnya
+# Daftar Katalog 150 Buku — Ringkasnya
 
-Dokumen ini mencatat seluruh **110 buku** dalam katalog Ringkasnya (`ringkasnya.com`), terbagi menjadi **Fase 1 (58 buku awal)**, **Fase 2 (42 buku, Batch 1–5)**, dan **Fase 3 (Batch 6: 10 buku)** beserta estimasi halaman, jumlah poin inti, dan durasi baca sesuai standar [`BOOK_CONTENT.md`](./BOOK_CONTENT.md).
+Dokumen ini mencatat seluruh **150 buku** dalam katalog Ringkasnya (`ringkasnya.com`), terbagi menjadi **Fase 1 (58 buku awal)**, **Fase 2 (42 buku, Batch 1–5)**, dan **Fase 3 (50 buku, Batch 6–10)** beserta estimasi halaman, jumlah poin inti, dan durasi baca sesuai standar [`BOOK_CONTENT.md`](./BOOK_CONTENT.md).
 
 ## Ringkasan Progres
 
@@ -13,7 +13,11 @@ Dokumen ini mencatat seluruh **110 buku** dalam katalog Ringkasnya (`ringkasnya.
 | **Fase 2 — Batch 4 (`0014`)** | **10 buku** | **Sudah dimigrasikan** | Buku #89–#98 selesai dimigrasikan & sesuai skala |
 | **Fase 2 — Batch 5 (`0015`)** | **2 buku** | **Sudah dimigrasikan** | Buku #99–#100 selesai dimigrasikan & sesuai skala |
 | **Fase 3 — Batch 6 (`0031`)** | **10 buku** | **Siap dimigrasikan (Preview)** | Buku #101–#110 selesai disusun & lolos validator ketat |
-| **Total Katalog** | **110 buku** | **100 di D1 + 10 di Batch 6** | **Fase 1 (58) + Fase 2 (42) + Fase 3 Batch 6 (10)** |
+| **Fase 3 — Batch 7 (`0032`)** | **10 buku** | **Siap dimigrasikan (Preview)** | Buku #111–#120 selesai disusun & lolos validator ketat |
+| **Fase 3 — Batch 8 (`0033`)** | **10 buku** | **Siap dimigrasikan (Preview)** | Buku #121–#130 selesai disusun & lolos validator ketat |
+| **Fase 3 — Batch 9 (`0034`)** | **10 buku** | **Siap dimigrasikan (Preview)** | Buku #131–#140 selesai disusun & lolos validator ketat |
+| **Fase 3 — Batch 10 (`0035`)** | **10 buku** | **Siap dimigrasikan (Preview)** | Buku #141–#150 selesai disusun & lolos validator ketat |
+| **Total Katalog** | **150 buku** | **100 di D1 + 50 di Fase 3** | **Fase 1 (58) + Fase 2 (42) + Fase 3 Batch 6–10 (50)** |
 
 ---
 
@@ -167,3 +171,63 @@ Dokumen ini mencatat seluruh **110 buku** dalam katalog Ringkasnya (`ringkasnya.
 | 108 | *Being Mortal* | Atul Gawande | `Tubuh & Kesehatan` | ~282 | 6 | 5 mnt | 15 mnt | `being-mortal` |
 | 109 | *The Courage to Be Disliked* | Ichiro Kishimi & Fumitake Koga | `Filsafat & Kebijaksanaan` | ~288 | 6 | 5 mnt | 15 mnt | `the-courage-to-be-disliked` |
 | 110 | *Rework* | Jason Fried & David Heinemeier Hansson | `Organisasi & Bisnis` | ~279 | 6 | 5 mnt | 15 mnt | `rework` |
+
+### Batch 7 (`0032_add_books_batch_7.sql` — 10 Buku)
+
+| No | Judul | Penulis | Kategori | Est. Hal | Poin | Kilat | Mendalam | Slug |
+|---:|---|---|---|---:|---:|---|---|---|
+| 111 | *The Fabric of the Cosmos* | Brian Greene | `Sains & Alam Semesta` | ~569 | 9 | 7 mnt | 20 mnt | `the-fabric-of-the-cosmos` |
+| 112 | *Other Minds* | Peter Godfrey-Smith | `Sains & Alam Semesta` | ~255 | 6 | 5 mnt | 15 mnt | `other-minds` |
+| 113 | *Until the End of Time* | Brian Greene | `Sains & Alam Semesta` | ~448 | 8 | 6 mnt | 18 mnt | `until-the-end-of-time` |
+| 114 | *The Vital Question* | Nick Lane | `Sains & Alam Semesta` | ~368 | 6 | 5 mnt | 15 mnt | `the-vital-question` |
+| 115 | *The Serengeti Rules* | Sean B. Carroll | `Sains & Alam Semesta` | ~264 | 6 | 5 mnt | 15 mnt | `the-serengeti-rules` |
+| 116 | *The Paradox of Choice* | Barry Schwartz | `Psikologi & Perilaku` | ~265 | 6 | 5 mnt | 15 mnt | `the-paradox-of-choice` |
+| 117 | *Mistakes Were Made (But Not by Me)* | Carol Tavris & Elliot Aronson | `Psikologi & Perilaku` | ~304 | 6 | 5 mnt | 15 mnt | `mistakes-were-made-but-not-by-me` |
+| 118 | *Drive* | Daniel H. Pink | `Psikologi & Perilaku` | ~242 | 6 | 5 mnt | 15 mnt | `drive` |
+| 119 | *Switch* | Chip Heath & Dan Heath | `Psikologi & Perilaku` | ~305 | 6 | 5 mnt | 15 mnt | `switch` |
+| 120 | *The Consolations of Philosophy* | Alain de Botton | `Filsafat & Kebijaksanaan` | ~265 | 6 | 5 mnt | 15 mnt | `the-consolations-of-philosophy` |
+
+### Batch 8 (`0033_add_books_batch_8.sql` — 10 Buku)
+
+| No | Judul | Penulis | Kategori | Est. Hal | Poin | Kilat | Mendalam | Slug |
+|---:|---|---|---|---:|---:|---|---|---|
+| 121 | *Gödel, Escher, Bach* | Douglas Hofstadter | `Teknologi & Masa Depan` | ~777 | 9 | 7 mnt | 20 mnt | `godel-escher-bach` |
+| 122 | *Superintelligence* | Nick Bostrom | `Teknologi & Masa Depan` | ~352 | 6 | 5 mnt | 15 mnt | `superintelligence` |
+| 123 | *Physics of the Future* | Michio Kaku | `Teknologi & Masa Depan` | ~389 | 7 | 6 mnt | 18 mnt | `physics-of-the-future` |
+| 124 | *The Future Is Faster Than You Think* | Peter H. Diamandis & Steven Kotler | `Teknologi & Masa Depan` | ~384 | 7 | 6 mnt | 18 mnt | `the-future-is-faster-than-you-think` |
+| 125 | *Antifragile* | Nassim Nicholas Taleb | `Nalar & Berpikir Kritis` | ~519 | 8 | 6 mnt | 18 mnt | `antifragile` |
+| 126 | *Fooled by Randomness* | Nassim Nicholas Taleb | `Nalar & Berpikir Kritis` | ~316 | 6 | 5 mnt | 15 mnt | `fooled-by-randomness` |
+| 127 | *Being Logical* | D.Q. McInerny | `Nalar & Berpikir Kritis` | ~144 | 5 | 4 mnt | 15 mnt | `being-logical` |
+| 128 | *Black Box Thinking* | Matthew Syed | `Nalar & Berpikir Kritis` | ~336 | 6 | 5 mnt | 15 mnt | `black-box-thinking` |
+| 129 | *In Defense of Food* | Michael Pollan | `Tubuh & Kesehatan` | ~244 | 6 | 5 mnt | 15 mnt | `in-defense-of-food` |
+| 130 | *Gut* | Giulia Enders | `Tubuh & Kesehatan` | ~288 | 6 | 5 mnt | 15 mnt | `gut` |
+
+### Batch 9 (`0034_add_books_batch_9.sql` — 10 Buku)
+
+| No | Judul | Penulis | Kategori | Est. Hal | Poin | Kilat | Mendalam | Slug |
+|---:|---|---|---|---:|---:|---|---|---|
+| 131 | *The Warmth of Other Suns* | Isabel Wilkerson | `Sejarah & Peradaban` | ~622 | 9 | 7 mnt | 20 mnt | `the-warmth-of-other-suns` |
+| 132 | *How Democracies Die* | Steven Levitsky & Daniel Ziblatt | `Sejarah & Peradaban` | ~312 | 6 | 5 mnt | 15 mnt | `how-democracies-die` |
+| 133 | *The Dawn of Everything* | David Graeber & David Wengrow | `Sejarah & Peradaban` | ~692 | 9 | 7 mnt | 20 mnt | `the-dawn-of-everything` |
+| 134 | *The World Until Yesterday* | Jared Diamond | `Sejarah & Peradaban` | ~498 | 8 | 6 mnt | 18 mnt | `the-world-until-yesterday` |
+| 135 | *The Rise and Fall of the Great Powers* | Paul Kennedy | `Sejarah & Peradaban` | ~677 | 9 | 7 mnt | 20 mnt | `the-rise-and-fall-of-the-great-powers` |
+| 136 | *The Undercover Economist* | Tim Harford | `Ekonomi & Keuangan` | ~276 | 6 | 5 mnt | 15 mnt | `the-undercover-economist` |
+| 137 | *Doughnut Economics* | Kate Raworth | `Ekonomi & Keuangan` | ~320 | 6 | 5 mnt | 15 mnt | `doughnut-economics` |
+| 138 | *Why Information Grows* | César Hidalgo | `Ekonomi & Keuangan` | ~232 | 6 | 5 mnt | 15 mnt | `why-information-grows` |
+| 139 | *The Millionaire Next Door* | Thomas J. Stanley & William D. Danko | `Ekonomi & Keuangan` | ~258 | 6 | 5 mnt | 15 mnt | `the-millionaire-next-door` |
+| 140 | *Thinking in Bets* | Annie Duke | `Ekonomi & Keuangan` | ~288 | 6 | 5 mnt | 15 mnt | `thinking-in-bets` |
+
+### Batch 10 (`0035_add_books_batch_10.sql` — 10 Buku)
+
+| No | Judul | Penulis | Kategori | Est. Hal | Poin | Kilat | Mendalam | Slug |
+|---:|---|---|---|---:|---:|---|---|---|
+| 141 | *The Brain That Changes Itself* | Norman Doidge | `Tubuh & Kesehatan` | ~427 | 8 | 6 mnt | 18 mnt | `the-brain-that-changes-itself` |
+| 142 | *Exercised* | Daniel E. Lieberman | `Tubuh & Kesehatan` | ~464 | 8 | 6 mnt | 18 mnt | `exercised` |
+| 143 | *The Five Dysfunctions of a Team* | Patrick Lencioni | `Organisasi & Bisnis` | ~229 | 6 | 5 mnt | 15 mnt | `the-five-dysfunctions-of-a-team` |
+| 144 | *Built to Last* | Jim Collins & Jerry I. Porras | `Organisasi & Bisnis` | ~342 | 6 | 5 mnt | 15 mnt | `built-to-last` |
+| 145 | *The Culture Code* | Daniel Coyle | `Organisasi & Bisnis` | ~304 | 6 | 5 mnt | 15 mnt | `the-culture-code` |
+| 146 | *Team of Teams* | Gen. Stanley McChrystal | `Organisasi & Bisnis` | ~290 | 6 | 5 mnt | 15 mnt | `team-of-teams` |
+| 147 | *The War of Art* | Steven Pressfield | `Produktivitas & Pengembangan Diri` | ~165 | 5 | 4 mnt | 15 mnt | `the-war-of-art` |
+| 148 | *So Good They Can't Ignore You* | Cal Newport | `Produktivitas & Pengembangan Diri` | ~288 | 6 | 5 mnt | 15 mnt | `so-good-they-cant-ignore-you` |
+| 149 | *Peak* | Anders Ericsson & Robert Pool | `Produktivitas & Pengembangan Diri` | ~336 | 6 | 5 mnt | 15 mnt | `peak` |
+| 150 | *Ultralearning* | Scott H. Young | `Produktivitas & Pengembangan Diri` | ~320 | 6 | 5 mnt | 15 mnt | `ultralearning` |

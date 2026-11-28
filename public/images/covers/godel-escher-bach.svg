@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="55%" stop-color="#1E1B4B" />
+      <stop offset="100%" stop-color="#451A03" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="54%" r="46%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.34" />
+      <stop offset="100%" stop-color="#1E1B4B" stop-opacity="0" />
+    </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#090D16" flood-opacity="0.65" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <path d="M0 0 H600 V270 Q300 235 0 270 Z" fill="#090D1F" opacity="0.55" />
+  <circle cx="300" cy="455" r="245" fill="url(#glow)" />
+
+  <!-- Eternal Golden Braid / Interlocking Strange Loop -->
+  <g transform="translate(300, 455)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="0" cy="0" r="175" stroke="#FDE68A" stroke-width="1.5" opacity="0.2" stroke-dasharray="8 8" />
+    <!-- Isometric Impossible Cube -->
+    <polygon points="0,-120 104,-60 104,60 0,120 -104,60 -104,-60" stroke="#F59E0B" stroke-width="4" fill="#312E81" fill-opacity="0.35" />
+    <polyline points="-104,-60 0,0 104,-60" stroke="#FBBF24" stroke-width="4" />
+    <line x1="0" y1="0" x2="0" y2="120" stroke="#FBBF24" stroke-width="4" />
+    <!-- Three Interlocking Braided Rings (G - E - B) -->
+    <ellipse cx="0" cy="-36" rx="88" ry="38" stroke="#FEF3C7" stroke-width="3.5" opacity="0.85" transform="rotate(-30)" />
+    <ellipse cx="0" cy="36" rx="88" ry="38" stroke="#60A5FA" stroke-width="3.5" opacity="0.85" transform="rotate(30)" />
+    <ellipse cx="0" cy="0" rx="38" ry="88" stroke="#F59E0B" stroke-width="3.5" opacity="0.9" />
+    <circle cx="0" cy="0" r="14" fill="#FEF3C7" />
+  </g>
+
+  <!-- Title & Author -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="132" fill="#FFFBEB" font-size="52" font-weight="900" letter-spacing="-1">Gödel, Escher, Bach</text>
+    <text x="300" y="176" fill="#FDE68A" font-size="20" font-weight="700" letter-spacing="3.5">AN ETERNAL GOLDEN BRAID</text>
+    <line x1="190" y1="200" x2="410" y2="200" stroke="#F59E0B" stroke-width="2.5" opacity="0.8" />
+    <text x="300" y="728" fill="#FEF3C7" font-size="22" font-weight="800" letter-spacing="4.5">DOUGLAS HOFSTADTER</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
+</svg>
