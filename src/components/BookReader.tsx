@@ -1080,30 +1080,52 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         style={{ top: "var(--header-h)" }}
         className="sticky z-40 border-b border-line bg-surface/95 shadow-sm backdrop-blur-md"
       >
-        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2.5 px-4 py-3 sm:px-6">
-          {/* Kiri: Tombol Keluar Mode Baca & Progres */}
-          <div className="flex items-center gap-2.5">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-2.5 px-4 py-2.5 sm:px-6 sm:py-3">
+          {/* Kiri-Tengah: Tombol Keluar Mode Baca, Progres, & Judul Buku */}
+          <div className="flex min-w-0 flex-1 items-center gap-2.5">
             <button
               type="button"
               onClick={handleExitReadingMode}
               disabled={isLeavingView}
               aria-label="Keluar dari mode baca"
               title="Kembali ke halaman pengantar"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition hover:border-accent-line hover:bg-page hover:text-ink active:scale-[0.98] disabled:opacity-50"
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition hover:border-accent-line hover:bg-page hover:text-ink active:scale-[0.98] disabled:opacity-50"
             >
               <X className="h-4 w-4" />
             </button>
 
             <span
-              className="min-w-[2.25rem] text-xs font-semibold tabular-nums text-ink-muted"
+              className="shrink-0 min-w-[2.25rem] text-xs font-semibold tabular-nums text-ink-muted"
               title="Progres membaca"
             >
               {readingProgress}%
             </span>
+
+            <span
+              className="hidden min-w-0 truncate text-xs font-semibold text-ink sm:block sm:text-sm"
+              title={book.title}
+            >
+              {book.title}
+            </span>
           </div>
 
-          {/* Kanan: Pengaturan Tampilan (Aa) & Toggle Mode Baca (Kilat vs Mendalam) */}
-          <div className="flex flex-wrap items-center justify-end gap-2">
+          {/* Kanan: Bookmark, Pengaturan Tampilan (Aa), & Toggle Mode Baca (Logo + Menit) */}
+          <div className="flex shrink-0 items-center justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => toggleBookmark(book.slug)}
+              aria-pressed={saved}
+              aria-label={saved ? "Hapus dari tersimpan" : "Simpan buku"}
+              title={saved ? "Tersimpan" : "Simpan buku"}
+              className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border transition active:scale-[0.98] ${
+                saved
+                  ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
+                  : "border-line bg-surface text-ink-muted hover:bg-page hover:text-ink"
+              }`}
+            >
+              <Bookmark className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
+            </button>
+
             <div ref={appearanceMenuRef} className="sm:relative">
               <button
                 type="button"
@@ -1210,27 +1232,31 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
                 type="button"
                 onClick={() => handleModeChange("quick")}
                 aria-pressed={readMode === "quick"}
-                className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
+                aria-label={`Kilat (${book.quickTimeMinutes} mnt)`}
+                title={`Mode Kilat (${book.quickTimeMinutes} menit)`}
+                className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
                   readMode === "quick"
                     ? "bg-amber-500 text-white shadow-sm"
                     : "text-ink-muted hover:text-ink"
                 }`}
               >
-                <Zap className="h-4 w-4" />
-                <span>Kilat ({book.quickTimeMinutes} mnt)</span>
+                <Zap className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span>{book.quickTimeMinutes} mnt</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleModeChange("deep")}
                 aria-pressed={readMode === "deep"}
-                className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
+                aria-label={`Mendalam (${book.readingTimeMinutes} mnt)`}
+                title={`Mode Mendalam (${book.readingTimeMinutes} menit)`}
+                className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-semibold transition-all ${
                   readMode === "deep"
                     ? "bg-surface text-ink shadow-sm"
                     : "text-ink-muted hover:text-ink"
                 }`}
               >
-                <BookOpen className="h-4 w-4 text-accent-strong" />
-                <span>Mendalam ({book.readingTimeMinutes} mnt)</span>
+                <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent-strong" />
+                <span>{book.readingTimeMinutes} mnt</span>
               </button>
             </div>
           </div>
