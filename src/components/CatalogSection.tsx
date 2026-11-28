@@ -445,18 +445,17 @@ export default function CatalogSection({
         )}
       </div>
 
-      {/* Filter Kategori, Urutan, Tombol Acak Kecil, & Status */}
+      {/* Filter Kategori, Urutan (termasuk Acak), & Status */}
       {isFull && (
         <div className="mt-6 space-y-3">
-          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-            <CategoryDropdown
-              options={categoryOptions}
-              selectedValue={selectedCategory}
-              onSelect={handleCategoryChange}
-              className="w-full sm:w-[260px]"
-            />
+          <div className="flex flex-wrap items-center justify-between gap-2.5">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <CategoryDropdown
+                options={categoryOptions}
+                selectedValue={selectedCategory}
+                onSelect={handleCategoryChange}
+              />
 
-            <div className="flex items-center justify-between gap-2 sm:justify-end">
               <div
                 role="group"
                 aria-label="Urutkan buku"
@@ -489,22 +488,21 @@ export default function CatalogSection({
                     </button>
                   );
                 })}
+                <button
+                  type="button"
+                  onClick={handleShuffleBooks}
+                  aria-pressed={Boolean(shuffleSeed)}
+                  aria-label={shuffleSeed ? "Acak ulang urutan buku" : "Acak urutan buku"}
+                  title={shuffleSeed ? "Klik lagi untuk acak ulang" : "Acak urutan buku"}
+                  className={`inline-flex items-center justify-center rounded-lg px-2.5 py-1.5 transition-all ${
+                    shuffleSeed
+                      ? "bg-emerald-600 text-white shadow-sm"
+                      : "text-ink-muted hover:text-ink"
+                  }`}
+                >
+                  <Shuffle className="h-3.5 w-3.5" />
+                </button>
               </div>
-
-              <button
-                type="button"
-                onClick={handleShuffleBooks}
-                aria-pressed={Boolean(shuffleSeed)}
-                aria-label={shuffleSeed ? "Acak ulang urutan buku" : "Acak urutan buku"}
-                title={shuffleSeed ? "Klik untuk acak ulang" : "Acak urutan buku"}
-                className={`inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-xl border transition-all ${
-                  shuffleSeed
-                    ? "border-emerald-600 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
-                    : "border-line bg-surface text-ink-muted hover:border-line-strong hover:text-ink"
-                }`}
-              >
-                <Shuffle className="h-4 w-4" />
-              </button>
             </div>
           </div>
 
