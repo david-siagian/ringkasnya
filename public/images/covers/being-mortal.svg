@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1C1917" />
+      <stop offset="55%" stop-color="#451A03" />
+      <stop offset="100%" stop-color="#0C0A09" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="54%" r="44%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.34" />
+      <stop offset="100%" stop-color="#451A03" stop-opacity="0" />
+    </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0C0A09" flood-opacity="0.65" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <circle cx="300" cy="490" r="240" fill="url(#glow)" />
+
+  <!-- Minimalist Hourglass & Warm Flame -->
+  <g transform="translate(300, 495)" fill="none">
+    <circle cx="0" cy="0" r="150" stroke="#FCD34D" stroke-width="1.5" opacity="0.28" />
+    <path d="M-72 -105 H72 L14 -12 V12 L72 105 H-72 L-14 12 V-12 Z" stroke="#FDE68A" stroke-width="3.5" stroke-linejoin="round" fill="#78350F" fill-opacity="0.35" />
+    <!-- Sand Mound -->
+    <path d="M-46 95 Q0 42 46 95 Z" fill="#F59E0B" opacity="0.85" />
+    <line x1="0" y1="-12" x2="0" y2="55" stroke="#FDE68A" stroke-width="2" stroke-dasharray="4 4" />
+    <circle cx="0" cy="-58" r="12" fill="#FEF3C7" opacity="0.9" />
+  </g>
+
+  <!-- Title & Author -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="152" fill="#FFFFFF" font-size="76" font-weight="900" letter-spacing="-0.5">Being Mortal</text>
+    <text x="300" y="198" fill="#FDE68A" font-size="17" font-weight="700" letter-spacing="2.8">MEDICINE AND WHAT MATTERS IN THE END</text>
+    <line x1="195" y1="222" x2="405" y2="222" stroke="#F59E0B" stroke-width="2.5" opacity="0.75" />
+    <text x="300" y="726" fill="#FEF3C7" font-size="24" font-weight="800" letter-spacing="5">ATUL GAWANDE</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
+</svg>

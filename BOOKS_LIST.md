@@ -1,6 +1,6 @@
-# Daftar Katalog 100 Buku — Ringkasnya
+# Daftar Katalog 110 Buku — Ringkasnya
 
-Dokumen ini mencatat seluruh **100 buku** dalam katalog Ringkasnya (`ringkasnya.com`), terbagi menjadi **Fase 1 (58 buku awal)** dan **Fase 2 (42 buku terakhir, Batch 1–5)** beserta estimasi halaman, jumlah poin inti, dan durasi baca sesuai standar [`BOOK_CONTENT.md`](./BOOK_CONTENT.md).
+Dokumen ini mencatat seluruh **110 buku** dalam katalog Ringkasnya (`ringkasnya.com`), terbagi menjadi **Fase 1 (58 buku awal)**, **Fase 2 (42 buku, Batch 1–5)**, dan **Fase 3 (Batch 6: 10 buku)** beserta estimasi halaman, jumlah poin inti, dan durasi baca sesuai standar [`BOOK_CONTENT.md`](./BOOK_CONTENT.md).
 
 ## Ringkasan Progres
 
@@ -12,7 +12,8 @@ Dokumen ini mencatat seluruh **100 buku** dalam katalog Ringkasnya (`ringkasnya.
 | **Fase 2 — Batch 3 (`0013`)** | **10 buku** | **Sudah dimigrasikan** | Buku #79–#88 selesai dimigrasikan & sesuai skala |
 | **Fase 2 — Batch 4 (`0014`)** | **10 buku** | **Sudah dimigrasikan** | Buku #89–#98 selesai dimigrasikan & sesuai skala |
 | **Fase 2 — Batch 5 (`0015`)** | **2 buku** | **Sudah dimigrasikan** | Buku #99–#100 selesai dimigrasikan & sesuai skala |
-| **Total Katalog** | **100 buku** | **100 / 100 Selesai Dimigrasikan** | **Fase 1 (58) + Fase 2 (42) lengkap di D1** |
+| **Fase 3 — Batch 6 (`0031`)** | **10 buku** | **Siap dimigrasikan (Preview)** | Buku #101–#110 selesai disusun & lolos validator ketat |
+| **Total Katalog** | **110 buku** | **100 di D1 + 10 di Batch 6** | **Fase 1 (58) + Fase 2 (42) + Fase 3 Batch 6 (10)** |
 
 ---
 
@@ -149,3 +150,20 @@ Dokumen ini mencatat seluruh **100 buku** dalam katalog Ringkasnya (`ringkasnya.
 |---:|---|---|---|---:|---:|---|---|---|
 | 99 | *The Design of Everyday Things* | Don Norman | `Psikologi & Perilaku` | ~368 | 6 | 5 mnt | 16 mnt | `the-design-of-everyday-things` |
 | 100 | *Four Thousand Weeks* | Oliver Burkeman | `Produktivitas & Pengembangan Diri` | ~288 | 6 | 5 mnt | 16 mnt | `four-thousand-weeks` |
+
+---
+
+## Fase 3: Batch 6 (`0031_add_books_batch_6.sql` — 10 Buku)
+
+| No | Judul | Penulis | Kategori | Est. Hal | Poin | Kilat | Mendalam | Slug |
+|---:|---|---|---|---:|---:|---|---|---|
+| 101 | *The Immortal Life of Henrietta Lacks* | Rebecca Skloot | `Sains & Alam Semesta` | ~381 | 7 | 6 mnt | 18 mnt | `the-immortal-life-of-henrietta-lacks` |
+| 102 | *The Blind Watchmaker* | Richard Dawkins | `Sains & Alam Semesta` | ~358 | 6 | 5 mnt | 15 mnt | `the-blind-watchmaker` |
+| 103 | *Emotional Intelligence* | Daniel Goleman | `Psikologi & Perilaku` | ~352 | 6 | 5 mnt | 15 mnt | `emotional-intelligence` |
+| 104 | *Flow* | Mihaly Csikszentmihalyi | `Psikologi & Perilaku` | ~303 | 6 | 5 mnt | 15 mnt | `flow` |
+| 105 | *Weapons of Math Destruction* | Cathy O'Neil | `Teknologi & Masa Depan` | ~259 | 6 | 5 mnt | 15 mnt | `weapons-of-math-destruction` |
+| 106 | *The Black Swan* | Nassim Nicholas Taleb | `Nalar & Berpikir Kritis` | ~400 | 7 | 6 mnt | 18 mnt | `the-black-swan` |
+| 107 | *Homo Deus* | Yuval Noah Harari | `Sejarah & Peradaban` | ~448 | 8 | 6 mnt | 18 mnt | `homo-deus` |
+| 108 | *Being Mortal* | Atul Gawande | `Tubuh & Kesehatan` | ~282 | 6 | 5 mnt | 15 mnt | `being-mortal` |
+| 109 | *The Courage to Be Disliked* | Ichiro Kishimi & Fumitake Koga | `Filsafat & Kebijaksanaan` | ~288 | 6 | 5 mnt | 15 mnt | `the-courage-to-be-disliked` |
+| 110 | *Rework* | Jason Fried & David Heinemeier Hansson | `Organisasi & Bisnis` | ~279 | 6 | 5 mnt | 15 mnt | `rework` |

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#022C22" />
+      <stop offset="55%" stop-color="#064E3B" />
+      <stop offset="100%" stop-color="#18181B" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="54%" r="44%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.30" />
+      <stop offset="100%" stop-color="#064E3B" stop-opacity="0" />
+    </radialGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#021A14" flood-opacity="0.6" />
+    </filter>
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.06 0" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)" />
+  <circle cx="300" cy="485" r="245" fill="url(#glow)" />
+
+  <!-- Clockwork Gear Transforming into Evolutionary Tree -->
+  <g transform="translate(300, 490)" fill="none">
+    <circle cx="0" cy="0" r="142" stroke="#FCD34D" stroke-width="2" stroke-dasharray="12 10" opacity="0.45" />
+    <circle cx="0" cy="0" r="102" stroke="#6EE7B7" stroke-width="2.5" opacity="0.55" />
+    <circle cx="0" cy="0" r="36" stroke="#FBBF24" stroke-width="3" opacity="0.8" />
+    <!-- Watch Hands / Compass -->
+    <line x1="0" y1="0" x2="0" y2="-88" stroke="#FEF3C7" stroke-width="4" stroke-linecap="round" />
+    <line x1="0" y1="0" x2="64" y2="38" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" />
+    <!-- Organic Evolutionary Branches -->
+    <path d="M0 -102 L0 -150 M0 -126 L-44 -162 M0 -126 L44 -162" stroke="#6EE7B7" stroke-width="2.5" stroke-linecap="round" opacity="0.75" />
+    <path d="M-95 40 Q-145 70 -165 115 M95 40 Q145 70 165 115" stroke="#34D399" stroke-width="2" stroke-linecap="round" opacity="0.55" />
+    <circle cx="0" cy="0" r="9" fill="#FEF3C7" />
+  </g>
+
+  <!-- Title & Author -->
+  <g filter="url(#textShadow)" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="300" y="114" fill="#A7F3D0" font-size="24" font-weight="800" letter-spacing="6">THE BLIND</text>
+    <text x="300" y="176" fill="#FFFFFF" font-size="68" font-weight="900" letter-spacing="1">Watchmaker</text>
+    <text x="300" y="218" fill="#FDE68A" font-size="14" font-weight="700" letter-spacing="2.2">EVIDENCE OF EVOLUTION WITHOUT DESIGN</text>
+    <line x1="195" y1="240" x2="405" y2="240" stroke="#F59E0B" stroke-width="2.5" opacity="0.75" />
+    <text x="300" y="726" fill="#ECFDF5" font-size="23" font-weight="800" letter-spacing="5">RICHARD DAWKINS</text>
+  </g>
+
+  <rect width="600" height="800" fill="#FFFFFF" filter="url(#grain)" opacity="0.35" style="mix-blend-mode: overlay;" />
+</svg>
