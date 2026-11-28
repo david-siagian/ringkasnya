@@ -378,17 +378,6 @@ export default function CatalogSection({
     }
   };
 
-  const handleResetShuffle = () => {
-    setShuffleSeed(null);
-    setCurrentPage(1);
-    syncCatalogUrl(1);
-    try {
-      window.sessionStorage.removeItem(CATALOG_SHUFFLE_SEED_KEY);
-    } catch {
-      // Abaikan jika sessionStorage tidak tersedia
-    }
-  };
-
   const handleOpenRandomBook = () => {
     const pool = filteredBooks.length > 0 ? filteredBooks : books;
     const picked = pickRandomItem(
@@ -469,10 +458,10 @@ export default function CatalogSection({
         )}
       </div>
 
-      {/* Filter Kategori, Urutan, Status, & Kontrol Acak */}
+      {/* Filter Kategori, Urutan (termasuk Acak), & Status */}
       {isFull && (
         <div className="mt-6 space-y-3">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2.5">
             <div className="flex flex-wrap items-center gap-2.5">
               <CategoryDropdown
                 options={categoryOptions}
@@ -512,49 +501,22 @@ export default function CatalogSection({
                     </button>
                   );
                 })}
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={handleShuffleBooks}
-                aria-pressed={Boolean(shuffleSeed)}
-                className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs sm:py-2.5 sm:text-sm font-semibold transition-all ${
-                  shuffleSeed
-                    ? "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
-                    : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
-                }`}
-              >
-                <Shuffle className="h-3.5 w-3.5" />
-                <span>{shuffleSeed ? "Acak Lagi" : "Acak Urutan"}</span>
-              </button>
-
-              {shuffleSeed && (
                 <button
                   type="button"
-                  onClick={handleResetShuffle}
-                  title="Kembalikan urutan awal"
-                  aria-label="Kembalikan urutan awal"
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition-colors hover:border-line-strong hover:bg-page hover:text-ink sm:h-10 sm:w-10"
+                  onClick={handleShuffleBooks}
+                  aria-pressed={Boolean(shuffleSeed)}
+                  title={shuffleSeed ? "Klik lagi untuk acak ulang" : "Acak urutan buku"}
+                  className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 transition-all ${
+                    shuffleSeed
+                      ? "bg-emerald-600 text-white shadow-sm"
+                      : "text-ink-muted hover:text-ink"
+                  }`}
                 >
-                  <X className="h-4 w-4" />
+                  <Shuffle className="h-3 w-3" />
+                  <span>Acak</span>
                 </button>
-              )}
+              </div>
             </div>
-
-            {books.length > 0 && (
-              <button
-                type="button"
-                onClick={handleOpenRandomBook}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2 text-xs sm:py-2.5 sm:text-sm font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white"
-              >
-                <Dices className="h-3.5 w-3.5" />
-                <span>Baca Acak</span>
-              </button>
-            )}
-          </div>
           </div>
 
           {/* Segmented Pills Status Baca */}
@@ -629,12 +591,40 @@ export default function CatalogSection({
         </div>
       )}
 
+      {/* Banner Discovery In-Feed: Baca Acak */}
+      {isFull && books.length > 0 && (
+        <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-accent-line/70 bg-gradient-to-r from-accent-soft/70 via-surface to-warm-soft/40 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-accent-line bg-surface text-accent-strong shadow-xs">
+              <Dices className="h-4 w-4" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-ink sm:text-sm">
+                Bingung mau mulai baca buku apa?
+              </p>
+              <p className="text-[11px] text-ink-muted sm:text-xs">
+                Biar kami pilihkan satu ringkasan secara acak untukmu.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleOpenRandomBook}
+            className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-xl border border-accent-line bg-surface px-3.5 py-2 text-xs font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white sm:self-auto sm:text-sm"
+          >
+            <Dices className="h-3.5 w-3.5" />
+            <span>Baca Acak</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* Daftar Buku */}
       {displayedBooks.length > 0 ? (
         isFull ? (
           <div
             key={`${selectedCategory}-${selectedStatus}-${sortBy}-${searchQuery}-${safePage}-${shuffleSeed ?? "default"}`}
-            className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
+            className="animate-fade-slide mt-6 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
           >
             {displayedBooks.map((book) => (
               <BookCard key={book.slug} book={book} onSelect={setPreviewBook} />

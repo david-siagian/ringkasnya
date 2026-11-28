@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Calendar, Dices, Shuffle, Sparkles, X } from "lucide-react";
+import { ArrowRight, Calendar, Dices, Shuffle, Sparkles } from "lucide-react";
 import { CATEGORIES } from "@/lib/book-constants";
 import {
   createRandomSeed,
@@ -162,17 +162,53 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
 
   return (
     <div className="mt-6">
-      {/* Filter Kategori & Rubrik */}
+      {/* Filter Kategori, Urutan (Terbaru/Acak), & Rubrik */}
       <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <CategoryDropdown
-            options={categoryOptions}
-            selectedValue={selectedCategory}
-            onSelect={setSelectedCategory}
-            listboxAriaLabel="Daftar kategori artikel"
-            className="min-w-0 flex-1 sm:w-[260px] sm:flex-initial"
-          />
-          <p className="shrink-0 text-right text-xs text-ink-subtle">
+        <div className="flex flex-wrap items-center justify-between gap-2.5">
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2.5 sm:flex-initial">
+            <CategoryDropdown
+              options={categoryOptions}
+              selectedValue={selectedCategory}
+              onSelect={setSelectedCategory}
+              listboxAriaLabel="Daftar kategori artikel"
+              className="min-w-0 flex-1 sm:w-[240px] sm:flex-initial"
+            />
+
+            <div
+              role="group"
+              aria-label="Urutkan artikel"
+              className="inline-flex shrink-0 items-center rounded-xl border border-line bg-surface p-1 text-xs font-semibold"
+            >
+              <button
+                type="button"
+                onClick={handleResetShuffle}
+                aria-pressed={!shuffleSeed}
+                className={`rounded-lg px-2.5 py-1.5 transition-all ${
+                  !shuffleSeed
+                    ? "bg-emerald-600 text-white shadow-sm"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                Terbaru
+              </button>
+              <button
+                type="button"
+                onClick={handleShuffleArticles}
+                aria-pressed={Boolean(shuffleSeed)}
+                title={shuffleSeed ? "Klik lagi untuk acak ulang" : "Acak urutan artikel"}
+                className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 transition-all ${
+                  shuffleSeed
+                    ? "bg-emerald-600 text-white shadow-sm"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                <Shuffle className="h-3 w-3" />
+                <span>Acak</span>
+              </button>
+            </div>
+          </div>
+
+          <p className="hidden shrink-0 text-right text-xs text-ink-subtle sm:block">
             {filteredItems.length} artikel
           </p>
         </div>
@@ -226,55 +262,41 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
             );
           })}
         </div>
-
-        {/* Ruang Terpisah untuk Kontrol Acak & Baca Acak */}
-        <div className="flex flex-wrap items-center gap-2 pt-0.5">
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={handleShuffleArticles}
-              aria-pressed={Boolean(shuffleSeed)}
-              className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-semibold transition-all ${
-                shuffleSeed
-                  ? "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
-                  : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
-              }`}
-            >
-              <Shuffle className="h-3.5 w-3.5" />
-              <span>{shuffleSeed ? "Acak Lagi" : "Acak Urutan"}</span>
-            </button>
-
-            {shuffleSeed && (
-              <button
-                type="button"
-                onClick={handleResetShuffle}
-                title="Kembalikan urutan awal"
-                aria-label="Kembalikan urutan awal"
-                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition-colors hover:border-line-strong hover:bg-page hover:text-ink sm:h-9 sm:w-9"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          {items.length > 0 && (
-            <button
-              type="button"
-              onClick={handleOpenRandomArticle}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2 text-xs sm:text-sm font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white"
-            >
-              <Dices className="h-3.5 w-3.5" />
-              <span>Baca Acak</span>
-            </button>
-          )}
-        </div>
       </div>
+
+      {/* Banner Discovery In-Feed: Baca Acak */}
+      {items.length > 0 && (
+        <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-accent-line/70 bg-gradient-to-r from-accent-soft/70 via-surface to-warm-soft/40 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-accent-line bg-surface text-accent-strong shadow-xs">
+              <Dices className="h-4 w-4" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-ink sm:text-sm">
+                Bingung mau baca artikel yang mana?
+              </p>
+              <p className="text-[11px] text-ink-muted sm:text-xs">
+                Biar kami pilihkan satu gagasan menarik secara acak untukmu.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleOpenRandomArticle}
+            className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-xl border border-accent-line bg-surface px-3.5 py-2 text-xs font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white sm:self-auto sm:text-sm"
+          >
+            <Dices className="h-3.5 w-3.5" />
+            <span>Baca Acak</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* Daftar Artikel atau Empty State "Akan Segera Hadir" */}
       {filteredItems.length > 0 ? (
         <section
           aria-label="Daftar Artikel"
-          className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
+          className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
         >
           {filteredItems.map((article) => (
             <a
