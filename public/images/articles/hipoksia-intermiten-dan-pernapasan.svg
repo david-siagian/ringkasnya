@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="bg-breath" x1="0" y1="0" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#041418"/>
+      <stop offset="55%" stop-color="#062c30"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+    <radialGradient id="glow-breath" cx="120" cy="116" r="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#041418" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lung-grad" x1="60" y1="60" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#5eead4"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="240" height="240" rx="24" fill="url(#bg-breath)"/>
+  <circle cx="120" cy="116" r="88" fill="url(#glow-breath)"/>
+
+  <!-- Gelombang Ritme Napas 5.5 Detik -->
+  <path
+    d="M24 182 C52 182 58 156 80 156 C102 156 108 182 132 182 C156 182 162 156 184 156 C206 156 210 182 216 182"
+    stroke="#5eead4"
+    stroke-opacity="0.45"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+  <path
+    d="M24 196 C52 196 58 176 80 176 C102 176 108 196 132 196 C156 196 162 176 184 176 C206 176 210 196 216 196"
+    stroke="#34d399"
+    stroke-opacity="0.25"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- Trakea / Saluran Napas -->
+  <path d="M120 34 V84" stroke="#99f6e4" stroke-width="5" stroke-linecap="round"/>
+  <path d="M120 84 L96 100 M120 84 L144 100" stroke="#99f6e4" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Paru-paru Kiri -->
+  <path
+    d="M110 88 C94 84 62 94 56 124 C51 146 62 160 82 158 C98 156 110 146 110 128 Z"
+    fill="#09292d"
+    stroke="url(#lung-grad)"
+    stroke-width="3"
+    stroke-linejoin="round"
+  />
+  <!-- Paru-paru Kanan -->
+  <path
+    d="M130 88 C146 84 178 94 184 124 C189 146 178 160 158 158 C142 156 130 146 130 128 Z"
+    fill="#09292d"
+    stroke="url(#lung-grad)"
+    stroke-width="3"
+    stroke-linejoin="round"
+  />
+
+  <!-- Molekul Oksigen (O2) & Aliran Udara -->
+  <circle cx="84" cy="122" r="7" fill="#2dd4bf" fill-opacity="0.3" stroke="#5eead4" stroke-width="2"/>
+  <circle cx="96" cy="136" r="5" fill="#34d399" fill-opacity="0.35" stroke="#6ee7b7" stroke-width="2"/>
+  <circle cx="156" cy="122" r="7" fill="#2dd4bf" fill-opacity="0.3" stroke="#5eead4" stroke-width="2"/>
+  <circle cx="144" cy="136" r="5" fill="#fbbf24" fill-opacity="0.35" stroke="#fcd34d" stroke-width="2"/>
+
+  <!-- Lingkaran Fokus Masuk Hidung -->
+  <circle cx="120" cy="42" r="14" stroke="#5eead4" stroke-opacity="0.35" stroke-width="1.8" stroke-dasharray="4 4"/>
+  <path d="M120 20 V30" stroke="#a7f3d0" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M115 26 L120 31 L125 26" stroke="#a7f3d0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -8,6 +8,9 @@ import { adaptasiHedonis } from "./articles/adaptasi-hedonis";
 import { eksperimenInvisibleGorilla } from "./articles/eksperimen-invisible-gorilla";
 import { fomoAiDiDuniaKerja } from "./articles/fomo-ai-di-dunia-kerja";
 import { manusiaEgoisAtauKooperatif } from "./articles/manusia-egois-atau-kooperatif";
+import { hipoksiaIntermitenDanPernapasan } from "./articles/hipoksia-intermiten-dan-pernapasan";
+import { mvpVsObsesiKesempurnaan } from "./articles/mvp-vs-obsesi-kesempurnaan";
+import { residuAtensi } from "./articles/residu-atensi";
 
 const WORDS_PER_MINUTE = 200;
 
@@ -51,6 +54,9 @@ const RAW_ARTICLES: Article[] = [
   eksperimenInvisibleGorilla,
   fomoAiDiDuniaKerja,
   manusiaEgoisAtauKooperatif,
+  hipoksiaIntermitenDanPernapasan,
+  mvpVsObsesiKesempurnaan,
+  residuAtensi,
 ];
 
 export const ARTICLES: Article[] = RAW_ARTICLES.map(withCalculatedReadingTime);

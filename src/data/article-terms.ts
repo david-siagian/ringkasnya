@@ -112,4 +112,44 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
     originLabel:
       "Richard Dawkins (1976) · Yuval Noah Harari (2011) · Rutger Bregman (2019)",
   },
+  {
+    slug: "hipoksia-intermiten-dan-pernapasan",
+    term: "Hipoksia Intermiten",
+    aliases: [
+      "Hipoksia Intermiten",
+      "Intermittent Hypoxia",
+      "Bernapas Lewat Mulut",
+      "Mouth Breathing",
+      "Toleransi Karbon Dioksida",
+    ],
+    category: "Tubuh & Kesehatan",
+    readingTimeMinutes: 5,
+    shortDefinition:
+      "Paparan penurunan kadar oksigen secara singkat, terkontrol, dan berselang melalui latihan napas yang melatih toleransi karbon dioksida serta efisiensi pengantaran oksigen ke jaringan tubuh.",
+    originLabel: "James Nestor & Stanford Rhinology (2020)",
+  },
+  {
+    slug: "mvp-vs-obsesi-kesempurnaan",
+    term: "Produk Minimum Layak",
+    aliases: [
+      "Produk Minimum Layak",
+      "Minimum Viable Product",
+      "Validated Learning",
+    ],
+    category: "Organisasi & Bisnis",
+    readingTimeMinutes: 4,
+    shortDefinition:
+      "Versi paling sederhana dari suatu produk yang tetap berfungsi utuh untuk menguji hipotesis bisnis terpenting di pasar nyata dengan biaya dan waktu seminimal mungkin.",
+    originLabel: "Eric Ries (2011) · Jim Collins (2001) · Clayton Christensen (1997)",
+  },
+  {
+    slug: "residu-atensi",
+    term: "Residu Atensi",
+    aliases: ["Residu Atensi", "Attention Residue", "Task Switching"],
+    category: "Produktivitas & Pengembangan Diri",
+    readingTimeMinutes: 4,
+    shortDefinition:
+      "Sisa perhatian kognitif yang tetap melekat pada tugas sebelumnya setelah seseorang berpindah ke tugas baru, sehingga menurunkan ketajaman fokus dan kualitas berpikir pada pekerjaan berikutnya.",
+    originLabel: "Sophie Leroy (2009) → Cal Newport (2016)",
+  },
 ];
