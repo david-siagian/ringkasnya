@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { BookCatalogItem } from "@/types/book";
-import { ArrowRight, BookOpen, CheckCircle2, Clock, Target, X, Zap } from "lucide-react";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { ArrowRight, Bookmark, BookOpen, CheckCircle2, Clock, Target, X, Zap } from "lucide-react";
 
 interface BookPreviewModalProps {
   book: BookCatalogItem | null;
@@ -13,6 +14,7 @@ export default function BookPreviewModal({
   onClose,
 }: BookPreviewModalProps) {
   const [mounted, setMounted] = useState(false);
+  const { isBookmarked, toggleBookmark } = useBookmarks();
   const onCloseRef = useRef(onClose);
   const pushedHistoryRef = useRef(false);
 
@@ -73,6 +75,8 @@ export default function BookPreviewModal({
 
   if (!mounted || !book) return null;
 
+  const saved = isBookmarked(book.slug);
+
   return createPortal(
     <div
       className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-md dark:bg-black/75"
@@ -85,15 +89,37 @@ export default function BookPreviewModal({
         className="animate-fade-slide relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl bg-surface shadow-2xl ring-1 ring-line"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Tombol X tetap fixed di pojok kanan atas card */}
-        <button
-          type="button"
-          onClick={handleClose}
-          aria-label="Tutup preview buku"
-          className="absolute right-4 top-4 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-900/50 text-white shadow-sm backdrop-blur-md transition hover:bg-slate-900/70 focus:outline-none focus:ring-2 focus:ring-white/70"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        {/* Tombol Bookmark & X tetap fixed di pojok kanan atas card */}
+        <div className="absolute right-4 top-4 z-20 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleBookmark(book.slug);
+            }}
+            aria-label={
+              saved
+                ? `Hapus ${book.title} dari daftar tersimpan`
+                : `Simpan ${book.title} ke daftar favorit`
+            }
+            aria-pressed={saved}
+            className={`inline-flex h-9 w-9 items-center justify-center rounded-full shadow-sm backdrop-blur-md transition focus:outline-none focus:ring-2 focus:ring-white/70 ${
+              saved
+                ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                : "bg-slate-900/50 text-white hover:bg-slate-900/70"
+            }`}
+          >
+            <Bookmark className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
+          </button>
+          <button
+            type="button"
+            onClick={handleClose}
+            aria-label="Tutup preview buku"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-900/50 text-white shadow-sm backdrop-blur-md transition hover:bg-slate-900/70 focus:outline-none focus:ring-2 focus:ring-white/70"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto">
           {/* Header Preview: Buku beserta background gradasinya */}
