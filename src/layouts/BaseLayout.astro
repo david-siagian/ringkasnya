@@ -8,6 +8,7 @@ import {
 } from "@/components/SmoothNavigation";
 import { THEME_STORAGE_KEY } from "@/lib/theme";
 import AuthModal from "@/components/auth/AuthModal";
+import UsernameOnboardingModal from "@/components/auth/UsernameOnboardingModal";
 import { isGoogleOAuthConfigured } from "@/lib/auth";
 
 interface Props {
@@ -68,6 +69,7 @@ const googleEnabled = isGoogleOAuthConfigured(Astro.locals.runtime?.env);
     {!hideFooter && <Footer />}
     <slot name="overlay" />
     <AuthModal client:load googleEnabled={googleEnabled} />
+    <UsernameOnboardingModal client:load />
     <script>
       function initScrollReveal() {
         if (!document.documentElement.classList.contains("reveal-ready")) return;

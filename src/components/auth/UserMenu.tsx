@@ -1,6 +1,7 @@
 import { ArrowRight, LogIn } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { openAuthModal } from "@/lib/auth-modal";
+import { isPlaceholderEmail } from "@/lib/auth-helpers";
 
 interface UserMenuProps {
   variant?: "desktop" | "mobile";
@@ -80,7 +81,19 @@ export default function UserMenu({
           )}
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-bold text-ink">{user.name}</p>
-            <p className="truncate text-xs text-ink-subtle">{user.email}</p>
+            <p className="truncate text-xs text-ink-subtle">
+              {!isPlaceholderEmail(user.email)
+                ? user.email
+                : (user as { displayUsername?: string | null; username?: string | null })
+                      .displayUsername ||
+                    (user as { username?: string | null }).username
+                  ? `@${
+                      (user as { displayUsername?: string | null; username?: string | null })
+                        .displayUsername ||
+                      (user as { username?: string | null }).username
+                    }`
+                  : "Akun Ringkasnya"}
+            </p>
           </div>
           <ArrowRight className="h-3.5 w-3.5 shrink-0 text-ink-faint" />
         </a>

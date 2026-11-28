@@ -12,8 +12,14 @@
     "enabled": true
   },
   "vars": {
-    "BETTER_AUTH_URL": "https://dev-app.ringkasnya.workers.dev"
+    "BETTER_AUTH_URL": "https://dev-app.ringkasnya.workers.dev",
+    "EMAIL_FROM": "noreply@ringkasnya.id"
   },
+  "send_email": [
+    {
+      "name": "EMAIL"
+    }
+  ],
   "d1_databases": [
     {
       "binding": "DB",

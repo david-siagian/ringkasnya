@@ -15,13 +15,18 @@ export const users = sqliteTable(
     emailVerified: integer("email_verified", { mode: "boolean" })
       .notNull()
       .default(false),
+    username: text("username").unique(),
+    displayUsername: text("display_username"),
     image: text("image"),
     role: text("role").notNull().default("user"),
     plan: text("plan").notNull().default("free"),
     createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
     updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
   },
-  (table) => [uniqueIndex("idx_users_email").on(table.email)]
+  (table) => [
+    uniqueIndex("idx_users_email").on(table.email),
+    uniqueIndex("idx_users_username").on(table.username),
+  ]
 );
 
 export const sessions = sqliteTable(

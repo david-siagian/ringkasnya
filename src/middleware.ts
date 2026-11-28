@@ -22,10 +22,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
     });
 
     if (sessionData) {
+      const rawUser = sessionData.user as typeof sessionData.user & {
+        role?: string;
+        plan?: string;
+        username?: string | null;
+        displayUsername?: string | null;
+      };
       context.locals.user = {
-        ...sessionData.user,
-        role: (sessionData.user as { role?: string }).role ?? "user",
-        plan: (sessionData.user as { plan?: string }).plan ?? "free",
+        ...rawUser,
+        username: rawUser.username ?? null,
+        displayUsername: rawUser.displayUsername ?? null,
+        role: rawUser.role ?? "user",
+        plan: rawUser.plan ?? "free",
       };
       context.locals.session = sessionData.session;
     }

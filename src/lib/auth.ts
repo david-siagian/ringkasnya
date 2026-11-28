@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { username } from "better-auth/plugins";
 import { getDb, schema } from "@/lib/db";
 import { hashPassword, verifyPassword } from "@/lib/password";
 
@@ -125,6 +126,18 @@ export function createAuth(env: Env, requestUrl?: string) {
           },
         }
       : {}),
+    account: {
+      accountLinking: {
+        enabled: true,
+        trustedProviders: ["google"],
+      },
+    },
+    plugins: [
+      username({
+        minUsernameLength: 3,
+        maxUsernameLength: 24,
+      }),
+    ],
     user: {
       additionalFields: {
         role: {

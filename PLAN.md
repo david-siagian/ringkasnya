@@ -12,6 +12,7 @@ Dokumen ini menyimpan rencana pengembangan **Fase 3** untuk `ringkasnya.com`, me
 | **1. Cloudflare KV (`SESSION_KV`)** | **Selesai** | Production & Preview (`SESSION_KV_preview`) aktif sebagai `secondaryStorage` Better Auth |
 | **1B. Migrasi Konten Statis ke D1** | **Selesai** | 58 buku awal dimigrasikan ke D1; `src/data/books/` dibersihkan |
 | **2. Fase 3.1 — Auth Dasar & Akun** | **Selesai** | Better Auth + Drizzle ORM (`0004`), `/masuk`, `/daftar`, `/akun`, `UserMenu` |
+| **2. Fase 3.1B — Auth Username, Email Opsional & Cloudflare Email** | **In Progress** | Plugin `username`, OTP 6 digit via Cloudflare Email Sending (`send_email`), blokir daftar sebelum email terverifikasi, onboarding username Google OAuth |
 | **2. Fase 3.2 — Progres Baca & Bookmark** | **Selesai** | Sinkronisasi bookmark, status selesai, mode baca, & progres via `/api/progress` ke D1 dan `/akun` |
 | **2. Fase 3.3 — Payment & Keanggotaan** | **Pending** | Tabel `subscriptions` siap; payment gateway & webhook belum dibuat |
 | **2. Admin CMS (`/admin`)** | **Pending** | Dashboard & API admin (CRUD ringkasan, publish, hitung durasi) belum dibuat |
@@ -57,6 +58,16 @@ Seluruh **58 buku awal** telah dipindahkan dari file TypeScript statis (`src/dat
   - **Migrasi SQL**: `migrations/0004_create_auth_tables.sql` mencakup 6 tabel: `users`, `sessions`, `accounts`, `verifications`, `user_book_progress` (persiapan Fase 3.2), dan `subscriptions` (persiapan Fase 3.3).
   - **Keamanan Workers-Native**: Hashing kata sandi menggunakan Web Crypto API `PBKDF2-SHA256` (`src/lib/password.ts`), cookie sesi `HttpOnly`/`SameSite=Lax`, per-request factory `createAuth(env)` (`src/lib/auth.ts`), dan proteksi route `/akun` via Astro SSR middleware (`src/middleware.ts`).
   - **Halaman & UI**: `/masuk`, `/daftar`, `/akun` (`prerender = false`), endpoint `/api/auth/[...all]`, dan integrasi `UserMenu` di `Navbar.tsx` (desktop dropdown & mobile drawer) dengan dukungan Email/Password + Google OAuth opsional via `.dev.vars` / Cloudflare Secrets.
+- **Tahap 1B: Username, Email Opsional Terverifikasi (OTP 6 Digit) & Cloudflare Email Sending — In Progress**
+  - **Username & Onboarding Google OAuth**: Aktifkan plugin `username()` Better Auth (migrasi D1 `0026_add_username_to_users.sql` untuk `username` & `display_username` pada tabel `users`) agar user dapat mendaftar/login via `username + password`, serta menambahkan modal onboarding singkat *"Pilih Username"* bagi user yang pertama kali mendaftar lewat Google OAuth.
+  - **Email Opsional & Verifikasi OTP 6 Digit (Blokir Sebelum Terverifikasi)**:
+    - User dapat mendaftar tanpa email (menggunakan *placeholder email internal* tersembunyi `<id>@noemail.ringkasnya.internal` dengan `emailVerified: false`).
+    - Jika user mengisi email saat mendaftar, akun **belum dibuat** sampai kode **OTP 6 digit** (berlaku 10 menit, maks 5 percobaan, cooldown kirim ulang 60 detik) diverifikasi — mencegah *email squatting* dan *pre-account takeover*. Setelah OTP cocok, akun langsung dibuat dengan `emailVerified: true` dan otomatis login.
+    - User yang mendaftar tanpa email dapat menambahkan email nanti di `/akun` dengan alur verifikasi **OTP 6 digit** yang sama.
+  - **Cloudflare Email Sending (`send_email` Binding)**:
+    - Onboarding domain pengirim (`ringkasnya.id`) ke Cloudflare Email Sending (`npx wrangler email sending enable`) lengkap dengan verifikasi DNS (SPF/DKIM/DMARC).
+    - Menambahkan binding `"send_email": [{ "name": "EMAIL" }]` di `wrangler.jsonc` untuk mengirim email transaksional OTP (format `html` + `text`) langsung dari Cloudflare Workers.
+  - **UI Akun & Penanganan Error OAuth**: Menambahkan `accountLinking.trustedProviders: ["google"]`, banner/form **Tambah & Verifikasi Email (OTP)** serta tombol **Hubungkan Akun Google** (`linkSocial`) di `/akun` (`AccountDashboard.tsx`), plus penanganan parameter `?error=` pada `LoginForm` / `RegisterForm` agar error OAuth tampil dalam bahasa Indonesia yang ramah.
 - **Tahap 2: Sinkronisasi Progres Baca & Bookmark — Selesai**
   - Memanfaatkan tabel `user_book_progress` melalui `/api/progress`, `/api/progress/sync`, dan `/api/progress/[slug]` untuk menyimpan bookmark, status selesai, mode baca terakhir, dan progres poin inti lintas perangkat (dengan *merge* otomatis dari `localStorage` saat login dan ringkasan di `/akun`).
 - **Tahap 3: Admin CMS (`/admin`) — Pending**

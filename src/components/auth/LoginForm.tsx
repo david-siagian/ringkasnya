@@ -1,7 +1,8 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, ArrowRight } from "lucide-react";
+import { User, Lock, Eye, EyeOff, Loader2, AlertCircle, ArrowRight } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { completeAuthRedirect, getSafeRedirect } from "@/lib/auth-modal";
+import { getOAuthErrorMessage } from "@/lib/auth-helpers";
 
 interface LoginFormProps {
   googleEnabled: boolean;
@@ -40,12 +41,21 @@ export default function LoginForm({
   onSuccess,
 }: LoginFormProps) {
   const safeRedirect = getSafeRedirect(redirectTo);
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthError = params.get("error");
+    const friendly = getOAuthErrorMessage(oauthError);
+    if (friendly) {
+      setErrorMessage(friendly);
+    }
+  }, []);
 
   useEffect(() => {
     const resetLoading = () => {
@@ -82,24 +92,33 @@ export default function LoginForm({
     e.preventDefault();
     setErrorMessage(null);
 
-    const normalizedEmail = email.trim().toLowerCase();
-    if (!normalizedEmail || !password) {
-      setErrorMessage("Mohon isi email dan kata sandi Anda.");
+    const trimmed = identifier.trim();
+    if (!trimmed || !password) {
+      setErrorMessage("Mohon isi username atau email beserta kata sandi Anda.");
       return;
     }
 
     setIsLoading(true);
     try {
-      const result = await authClient.signIn.email({
-        email: normalizedEmail,
-        password,
-        callbackURL: safeRedirect,
-      });
+      const isEmail = trimmed.includes("@") && !trimmed.startsWith("@");
+      const result = isEmail
+        ? await authClient.signIn.email({
+            email: trimmed.toLowerCase(),
+            password,
+            callbackURL: safeRedirect,
+          })
+        : await authClient.signIn.username({
+            username: trimmed.replace(/^@+/, "").toLowerCase(),
+            password,
+            callbackURL: safeRedirect,
+          });
 
       if (result.error) {
+        const code = result.error.code;
         setErrorMessage(
-          result.error.code === "INVALID_EMAIL_OR_PASSWORD"
-            ? "Email atau kata sandi salah. Silakan periksa kembali."
+          code === "INVALID_EMAIL_OR_PASSWORD" ||
+            code === "INVALID_USERNAME_OR_PASSWORD"
+            ? "Username/email atau kata sandi salah. Silakan periksa kembali."
             : result.error.message || "Gagal masuk. Silakan coba lagi."
         );
         setIsLoading(false);
@@ -120,6 +139,7 @@ export default function LoginForm({
       const result = await authClient.signIn.social({
         provider: "google",
         callbackURL: safeRedirect,
+        errorCallbackURL: "/masuk",
       });
 
       if (result.error) {
@@ -168,7 +188,7 @@ export default function LoginForm({
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-surface px-3 font-medium text-ink-subtle">
-                atau dengan email
+                atau dengan akun
               </span>
             </div>
           </div>
@@ -178,22 +198,22 @@ export default function LoginForm({
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         <div>
           <label
-            htmlFor="login-email"
+            htmlFor="login-identifier"
             className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted"
           >
-            Email
+            Username atau Email
           </label>
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
+            <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
             <input
-              id="login-email"
-              name="email"
-              type="email"
-              autoComplete="email"
+              id="login-identifier"
+              name="username"
+              type="text"
+              autoComplete="username"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="nama@email.com"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              placeholder="username atau nama@email.com"
               className="w-full rounded-xl border border-line bg-page/70 py-2.5 pl-10 pr-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             />
           </div>

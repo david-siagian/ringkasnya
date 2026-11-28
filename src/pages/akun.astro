@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import AccountDashboard, {
   type AccountProgressBookItem,
 } from "@/components/auth/AccountDashboard";
+import { isGoogleOAuthConfigured } from "@/lib/auth";
 
 export const prerender = false;
 
@@ -15,6 +16,8 @@ const serializedUser = {
   id: user.id,
   name: user.name,
   email: user.email,
+  username: user.username ?? null,
+  displayUsername: user.displayUsername ?? null,
   image: user.image ?? null,
   role: user.role,
   plan: user.plan,
@@ -25,9 +28,22 @@ const serializedUser = {
       : String(user.createdAt),
 };
 
+const googleEnabled = isGoogleOAuthConfigured(Astro.locals.runtime?.env);
+let isGoogleLinked = false;
 let progressItems: AccountProgressBookItem[] = [];
 const db = Astro.locals.runtime?.env?.DB;
 if (db) {
+  try {
+    const googleAccount = await db
+      .prepare(
+        "SELECT id FROM accounts WHERE user_id = ? AND provider_id = 'google' LIMIT 1"
+      )
+      .bind(user.id)
+      .first<{ id: string }>();
+    isGoogleLinked = Boolean(googleAccount);
+  } catch (error) {
+    console.error("[/akun] Gagal memeriksa tautan Google:", error);
+  }
   try {
     const result = await db
       .prepare(
@@ -93,6 +109,8 @@ if (db) {
     <AccountDashboard
       client:load
       user={serializedUser}
+      googleEnabled={googleEnabled}
+      isGoogleLinked={isGoogleLinked}
       initialProgressItems={progressItems}
     />
   </main>

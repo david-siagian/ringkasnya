@@ -1,10 +1,25 @@
 /// <reference path="../.astro/types.d.ts" />
 
+interface EmailSendMessage {
+  from: string | { email: string; name?: string };
+  to: string | string[];
+  subject: string;
+  text?: string;
+  html?: string;
+  replyTo?: string | { email: string; name?: string };
+}
+
+interface SendEmailBinding {
+  send(message: EmailSendMessage): Promise<{ messageId?: string } | void>;
+}
+
 interface Env {
   BETTER_AUTH_SECRET?: string;
   BETTER_AUTH_URL?: string;
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_CLIENT_SECRET?: string;
+  EMAIL_FROM?: string;
+  EMAIL?: SendEmailBinding;
 }
 
 type Runtime = import("@astrojs/cloudflare").Runtime<Env>;
@@ -15,6 +30,8 @@ declare namespace App {
     name: string;
     email: string;
     emailVerified: boolean;
+    username?: string | null;
+    displayUsername?: string | null;
     image?: string | null;
     role: string;
     plan: string;

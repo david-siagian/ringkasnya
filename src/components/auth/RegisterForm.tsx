@@ -1,7 +1,25 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { User, Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, ArrowRight } from "lucide-react";
+import {
+  User,
+  AtSign,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Loader2,
+  AlertCircle,
+  ArrowRight,
+  ArrowLeft,
+  ShieldCheck,
+  RefreshCw,
+} from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { completeAuthRedirect, getSafeRedirect } from "@/lib/auth-modal";
+import {
+  getOAuthErrorMessage,
+  isValidEmailFormat,
+  validateUsername,
+} from "@/lib/auth-helpers";
 
 interface RegisterFormProps {
   googleEnabled: boolean;
@@ -40,14 +58,37 @@ export default function RegisterForm({
   onSuccess,
 }: RegisterFormProps) {
   const safeRedirect = getSafeRedirect(redirectTo);
+  const [step, setStep] = useState<"form" | "otp">("form");
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [cooldown, setCooldown] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthError = params.get("error");
+    const friendly = getOAuthErrorMessage(oauthError);
+    if (friendly) {
+      setErrorMessage(friendly);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = window.setInterval(() => {
+      setCooldown((prev) => (prev > 1 ? prev - 1 : 0));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [cooldown]);
 
   useEffect(() => {
     const resetLoading = () => {
@@ -80,20 +121,27 @@ export default function RegisterForm({
     return () => window.clearTimeout(timer);
   }, [isGoogleLoading]);
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrorMessage(null);
+    setInfoMessage(null);
 
     const trimmedName = name.trim();
     const normalizedEmail = email.trim().toLowerCase();
+    const usernameCheck = validateUsername(username);
 
     if (trimmedName.length < 2) {
       setErrorMessage("Nama lengkap minimal 2 karakter.");
       return;
     }
 
-    if (!normalizedEmail || !normalizedEmail.includes("@")) {
-      setErrorMessage("Mohon masukkan alamat email yang valid.");
+    if (!usernameCheck.valid) {
+      setErrorMessage(usernameCheck.error || "Format username tidak valid.");
+      return;
+    }
+
+    if (normalizedEmail && !isValidEmailFormat(normalizedEmail)) {
+      setErrorMessage("Mohon masukkan alamat email yang valid atau kosongkan kolom email.");
       return;
     }
 
@@ -109,19 +157,100 @@ export default function RegisterForm({
 
     setIsLoading(true);
     try {
-      const result = await authClient.signUp.email({
-        name: trimmedName,
-        email: normalizedEmail,
-        password,
-        callbackURL: safeRedirect,
+      // Alur 1: Daftar tanpa email (langsung buat akun dengan username)
+      if (!normalizedEmail) {
+        const response = await fetch("/api/account/register-username", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: trimmedName,
+            username: usernameCheck.display,
+            password,
+          }),
+        });
+
+        const data = (await response.json().catch(() => ({}))) as {
+          error?: string;
+        };
+
+        if (!response.ok) {
+          setErrorMessage(data.error || "Gagal mendaftar. Silakan coba lagi.");
+          setIsLoading(false);
+          return;
+        }
+
+        completeAuthRedirect(safeRedirect, onSuccess);
+        return;
+      }
+
+      // Alur 2: Daftar dengan email -> kirim OTP 6 digit dulu (blokir pembuatan akun sebelum terverifikasi)
+      const response = await fetch("/api/account/otp/request-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: trimmedName,
+          username: usernameCheck.display,
+          email: normalizedEmail,
+        }),
       });
 
-      if (result.error) {
-        setErrorMessage(
-          result.error.code === "USER_ALREADY_EXISTS"
-            ? "Email ini sudah terdaftar. Silakan masuk ke akun Anda."
-            : result.error.message || "Gagal mendaftar. Silakan coba lagi."
-        );
+      const data = (await response.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        cooldownSeconds?: number;
+        retryAfterSeconds?: number;
+      };
+
+      if (!response.ok || !data.ok) {
+        if (data.retryAfterSeconds) {
+          setCooldown(data.retryAfterSeconds);
+        }
+        setErrorMessage(data.error || "Gagal mengirim kode verifikasi.");
+        setIsLoading(false);
+        return;
+      }
+
+      setOtpCode("");
+      setCooldown(data.cooldownSeconds ?? 60);
+      setStep("otp");
+      setIsLoading(false);
+    } catch {
+      setErrorMessage("Terjadi kesalahan koneksi. Silakan coba beberapa saat lagi.");
+      setIsLoading(false);
+    }
+  }
+
+  async function handleOtpSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setErrorMessage(null);
+    setInfoMessage(null);
+
+    const cleanedCode = otpCode.replace(/\D/g, "");
+    if (cleanedCode.length !== 6) {
+      setErrorMessage("Masukkan 6 digit kode verifikasi yang dikirim ke email Anda.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/account/otp/verify-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          username: username.trim().replace(/^@+/, ""),
+          email: email.trim().toLowerCase(),
+          password,
+          code: cleanedCode,
+        }),
+      });
+
+      const data = (await response.json().catch(() => ({}))) as {
+        error?: string;
+      };
+
+      if (!response.ok) {
+        setErrorMessage(data.error || "Kode verifikasi tidak valid.");
         setIsLoading(false);
         return;
       }
@@ -133,6 +262,46 @@ export default function RegisterForm({
     }
   }
 
+  async function handleResendOtp() {
+    if (cooldown > 0 || isResending) return;
+    setErrorMessage(null);
+    setInfoMessage(null);
+    setIsResending(true);
+
+    try {
+      const response = await fetch("/api/account/otp/request-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          username: username.trim().replace(/^@+/, ""),
+          email: email.trim().toLowerCase(),
+        }),
+      });
+
+      const data = (await response.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        cooldownSeconds?: number;
+        retryAfterSeconds?: number;
+      };
+
+      if (!response.ok || !data.ok) {
+        if (data.retryAfterSeconds) {
+          setCooldown(data.retryAfterSeconds);
+        }
+        setErrorMessage(data.error || "Gagal mengirim ulang kode.");
+      } else {
+        setCooldown(data.cooldownSeconds ?? 60);
+        setInfoMessage("Kode verifikasi baru telah dikirim ke email Anda.");
+      }
+    } catch {
+      setErrorMessage("Terjadi kesalahan koneksi. Silakan coba lagi.");
+    } finally {
+      setIsResending(false);
+    }
+  }
+
   async function handleGoogleSignUp() {
     setErrorMessage(null);
     setIsGoogleLoading(true);
@@ -140,6 +309,7 @@ export default function RegisterForm({
       const result = await authClient.signIn.social({
         provider: "google",
         callbackURL: safeRedirect,
+        errorCallbackURL: "/daftar",
       });
 
       if (result.error) {
@@ -152,6 +322,111 @@ export default function RegisterForm({
       setErrorMessage("Gagal menghubungkan ke Google. Silakan coba lagi.");
       setIsGoogleLoading(false);
     }
+  }
+
+  if (step === "otp") {
+    return (
+      <div className="space-y-5">
+        <div className="rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/70 dark:bg-emerald-950/40 p-4 text-sm text-emerald-900 dark:text-emerald-200">
+          <div className="flex items-start gap-2.5">
+            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <div>
+              <p className="font-semibold">Verifikasi Email Anda</p>
+              <p className="mt-1 text-xs leading-relaxed text-emerald-800/90 dark:text-emerald-300/90">
+                Kami telah mengirim kode OTP 6 digit ke{" "}
+                <strong className="font-bold">{email.trim().toLowerCase()}</strong>.
+                Masukkan kode tersebut untuk menyelesaikan pendaftaran.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {errorMessage && (
+          <div
+            role="alert"
+            className="flex items-start gap-2.5 rounded-xl border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/50 px-3.5 py-3 text-sm text-red-700 dark:text-red-300"
+          >
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {infoMessage && (
+          <div className="rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50 dark:bg-emerald-950/40 px-3.5 py-2.5 text-xs font-medium text-emerald-700 dark:text-emerald-300">
+            {infoMessage}
+          </div>
+        )}
+
+        <form onSubmit={handleOtpSubmit} className="space-y-4" noValidate>
+          <div>
+            <label
+              htmlFor="register-otp"
+              className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted"
+            >
+              Kode Verifikasi (6 Digit)
+            </label>
+            <input
+              id="register-otp"
+              name="otp"
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              autoFocus
+              maxLength={6}
+              value={otpCode}
+              onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              placeholder="000000"
+              className="w-full rounded-xl border border-line bg-page/70 py-3 px-4 text-center font-mono text-2xl font-bold tracking-[0.45em] text-ink placeholder:text-ink-subtle/50 transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading || otpCode.length !== 6}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Memverifikasi...</span>
+              </>
+            ) : (
+              <>
+                <span>Verifikasi &amp; Buat Akun</span>
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="flex items-center justify-between text-xs">
+          <button
+            type="button"
+            onClick={() => {
+              setStep("form");
+              setErrorMessage(null);
+              setInfoMessage(null);
+            }}
+            className="inline-flex items-center gap-1 font-semibold text-ink-muted hover:text-ink"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Ubah data</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleResendOtp}
+            disabled={cooldown > 0 || isResending}
+            className="inline-flex items-center gap-1 font-semibold text-accent-text hover:underline disabled:cursor-not-allowed disabled:text-ink-subtle disabled:no-underline"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${isResending ? "animate-spin" : ""}`} />
+            <span>
+              {cooldown > 0 ? `Kirim ulang (${cooldown}d)` : "Kirim ulang kode"}
+            </span>
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -188,14 +463,14 @@ export default function RegisterForm({
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-surface px-3 font-medium text-ink-subtle">
-                atau dengan email
+                atau dengan username
               </span>
             </div>
           </div>
         </>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+      <form onSubmit={handleFormSubmit} className="space-y-3.5" noValidate>
         <div>
           <label
             htmlFor="register-name"
@@ -221,11 +496,39 @@ export default function RegisterForm({
 
         <div>
           <label
-            htmlFor="register-email"
+            htmlFor="register-username"
             className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted"
           >
-            Email
+            Username
           </label>
+          <div className="relative">
+            <AtSign className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
+            <input
+              id="register-username"
+              name="username"
+              type="text"
+              autoComplete="username"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="contoh: budi_santoso"
+              className="w-full rounded-xl border border-line bg-page/70 py-2.5 pl-10 pr-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-1.5 flex items-center justify-between">
+            <label
+              htmlFor="register-email"
+              className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
+            >
+              Email
+            </label>
+            <span className="text-[11px] font-medium text-ink-subtle">
+              Opsional
+            </span>
+          </div>
           <div className="relative">
             <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" />
             <input
@@ -233,13 +536,15 @@ export default function RegisterForm({
               name="email"
               type="email"
               autoComplete="email"
-              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="nama@email.com"
+              placeholder="nama@email.com (opsional)"
               className="w-full rounded-xl border border-line bg-page/70 py-2.5 pl-10 pr-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-emerald-500 focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             />
           </div>
+          <p className="mt-1 text-[11px] leading-relaxed text-ink-subtle">
+            Jika diisi, kami akan mengirim kode OTP 6 digit untuk verifikasi sebelum akun dibuat.
+          </p>
         </div>
 
         <div>
@@ -306,11 +611,11 @@ export default function RegisterForm({
           {isLoading ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Membuat akun...</span>
+              <span>{email.trim() ? "Mengirim kode OTP..." : "Membuat akun..."}</span>
             </>
           ) : (
             <>
-              <span>Buat Akun Gratis</span>
+              <span>{email.trim() ? "Lanjut & Verifikasi Email" : "Buat Akun Gratis"}</span>
               <ArrowRight className="h-4 w-4" />
             </>
           )}
