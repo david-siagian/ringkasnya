@@ -1,6 +1,11 @@
-import { useMemo, useState } from "react";
-import { ArrowRight, Calendar, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowRight, Calendar, Dices, Shuffle, Sparkles, X } from "lucide-react";
 import { CATEGORIES } from "@/lib/book-constants";
+import {
+  createRandomSeed,
+  pickRandomItem,
+  shuffleWithSeed,
+} from "@/lib/shuffle";
 import type { BookCategory } from "@/types/book";
 import {
   ARTICLE_FORMATS,
@@ -16,27 +21,45 @@ interface ArticleFeedProps {
 
 type FormatFilterValue = "semua" | ArticleFormat;
 type CategoryFilterValue = "Semua" | BookCategory;
+const ARTICLE_SHUFFLE_SEED_KEY = "ringkasnya:article-shuffle-seed";
 
 export default function ArticleFeed({ items }: ArticleFeedProps) {
   const [selectedFormat, setSelectedFormat] =
     useState<FormatFilterValue>("semua");
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryFilterValue>("Semua");
+  const [shuffleSeed, setShuffleSeed] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const savedSeed = window.sessionStorage.getItem(ARTICLE_SHUFFLE_SEED_KEY);
+      if (savedSeed) {
+        setShuffleSeed(savedSeed);
+      }
+    } catch {
+      // Abaikan jika sessionStorage tidak tersedia
+    }
+  }, []);
+
+  const orderedItems = useMemo(
+    () => (shuffleSeed ? shuffleWithSeed(items, shuffleSeed) : items),
+    [items, shuffleSeed]
+  );
 
   const itemsMatchingCategory = useMemo(
     () =>
       selectedCategory === "Semua"
-        ? items
-        : items.filter((item) => item.category === selectedCategory),
-    [items, selectedCategory]
+        ? orderedItems
+        : orderedItems.filter((item) => item.category === selectedCategory),
+    [orderedItems, selectedCategory]
   );
 
   const itemsMatchingFormat = useMemo(
     () =>
       selectedFormat === "semua"
-        ? items
-        : items.filter((item) => item.format === selectedFormat),
-    [items, selectedFormat]
+        ? orderedItems
+        : orderedItems.filter((item) => item.format === selectedFormat),
+    [orderedItems, selectedFormat]
   );
 
   const filteredItems = useMemo(
@@ -103,6 +126,33 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
     setSelectedCategory("Semua");
   };
 
+  const handleShuffleArticles = () => {
+    const nextSeed = createRandomSeed();
+    setShuffleSeed(nextSeed);
+    try {
+      window.sessionStorage.setItem(ARTICLE_SHUFFLE_SEED_KEY, nextSeed);
+    } catch {
+      // Abaikan jika sessionStorage tidak tersedia
+    }
+  };
+
+  const handleResetShuffle = () => {
+    setShuffleSeed(null);
+    try {
+      window.sessionStorage.removeItem(ARTICLE_SHUFFLE_SEED_KEY);
+    } catch {
+      // Abaikan jika sessionStorage tidak tersedia
+    }
+  };
+
+  const handleOpenRandomArticle = () => {
+    const pool = filteredItems.length > 0 ? filteredItems : items;
+    const picked = pickRandomItem(pool);
+    if (picked) {
+      window.location.assign(`/artikel/${picked.slug}`);
+    }
+  };
+
   const pillBaseClass =
     "inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40";
   const pillActiveClass =
@@ -114,14 +164,56 @@ export default function ArticleFeed({ items }: ArticleFeedProps) {
     <div className="mt-6">
       {/* Filter Kategori & Rubrik */}
       <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <CategoryDropdown
-            options={categoryOptions}
-            selectedValue={selectedCategory}
-            onSelect={setSelectedCategory}
-            listboxAriaLabel="Daftar kategori artikel"
-            className="min-w-0 flex-1 sm:w-[260px] sm:flex-initial"
-          />
+        <div className="flex flex-wrap items-center justify-between gap-2.5">
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+            <CategoryDropdown
+              options={categoryOptions}
+              selectedValue={selectedCategory}
+              onSelect={setSelectedCategory}
+              listboxAriaLabel="Daftar kategori artikel"
+              className="min-w-0 flex-1 sm:w-[260px] sm:flex-initial"
+            />
+
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleShuffleArticles}
+                aria-pressed={Boolean(shuffleSeed)}
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
+                  shuffleSeed
+                    ? "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
+                    : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
+                }`}
+              >
+                <Shuffle className="h-3.5 w-3.5" />
+                <span>{shuffleSeed ? "Acak Lagi" : "Acak Urutan"}</span>
+              </button>
+
+              {shuffleSeed && (
+                <button
+                  type="button"
+                  onClick={handleResetShuffle}
+                  title="Kembalikan urutan awal"
+                  aria-label="Kembalikan urutan awal"
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition-colors hover:border-line-strong hover:bg-page hover:text-ink sm:h-10 sm:w-10"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            {items.length > 0 && (
+              <button
+                type="button"
+                onClick={handleOpenRandomArticle}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white"
+              >
+                <Dices className="h-3.5 w-3.5" />
+                <span>Baca Acak</span>
+              </button>
+            )}
+          </div>
+
           <p className="shrink-0 text-right text-xs text-ink-subtle">
             {filteredItems.length} artikel
           </p>

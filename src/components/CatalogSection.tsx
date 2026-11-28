@@ -16,11 +16,18 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
+  Dices,
   Layers,
   Search,
+  Shuffle,
   X,
   Zap,
 } from "lucide-react";
+import {
+  createRandomSeed,
+  pickRandomItem,
+  shuffleWithSeed,
+} from "@/lib/shuffle";
 
 interface CatalogSectionProps {
   books: BookCatalogItem[];
@@ -31,6 +38,7 @@ interface CatalogSectionProps {
 const MAX_PREVIEW_OTHER_BOOKS = 6;
 const DEFAULT_PREVIEW_COLS = 5;
 const DEFAULT_ITEMS_PER_PAGE = 20;
+const CATALOG_SHUFFLE_SEED_KEY = "ringkasnya:catalog-shuffle-seed";
 
 function getPageNumbers(currentPage: number, totalPages: number): (number | "ellipsis")[] {
   if (totalPages <= 7) {
@@ -62,6 +70,7 @@ export default function CatalogSection({
   >("Semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [shuffleSeed, setShuffleSeed] = useState<string | null>(null);
   const [previewBook, setPreviewBook] = useState<BookCatalogItem | null>(null);
   const [previewCols, setPreviewCols] = useState(DEFAULT_PREVIEW_COLS);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -97,6 +106,15 @@ export default function CatalogSection({
     if (Number.isInteger(pageParam) && pageParam > 1) {
       setCurrentPage(pageParam);
     }
+
+    try {
+      const savedSeed = window.sessionStorage.getItem(CATALOG_SHUFFLE_SEED_KEY);
+      if (savedSeed) {
+        setShuffleSeed(savedSeed);
+      }
+    } catch {
+      // Abaikan jika sessionStorage tidak tersedia
+    }
   }, [isFull]);
 
   const categoryOptions = useMemo<CategoryOption[]>(() => {
@@ -114,8 +132,13 @@ export default function CatalogSection({
     ];
   }, [books]);
 
+  const orderedBooks = useMemo(() => {
+    if (!isFull || !shuffleSeed) return books;
+    return shuffleWithSeed(books, shuffleSeed);
+  }, [books, isFull, shuffleSeed]);
+
   const filteredBooks = useMemo(() => {
-    return books.filter((book) => {
+    return orderedBooks.filter((book) => {
       const matchesCategory =
         selectedCategory === "Semua" ||
         (selectedCategory === "Tersimpan"
@@ -131,7 +154,7 @@ export default function CatalogSection({
 
       return matchesCategory && matchesQuery;
     });
-  }, [books, selectedCategory, searchQuery, isBookmarked]);
+  }, [orderedBooks, selectedCategory, searchQuery, isBookmarked]);
 
   const hasPreviewOtherBooks = !isFull && filteredBooks.length > 1;
 
@@ -219,6 +242,40 @@ export default function CatalogSection({
     setCurrentPage(nextPage);
     syncCatalogUrl(nextPage);
     smoothScrollToElement("katalog", 500);
+  };
+
+  const handleShuffleBooks = () => {
+    const nextSeed = createRandomSeed();
+    setShuffleSeed(nextSeed);
+    setCurrentPage(1);
+    syncCatalogUrl(1);
+    try {
+      window.sessionStorage.setItem(CATALOG_SHUFFLE_SEED_KEY, nextSeed);
+    } catch {
+      // Abaikan jika sessionStorage tidak tersedia
+    }
+  };
+
+  const handleResetShuffle = () => {
+    setShuffleSeed(null);
+    setCurrentPage(1);
+    syncCatalogUrl(1);
+    try {
+      window.sessionStorage.removeItem(CATALOG_SHUFFLE_SEED_KEY);
+    } catch {
+      // Abaikan jika sessionStorage tidak tersedia
+    }
+  };
+
+  const handleOpenRandomBook = () => {
+    const pool = filteredBooks.length > 0 ? filteredBooks : books;
+    const picked = pickRandomItem(
+      pool,
+      previewBook ? (book) => book.slug === previewBook.slug : undefined
+    );
+    if (picked) {
+      setPreviewBook(picked);
+    }
   };
 
   const startItem = filteredBooks.length === 0 ? 0 : (safePage - 1) * itemsPerPage + 1;
@@ -320,6 +377,45 @@ export default function CatalogSection({
             />
             Tersimpan ({bookmarkedCount})
           </button>
+
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handleShuffleBooks}
+              aria-pressed={Boolean(shuffleSeed)}
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
+                shuffleSeed
+                  ? "bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
+                  : "border border-line bg-surface text-ink-muted hover:border-line-strong hover:bg-page"
+              }`}
+            >
+              <Shuffle className="h-3.5 w-3.5" />
+              <span>{shuffleSeed ? "Acak Lagi" : "Acak Urutan"}</span>
+            </button>
+
+            {shuffleSeed && (
+              <button
+                type="button"
+                onClick={handleResetShuffle}
+                title="Kembalikan urutan awal"
+                aria-label="Kembalikan urutan awal"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-ink-muted transition-colors hover:border-line-strong hover:bg-page hover:text-ink sm:h-10 sm:w-10"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          {books.length > 0 && (
+            <button
+              type="button"
+              onClick={handleOpenRandomBook}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-accent-line bg-accent-soft px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-accent-text transition-colors hover:border-accent-strong hover:bg-accent-strong hover:text-white"
+            >
+              <Dices className="h-3.5 w-3.5" />
+              <span>Baca Acak</span>
+            </button>
+          )}
         </div>
       )}
 
@@ -327,7 +423,7 @@ export default function CatalogSection({
       {displayedBooks.length > 0 ? (
         isFull ? (
           <div
-            key={`${selectedCategory}-${searchQuery}-${safePage}`}
+            key={`${selectedCategory}-${searchQuery}-${safePage}-${shuffleSeed ?? "default"}`}
             className="animate-fade-slide mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
           >
             {displayedBooks.map((book) => (
