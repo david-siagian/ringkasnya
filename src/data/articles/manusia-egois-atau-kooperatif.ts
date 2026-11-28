@@ -14,7 +14,6 @@ export const manusiaEgoisAtauKooperatif: Article = {
     "Homo Puppy",
   ],
   format: "lintas-buku",
-  category: "Sains & Alam Semesta",
   readingTimeMinutes: 5,
   shortDefinition:
     "Mekanisme evolusi ketika individu membantu pihak lain yang bukan kerabat genetiknya dengan harapan bantuan serupa akan dibalas di kemudian hari, membentuk fondasi kerja sama dan kepercayaan sosial manusia.",

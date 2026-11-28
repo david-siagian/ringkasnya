@@ -8,7 +8,6 @@ export const efekJangkar: Article = {
   term: "Efek Jangkar",
   aliases: ["Efek Jangkar", "Anchoring Effect", "Anchoring"],
   format: "bedah-istilah",
-  category: "Psikologi & Perilaku",
   readingTimeMinutes: 5,
   shortDefinition:
     "Bias kognitif ketika manusia terlalu bergantung pada informasi atau angka pertama yang ia dengar (sang 'jangkar') sebagai patokan saat memperkirakan nilai, bernegosiasi, atau mengambil keputusan—meski angka awal itu acak atau tidak relevan.",

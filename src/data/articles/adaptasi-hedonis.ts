@@ -8,7 +8,6 @@ export const adaptasiHedonis: Article = {
   term: "Adaptasi Hedonis",
   aliases: ["Adaptasi Hedonis", "Hedonic Treadmill", "Hedonic Adaptation"],
   format: "bedah-istilah",
-  category: "Filsafat & Kebijaksanaan",
   readingTimeMinutes: 5,
   shortDefinition:
     "Kecenderungan manusia untuk cepat kembali ke tingkat kebahagiaan dasarnya setelah mengalami peristiwa positif maupun negatif yang besar—seperti berlari di atas treadmill yang membuat kita terus mengejar hal baru namun tetap berada di tempat yang sama.",

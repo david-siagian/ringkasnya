@@ -1,5 +1,3 @@
-import type { BookCategory } from "@/types/book";
-
 export type ArticleFormat =
   | "bedah-istilah"
   | "lintas-buku"
@@ -46,7 +44,6 @@ export interface ArticleFeedItem {
   title: string;
   subtitle: string;
   format: ArticleFormat;
-  category: BookCategory;
   publishedAt: string;
   coverImage?: string;
   coverGradient: string;
@@ -100,7 +97,6 @@ export interface Article {
   /** Frasa/alias yang otomatis di-highlight di ringkasan buku (case-insensitive, word-boundary). */
   aliases: string[];
   format: ArticleFormat;
-  category: BookCategory;
   readingTimeMinutes: number;
   /** Ringkasan 2-3 kalimat untuk pratinjau cepat (Opsi A popover/drawer) di halaman reader buku. */
   shortDefinition: string;
@@ -120,7 +116,6 @@ export interface ArticleTermEntry {
   slug: string;
   term: string;
   aliases: string[];
-  category: BookCategory;
   readingTimeMinutes: number;
   shortDefinition: string;
   originLabel: string;

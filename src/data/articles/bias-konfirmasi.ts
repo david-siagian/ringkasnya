@@ -8,7 +8,6 @@ export const biasKonfirmasi: Article = {
   term: "Bias Konfirmasi",
   aliases: ["Bias Konfirmasi", "Confirmation Bias"],
   format: "bedah-istilah",
-  category: "Nalar & Berpikir Kritis",
   readingTimeMinutes: 5,
   shortDefinition:
     "Kecenderungan alami otak manusia untuk mencari, menafsirkan, dan mengingat informasi yang mendukung keyakinan yang sudah ada, sambil mengabaikan atau meremehkan bukti yang bertentangan dengannya.",

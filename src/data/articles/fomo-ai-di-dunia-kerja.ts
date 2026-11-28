@@ -13,7 +13,6 @@ export const fomoAiDiDuniaKerja: Article = {
     "Co-Intelligence",
   ],
   format: "sains-aktual",
-  category: "Teknologi & Masa Depan",
   readingTimeMinutes: 5,
   shortDefinition:
     "Batas kemampuan kecerdasan buatan yang tidak rata: AI tampak sangat cerdas pada tugas rumit tertentu, namun mendadak keliru pada persoalan yang terlihat sepele bagi manusia sehingga menuntut pengujian dan pengawasan kritis.",

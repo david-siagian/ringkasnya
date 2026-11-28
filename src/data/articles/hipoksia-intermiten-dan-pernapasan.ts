@@ -14,7 +14,6 @@ export const hipoksiaIntermitenDanPernapasan: Article = {
     "Toleransi Karbon Dioksida",
   ],
   format: "kisah-eksperimen",
-  category: "Tubuh & Kesehatan",
   readingTimeMinutes: 5,
   shortDefinition:
     "Paparan penurunan kadar oksigen secara singkat, terkontrol, dan berselang melalui latihan napas yang melatih toleransi karbon dioksida serta efisiensi pengantaran oksigen ke jaringan tubuh.",

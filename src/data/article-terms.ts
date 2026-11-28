@@ -9,7 +9,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
     slug: "prinsip-anna-karenina",
     term: "Prinsip Anna Karenina",
     aliases: ["Prinsip Anna Karenina", "Anna Karenina principle"],
-    category: "Sejarah & Peradaban",
     readingTimeMinutes: 5,
     shortDefinition:
       "Prinsip yang menyatakan bahwa keberhasilan suatu upaya kompleks menuntut seluruh faktor kunci berjalan serentak, sedangkan kekurangan pada satu faktor saja sudah cukup menggagalkan semuanya. Dipopulerkan Jared Diamond dari kalimat pembuka novel Anna Karenina karya Leo Tolstoy.",
@@ -19,7 +18,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
     slug: "efek-dunning-kruger",
     term: "Efek Dunning-Kruger",
     aliases: ["Efek Dunning-Kruger", "Dunning-Kruger", "Dunning-Kruger effect"],
-    category: "Nalar & Berpikir Kritis",
     readingTimeMinutes: 5,
     shortDefinition:
       "Bias kognitif ketika seseorang dengan kemampuan atau pengetahuan rendah pada suatu bidang justru melebih-lebihkan kemampuannya sendiri, karena ia belum memiliki cukup ilmu untuk menyadari batas ketidaktahuannya.",
@@ -29,7 +27,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
     slug: "destruksi-kreatif",
     term: "Destruksi Kreatif",
     aliases: ["Destruksi Kreatif", "Creative Destruction"],
-    category: "Sejarah & Peradaban",
     readingTimeMinutes: 4,
     shortDefinition:
       "Proses pembaruan ekonomi ketika inovasi teknologi atau model bisnis baru menggantikan cara lama yang sudah mapan, sekaligus menciptakan peluang pertumbuhan baru dan menggeser pemain lama yang enggan beradaptasi.",
@@ -39,7 +36,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
     slug: "bias-konfirmasi",
     term: "Bias Konfirmasi",
     aliases: ["Bias Konfirmasi", "Confirmation Bias"],
-    category: "Nalar & Berpikir Kritis",
     readingTimeMinutes: 4,
     shortDefinition:
       "Kecenderungan alami otak manusia untuk mencari, menafsirkan, dan mengingat informasi yang mendukung keyakinan yang sudah ada, sambil mengabaikan atau meremehkan bukti yang bertentangan dengannya.",
@@ -49,7 +45,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
     slug: "efek-jangkar",
     term: "Efek Jangkar",
     aliases: ["Efek Jangkar", "Anchoring Effect", "Anchoring"],
-    category: "Psikologi & Perilaku",
     readingTimeMinutes: 4,
     shortDefinition:
       "Bias kognitif ketika manusia terlalu bergantung pada informasi atau angka pertama yang ia dengar (sang 'jangkar') sebagai patokan saat memperkirakan nilai, bernegosiasi, atau mengambil keputusan—meski angka awal itu acak atau tidak relevan.",
@@ -59,7 +54,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
     slug: "adaptasi-hedonis",
     term: "Adaptasi Hedonis",
     aliases: ["Adaptasi Hedonis", "Hedonic Treadmill", "Hedonic Adaptation"],
-    category: "Filsafat & Kebijaksanaan",
     readingTimeMinutes: 4,
     shortDefinition:
       "Kecenderungan manusia untuk cepat kembali ke tingkat kebahagiaan dasarnya setelah mengalami peristiwa positif maupun negatif yang besar—seperti berlari di atas treadmill yang membuat kita terus mengejar hal baru namun tetap berada di tempat yang sama.",
@@ -74,7 +68,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
       "Kebutaan Tanpa Atensi",
       "Eksperimen Gorila",
     ],
-    category: "Nalar & Berpikir Kritis",
     readingTimeMinutes: 5,
     shortDefinition:
       "Fenomena psikologi kognitif ketika seseorang gagal menyadari stimulus visual yang sangat jelas dan tak terduga tepat di hadapannya, semata-mata karena kapasitas perhatiannya sedang tersedot penuh pada tugas mental lain.",
@@ -89,7 +82,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
       "Perbatasan Bergerigi AI",
       "Co-Intelligence",
     ],
-    category: "Teknologi & Masa Depan",
     readingTimeMinutes: 5,
     shortDefinition:
       "Batas kemampuan kecerdasan buatan yang tidak rata: AI tampak sangat cerdas pada tugas rumit tertentu, namun mendadak keliru pada persoalan yang terlihat sepele bagi manusia sehingga menuntut pengujian dan pengawasan kritis.",
@@ -105,7 +97,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
       "Selfish Gene",
       "Homo Puppy",
     ],
-    category: "Sains & Alam Semesta",
     readingTimeMinutes: 5,
     shortDefinition:
       "Mekanisme evolusi ketika individu membantu pihak lain yang bukan kerabat genetiknya dengan harapan bantuan serupa akan dibalas di kemudian hari, membentuk fondasi kerja sama dan kepercayaan sosial manusia.",
@@ -122,7 +113,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
       "Mouth Breathing",
       "Toleransi Karbon Dioksida",
     ],
-    category: "Tubuh & Kesehatan",
     readingTimeMinutes: 5,
     shortDefinition:
       "Paparan penurunan kadar oksigen secara singkat, terkontrol, dan berselang melalui latihan napas yang melatih toleransi karbon dioksida serta efisiensi pengantaran oksigen ke jaringan tubuh.",
@@ -136,7 +126,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
       "Minimum Viable Product",
       "Validated Learning",
     ],
-    category: "Organisasi & Bisnis",
     readingTimeMinutes: 4,
     shortDefinition:
       "Versi paling sederhana dari suatu produk yang tetap berfungsi utuh untuk menguji hipotesis bisnis terpenting di pasar nyata dengan biaya dan waktu seminimal mungkin.",
@@ -146,7 +135,6 @@ export const ARTICLE_TERMS: readonly ArticleTermEntry[] = [
     slug: "residu-atensi",
     term: "Residu Atensi",
     aliases: ["Residu Atensi", "Attention Residue", "Task Switching"],
-    category: "Produktivitas & Pengembangan Diri",
     readingTimeMinutes: 4,
     shortDefinition:
       "Sisa perhatian kognitif yang tetap melekat pada tugas sebelumnya setelah seseorang berpindah ke tugas baru, sehingga menurunkan ketajaman fokus dan kualitas berpikir pada pekerjaan berikutnya.",

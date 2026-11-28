@@ -8,7 +8,6 @@ export const prinsipAnnaKarenina: Article = {
   term: "Prinsip Anna Karenina",
   aliases: ["Prinsip Anna Karenina", "Anna Karenina principle"],
   format: "bedah-istilah",
-  category: "Sejarah & Peradaban",
   readingTimeMinutes: 5,
   shortDefinition:
     "Prinsip yang menyatakan bahwa keberhasilan suatu upaya kompleks menuntut seluruh faktor kunci berjalan serentak, sedangkan kekurangan pada satu faktor saja sudah cukup menggagalkan semuanya. Dipopulerkan Jared Diamond dari kalimat pembuka novel Anna Karenina karya Leo Tolstoy.",

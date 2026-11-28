@@ -37,7 +37,7 @@ Durasi baca artikel dihitung otomatis melalui `withCalculatedReadingTime` di `sr
 
 | Komponen (`Article`) | Jumlah / Format | Rentang Kata | Pedoman Penulisan |
 |---|---|---|---|
-| **`title`** | 1 judul | **3–8 kata** | Ringkas, tajam, mudah dipindai pada kartu feed maupun beranda. Khusus rubrik `bedah-istilah`, wajib memakai pola **`Istilah Utama: Hook Singkat`** (mis. `Residu Atensi: Harga Mahal Multitasking`) agar konsisten dan memberi konteks tanpa mengulang `subtitle`. |
+| **`title`** | 1 judul | **3–8 kata** | Ringkas, tajam, mudah dipindai pada kartu feed maupun beranda. Khusus rubrik `bedah-istilah` (serta `kisah-eksperimen` yang bertumpu pada satu nama eksperimen), gunakan pola **`Istilah/Eksperimen: Hook Singkat`** (mis. `Residu Atensi: Harga Mahal Multitasking`, `Invisible Gorilla: Batas Tersembunyi Fokus Manusia`) agar konsisten dan memberi konteks tanpa mengulang `subtitle`. |
 | **`subtitle`** | 1 kalimat | **10–20 kata** | Menjelaskan sudut pandang menarik atau paradoks utama artikel tanpa mengulang judul. |
 | **`leadParagraph`** | 1 paragraf pembuka | **65–110 kata** | Pengait cerita, skenario keseharian, atau pertanyaan tajam yang langsung menarik pembaca masuk. |
 | **`sections`** | **3–5 subbagian** (ideal **4**) | — | Tiap subbagian memiliki `heading` ringkas (**4–10 kata**) yang menggambarkan alur logis cerita. |
@@ -67,7 +67,6 @@ Artikel di Ringkasnya terhubung langsung ke pembaca buku melalui fitur *auto-hig
 ## 5. Keterkaitan Katalog Buku & Standar Visual
 
 - **`slug`:** Huruf kecil `kebab-case` yang ringkas (mis. `eksperimen-invisible-gorilla`).
-- **`category`:** Wajib memilih salah satu dari 10 kategori resmi `BookCategory` (`src/lib/book-constants.ts`).
 - **`publishedAt`:** Format tanggal ISO `YYYY-MM-DD` (mis. `2026-11-24`), diformat otomatis menjadi `24 Nov 2026` di UI.
 - **`relatedBookSlugs`:** Wajib mencantumkan **2–4 `slug` buku** yang benar-benar tersedia di katalog Ringkasnya ([`BOOKS_LIST.md`](./BOOKS_LIST.md)) dan relevan dengan isi artikel.
 - **`coverGradient`:** Gradien Tailwind bernuansa gelap (`800`–`950`, mis. `from-slate-950 via-amber-950 to-slate-900`) yang serasi dengan palet ilustrasi SVG agar teks putih di header selalu kontras.
@@ -84,7 +83,7 @@ Setiap penambahan artikel baru wajib menyelesaikan langkah berikut:
 
 1. **Buat File Artikel:** Simpan di `src/data/articles/<slug>.ts` mengikuti tipe `Article`.
 2. **Daftarkan ke Indeks Artikel:** Impor dan tambahkan ke array `RAW_ARTICLES` di `src/data/articles.ts`.
-3. **Daftarkan ke Registri Istilah Ringan:** Tambahkan entri `ArticleTermEntry` yang selaras (`slug`, `term`, `aliases`, `category`, `readingTimeMinutes`, `shortDefinition`, `originLabel`) ke `src/data/article-terms.ts` agar `BookReader` tetap ringan tanpa membundel isi penuh artikel.
+3. **Daftarkan ke Registri Istilah Ringan:** Tambahkan entri `ArticleTermEntry` yang selaras (`slug`, `term`, `aliases`, `readingTimeMinutes`, `shortDefinition`, `originLabel`) ke `src/data/article-terms.ts` agar `BookReader` tetap ringan tanpa membundel isi penuh artikel.
 4. **Buat Ilustrasi SVG:** Simpan di `public/images/articles/<slug>.svg` (`viewBox="0 0 240 240"`).
 5. **Verifikasi Akhir:**
    - Total kata berada di kisaran **750–1.250 kata** (**4–6 menit**).

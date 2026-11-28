@@ -8,7 +8,6 @@ export const efekDunningKruger: Article = {
   term: "Efek Dunning-Kruger",
   aliases: ["Efek Dunning-Kruger", "Dunning-Kruger", "Dunning-Kruger effect"],
   format: "bedah-istilah",
-  category: "Nalar & Berpikir Kritis",
   readingTimeMinutes: 5,
   shortDefinition:
     "Bias kognitif ketika seseorang dengan kemampuan atau pengetahuan rendah pada suatu bidang justru melebih-lebihkan kemampuannya sendiri, karena ia belum memiliki cukup ilmu untuk menyadari batas ketidaktahuannya.",

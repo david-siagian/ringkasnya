@@ -8,7 +8,6 @@ export const residuAtensi: Article = {
   term: "Residu Atensi",
   aliases: ["Residu Atensi", "Attention Residue", "Task Switching"],
   format: "bedah-istilah",
-  category: "Produktivitas & Pengembangan Diri",
   readingTimeMinutes: 4,
   shortDefinition:
     "Sisa perhatian kognitif yang tetap melekat pada tugas sebelumnya setelah seseorang berpindah ke tugas baru, sehingga menurunkan ketajaman fokus dan kualitas berpikir pada pekerjaan berikutnya.",

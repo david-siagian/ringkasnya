@@ -2,7 +2,7 @@ import type { Article } from "@/types/article";
 
 export const eksperimenInvisibleGorilla: Article = {
   slug: "eksperimen-invisible-gorilla",
-  title: "Eksperimen 'Invisible Gorilla'",
+  title: "Invisible Gorilla: Batas Tersembunyi Fokus Manusia",
   subtitle:
     "Saat mata menatap lurus tetapi otak melewatkan hal paling mencolok di depan hidung kita sendiri.",
   term: "Kebutaan Tanpa Atensi",
@@ -13,7 +13,6 @@ export const eksperimenInvisibleGorilla: Article = {
     "Eksperimen Gorila",
   ],
   format: "kisah-eksperimen",
-  category: "Nalar & Berpikir Kritis",
   readingTimeMinutes: 5,
   shortDefinition:
     "Fenomena psikologi kognitif ketika seseorang gagal menyadari stimulus visual yang sangat jelas dan tak terduga tepat di hadapannya, semata-mata karena kapasitas perhatiannya sedang tersedot penuh pada tugas mental lain.",

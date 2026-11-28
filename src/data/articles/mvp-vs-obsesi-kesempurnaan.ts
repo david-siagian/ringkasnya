@@ -12,7 +12,6 @@ export const mvpVsObsesiKesempurnaan: Article = {
     "Validated Learning",
   ],
   format: "lintas-buku",
-  category: "Organisasi & Bisnis",
   readingTimeMinutes: 4,
   shortDefinition:
     "Versi paling sederhana dari suatu produk yang tetap berfungsi utuh untuk menguji hipotesis bisnis terpenting di pasar nyata dengan biaya dan waktu seminimal mungkin.",
