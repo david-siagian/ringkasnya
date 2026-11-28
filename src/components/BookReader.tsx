@@ -216,6 +216,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const [unmarkToastMessage, setUnmarkToastMessage] = useState<string | null>(
     null
   );
+  const [modeToast, setModeToast] = useState<"quick" | "deep" | null>(null);
   const [activeArticleTerm, setActiveArticleTerm] =
     useState<ArticleTermEntry | null>(null);
   const [isLeavingView, setIsLeavingView] = useState(false);
@@ -226,6 +227,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
   const copyTimerRef = useRef<number | undefined>(undefined);
   const viewExitTimerRef = useRef<number | undefined>(undefined);
   const unmarkToastTimerRef = useRef<number | undefined>(undefined);
+  const modeToastTimerRef = useRef<number | undefined>(undefined);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const appearanceMenuRef = useRef<HTMLDivElement>(null);
   const readingAreaRef = useRef<HTMLDivElement>(null);
@@ -472,6 +474,7 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
       window.clearTimeout(pendingQuickStepTimerRef.current);
       window.clearTimeout(viewExitTimerRef.current);
       window.clearTimeout(unmarkToastTimerRef.current);
+      window.clearTimeout(modeToastTimerRef.current);
     };
   }, []);
 
@@ -860,6 +863,12 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
     if (nextMode === readMode) return;
     cancelViewExit();
     setIsStartingSession(false);
+
+    setModeToast(nextMode);
+    window.clearTimeout(modeToastTimerRef.current);
+    modeToastTimerRef.current = window.setTimeout(() => {
+      setModeToast(null);
+    }, 2200);
 
     if (nextMode === "quick") {
       let nextStartedQuick = false;
@@ -1573,6 +1582,26 @@ export default function BookReader({ book, relatedBooks }: BookReaderProps) {
         message={unmarkToastMessage ?? ""}
         bottomOffsetClass={
           showDeepBottomBar || isIntroView ? "bottom-24" : "bottom-5"
+        }
+      />
+
+      <ReaderToast
+        open={Boolean(modeToast) && !isIntroView}
+        message={
+          modeToast === "quick" ? "Masuk Mode Kilat" : "Masuk Mode Mendalam"
+        }
+        bottomOffsetClass="top-[calc(var(--header-h)+var(--reader-toolbar-h)+12px)]"
+        compact
+        icon={
+          modeToast === "quick" ? (
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-500">
+              <Zap className="h-3 w-3" />
+            </span>
+          ) : (
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
+              <BookOpen className="h-3 w-3" />
+            </span>
+          )
         }
       />
 
